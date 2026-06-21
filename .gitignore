@@ -33,6 +33,7 @@ lerna-debug.log*
 # Runtime and cache files
 .cache/
 .turbo/
+.docker/
 .temp/
 .tmp/
 tmp/

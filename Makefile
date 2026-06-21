@@ -6,13 +6,17 @@ FRONT_PORT := 3010
 BACK_PORT := 3011
 API_URL := http://localhost:$(BACK_PORT)
 
-.PHONY: help install install-frontend install-backend infra-up infra-down dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-fix format check clean
+.PHONY: help install install-frontend install-backend infra-up infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-fix format check clean
 
 help:
 	@printf "Comandos disponiveis na raiz:\\n"
 	@printf "  make install    Instala dependencias do backend e frontend\\n"
 	@printf "  make infra-up   Sobe o PostgreSQL com Docker Compose\\n"
 	@printf "  make infra-down Para o PostgreSQL\\n"
+	@printf "  make prisma-deploy   Aplica migrations Prisma em ambiente preparado\\n"
+	@printf "  make prisma-generate Gera o Prisma Client\\n"
+	@printf "  make prisma-migrate  Cria/aplica migration Prisma em desenvolvimento\\n"
+	@printf "  make prisma-seed     Executa o seed Prisma\\n"
 	@printf "  make dev        Sobe PostgreSQL, backend e frontend\\n"
 	@printf "  make dev-backend   Inicia o backend Nest em modo watch\\n"
 	@printf "  make dev-frontend  Inicia o frontend Next em modo dev\\n"
@@ -34,7 +38,7 @@ install-frontend:
 
 install-backend:
 	cd $(BACK_DIR) && yarn install
-	cd $(BACK_DIR) && yarn prisma generate
+	$(MAKE) prisma-generate
 
 infra-up:
 	docker compose up -d --remove-orphans postgres
@@ -42,10 +46,22 @@ infra-up:
 infra-down:
 	docker compose down --remove-orphans
 
-dev: infra-up
-	cd $(BACK_DIR) && yarn prisma migrate deploy
-	cd $(BACK_DIR) && yarn prisma generate
+prisma-deploy:
+	cd $(BACK_DIR) && yarn prisma:deploy
+
+prisma-generate:
+	cd $(BACK_DIR) && yarn prisma:generate
+
+prisma-migrate:
+	cd $(BACK_DIR) && yarn prisma:migrate
+
+prisma-seed:
 	cd $(BACK_DIR) && yarn prisma:seed
+
+dev: infra-up
+	$(MAKE) prisma-deploy
+	$(MAKE) prisma-generate
+	$(MAKE) prisma-seed
 	@printf "Backend:  $(API_URL)\\n"
 	@printf "Frontend: http://localhost:$(FRONT_PORT)\\n"
 	@trap 'kill "$$BACK_PID" "$$FRONT_PID" 2>/dev/null || true' INT TERM EXIT; \
@@ -104,7 +120,7 @@ build-frontend:
 	$(MAKE) -C $(FRONT_DIR) build
 
 build-backend:
-	cd $(BACK_DIR) && yarn prisma generate
+	$(MAKE) prisma-generate
 	cd $(BACK_DIR) && yarn build
 
 lint: lint-backend lint-frontend
