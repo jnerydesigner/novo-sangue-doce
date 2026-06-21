@@ -1,0 +1,35 @@
+import { ArticleCard } from "./article-card";
+import { articles } from "./data";
+import { ArrowIcon } from "./icons";
+
+export function EditorialSection() {
+  return (
+    <section className="py-[clamp(64px,9vw,110px)]" id="materias">
+      <div className="wrap">
+        <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <span className="eyebrow">Em destaque</span>
+            <h2 className="mt-3 max-w-[18ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-medium leading-[1.05] tracking-normal">
+              O que esta movendo o cuidado esta semana
+            </h2>
+          </div>
+          <a
+            className="group inline-flex items-center gap-2 text-[15px] font-semibold text-greenDeep"
+            href="#materias"
+          >
+            Todas as materias
+            <ArrowIcon />
+          </a>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
+          <ArticleCard article={articles[0]} seq={1} />
+          <div className="grid gap-6 lg:grid-rows-2">
+            <ArticleCard article={articles[1]} seq={2} compact />
+            <ArticleCard article={articles[2]} seq={3} compact />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

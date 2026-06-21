@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #faf6ee;
+  color: #211d18;
+  font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #3f7a4f;
+  color: #fff;
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto max-w-page px-[clamp(20px,5vw,64px)];
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-[12.5px] font-semibold uppercase tracking-[0.16em] text-muted;
+  }
+
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-[1.5px] w-[22px] bg-green;
+  }
+
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center rounded-lg border-0 px-5 py-3 text-[15px] font-semibold transition;
+  }
+
+  .btn-primary {
+    @apply bg-green text-white hover:-translate-y-px hover:bg-greenDeep hover:shadow-[0_8px_22px_-10px_#3f7a4f];
+  }
+
+  .btn-ghost {
+    @apply border border-white/35 bg-white/15 text-paper backdrop-blur hover:-translate-y-px hover:bg-white/25;
+  }
+}
+
+@keyframes drip {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

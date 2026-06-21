@@ -1,0 +1,16 @@
+import { UserEntity } from '../entities/user.entity';
+
+export class UserEmailAlreadyExistsError extends Error {
+  constructor() {
+    super('User e-mail already exists.');
+    this.name = 'UserEmailAlreadyExistsError';
+  }
+}
+
+export abstract class UserRepository {
+  abstract create(user: UserEntity): Promise<UserEntity>;
+  abstract findAll(): Promise<UserEntity[]>;
+  abstract findById(id: string): Promise<UserEntity | null>;
+  abstract findByEmail(email: string): Promise<UserEntity | null>;
+  abstract findByEmailWithPassword(email: string): Promise<UserEntity | null>;
+}

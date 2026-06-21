@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+
+# Next.js output
+.next/
+out/
+
+# Build and coverage output
+dist/
+build/
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime and cache files
+.cache/
+.turbo/
+.temp/
+.tmp/
+tmp/
+temp/
+
+# OS and editor local state
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+
+# Local assistant/tooling state
+.agents/
+.codex/
+.claude/
+
+# Generated local captures
+screenshots/
+public/original-project/
+.thumbnail

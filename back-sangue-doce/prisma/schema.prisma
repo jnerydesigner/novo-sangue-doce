@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DiabetesType {
+  TYPE_1
+  TYPE_2
+  GESTATIONAL
+  OTHER
+  UNKNOWN
+}
+
+enum ReadingContext {
+  FASTING
+  BEFORE_MEAL
+  AFTER_MEAL
+  BEDTIME
+  EXERCISE
+  MANUAL
+  RANDOM
+}
+
+enum MeasurementSource {
+  MANUAL
+  SENSOR
+  IMPORT
+}
+
+enum MeasurementNoteType {
+  FASTING_WAKE_UP
+  BEFORE_BREAKFAST
+  AFTER_BREAKFAST
+  MORNING_RANDOM_CHECK
+  BEFORE_LUNCH
+  AFTER_LUNCH
+  AFTERNOON_RANDOM_CHECK
+  BEFORE_DINNER
+  AFTER_DINNER
+  BEFORE_SLEEP
+  NIGHT_RANDOM_CHECK
+  BEFORE_EXERCISE
+  AFTER_EXERCISE
+  FEELING_UNWELL
+  ROUTINE_CHECK
+  DAWN_RANDOM_CHECK
+}
+
+model User {
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  birthDate    DateTime?     @map("birth_date")
+  diabetesType DiabetesType  @default(UNKNOWN) @map("diabetes_type")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  measurements Measurement[]
+
+  @@map("users")
+}
+
+model Measurement {
+  id               String               @id @default(uuid()) @db.Uuid
+  userId           String               @map("user_id") @db.Uuid
+  measuredAt       DateTime             @map("measured_at")
+  glucoseValueMgDl Int                  @map("glucose_value_mg_dl")
+  readingContext   ReadingContext       @default(MANUAL) @map("reading_context")
+  source           MeasurementSource    @default(MANUAL)
+  noteType         MeasurementNoteType? @map("note_type")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, measuredAt(sort: Desc)])
+  @@map("measurements")
+}
