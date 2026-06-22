@@ -74,6 +74,8 @@ export class AuthService {
         ? formatDateToDayMonthYear(user.birthDate)
         : undefined,
       diabetesType: this.formatDiabetesType(user.diabetesType),
+      role: user.role as 'ADMIN' | 'USER',
+      roles: [user.role as 'ADMIN' | 'USER'],
       createdAt: formatDateToDayMonthYear(user.createdAt),
       updatedAt: formatDateToDayMonthYear(user.updatedAt),
     };

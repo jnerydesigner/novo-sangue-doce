@@ -1,0 +1,161 @@
+import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import {
+  PostEntity,
+  type PersistedPostEntityProps,
+} from '@app/posts/entities/post.entity';
+import {
+  type PaginatedPosts,
+  PostAlreadyExistsError,
+  type PostPaginationParams,
+  PostRelationNotFoundError,
+  PostRepository,
+} from '@app/posts/repositories/post.repository';
+import { PrismaService } from '../prisma.service';
+
+const postInclude = {
+  author: true,
+  category: true,
+  tags: {
+    include: {
+      tag: true,
+    },
+  },
+} satisfies Prisma.PostInclude;
+
+type PostRecord = Prisma.PostGetPayload<{ include: typeof postInclude }>;
+
+@Injectable()
+export class PrismaPostsRepository implements PostRepository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(post: PostEntity): Promise<PostEntity> {
+    const payload = post.toPersistence();
+    const tagIds = post.getTagIds();
+
+    try {
+      const createdPost = await this.prisma.post.create({
+        data: {
+          ...payload,
+          content: payload.content as Prisma.InputJsonValue,
+        },
+      });
+
+      if (tagIds.length > 0) {
+        await this.prisma.postTagRelation.createMany({
+          data: tagIds.map((tagId) => ({
+            postId: createdPost.id,
+            tagId,
+          })),
+          skipDuplicates: true,
+        });
+      }
+
+      const postWithRelations = await this.findById(createdPost.id);
+
+      if (!postWithRelations) {
+        throw new PostRelationNotFoundError();
+      }
+
+      return postWithRelations;
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new PostAlreadyExistsError();
+      }
+
+      if (this.isForeignKeyError(error) || this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
+  async findAll(params: PostPaginationParams): Promise<PaginatedPosts> {
+    const skip = (params.page - 1) * params.limit;
+    const [posts, total] = await this.prisma.$transaction([
+      this.prisma.post.findMany({
+        include: postInclude,
+        orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+        skip,
+        take: params.limit,
+      }),
+      this.prisma.post.count(),
+    ]);
+    const totalPages = Math.max(1, Math.ceil(total / params.limit));
+
+    return {
+      data: posts.map((post) => this.toEntity(post)),
+      meta: {
+        page: params.page,
+        limit: params.limit,
+        total,
+        totalPages,
+        hasNextPage: params.page < totalPages,
+        hasPreviousPage: params.page > 1,
+      },
+    };
+  }
+
+  async findById(id: string): Promise<PostEntity | null> {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: postInclude,
+    });
+
+    return post ? this.toEntity(post) : null;
+  }
+
+  async findBySlug(slug: string): Promise<PostEntity | null> {
+    const post = await this.prisma.post.findUnique({
+      where: { slug },
+      include: postInclude,
+    });
+
+    return post ? this.toEntity(post) : null;
+  }
+
+  private toEntity(post: PostRecord): PostEntity {
+    const props: PersistedPostEntityProps = {
+      ...post,
+      author: {
+        id: post.author.id,
+        name: post.author.name,
+        slug: post.author.slug,
+        role: post.author.role,
+        bio: post.author.bio ?? undefined,
+        avatarUrl: post.author.avatarUrl ?? undefined,
+        email: post.author.email ?? undefined,
+      },
+      category: post.category,
+      tags: post.tags.map(({ tag }) => ({
+        id: tag.id,
+        name: tag.name,
+        slug: tag.slug,
+      })),
+    };
+
+    return PostEntity.fromPersistence(props);
+  }
+
+  private isDuplicateKeyError(error: unknown): boolean {
+    return (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    );
+  }
+
+  private isForeignKeyError(error: unknown): boolean {
+    return (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2003'
+    );
+  }
+
+  private isRecordNotFoundError(error: unknown): boolean {
+    return (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2025'
+    );
+  }
+}

@@ -3,6 +3,14 @@ require('dotenv/config');
 const { PrismaPg } = require('@prisma/adapter-pg');
 const { PrismaClient } = require('@prisma/client');
 const { scryptSync } = require('node:crypto');
+const {
+  MEASUREMENT_TIME_ZONE,
+  measurementSchedule,
+} = require('./seed-data/measurement-schedule');
+const { buildSimplePostContent } = require('./seed-data/post-content');
+const { postCategories } = require('./seed-data/post-categories');
+const { postTags } = require('./seed-data/post-tags');
+const { seedPosts } = require('./seed-data/posts');
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -15,131 +23,6 @@ function hashPassword(password) {
 
   return `scrypt:${salt}:${derivedKey.toString('hex')}`;
 }
-
-const MEASUREMENT_TIME_ZONE = 'America/Sao_Paulo';
-
-const measurementSchedule = [
-  {
-    daysAgo: 14,
-    hour: 6,
-    minute: 35,
-    glucoseValueMgDl: 103,
-    readingContext: 'BEFORE_MEAL',
-    noteType: 'BEFORE_BREAKFAST',
-  },
-  {
-    daysAgo: 13,
-    hour: 13,
-    minute: 15,
-    glucoseValueMgDl: 128,
-    readingContext: 'AFTER_MEAL',
-    noteType: 'AFTER_LUNCH',
-  },
-  {
-    daysAgo: 12,
-    hour: 22,
-    minute: 20,
-    glucoseValueMgDl: 112,
-    readingContext: 'BEDTIME',
-    noteType: 'BEFORE_SLEEP',
-  },
-  {
-    daysAgo: 11,
-    hour: 7,
-    minute: 45,
-    glucoseValueMgDl: 118,
-    readingContext: 'AFTER_MEAL',
-    noteType: 'AFTER_BREAKFAST',
-  },
-  {
-    daysAgo: 10,
-    hour: 11,
-    minute: 30,
-    glucoseValueMgDl: 97,
-    readingContext: 'BEFORE_MEAL',
-    noteType: 'BEFORE_LUNCH',
-  },
-  {
-    daysAgo: 9,
-    hour: 19,
-    minute: 50,
-    glucoseValueMgDl: 141,
-    readingContext: 'AFTER_MEAL',
-    noteType: 'AFTER_DINNER',
-  },
-  {
-    daysAgo: 8,
-    hour: 15,
-    minute: 35,
-    glucoseValueMgDl: 109,
-    readingContext: 'RANDOM',
-    noteType: 'AFTERNOON_RANDOM_CHECK',
-  },
-  {
-    daysAgo: 7,
-    hour: 6,
-    minute: 25,
-    glucoseValueMgDl: 92,
-    readingContext: 'BEFORE_MEAL',
-    noteType: 'BEFORE_BREAKFAST',
-  },
-  {
-    daysAgo: 6,
-    hour: 12,
-    minute: 40,
-    glucoseValueMgDl: 136,
-    readingContext: 'AFTER_MEAL',
-    noteType: 'AFTER_LUNCH',
-  },
-  {
-    daysAgo: 5,
-    hour: 18,
-    minute: 15,
-    glucoseValueMgDl: 101,
-    readingContext: 'BEFORE_MEAL',
-    noteType: 'BEFORE_DINNER',
-  },
-  {
-    daysAgo: 4,
-    hour: 22,
-    minute: 45,
-    glucoseValueMgDl: 119,
-    readingContext: 'BEDTIME',
-    noteType: 'BEFORE_SLEEP',
-  },
-  {
-    daysAgo: 3,
-    hour: 8,
-    minute: 10,
-    glucoseValueMgDl: 124,
-    readingContext: 'AFTER_MEAL',
-    noteType: 'AFTER_BREAKFAST',
-  },
-  {
-    daysAgo: 2,
-    hour: 14,
-    minute: 20,
-    glucoseValueMgDl: 132,
-    readingContext: 'RANDOM',
-    noteType: 'AFTERNOON_RANDOM_CHECK',
-  },
-  {
-    daysAgo: 1,
-    hour: 6,
-    minute: 40,
-    glucoseValueMgDl: 99,
-    readingContext: 'BEFORE_MEAL',
-    noteType: 'BEFORE_BREAKFAST',
-  },
-  {
-    daysAgo: 1,
-    hour: 20,
-    minute: 5,
-    glucoseValueMgDl: 145,
-    readingContext: 'AFTER_MEAL',
-    noteType: 'AFTER_DINNER',
-  },
-];
 
 function createMeasurementDate(daysAgo, hour, minute) {
   const today = getDatePartsInTimeZone(new Date(), MEASUREMENT_TIME_ZONE);
@@ -255,12 +138,14 @@ async function main() {
     where: { email: 'jander.webmaster@gmail.com' },
     update: {
       passwordHash: hashPassword('12345678'),
+      role: 'ADMIN',
     },
     create: {
       name: 'Jander Nery',
       email: 'jander.webmaster@gmail.com',
       passwordHash: hashPassword('12345678'),
       diabetesType: 'UNKNOWN',
+      role: 'ADMIN',
     },
   });
 
@@ -268,6 +153,7 @@ async function main() {
     where: { email: 'ana.ribeiro@sanguedoce.com' },
     update: {
       passwordHash: hashPassword('12345678'),
+      role: 'USER',
     },
     create: {
       name: 'Ana Ribeiro',
@@ -275,8 +161,171 @@ async function main() {
       passwordHash: hashPassword('12345678'),
       birthDate: new Date('1992-05-12T00:00:00.000Z'),
       diabetesType: 'TYPE_1',
+      role: 'USER',
     },
   });
+
+  const helenaUser = await prisma.user.upsert({
+    where: { email: 'helena.marques@sanguedoce.com' },
+    update: {
+      name: 'Helena Marques',
+      passwordHash: hashPassword('12345678'),
+      role: 'USER',
+    },
+    create: {
+      name: 'Helena Marques',
+      email: 'helena.marques@sanguedoce.com',
+      passwordHash: hashPassword('12345678'),
+      diabetesType: 'UNKNOWN',
+      role: 'USER',
+    },
+  });
+
+  const janderAuthor = await prisma.postAuthor.upsert({
+    where: { slug: 'jander-nery' },
+    update: {
+      name: 'Jander Nery',
+      role: 'Editor e Desenvolvedor com Diabetes Tipo 1',
+      bio: 'Designer e desenvolvedor por tras do Sangue Doce. Vive com diabetes tipo 1 e escreve a partir do encontro entre experiencia pessoal, tecnologia e cuidado diario, buscando transformar dados, rotina e linguagem em ferramentas mais simples para quem convive com a condicao.',
+      avatarUrl: 'https://github.com/jnerydesigner.png',
+      email: 'jander.nery@sanguedoce.com',
+      userId: jander.id,
+    },
+    create: {
+      name: 'Jander Nery',
+      slug: 'jander-nery',
+      role: 'Editor e Desenvolvedor com Diabetes Tipo 1',
+      bio: 'Designer e desenvolvedor por tras do Sangue Doce. Vive com diabetes tipo 1 e escreve a partir do encontro entre experiencia pessoal, tecnologia e cuidado diario, buscando transformar dados, rotina e linguagem em ferramentas mais simples para quem convive com a condicao.',
+      avatarUrl: 'https://github.com/jnerydesigner.png',
+      email: 'jander.nery@sanguedoce.com',
+      userId: jander.id,
+    },
+  });
+
+  const helenaAuthor = await prisma.postAuthor.upsert({
+    where: { slug: 'helena-marques' },
+    update: {
+      name: 'Helena Marques',
+      role: 'Editora de Saude Metabolica',
+      bio: 'Jornalista com mais de dez anos cobrindo saude e ciencia. Escreve sobre diabetes com foco no dia a dia de quem vive com a condicao, traduzindo evidencia em decisoes praticas, sem alarmismo.',
+      avatarUrl: '/images/saudavel.png',
+      email: 'helena.marques@sanguedoce.com',
+      userId: helenaUser.id,
+    },
+    create: {
+      name: 'Helena Marques',
+      slug: 'helena-marques',
+      role: 'Editora de Saude Metabolica',
+      bio: 'Jornalista com mais de dez anos cobrindo saude e ciencia. Escreve sobre diabetes com foco no dia a dia de quem vive com a condicao, traduzindo evidencia em decisoes praticas, sem alarmismo.',
+      avatarUrl: '/images/saudavel.png',
+      email: 'helena.marques@sanguedoce.com',
+      userId: helenaUser.id,
+    },
+  });
+
+  const categories = await Promise.all(
+    postCategories.map((category) =>
+      prisma.postCategory.upsert({
+        where: { slug: category.slug },
+        update: {
+          name: category.name,
+          color: category.color,
+        },
+        create: category,
+      }),
+    ),
+  );
+
+  const tags = await Promise.all(
+    postTags.map((tag) =>
+      prisma.postTag.upsert({
+        where: { slug: tag.slug },
+        update: {
+          name: tag.name,
+        },
+        create: tag,
+      }),
+    ),
+  );
+
+  const authorBySlug = {
+    [janderAuthor.slug]: janderAuthor,
+    [helenaAuthor.slug]: helenaAuthor,
+  };
+  const categoryBySlug = Object.fromEntries(
+    categories.map((category) => [category.slug, category]),
+  );
+  const tagBySlug = Object.fromEntries(tags.map((tag) => [tag.slug, tag]));
+
+  for (const post of seedPosts) {
+    const author = authorBySlug[post.authorSlug];
+    const category = categoryBySlug[post.categorySlug];
+
+    if (!author || !category) {
+      throw new Error(`Missing author or category for post ${post.slug}`);
+    }
+
+    const createdPost = await prisma.post.upsert({
+      where: { slug: post.slug },
+      update: {
+        title: post.title,
+        excerpt: post.excerpt,
+        standfirst: post.standfirst ?? post.excerpt,
+        content: post.content ?? buildSimplePostContent(post.title, post.excerpt),
+        status: 'PUBLISHED',
+        featured: post.featured ?? false,
+        readingMinutes: post.readingMinutes,
+        coverImageUrl: post.coverImageUrl,
+        coverImageAlt: post.coverImageAlt,
+        coverCaption: post.coverCaption ?? null,
+        verticalImageUrl: post.verticalImageUrl,
+        metaTitle: `${post.title} | Sangue Doce`,
+        metaDescription: post.excerpt,
+        publishedAt: new Date(post.publishedAt),
+        authorId: author.id,
+        categoryId: category.id,
+      },
+      create: {
+        slug: post.slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        standfirst: post.standfirst ?? post.excerpt,
+        content: post.content ?? buildSimplePostContent(post.title, post.excerpt),
+        status: 'PUBLISHED',
+        featured: post.featured ?? false,
+        readingMinutes: post.readingMinutes,
+        coverImageUrl: post.coverImageUrl,
+        coverImageAlt: post.coverImageAlt,
+        coverCaption: post.coverCaption ?? null,
+        verticalImageUrl: post.verticalImageUrl,
+        metaTitle: `${post.title} | Sangue Doce`,
+        metaDescription: post.excerpt,
+        publishedAt: new Date(post.publishedAt),
+        authorId: author.id,
+        categoryId: category.id,
+      },
+    });
+
+    await prisma.postTagRelation.deleteMany({
+      where: { postId: createdPost.id },
+    });
+
+    await prisma.postTagRelation.createMany({
+      data: post.tagSlugs.map((tagSlug) => {
+        const tag = tagBySlug[tagSlug];
+
+        if (!tag) {
+          throw new Error(`Missing tag ${tagSlug} for post ${post.slug}`);
+        }
+
+        return {
+          postId: createdPost.id,
+          tagId: tag.id,
+        };
+      }),
+      skipDuplicates: true,
+    });
+  }
 
   await prisma.measurement.deleteMany({
     where: {

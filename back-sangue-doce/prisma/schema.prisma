@@ -14,6 +14,11 @@ enum DiabetesType {
   UNKNOWN
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 enum ReadingContext {
   FASTING
   BEFORE_MEAL
@@ -49,6 +54,18 @@ enum MeasurementNoteType {
   DAWN_RANDOM_CHECK
 }
 
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PostAccentColor {
+  GREEN
+  TOMATO
+  BLUE
+}
+
 model User {
   id           String        @id @default(uuid()) @db.Uuid
   name         String
@@ -56,9 +73,11 @@ model User {
   passwordHash String        @map("password_hash")
   birthDate    DateTime?     @map("birth_date")
   diabetesType DiabetesType  @default(UNKNOWN) @map("diabetes_type")
+  role         Role          @default(USER)
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
   measurements Measurement[]
+  postAuthors  PostAuthor[]
 
   @@map("users")
 }
@@ -77,4 +96,87 @@ model Measurement {
 
   @@index([userId, measuredAt(sort: Desc)])
   @@map("measurements")
+}
+
+model PostAuthor {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  role      String
+  bio       String?  @db.Text
+  avatarUrl String?  @map("avatar_url")
+  email     String?  @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  posts     Post[]
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("post_authors")
+}
+
+model PostCategory {
+  id        String          @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String          @unique
+  color     PostAccentColor @default(GREEN)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  posts     Post[]
+
+  @@map("post_categories")
+}
+
+model PostTag {
+  id        String            @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String            @unique
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  posts     PostTagRelation[]
+
+  @@map("post_tags")
+}
+
+model PostTagRelation {
+  postId String  @map("post_id") @db.Uuid
+  tagId  String  @map("tag_id") @db.Uuid
+  post   Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    PostTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([tagId])
+  @@map("post_tag_relations")
+}
+
+model Post {
+  id               String            @id @default(uuid()) @db.Uuid
+  slug             String            @unique
+  title            String
+  excerpt          String            @db.Text
+  standfirst       String?           @db.Text
+  content          Json              @default("[]")
+  status           PostStatus        @default(DRAFT)
+  featured         Boolean           @default(false)
+  readingMinutes   Int               @default(5) @map("reading_minutes")
+  coverImageUrl    String            @map("cover_image_url")
+  coverImageAlt    String?           @map("cover_image_alt")
+  coverCaption     String?           @map("cover_caption") @db.Text
+  verticalImageUrl String?           @map("vertical_image_url")
+  metaTitle        String?           @map("meta_title")
+  metaDescription  String?           @map("meta_description") @db.Text
+  publishedAt      DateTime?         @map("published_at")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  authorId         String            @map("author_id") @db.Uuid
+  categoryId       String            @map("category_id") @db.Uuid
+  author           PostAuthor        @relation(fields: [authorId], references: [id])
+  category         PostCategory      @relation(fields: [categoryId], references: [id])
+  tags             PostTagRelation[]
+
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([featured, publishedAt(sort: Desc)])
+  @@index([categoryId, publishedAt(sort: Desc)])
+  @@index([authorId])
+  @@map("posts")
 }

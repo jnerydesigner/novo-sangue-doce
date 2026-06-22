@@ -7,12 +7,15 @@ export type UserDiabetesType =
   | 'OTHER'
   | 'UNKNOWN';
 
+export type UserRole = 'ADMIN' | 'USER';
+
 export type CreateUserEntityProps = {
   name: string;
   email: string;
   passwordHash: string;
   birthDate?: string | Date | null;
   diabetesType?: UserDiabetesType;
+  role?: UserRole;
 };
 
 export type UserPersistence = {
@@ -21,6 +24,7 @@ export type UserPersistence = {
   passwordHash: string;
   birthDate: Date | null;
   diabetesType: UserDiabetesType;
+  role: UserRole;
 };
 
 export type UserEntityProps = UserPersistence & {
@@ -45,6 +49,7 @@ export class UserEntity {
       passwordHash: props.passwordHash,
       birthDate: props.birthDate ? new Date(props.birthDate) : null,
       diabetesType: props.diabetesType ?? 'UNKNOWN',
+      role: props.role ?? 'USER',
     });
   }
 
@@ -59,6 +64,7 @@ export class UserEntity {
       passwordHash: this.props.passwordHash,
       birthDate: this.props.birthDate,
       diabetesType: this.props.diabetesType,
+      role: this.props.role,
     };
   }
 
@@ -73,6 +79,7 @@ export class UserEntity {
       email: this.props.email,
       birthDate: this.props.birthDate ?? undefined,
       diabetesType: this.props.diabetesType,
+      role: this.props.role,
       createdAt: this.props.createdAt as Date,
       updatedAt: this.props.updatedAt as Date,
     };

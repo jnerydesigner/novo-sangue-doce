@@ -4,6 +4,8 @@ export type JwtPayload = {
   email: string;
   birthDate?: string;
   diabetesType: string;
+  role: 'ADMIN' | 'USER';
+  roles: ('ADMIN' | 'USER')[];
   createdAt: string;
   updatedAt: string;
 };
