@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Brand } from "@/components/home/brand";
 import { api } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
 import { LoginForm } from "./login-form";
@@ -13,7 +14,7 @@ export default async function LoginPage() {
     const profile = await api.auth.profile(accessToken).catch(() => null);
 
     if (profile) {
-      redirect("/");
+      redirect(profile.role === "ADMIN" ? "/admin" : "/dashboard");
     }
   }
 
@@ -21,12 +22,9 @@ export default async function LoginPage() {
     <main className="min-h-screen bg-paper text-ink">
       <header className="border-b border-line bg-card">
         <div className="wrap flex min-h-[76px] flex-wrap items-center justify-between gap-4 py-4">
-          <Link
-            className="font-serif text-[1.6rem] font-medium tracking-normal text-greenDeep"
-            href="/"
-          >
-            Sangue Doce
-          </Link>
+          <div className="text-greenDeep">
+            <Brand />
+          </div>
           <Link
             className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
             href="/"

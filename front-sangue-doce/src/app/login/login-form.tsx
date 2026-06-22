@@ -53,7 +53,11 @@ export function LoginForm() {
         throw new Error(await response.text());
       }
 
-      router.push("/");
+      const payload = (await response.json()) as {
+        redirectTo?: string;
+      };
+
+      router.push(payload.redirectTo ?? "/dashboard");
       router.refresh();
     } catch (error) {
       setErrorMessage(getErrorMessage(error));

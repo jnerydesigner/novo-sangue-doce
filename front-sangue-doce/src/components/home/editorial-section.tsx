@@ -1,8 +1,17 @@
+import Link from "next/link";
+import { api } from "@/lib/api";
+import { mapPostToArticle } from "@/lib/posts";
 import { ArticleCard } from "./article-card";
-import { articles } from "./data";
 import { ArrowIcon } from "./icons";
 
-export function EditorialSection() {
+export async function EditorialSection() {
+  const posts = await api.posts.list({ limit: 3 });
+  const articles = posts.data.map(mapPostToArticle);
+
+  if (articles.length < 3) {
+    return null;
+  }
+
   return (
     <section className="py-[clamp(64px,9vw,110px)]" id="materias">
       <div className="wrap">
@@ -13,13 +22,13 @@ export function EditorialSection() {
               O que esta movendo o cuidado esta semana
             </h2>
           </div>
-          <a
+          <Link
             className="group inline-flex items-center gap-2 text-[15px] font-semibold text-greenDeep"
-            href="#materias"
+            href="/materias"
           >
             Todas as materias
             <ArrowIcon />
-          </a>
+          </Link>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">

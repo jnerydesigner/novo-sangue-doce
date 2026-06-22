@@ -1,12 +1,13 @@
 import Image from "next/image";
-import type { Article } from "./data";
+import Link from "next/link";
+import type { ArticleSummary } from "@/lib/posts";
 
 export function ArticleCard({
   article,
   seq,
   compact = false,
 }: {
-  article: Article;
+  article: ArticleSummary;
   seq: number;
   compact?: boolean;
 }) {
@@ -18,7 +19,8 @@ export function ArticleCard({
         : "bg-[#e7eef5] text-blue";
 
   return (
-    <article
+    <Link
+      href={`/materias/${article.slug}`}
       className={`group overflow-hidden rounded-lg border border-line bg-card transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial ${
         compact ? "grid md:grid-cols-[42%_1fr] lg:min-h-[216px]" : ""
       }`}
@@ -50,6 +52,6 @@ export function ArticleCard({
         <p className="text-[15.5px] leading-[1.55] text-inkSoft">{article.excerpt}</p>
         <div className="mt-auto text-[13px] text-muted">{article.meta}</div>
       </div>
-    </article>
+    </Link>
   );
 }

@@ -29,6 +29,10 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  if (userData.role === "ADMIN") {
+    redirect("/admin");
+  }
+
   const today = new Date();
   const monthlyReport = await api.measurements.monthlyReport({
     accessToken,

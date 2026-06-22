@@ -5,6 +5,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        hostname: "github.com",
+        protocol: "https",
+      },
+    ],
+  },
   turbopack: {
     root: __dirname,
   },

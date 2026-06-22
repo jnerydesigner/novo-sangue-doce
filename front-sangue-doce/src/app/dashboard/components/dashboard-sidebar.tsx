@@ -1,16 +1,13 @@
 import Link from "next/link";
+import { Brand } from "@/components/home/brand";
 import { sidebarItems } from "../dashboard.data";
 
 export function DashboardSidebar() {
   return (
     <aside className="hidden border-r border-line bg-card px-5 py-7 lg:flex lg:flex-col">
-      <Link
-        className="mb-8 inline-flex items-center gap-3 px-2 font-serif text-[1.55rem] font-medium tracking-normal text-greenDeep"
-        href="/"
-      >
-        <span className="h-2.5 w-2.5 rounded-full bg-tomato shadow-[0_0_0_4px_rgba(197,86,63,0.18)]" />
-        Sangue Doce
-      </Link>
+      <div className="mb-8 px-2 text-greenDeep">
+        <Brand />
+      </div>
 
       <nav aria-label="Menu da dashboard">
         <ul className="grid gap-1">

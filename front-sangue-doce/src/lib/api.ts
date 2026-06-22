@@ -5,6 +5,7 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 };
 
 export type DiabetesType = "TYPE_1" | "TYPE_2" | "GESTATIONAL" | "OTHER" | "UNKNOWN";
+export type UserRole = "ADMIN" | "USER";
 
 export type User = {
   id: string;
@@ -12,6 +13,7 @@ export type User = {
   email: string;
   birthDate?: string;
   diabetesType: DiabetesType;
+  role: UserRole;
   createdAt: string;
   updatedAt: string;
 };
@@ -39,6 +41,8 @@ export type AuthProfile = {
   email: string;
   birthDate?: string;
   diabetesType: string;
+  role: UserRole;
+  roles: UserRole[];
   createdAt: string;
   updatedAt: string;
 };
@@ -126,6 +130,100 @@ export type MonthlyMeasurementReport = {
   days: MonthlyMeasurementReportDay[];
 };
 
+export type PostAccentColor = "GREEN" | "TOMATO" | "BLUE";
+export type PostStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
+
+export type PostAuthor = {
+  id: string;
+  name: string;
+  slug: string;
+  role: string;
+  bio?: string;
+  avatarUrl?: string;
+  email?: string;
+};
+
+export type PostCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  color: PostAccentColor;
+};
+
+export type PostTag = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+export type PostContentBlock =
+  | {
+      type: "paragraph";
+      content: string;
+    }
+  | {
+      type: "heading";
+      level: 2 | 3;
+      content: string;
+    }
+  | {
+      type: "quote";
+      content: string;
+    }
+  | {
+      type: "list";
+      items: string[];
+    }
+  | {
+      type: "image";
+      src: string;
+      alt?: string;
+      caption?: string;
+    }
+  | {
+      type: "callout";
+      title: string;
+      content: string;
+    };
+
+export type Post = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  standfirst?: string;
+  content: PostContentBlock[];
+  status: PostStatus;
+  featured: boolean;
+  readingMinutes: number;
+  coverImageUrl: string;
+  coverImageAlt?: string;
+  coverCaption?: string;
+  verticalImageUrl?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  publishedAt?: string;
+  authorId: string;
+  categoryId: string;
+  createdAt: string;
+  updatedAt: string;
+  author: PostAuthor;
+  category: PostCategory;
+  tags: PostTag[];
+};
+
+export type PaginatedResponse<T> = {
+  data: T[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+};
+
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, {
     cache: "no-store",
@@ -166,9 +264,24 @@ export const api = {
         method: "POST",
         body: payload,
       }),
-    list: () => apiFetch<User[]>("/users"),
-    get: (id: string) => apiFetch<User>(`/users/${id}`),
-    getEmail: (email: string) => apiFetch<User>(`/users/search?email=${encodeURIComponent(email)}`),
+    list: (params: AuthenticatedApiParams) =>
+      apiFetch<User[]>("/users", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
+    get: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<User>(`/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
+    getEmail: (email: string, params: AuthenticatedApiParams) =>
+      apiFetch<User>(`/users/search?email=${encodeURIComponent(email)}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
   },
   measurements: {
     create: (payload: CreateMeasurementPayload, params: AuthenticatedApiParams) =>
@@ -239,5 +352,29 @@ export const api = {
         },
       );
     },
+  },
+  posts: {
+    list: (params: { page?: number; limit?: number } = {}) => {
+      const searchParams = new URLSearchParams();
+
+      if (params.page) {
+        searchParams.set("page", String(params.page));
+      }
+
+      if (params.limit) {
+        searchParams.set("limit", String(params.limit));
+      }
+
+      const query = searchParams.toString();
+
+      return apiFetch<PaginatedResponse<Post>>(`/posts${query ? `?${query}` : ""}`);
+    },
+    get: (id: string) => apiFetch<Post>(`/posts/${id}`),
+    getBySlug: (slug: string) => apiFetch<Post>(`/posts/slug/${slug}`),
+  },
+  authors: {
+    list: () => apiFetch<PostAuthor[]>("/authors"),
+    get: (id: string) => apiFetch<PostAuthor>(`/authors/${id}`),
+    getBySlug: (slug: string) => apiFetch<PostAuthor>(`/authors/slug/${slug}`),
   },
 };

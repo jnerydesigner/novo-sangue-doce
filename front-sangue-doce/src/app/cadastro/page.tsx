@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Brand } from "@/components/home/brand";
 import { SignupForm } from "./signup-form";
 
 export default function SignupPage() {
@@ -6,12 +7,9 @@ export default function SignupPage() {
     <main className="min-h-screen bg-paper text-ink">
       <header className="border-b border-line bg-card">
         <div className="wrap flex min-h-[76px] flex-wrap items-center justify-between gap-4 py-4">
-          <Link
-            className="font-serif text-[1.6rem] font-medium tracking-normal text-greenDeep"
-            href="/"
-          >
-            Sangue Doce
-          </Link>
+          <div className="text-greenDeep">
+            <Brand />
+          </div>
           <Link
             className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
             href="/login"

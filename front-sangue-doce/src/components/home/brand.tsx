@@ -1,13 +1,23 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export function Brand({ dark = false }: { dark?: boolean }) {
   return (
-    <a
-      href="#top"
+    <Link
+      href="/"
       className={`inline-flex items-center gap-[11px] font-serif text-2xl font-medium tracking-normal ${
         dark ? "text-paper" : "text-inherit"
       }`}
     >
-      <span className="h-[11px] w-[11px] rounded-full bg-tomato shadow-[0_0_0_4px_rgba(197,86,63,0.22)]" />
-      Sangue Doce
-    </a>
+      <Image
+        src="/sangue-doce-logo.png"
+        alt=""
+        width={44}
+        height={44}
+        className="h-11 w-11 rounded-lg object-cover"
+        priority={!dark}
+      />
+      <span>Sangue Doce</span>
+    </Link>
   );
 }

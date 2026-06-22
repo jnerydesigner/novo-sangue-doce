@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Brand } from "@/components/home/brand";
 import { SiteFooter } from "@/components/home/site-footer";
 
 export const metadata: Metadata = {
@@ -56,12 +57,9 @@ export default function AntesDaConsultaPage() {
     <>
       <header className="sticky top-0 z-[100] border-b border-line bg-paper/80 shadow-sm backdrop-blur-xl">
         <div className="wrap flex h-[76px] items-center justify-between gap-6">
-          <Link
-            href="/"
-            className="font-serif text-[1.6rem] font-medium tracking-normal text-greenDeep"
-          >
-            Sangue Doce
-          </Link>
+          <div className="text-greenDeep">
+            <Brand />
+          </div>
           <nav className="flex items-center gap-5">
             <Link
               href="/#guias"
