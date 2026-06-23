@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -25,9 +27,42 @@ export class PostsController {
     return this.postsService.create(createPostDto);
   }
 
+  @Patch(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  update(@Param('id') id: string, @Body() updatePostDto: CreatePostDto) {
+    return this.postsService.update(id, updatePostDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async delete(@Param('id') id: string) {
+    await this.postsService.delete(id);
+
+    return { ok: true };
+  }
+
   @Get()
   findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
     return this.postsService.findAll({ page, limit });
+  }
+
+  @Get('admin')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  findAllAdmin(@Query('page') page?: string, @Query('limit') limit?: string) {
+    return this.postsService.findAllAdmin({ page, limit });
+  }
+
+  @Get('categories')
+  findCategories() {
+    return this.postsService.findCategories();
+  }
+
+  @Get('tags')
+  findTags() {
+    return this.postsService.findTags();
   }
 
   @Get('slug/:slug')
@@ -36,6 +71,8 @@ export class PostsController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(id);
   }

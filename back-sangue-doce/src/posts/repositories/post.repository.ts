@@ -1,4 +1,5 @@
 import { PostEntity } from '../entities/post.entity';
+import { PublicPostCategory, PublicPostTag } from '../types/posts.type';
 
 export type PostPaginationParams = {
   page: number;
@@ -33,7 +34,13 @@ export class PostRelationNotFoundError extends Error {
 
 export abstract class PostRepository {
   abstract create(post: PostEntity): Promise<PostEntity>;
+  abstract update(id: string, post: PostEntity): Promise<PostEntity>;
+  abstract delete(id: string): Promise<void>;
   abstract findAll(params: PostPaginationParams): Promise<PaginatedPosts>;
+  abstract findAllAdmin(params: PostPaginationParams): Promise<PaginatedPosts>;
+  abstract findCategories(): Promise<PublicPostCategory[]>;
+  abstract findTags(): Promise<PublicPostTag[]>;
   abstract findById(id: string): Promise<PostEntity | null>;
   abstract findBySlug(slug: string): Promise<PostEntity | null>;
+  abstract findAnyBySlug(slug: string): Promise<PostEntity | null>;
 }

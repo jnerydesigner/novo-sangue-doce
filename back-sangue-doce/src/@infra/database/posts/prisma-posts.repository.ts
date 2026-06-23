@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import {
-  PostEntity,
-  type PersistedPostEntityProps,
-} from '@app/posts/entities/post.entity';
+import { PostEntity } from '@app/posts/entities/post.entity';
 import {
   type PaginatedPosts,
   PostAlreadyExistsError,
@@ -11,6 +8,11 @@ import {
   PostRelationNotFoundError,
   PostRepository,
 } from '@app/posts/repositories/post.repository';
+import type {
+  PersistedPostEntityProps,
+  PublicPostCategory,
+  PublicPostTag,
+} from '@app/posts/types/posts.type';
 import { PrismaService } from '../prisma.service';
 
 const postInclude = {
@@ -71,12 +73,105 @@ export class PrismaPostsRepository implements PostRepository {
     }
   }
 
+  async update(id: string, post: PostEntity): Promise<PostEntity> {
+    const payload = post.toPersistence();
+    const tagIds = post.getTagIds();
+
+    try {
+      const postWithRelations = await this.prisma.$transaction(async (tx) => {
+        await tx.post.update({
+          where: { id },
+          data: {
+            ...payload,
+            content: payload.content as Prisma.InputJsonValue,
+          },
+        });
+
+        await tx.postTagRelation.deleteMany({
+          where: { postId: id },
+        });
+
+        if (tagIds.length > 0) {
+          await tx.postTagRelation.createMany({
+            data: tagIds.map((tagId) => ({
+              postId: id,
+              tagId,
+            })),
+            skipDuplicates: true,
+          });
+        }
+
+        return tx.post.findUnique({
+          where: { id },
+          include: postInclude,
+        });
+      });
+
+      if (!postWithRelations) {
+        throw new PostRelationNotFoundError();
+      }
+
+      return this.toEntity(postWithRelations);
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new PostAlreadyExistsError();
+      }
+
+      if (this.isForeignKeyError(error) || this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.prisma.post.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
   async findAll(params: PostPaginationParams): Promise<PaginatedPosts> {
     const skip = (params.page - 1) * params.limit;
     const [posts, total] = await this.prisma.$transaction([
       this.prisma.post.findMany({
         include: postInclude,
         orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+        where: { status: 'PUBLISHED' },
+        skip,
+        take: params.limit,
+      }),
+      this.prisma.post.count({ where: { status: 'PUBLISHED' } }),
+    ]);
+    const totalPages = Math.max(1, Math.ceil(total / params.limit));
+
+    return {
+      data: posts.map((post) => this.toEntity(post)),
+      meta: {
+        page: params.page,
+        limit: params.limit,
+        total,
+        totalPages,
+        hasNextPage: params.page < totalPages,
+        hasPreviousPage: params.page > 1,
+      },
+    };
+  }
+
+  async findAllAdmin(params: PostPaginationParams): Promise<PaginatedPosts> {
+    const skip = (params.page - 1) * params.limit;
+    const [posts, total] = await this.prisma.$transaction([
+      this.prisma.post.findMany({
+        include: postInclude,
+        orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
         skip,
         take: params.limit,
       }),
@@ -97,6 +192,18 @@ export class PrismaPostsRepository implements PostRepository {
     };
   }
 
+  async findCategories(): Promise<PublicPostCategory[]> {
+    return this.prisma.postCategory.findMany({
+      orderBy: { name: 'asc' },
+    });
+  }
+
+  async findTags(): Promise<PublicPostTag[]> {
+    return this.prisma.postTag.findMany({
+      orderBy: { name: 'asc' },
+    });
+  }
+
   async findById(id: string): Promise<PostEntity | null> {
     const post = await this.prisma.post.findUnique({
       where: { id },
@@ -107,6 +214,15 @@ export class PrismaPostsRepository implements PostRepository {
   }
 
   async findBySlug(slug: string): Promise<PostEntity | null> {
+    const post = await this.prisma.post.findFirst({
+      where: { slug, status: 'PUBLISHED' },
+      include: postInclude,
+    });
+
+    return post ? this.toEntity(post) : null;
+  }
+
+  async findAnyBySlug(slug: string): Promise<PostEntity | null> {
     const post = await this.prisma.post.findUnique({
       where: { slug },
       include: postInclude,
