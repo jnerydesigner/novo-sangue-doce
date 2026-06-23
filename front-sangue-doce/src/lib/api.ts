@@ -212,6 +212,30 @@ export type Post = {
   tags: PostTag[];
 };
 
+export type CreatePostPayload = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: PostContentBlock[];
+  status: PostStatus;
+  featured?: boolean;
+  readingMinutes: number;
+  coverImageUrl: string;
+  coverImageAlt?: string;
+  coverCaption?: string;
+  verticalImageUrl?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  publishedAt?: string;
+  authorId: string;
+  categoryId: string;
+  tagIds?: string[];
+};
+
+export type DeleteResponse = {
+  ok: boolean;
+};
+
 export type PaginatedResponse<T> = {
   data: T[];
   meta: {
@@ -369,12 +393,68 @@ export const api = {
 
       return apiFetch<PaginatedResponse<Post>>(`/posts${query ? `?${query}` : ""}`);
     },
-    get: (id: string) => apiFetch<Post>(`/posts/${id}`),
+    create: (payload: CreatePostPayload, params: AuthenticatedApiParams) =>
+      apiFetch<Post>("/posts", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "POST",
+        body: payload,
+      }),
+    adminList: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
+      const searchParams = new URLSearchParams();
+
+      if (params.page) {
+        searchParams.set("page", String(params.page));
+      }
+
+      if (params.limit) {
+        searchParams.set("limit", String(params.limit));
+      }
+
+      const query = searchParams.toString();
+
+      return apiFetch<PaginatedResponse<Post>>(
+        `/posts/admin${query ? `?${query}` : ""}`,
+        {
+          headers: {
+            Authorization: `Bearer ${params.accessToken}`,
+          },
+        },
+      );
+    },
+    update: (id: string, payload: CreatePostPayload, params: AuthenticatedApiParams) =>
+      apiFetch<Post>(`/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "PATCH",
+        body: payload,
+      }),
+    delete: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<DeleteResponse>(`/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "DELETE",
+      }),
+    get: (id: string, params?: AuthenticatedApiParams) =>
+      apiFetch<Post>(`/posts/${id}`, {
+        headers: params
+          ? {
+              Authorization: `Bearer ${params.accessToken}`,
+            }
+          : undefined,
+      }),
     getBySlug: (slug: string) => apiFetch<Post>(`/posts/slug/${slug}`),
+    categories: () => apiFetch<PostCategory[]>("/posts/categories"),
+    tags: () => apiFetch<PostTag[]>("/posts/tags"),
   },
   authors: {
     list: () => apiFetch<PostAuthor[]>("/authors"),
     get: (id: string) => apiFetch<PostAuthor>(`/authors/${id}`),
     getBySlug: (slug: string) => apiFetch<PostAuthor>(`/authors/slug/${slug}`),
+    searchByEmail: (email: string) =>
+      apiFetch<PostAuthor>(`/authors/search?email=${encodeURIComponent(email)}`),
   },
 };

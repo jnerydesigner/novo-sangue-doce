@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { Brand } from "@/components/home/brand";
+import { AdminShell } from "./admin-shell";
 import { requireAdmin } from "./_lib/require-admin";
 
 export const dynamic = "force-dynamic";
 
 const adminActions = [
   {
-    title: "Criar materia",
-    description: "Publicar posts, organizar conteúdo e preparar chamadas editoriais.",
-    href: "/admin/posts/novo",
+    title: "Materias",
+    description: "Publicar, revisar rascunhos e gerenciar a linha editorial.",
+    href: "/admin/posts",
   },
   {
     title: "Usuarios",
@@ -26,29 +26,11 @@ export default async function AdminPage() {
   const { profile } = await requireAdmin();
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
-      <header className="border-b border-line bg-card">
-        <div className="wrap flex min-h-[76px] flex-wrap items-center justify-between gap-4 py-4">
-          <div className="text-greenDeep">
-            <Brand />
-          </div>
-          <Link
-            className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
-            href="/"
-          >
-            Ver site
-          </Link>
-        </div>
-      </header>
-
-      <section className="wrap py-[clamp(48px,8vw,90px)]">
-        <span className="eyebrow">Admin</span>
-        <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
+    <AdminShell active="overview" userName={profile.name} userRole={profile.role}>
+      <section>
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <h1 className="max-w-[14ch] text-balance font-serif text-[clamp(2.4rem,5vw,4.2rem)] font-medium leading-[1.04] tracking-normal">
-              Area administrativa
-            </h1>
-            <p className="mt-4 max-w-[56ch] text-[1.05rem] leading-relaxed text-inkSoft">
+            <p className="max-w-[62ch] text-[1.05rem] leading-relaxed text-inkSoft">
               Ola, {profile.name}. Esta area separa as ferramentas de gestao do painel de usuario.
             </p>
           </div>
@@ -57,10 +39,10 @@ export default async function AdminPage() {
           </span>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <div className="mt-5 grid gap-5 md:grid-cols-3">
           {adminActions.map((action) => (
             <Link
-              className="rounded-lg border border-line bg-card p-6 transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial"
+              className="rounded-lg border border-line bg-card p-5 transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial"
               href={action.href}
               key={action.title}
             >
@@ -74,6 +56,6 @@ export default async function AdminPage() {
           ))}
         </div>
       </section>
-    </main>
+    </AdminShell>
   );
 }
