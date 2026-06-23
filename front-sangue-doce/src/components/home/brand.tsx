@@ -10,12 +10,14 @@ export function Brand({ dark = false }: { dark?: boolean }) {
       }`}
     >
       <Image
-        src="/sangue-doce-logo.png"
-        alt=""
+        src="http://localhost:9610/sangue-doce/public/sangue-doce-logo.png"
+        alt="sangue doce logo"
         width={44}
         height={44}
         className="h-11 w-11 rounded-lg object-cover"
-        priority={!dark}
+        fetchPriority={dark ? "auto" : "high"}
+        loading={dark ? "lazy" : "eager"}
+        title="Sangue Doce"
       />
       <span>Sangue Doce</span>
     </Link>

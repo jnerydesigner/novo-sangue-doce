@@ -3,11 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { Brand } from "@/components/home/brand";
 import { SiteFooter } from "@/components/home/site-footer";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
+
+const DESCRIPTION =
+  "Chegue preparado para aproveitar melhor o tempo com o médico. Lista do que levar, o que observar e perguntas que valem fazer na consulta.";
 
 export const metadata: Metadata = {
-  title: "Antes da Consulta — Guia 01 | Sangue Doce",
-  description:
-    "Chegue preparado para aproveitar melhor o tempo com o medico. Lista do que levar, o que observar e perguntas que valem fazer na consulta.",
+  title: "Antes da Consulta — Guia 01",
+  description: DESCRIPTION,
+  alternates: {
+    canonical: `${SITE_URL}/guias/antes-da-consulta`,
+  },
+  openGraph: {
+    title: `Antes da Consulta — Guia 01 | ${SITE_NAME}`,
+    description: DESCRIPTION,
+    url: `${SITE_URL}/guias/antes-da-consulta`,
+    type: "article",
+    images: [{ url: `${SITE_URL}/antes_da_consulta.png`, alt: "Antes da Consulta" }],
+  },
 };
 
 const itemsToCarry = [
@@ -83,10 +96,13 @@ export default function AntesDaConsultaPage() {
           <Image
             src="/antes_da_consulta.png"
             alt="Pessoa revisando anotacoes antes de uma consulta medica"
-            fill
-            priority
-            className="-z-20 object-cover object-center"
+            width={1920}
+            height={1280}
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+            fetchPriority="high"
+            loading="eager"
             sizes="100vw"
+            title="Antes da consulta"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(20,16,12,.90)_0%,rgba(20,16,12,.45)_50%,rgba(20,16,12,.20)_100%)]" />
 
@@ -213,9 +229,12 @@ export default function AntesDaConsultaPage() {
                     <Image
                       src={guide.image}
                       alt={guide.title}
-                      fill
-                      className="object-cover"
+                      width={600}
+                      height={338}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
                       sizes="600px"
+                      title={guide.title}
                     />
                   </div>
                   <div className="p-7">

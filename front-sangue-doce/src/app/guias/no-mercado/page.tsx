@@ -3,11 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { Brand } from "@/components/home/brand";
 import { SiteFooter } from "@/components/home/site-footer";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
+
+const DESCRIPTION =
+  "Pequenas escolhas no carrinho fazem grande diferença no controle glicêmico. Veja o que priorizar, como ler rótulos e o que evitar comprar em excesso.";
 
 export const metadata: Metadata = {
-  title: "No Mercado — Guia 02 | Sangue Doce",
-  description:
-    "Pequenas escolhas no carrinho fazem grande diferenca no controle glicemico. Veja o que priorizar, como ler rotulos e o que evitar comprar em excesso.",
+  title: "No Mercado — Guia 02",
+  description: DESCRIPTION,
+  alternates: {
+    canonical: `${SITE_URL}/guias/no-mercado`,
+  },
+  openGraph: {
+    title: `No Mercado — Guia 02 | ${SITE_NAME}`,
+    description: DESCRIPTION,
+    url: `${SITE_URL}/guias/no-mercado`,
+    type: "article",
+    images: [{ url: `${SITE_URL}/no_mercado.png`, alt: "No Mercado" }],
+  },
 };
 
 const priorityItems = [
@@ -83,10 +96,13 @@ export default function NoMercadoPage() {
           <Image
             src="/no_mercado.png"
             alt="Compras saudaveis no mercado"
-            fill
-            priority
-            className="-z-20 object-cover object-center"
+            width={1920}
+            height={1280}
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+            fetchPriority="high"
+            loading="eager"
             sizes="100vw"
+            title="No mercado"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(20,16,12,.88)_0%,rgba(20,16,12,.42)_52%,rgba(20,16,12,.18)_100%)]" />
 
@@ -216,9 +232,12 @@ export default function NoMercadoPage() {
                     <Image
                       src={guide.image}
                       alt={guide.title}
-                      fill
-                      className="object-cover"
+                      width={600}
+                      height={338}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
                       sizes="600px"
+                      title={guide.title}
                     />
                   </div>
                   <div className="p-7">

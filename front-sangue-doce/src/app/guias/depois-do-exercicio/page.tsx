@@ -3,11 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { Brand } from "@/components/home/brand";
 import { SiteFooter } from "@/components/home/site-footer";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
+
+const DESCRIPTION =
+  "A atividade física continua impactando a glicose mesmo após o treino. Veja como monitorar, reconhecer sinais de alerta e recuperar com segurança.";
 
 export const metadata: Metadata = {
-  title: "Depois do Exercício — Guia 03 | Sangue Doce",
-  description:
-    "A atividade fisica continua impactando a glicose mesmo apos o treino. Veja como monitorar, reconhecer sinais de alerta e recuperar com seguranca.",
+  title: "Depois do Exercício — Guia 03",
+  description: DESCRIPTION,
+  alternates: {
+    canonical: `${SITE_URL}/guias/depois-do-exercicio`,
+  },
+  openGraph: {
+    title: `Depois do Exercício — Guia 03 | ${SITE_NAME}`,
+    description: DESCRIPTION,
+    url: `${SITE_URL}/guias/depois-do-exercicio`,
+    type: "article",
+    images: [{ url: `${SITE_URL}/depois_do_exercicio.png`, alt: "Depois do Exercício" }],
+  },
 };
 
 const afterExerciseItems = [
@@ -86,10 +99,13 @@ export default function DepoisDoExercicioPage() {
           <Image
             src="/depois_do_exercicio.png"
             alt="Pessoa se recuperando depois de atividade fisica"
-            fill
-            priority
-            className="-z-20 object-cover object-center"
+            width={1920}
+            height={1280}
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+            fetchPriority="high"
+            loading="eager"
             sizes="100vw"
+            title="Depois do exercicio"
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(20,16,12,.88)_0%,rgba(20,16,12,.42)_52%,rgba(20,16,12,.18)_100%)]" />
 
@@ -237,9 +253,12 @@ export default function DepoisDoExercicioPage() {
                     <Image
                       src={guide.image}
                       alt={guide.title}
-                      fill
-                      className="object-cover"
+                      width={600}
+                      height={338}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
                       sizes="600px"
+                      title={guide.title}
                     />
                   </div>
                   <div className="p-7">

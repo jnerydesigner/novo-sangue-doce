@@ -9,10 +9,13 @@ export function HeroSection() {
       <Image
         src="/images/saudavel.png"
         alt="Alimentos saudaveis sobre fundo claro para cuidado diario com diabetes"
-        fill
-        priority
-        className="-z-20 scale-105 object-cover object-center"
+        width={1920}
+        height={1280}
+        className="absolute inset-0 -z-20 h-full w-full scale-105 object-cover object-center"
+        fetchPriority="high"
+        loading="eager"
         sizes="100vw"
+        title="Alimentos saudaveis para cuidado diario com diabetes"
       />
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(20,16,12,.86)_0%,rgba(20,16,12,.34)_42%,rgba(20,16,12,.22)_100%),linear-gradient(105deg,rgba(20,16,12,.70)_0%,rgba(20,16,12,.26)_58%,rgba(20,16,12,.10)_100%)]" />
 

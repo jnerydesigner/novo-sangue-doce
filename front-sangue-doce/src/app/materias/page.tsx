@@ -1,16 +1,38 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleCard } from "@/components/home/article-card";
-import { Brand } from "@/components/home/brand";
+import { PublicSiteHeader } from "@/components/home/public-site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { api } from "@/lib/api";
 import { mapPostToArticle } from "@/lib/posts";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Materias | Sangue Doce",
-  description:
-    "Lista de materias do Sangue Doce sobre glicemia, alimentacao, rotina, sensores e cuidado diario.",
-};
+const MATERIASPAGE_DESCRIPTION =
+  "Leituras sobre glicemia, alimentação, sensores, consultas e cuidado diário com diabetes.";
+
+export async function generateMetadata({ searchParams }: MateriasPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const page = parsePage(params?.pagina);
+  const isPaginated = page > 1;
+  const canonicalUrl = isPaginated
+    ? `${SITE_URL}/materias?pagina=${page}`
+    : `${SITE_URL}/materias`;
+
+  return {
+    title: isPaginated ? `Matérias — Página ${page}` : "Matérias",
+    description: MATERIASPAGE_DESCRIPTION,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `Matérias | ${SITE_NAME}`,
+      description: MATERIASPAGE_DESCRIPTION,
+      url: canonicalUrl,
+      type: "website",
+    },
+    ...(isPaginated && { robots: { index: false, follow: true } }),
+  };
+}
 
 const ARTICLES_PER_PAGE = 6;
 
@@ -45,27 +67,7 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
 
   return (
     <>
-      <header className="sticky top-0 z-[100] border-b border-line bg-paper/85 shadow-sm backdrop-blur-xl">
-        <div className="wrap flex h-[76px] items-center justify-between gap-6">
-          <div className="text-greenDeep">
-            <Brand />
-          </div>
-          <nav className="flex items-center gap-5" aria-label="Materias">
-            <Link
-              href="/"
-              className="text-[14px] font-semibold text-inkSoft transition hover:text-ink"
-            >
-              Inicio
-            </Link>
-            <Link
-              href="/#guias"
-              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 sm:inline-flex"
-            >
-              Guias
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <PublicSiteHeader />
 
       <main>
         <section className="border-b border-line bg-paper2 py-[clamp(72px,10vw,128px)]">

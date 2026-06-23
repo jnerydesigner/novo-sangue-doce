@@ -1,4 +1,4 @@
-import type { Measurement } from "@/lib/api";
+import type { AuthProfile, Measurement } from "@/lib/api";
 import { EditorialSection } from "./home/editorial-section";
 import { GlucoseEntrySection } from "./home/glucose-entry-section";
 import { GuidesSection } from "./home/guides-section";
@@ -9,15 +9,20 @@ import { SiteHeader } from "./home/site-header";
 
 type HomePageProps = {
   isAuthenticated: boolean;
+  profile: AuthProfile | null;
   recentReadings: Measurement[];
 };
 
-export function HomePage({ isAuthenticated, recentReadings }: HomePageProps) {
+export function HomePage({
+  isAuthenticated,
+  profile,
+  recentReadings,
+}: HomePageProps) {
   const glucoseEntryKey = `${isAuthenticated}-${recentReadings.map((reading) => reading.id).join("-")}`;
 
   return (
     <>
-      <SiteHeader isAuthenticated={isAuthenticated} />
+      <SiteHeader isAuthenticated={isAuthenticated} profile={profile} />
       <main>
         <HeroSection />
         <EditorialSection />

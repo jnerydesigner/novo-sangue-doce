@@ -1,10 +1,55 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
+
+export const viewport: Viewport = {
+  themeColor: "#2f5d3c",
+};
 
 export const metadata: Metadata = {
-  title: "Sangue Doce | Cuidado diario para viver melhor com diabetes",
-  description:
-    "Jornalismo e cuidado sobre diabetes, prevencao, alimentacao e saude metabolica para o dia a dia.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | Cuidado diário para viver melhor com diabetes`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    siteName: SITE_NAME,
+    locale: "pt_BR",
+    type: "website",
+    images: [
+      {
+        url: "/sangue-doce-logo.png",
+        width: 512,
+        height: 512,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  icons: {
+    apple: [
+      {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        type: "image/png",
+        url: "/apple-touch-icon.png",
+      },
+    ],
+    icon: [
+      {
+        sizes: "1024x1024",
+        type: "image/png",
+        url: "/sangue-doce-logo.png",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

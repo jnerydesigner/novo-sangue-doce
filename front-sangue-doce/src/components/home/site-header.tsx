@@ -2,18 +2,22 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { AuthProfile } from "@/lib/api";
 import { Brand } from "./brand";
 import { navItems } from "./data";
 import { CloseIcon, MenuIcon } from "./icons";
+import { UserMenu } from "./user-menu";
 import { scrollToId } from "./utils";
 
 type SiteHeaderProps = {
   isAuthenticated: boolean;
+  profile: AuthProfile | null;
 };
 
-export function SiteHeader({ isAuthenticated }: SiteHeaderProps) {
+export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const dashboardHref = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -65,16 +69,26 @@ export function SiteHeader({ isAuthenticated }: SiteHeaderProps) {
             Receber boletim
           </button>
 
-          <Link
-            className={`hidden rounded-lg border px-5 py-3 text-[15px] font-semibold transition hover:-translate-y-px md:inline-flex ${
-              scrolled
-                ? "border-lineStrong text-greenDeep hover:bg-paper2"
-                : "border-white/35 bg-white/10 text-paper hover:bg-white/20"
-            }`}
-            href={isAuthenticated ? "/dashboard" : "/login"}
-          >
-            {isAuthenticated ? "Minha Area" : "Entrar"}
-          </Link>
+          {profile ? (
+            <div className="hidden md:block">
+              <UserMenu
+                dashboardHref={dashboardHref}
+                name={profile.name}
+                tone={scrolled ? "solid" : "light"}
+              />
+            </div>
+          ) : (
+            <Link
+              className={`hidden rounded-lg border px-5 py-3 text-[15px] font-semibold transition hover:-translate-y-px md:inline-flex ${
+                scrolled
+                  ? "border-lineStrong text-greenDeep hover:bg-paper2"
+                  : "border-white/35 bg-white/10 text-paper hover:bg-white/20"
+              }`}
+              href={isAuthenticated ? dashboardHref : "/login"}
+            >
+              Entrar
+            </Link>
+          )}
 
           <button
             className={`grid h-11 w-11 place-items-center md:hidden ${scrolled ? "text-ink" : "text-paper"}`}
@@ -120,13 +134,19 @@ export function SiteHeader({ isAuthenticated }: SiteHeaderProps) {
         >
           Receber boletim
         </button>
-        <Link
-          className="mt-3 inline-flex self-start rounded-lg border border-lineStrong px-7 py-4 text-base font-semibold text-greenDeep"
-          href={isAuthenticated ? "/dashboard" : "/login"}
-          onClick={() => setMenuOpen(false)}
-        >
-          {isAuthenticated ? "Minha Area" : "Entrar"}
-        </Link>
+        {profile ? (
+          <div className="mt-3 self-start">
+            <UserMenu dashboardHref={dashboardHref} name={profile.name} />
+          </div>
+        ) : (
+          <Link
+            className="mt-3 inline-flex self-start rounded-lg border border-lineStrong px-7 py-4 text-base font-semibold text-greenDeep"
+            href={isAuthenticated ? dashboardHref : "/login"}
+            onClick={() => setMenuOpen(false)}
+          >
+            Entrar
+          </Link>
+        )}
       </div>
     </>
   );

@@ -30,10 +30,13 @@ export function ArticleCard({
       >
         <Image
           src={seq === 1 ? article.image : article.imageVertical}
-          alt=""
-          fill
-          className="object-cover"
+          alt={article.title}
+          width={780}
+          height={488}
+          className="h-full w-full object-cover"
+          loading="lazy"
           sizes={compact ? "420px" : "780px"}
+          title={article.title}
         />
       </div>
       <div className={`flex flex-1 flex-col gap-3 ${compact ? "p-6" : "p-8"}`}>
