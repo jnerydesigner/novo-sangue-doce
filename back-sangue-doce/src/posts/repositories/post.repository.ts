@@ -43,4 +43,5 @@ export abstract class PostRepository {
   abstract findById(id: string): Promise<PostEntity | null>;
   abstract findBySlug(slug: string): Promise<PostEntity | null>;
   abstract findAnyBySlug(slug: string): Promise<PostEntity | null>;
+  abstract findByAuthorId(authorId: string): Promise<PostEntity[]>;
 }

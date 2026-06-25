@@ -1,4 +1,5 @@
 import { UserEntity } from '../entities/user.entity';
+import type { UserDiabetesType } from '../entities/user.entity';
 
 export class UserEmailAlreadyExistsError extends Error {
   constructor() {
@@ -13,4 +14,16 @@ export abstract class UserRepository {
   abstract findById(id: string): Promise<UserEntity | null>;
   abstract findByEmail(email: string): Promise<UserEntity | null>;
   abstract findByEmailWithPassword(email: string): Promise<UserEntity | null>;
+  abstract updateProfile(
+    id: string,
+    data: {
+      name: string;
+      birthDate: Date | null;
+      diabetesType: UserDiabetesType;
+    },
+  ): Promise<UserEntity>;
+  abstract updatePasswordHash(
+    id: string,
+    passwordHash: string,
+  ): Promise<UserEntity>;
 }

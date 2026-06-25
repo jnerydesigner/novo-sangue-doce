@@ -231,6 +231,16 @@ export class PrismaPostsRepository implements PostRepository {
     return post ? this.toEntity(post) : null;
   }
 
+  async findByAuthorId(authorId: string): Promise<PostEntity[]> {
+    const posts = await this.prisma.post.findMany({
+      where: { authorId },
+      include: postInclude,
+      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+    });
+
+    return posts.map((post) => this.toEntity(post));
+  }
+
   private toEntity(post: PostRecord): PostEntity {
     const props: PersistedPostEntityProps = {
       ...post,

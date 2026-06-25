@@ -6,6 +6,7 @@ export type JwtPayload = {
   diabetesType: string;
   role: 'ADMIN' | 'USER';
   roles: ('ADMIN' | 'USER')[];
+  passwordSetupRequired: boolean;
   createdAt: string;
   updatedAt: string;
 };

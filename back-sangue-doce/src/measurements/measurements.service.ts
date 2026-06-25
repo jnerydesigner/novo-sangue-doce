@@ -281,6 +281,8 @@ export class MeasurementsService {
     userRequest: AuthenticatedRequest,
     yearInput?: string,
     monthInput?: string,
+    startDateInput?: string,
+    endDateInput?: string,
   ): Promise<MonthlyMeasurementReport> {
     const userAuthenticated =
       this.authService.getAuthenticatedUser(userRequest);
@@ -289,29 +291,14 @@ export class MeasurementsService {
     }
 
     const now = this.getDatePartsInTimeZone(new Date(), MEASUREMENT_TIME_ZONE);
-    const year = this.parseReportYear(yearInput, now.year);
-    const month = this.parseReportMonth(monthInput, now.month);
-    const startDate = this.createDateInTimeZone(
-      year,
-      month,
-      1,
-      0,
-      0,
-      0,
-      0,
-      MEASUREMENT_TIME_ZONE,
-    );
-    const endDate = new Date(
-      this.createDateInTimeZone(
-        year,
-        month + 1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        MEASUREMENT_TIME_ZONE,
-      ).getTime() - 1,
+    const period = this.resolveReportPeriod(
+      {
+        endDate: endDateInput,
+        month: monthInput,
+        startDate: startDateInput,
+        year: yearInput,
+      },
+      now,
     );
     const user = await this.userService.findOne(userAuthenticated.sub);
 
@@ -321,7 +308,7 @@ export class MeasurementsService {
 
     const measurements = await this.prisma.measurement.findMany({
       where: {
-        measuredAt: { gte: startDate, lte: endDate },
+        measuredAt: { gte: period.startDate, lte: period.endDate },
         readingContext: { not: 'RANDOM' },
         userId: userAuthenticated.sub,
       },
@@ -331,7 +318,11 @@ export class MeasurementsService {
     const publicMeasurements = measurements.map((measurement) =>
       this.toPublicMeasurement(measurement),
     );
-    const days = this.buildMonthlyReportDays(year, month, publicMeasurements);
+    const days = this.buildReportDays(
+      period.startDate,
+      period.endDate,
+      publicMeasurements,
+    );
     const totalMeasurements = publicMeasurements.length;
     const glucoseTotal = publicMeasurements.reduce(
       (total, measurement) => total + measurement.glucoseValueMgDl,
@@ -341,11 +332,11 @@ export class MeasurementsService {
     return {
       userId: userAuthenticated.sub,
       userName: user.name,
-      year,
-      month,
+      year: period.year,
+      month: period.month,
       period: {
-        startDate,
-        endDate,
+        startDate: period.startDate,
+        endDate: period.endDate,
       },
       excludedContexts: ['RANDOM'],
       summary: {
@@ -461,16 +452,113 @@ export class MeasurementsService {
     return year;
   }
 
-  private buildMonthlyReportDays(
-    year: number,
-    month: number,
+  private resolveReportPeriod(
+    params: {
+      endDate?: string;
+      month?: string;
+      startDate?: string;
+      year?: string;
+    },
+    fallback: { month: number; year: number },
+  ): {
+    endDate: Date;
+    month: number;
+    startDate: Date;
+    year: number;
+  } {
+    if (params.startDate || params.endDate) {
+      if (!params.startDate || !params.endDate) {
+        throw new BadRequestException(
+          'startDate and endDate must be provided together.',
+        );
+      }
+
+      const startDate = this.parseFilterDate(params.startDate, 'startDate');
+      const endDate = this.parseFilterDate(params.endDate, 'endDate');
+
+      if (startDate.getTime() > endDate.getTime()) {
+        throw new BadRequestException(
+          'startDate must be before or equal to endDate.',
+        );
+      }
+
+      const startParts = this.getDatePartsInTimeZone(
+        startDate,
+        MEASUREMENT_TIME_ZONE,
+      );
+
+      return {
+        endDate,
+        month: startParts.month,
+        startDate,
+        year: startParts.year,
+      };
+    }
+
+    const year = this.parseReportYear(params.year, fallback.year);
+    const month = this.parseReportMonth(params.month, fallback.month);
+    const startDate = this.createDateInTimeZone(
+      year,
+      month,
+      1,
+      0,
+      0,
+      0,
+      0,
+      MEASUREMENT_TIME_ZONE,
+    );
+    const endDate = new Date(
+      this.createDateInTimeZone(
+        year,
+        month + 1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        MEASUREMENT_TIME_ZONE,
+      ).getTime() - 1,
+    );
+
+    return {
+      endDate,
+      month,
+      startDate,
+      year,
+    };
+  }
+
+  private buildReportDays(
+    startDate: Date,
+    endDate: Date,
     measurements: PublicMeasurement[],
   ): MonthlyMeasurementReportDay[] {
-    const daysInMonth = new Date(year, month, 0).getDate();
+    const days: MonthlyMeasurementReportDay[] = [];
+    const startParts = this.getDatePartsInTimeZone(
+      startDate,
+      MEASUREMENT_TIME_ZONE,
+    );
+    let cursor = this.createDateInTimeZone(
+      startParts.year,
+      startParts.month,
+      startParts.day,
+      0,
+      0,
+      0,
+      0,
+      MEASUREMENT_TIME_ZONE,
+    );
 
-    return Array.from({ length: daysInMonth }, (_, index) => {
-      const day = index + 1;
-      const date = this.formatReportDate(year, month, day);
+    while (cursor.getTime() <= endDate.getTime()) {
+      const cursorParts = this.getDatePartsInTimeZone(
+        cursor,
+        MEASUREMENT_TIME_ZONE,
+      );
+      const date = this.formatReportDate(
+        cursorParts.year,
+        cursorParts.month,
+        cursorParts.day,
+      );
       const dayMeasurements = measurements.filter(
         (measurement) =>
           this.formatDateOnly(measurement.measuredAt, MEASUREMENT_TIME_ZONE) ===
@@ -481,9 +569,9 @@ export class MeasurementsService {
         0,
       );
 
-      return {
+      days.push({
         date,
-        day,
+        day: cursorParts.day,
         measurements: dayMeasurements,
         summary: {
           averageGlucoseMgDl:
@@ -492,8 +580,21 @@ export class MeasurementsService {
               : null,
           totalMeasurements: dayMeasurements.length,
         },
-      };
-    });
+      });
+
+      cursor = this.createDateInTimeZone(
+        cursorParts.year,
+        cursorParts.month,
+        cursorParts.day + 1,
+        0,
+        0,
+        0,
+        0,
+        MEASUREMENT_TIME_ZONE,
+      );
+    }
+
+    return days;
   }
 
   private formatDateOnly(date: Date, timeZone: string): string {

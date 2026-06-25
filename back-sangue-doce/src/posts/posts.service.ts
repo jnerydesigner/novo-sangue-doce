@@ -214,4 +214,14 @@ export class PostsService {
 
     return parsed;
   }
+
+  async findPostsByAuthor(authorId: string): Promise<PublicPost[]> {
+    if (!this.isValidUuid(authorId)) {
+      throw new BadRequestException('Invalid author id.');
+    }
+
+    const posts = await this.postRepository.findByAuthorId(authorId);
+
+    return posts.map((post) => post.toPublic());
+  }
 }

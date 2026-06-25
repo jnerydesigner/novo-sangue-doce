@@ -70,6 +70,11 @@ export class PostsController {
     return this.postsService.findSlug(slug);
   }
 
+  @Get('authors/:authorId')
+  findPostsByAuthor(@Param('authorId') authorId: string) {
+    return this.postsService.findPostsByAuthor(authorId);
+  }
+
   @Get(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
