@@ -2,6 +2,10 @@ import Link from "next/link";
 import type React from "react";
 import { Brand } from "@/components/home/brand";
 import { UserMenu } from "@/components/home/user-menu";
+import {
+  adminSidebarItems,
+  dashboardSidebarItems,
+} from "../dashboard/dashboard.data";
 
 type AdminShellProps = {
   active: "overview" | "posts" | "users" | "authors";
@@ -12,37 +16,22 @@ type AdminShellProps = {
   userRole?: string;
 };
 
-const navItems = [
-  {
-    id: "overview",
-    href: "/admin",
-    label: "Visao geral",
-    mark: "V",
-  },
-  {
-    id: "posts",
-    href: "/admin/posts",
-    label: "Materias",
-    mark: "M",
-  },
-  {
-    id: "users",
-    href: "/admin/usuarios",
-    label: "Usuarios",
-    mark: "U",
-  },
-  {
-    id: "authors",
-    href: "/admin/autores",
-    label: "Autores",
-    mark: "A",
-  },
-] as const;
+const adminActiveByHref = {
+  "/admin": "overview",
+  "/admin/posts": "posts",
+  "/admin/usuarios": "users",
+  "/admin/autores": "authors",
+} as const;
 
-const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: string }> = {
+const navItems = [...adminSidebarItems, ...dashboardSidebarItems];
+
+const pageTitles: Record<
+  AdminShellProps["active"],
+  { title: string; subtitle: string }
+> = {
   overview: {
-    title: "Area administrativa",
-    subtitle: "Ferramentas de gestao do painel.",
+    title: "Bom te ver por aqui",
+    subtitle: "Seu painel para acompanhar a sua Sáude está aqui.",
   },
   posts: {
     title: "Materias",
@@ -82,10 +71,19 @@ export function AdminShell({
           <nav aria-label="Menu administrativo">
             <ul className="grid gap-1">
               {navItems.map((item) => {
-                const isActive = active === item.id;
+                const isActive =
+                  item.href in adminActiveByHref &&
+                  active ===
+                    adminActiveByHref[
+                      item.href as keyof typeof adminActiveByHref
+                    ];
+                const mark =
+                  "mark" in item && typeof item.mark === "string"
+                    ? item.mark
+                    : item.label.slice(0, 1);
 
                 return (
-                  <li key={item.id}>
+                  <li key={item.label}>
                     <Link
                       className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-[15px] font-semibold transition ${
                         isActive
@@ -95,7 +93,7 @@ export function AdminShell({
                       href={item.href}
                     >
                       <span className="grid h-8 w-8 place-items-center rounded-lg bg-paper text-sm">
-                        {item.mark}
+                        {mark}
                       </span>
                       {item.label}
                     </Link>
@@ -109,7 +107,9 @@ export function AdminShell({
             <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
               Acesso
             </span>
-            <p className="mt-2 text-sm font-semibold text-ink">{userName ?? "Painel"}</p>
+            <p className="mt-2 text-sm font-semibold text-ink">
+              {userName ?? "Painel"}
+            </p>
             {userRole ? (
               <span className="mt-3 inline-flex rounded-full border border-green/30 bg-green/10 px-3 py-1 text-xs font-bold text-greenDeep">
                 {userRole}
@@ -147,15 +147,18 @@ export function AdminShell({
               aria-label="Atalhos administrativos"
               className="mt-5 flex flex-wrap gap-2 lg:hidden"
             >
-              {navItems.map((item) => (
+              {adminSidebarItems.map((item) => (
                 <Link
                   className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                    active === item.id
+                    active ===
+                    adminActiveByHref[
+                      item.href as keyof typeof adminActiveByHref
+                    ]
                       ? "border-green/30 bg-green/10 text-greenDeep"
                       : "border-lineStrong text-inkSoft hover:bg-paper2"
                   }`}
                   href={item.href}
-                  key={item.id}
+                  key={item.label}
                 >
                   {item.label}
                 </Link>

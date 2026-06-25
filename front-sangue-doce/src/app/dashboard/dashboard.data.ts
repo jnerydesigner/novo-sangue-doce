@@ -11,7 +11,22 @@ export const glucosePoints = glucoseValues.map((value, index) => ({
   value,
 }));
 
-export const sidebarItems = ["Hoje", "Glicemia", "Sono", "Refeicoes", "Relatorios", "Ajustes"];
+export const adminSidebarItems = [
+  { href: "/admin", label: "Visao geral", mark: "V" },
+  { href: "/admin/posts", label: "Materias", mark: "M" },
+  { href: "/admin/usuarios", label: "Usuarios", mark: "U" },
+  { href: "/admin/autores", label: "Autores", mark: "A" },
+];
+
+export const dashboardSidebarItems = [
+  { href: "/dashboard", label: "Hoje" },
+  { href: "/dashboard", label: "Glicemia" },
+  { href: "/dashboard", label: "Sono" },
+  { href: "/dashboard", label: "Refeicoes" },
+  { href: "/dashboard/reports", label: "Relatorios" },
+  { href: "/dashboard/account", label: "Minha conta" },
+  { href: "/dashboard/account/password", label: "Senha" },
+];
 
 export type SummaryTile = {
   label: string;

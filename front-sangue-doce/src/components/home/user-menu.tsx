@@ -7,6 +7,8 @@ import { UserAvatar } from "@/app/dashboard/components/user-avatar";
 
 type UserMenuProps = {
   actionLabel?: string;
+  accountHref?: string;
+  accountLabel?: string;
   dashboardHref: string;
   name: string;
   sectionLabel?: string;
@@ -16,6 +18,8 @@ type UserMenuProps = {
 
 export function UserMenu({
   actionLabel = "Acessar area logada",
+  accountHref = "/dashboard/account",
+  accountLabel = "Minha conta",
   dashboardHref,
   name,
   sectionLabel = "Area logada",
@@ -95,6 +99,16 @@ export function UserMenu({
           >
             {actionLabel}
           </Link>
+          {accountHref ? (
+            <Link
+              className="rounded-md px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 hover:text-ink"
+              href={accountHref}
+              onClick={() => setOpen(false)}
+              role="menuitem"
+            >
+              {accountLabel}
+            </Link>
+          ) : null}
           <LogoutButton />
         </div>
       ) : null}

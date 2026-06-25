@@ -74,3 +74,16 @@ body {
     scroll-behavior: auto;
   }
 }
+
+@page {
+  margin: 10mm;
+  size: A4 portrait;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff;
+    font-size: 12px;
+  }
+}

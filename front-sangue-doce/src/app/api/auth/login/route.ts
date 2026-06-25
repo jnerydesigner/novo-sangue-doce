@@ -37,7 +37,11 @@ export async function POST(request: Request) {
   }
 
   const profile = await api.auth.profile(loginResponse.access_token).catch(() => null);
-  const redirectTo = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
+  const redirectTo = profile?.passwordSetupRequired
+    ? "/dashboard/account/password"
+    : profile?.role === "ADMIN"
+      ? "/admin"
+      : "/dashboard";
 
   const response = NextResponse.json({ ok: true, redirectTo });
   response.cookies.set(AUTH_COOKIE_NAME, loginResponse.access_token, authCookieOptions);

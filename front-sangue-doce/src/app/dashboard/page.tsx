@@ -33,6 +33,10 @@ export default async function DashboardPage() {
     redirect("/admin");
   }
 
+  if (userData.passwordSetupRequired) {
+    redirect("/dashboard/account/password");
+  }
+
   const today = new Date();
   const monthlyReport = await api.measurements.monthlyReport({
     accessToken,

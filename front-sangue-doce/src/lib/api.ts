@@ -35,6 +35,16 @@ export type LoginResponse = {
   access_token: string;
 };
 
+export type UpdateProfilePayload = {
+  name: string;
+  birthDate?: string | null;
+  diabetesType: DiabetesType;
+};
+
+export type SetPasswordPayload = {
+  password: string;
+};
+
 export type AuthProfile = {
   sub: string;
   name: string;
@@ -43,6 +53,7 @@ export type AuthProfile = {
   diabetesType: string;
   role: UserRole;
   roles: UserRole[];
+  passwordSetupRequired: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -281,6 +292,22 @@ export const api = {
           Authorization: `Bearer ${accessToken}`,
         },
       }),
+    updateProfile: (payload: UpdateProfilePayload, accessToken: string) =>
+      apiFetch<{ access_token: string; profile: AuthProfile }>("/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        method: "PATCH",
+        body: payload,
+      }),
+    setPassword: (payload: SetPasswordPayload, accessToken: string) =>
+      apiFetch<{ access_token: string; profile: AuthProfile }>("/auth/password", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        method: "PATCH",
+        body: payload,
+      }),
   },
   users: {
     create: (payload: CreateUserPayload) =>
@@ -356,7 +383,14 @@ export const api = {
         },
       });
     },
-    monthlyReport: (params: AuthenticatedApiParams & { year?: number; month?: number }) => {
+    monthlyReport: (
+      params: AuthenticatedApiParams & {
+        endDate?: string;
+        month?: number;
+        startDate?: string;
+        year?: number;
+      },
+    ) => {
       const searchParams = new URLSearchParams();
 
       if (params.year) {
@@ -365,6 +399,14 @@ export const api = {
 
       if (params.month) {
         searchParams.set("month", String(params.month));
+      }
+
+      if (params.startDate) {
+        searchParams.set("startDate", params.startDate);
+      }
+
+      if (params.endDate) {
+        searchParams.set("endDate", params.endDate);
       }
 
       return apiFetch<MonthlyMeasurementReport>(
@@ -446,6 +488,7 @@ export const api = {
             }
           : undefined,
       }),
+    listByAuthor: (authorId: string) => apiFetch<Post[]>(`/posts/authors/${authorId}`),
     getBySlug: (slug: string) => apiFetch<Post>(`/posts/slug/${slug}`),
     categories: () => apiFetch<PostCategory[]>("/posts/categories"),
     tags: () => apiFetch<PostTag[]>("/posts/tags"),
