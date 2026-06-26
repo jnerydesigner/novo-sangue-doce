@@ -14,7 +14,7 @@ async function bootstrap() {
   const port = Number(process.env.SERVER_PORT ?? 3000);
   const environment = process.env.NODE_ENV ?? 'development';
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 
   const url = await app.getUrl();
 

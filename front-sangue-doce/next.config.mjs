@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   images: {
     dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
+    unoptimized: process.env.NEXT_IMAGE_UNOPTIMIZED === "true",
     remotePatterns: [
       {
         hostname: "github.com",
@@ -20,6 +21,7 @@ const nextConfig = {
       },
     ],
   },
+  output: "standalone",
   turbopack: {
     root: __dirname,
   },
