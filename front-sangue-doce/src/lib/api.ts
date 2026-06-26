@@ -1,4 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3011";
+const API_URL =
+  process.env.INTERNAL_API_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:3011";
 
 type RequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
@@ -45,10 +48,16 @@ export type SetPasswordPayload = {
   password: string;
 };
 
+export type UpdateAuthorProfilePayload = {
+  bio?: string | null;
+  role: string;
+};
+
 export type AuthProfile = {
   sub: string;
   name: string;
   email: string;
+  avatarUrl?: string;
   birthDate?: string;
   diabetesType: string;
   role: UserRole;
@@ -125,6 +134,7 @@ export type MonthlyMeasurementReportDay = {
 
 export type MonthlyMeasurementReport = {
   userId: string;
+  userAvatarUrl?: string;
   userName: string;
   year: number;
   month: number;
@@ -495,6 +505,20 @@ export const api = {
   },
   authors: {
     list: () => apiFetch<PostAuthor[]>("/authors"),
+    me: (params: AuthenticatedApiParams) =>
+      apiFetch<PostAuthor>("/authors/me", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
+    updateMe: (payload: UpdateAuthorProfilePayload, params: AuthenticatedApiParams) =>
+      apiFetch<PostAuthor>("/authors/me", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "PATCH",
+        body: payload,
+      }),
     get: (id: string) => apiFetch<PostAuthor>(`/authors/${id}`),
     getBySlug: (slug: string) => apiFetch<PostAuthor>(`/authors/slug/${slug}`),
     searchByEmail: (email: string) =>

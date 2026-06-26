@@ -19,6 +19,7 @@ export type DraftPostPreview = {
   tags: PostTag[];
   readingMinutes: number;
   coverImageUrl: string;
+  coverImageAlt?: string;
   content: PostContentBlock[];
   savedAt: string;
 };

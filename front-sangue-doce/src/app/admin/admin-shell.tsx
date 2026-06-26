@@ -12,6 +12,7 @@ type AdminShellProps = {
   children: React.ReactNode;
   subtitle?: string;
   title?: string;
+  userAvatarUrl?: string;
   userName?: string;
   userRole?: string;
 };
@@ -31,7 +32,7 @@ const pageTitles: Record<
 > = {
   overview: {
     title: "Bom te ver por aqui",
-    subtitle: "Seu painel para acompanhar a sua Sáude está aqui.",
+    subtitle: "Ola, acompanhe sua rotina e as ferramentas de gestao no mesmo lugar.",
   },
   posts: {
     title: "Materias",
@@ -52,6 +53,7 @@ export function AdminShell({
   children,
   subtitle,
   title,
+  userAvatarUrl,
   userName,
   userRole,
 }: AdminShellProps) {
@@ -134,6 +136,7 @@ export function AdminShell({
                 {userName ? (
                   <UserMenu
                     actionLabel="Ver site"
+                    avatarUrl={userAvatarUrl}
                     dashboardHref="/"
                     name={userName}
                     sectionLabel="Site publico"

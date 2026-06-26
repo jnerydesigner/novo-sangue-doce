@@ -187,7 +187,7 @@ export function PostContentEditor({
     <div className="md:col-span-2">
       <input name="conteudo" type="hidden" value={serializedContent} />
 
-      <div className="overflow-hidden rounded-lg border border-line bg-paper">
+      <div className="rounded-lg border border-line bg-paper">
         <div className="flex flex-wrap items-center gap-1 border-b border-line bg-card px-3 py-2">
           {blockOptions.map((option) => (
             <button

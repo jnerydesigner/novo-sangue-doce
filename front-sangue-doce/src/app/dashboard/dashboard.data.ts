@@ -20,9 +20,9 @@ export const adminSidebarItems = [
 
 export const dashboardSidebarItems = [
   { href: "/dashboard", label: "Hoje" },
-  { href: "/dashboard", label: "Glicemia" },
-  { href: "/dashboard", label: "Sono" },
-  { href: "/dashboard", label: "Refeicoes" },
+  { href: "/dashboard/glucose", label: "Glicemia" },
+  { href: "/dashboard/sleep", label: "Sono" },
+  { href: "/dashboard/meals", label: "Refeicoes" },
   { href: "/dashboard/reports", label: "Relatorios" },
   { href: "/dashboard/account", label: "Minha conta" },
   { href: "/dashboard/account/password", label: "Senha" },

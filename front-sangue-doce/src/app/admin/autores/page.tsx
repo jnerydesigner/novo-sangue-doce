@@ -10,7 +10,12 @@ export default async function AdminAuthorsPage() {
   const authors = await api.authors.list();
 
   return (
-    <AdminShell active="authors" userName={profile.name} userRole={profile.role}>
+    <AdminShell
+      active="authors"
+      userAvatarUrl={profile.avatarUrl}
+      userName={profile.name}
+      userRole={profile.role}
+    >
       <section>
         <div className="grid gap-5 md:grid-cols-2">
           {authors.map((author) => (

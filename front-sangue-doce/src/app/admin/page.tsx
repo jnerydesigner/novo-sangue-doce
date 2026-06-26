@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { api, type MonthlyMeasurementReport, type Post, type PostAuthor } from "@/lib/api";
+import { api, type MonthlyMeasurementReport, type Post } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
 import { AdminShell } from "./admin-shell";
 import { requireAdmin } from "./_lib/require-admin";
@@ -59,15 +59,11 @@ function getMeasurementTime(value?: string) {
   }).format(new Date(value));
 }
 
-function normalizeName(value: string) {
-  return value.trim().toLowerCase();
-}
-
 export default async function AdminPage() {
   const { accessToken, profile } = await requireAdmin();
   const today = new Date();
-  const [authors, monthlyReport] = await Promise.all([
-    api.authors.list().catch(() => []),
+  const [author, monthlyReport] = await Promise.all([
+    api.authors.me({ accessToken }).catch(() => null),
     api.measurements
       .monthlyReport({
         accessToken,
@@ -76,13 +72,6 @@ export default async function AdminPage() {
       })
       .catch(() => null),
   ]);
-  const author =
-    authors.find((currentAuthor) => currentAuthor.email === profile.email) ??
-    authors.find(
-      (currentAuthor) =>
-        normalizeName(currentAuthor.name) === normalizeName(profile.name),
-    ) ??
-    null;
   const authorPosts = author ? await api.posts.listByAuthor(author.id).catch(() => []) : [];
   const latestMeasurement = getLatestMeasurement(monthlyReport);
   const latestPost = authorPosts[0] ?? null;
@@ -112,7 +101,12 @@ export default async function AdminPage() {
   ];
 
   return (
-    <AdminShell active="overview" userName={profile.name} userRole={profile.role}>
+    <AdminShell
+      active="overview"
+      userAvatarUrl={profile.avatarUrl}
+      userName={profile.name}
+      userRole={profile.role}
+    >
       <section className="grid gap-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>

@@ -49,7 +49,11 @@ export async function PublicSiteHeader() {
 
           {profile ? (
             <div className="hidden sm:block">
-              <UserMenu dashboardHref={dashboardHref} name={profile.name} />
+              <UserMenu
+                avatarUrl={profile.avatarUrl}
+                dashboardHref={dashboardHref}
+                name={profile.name}
+              />
             </div>
           ) : (
             <Link

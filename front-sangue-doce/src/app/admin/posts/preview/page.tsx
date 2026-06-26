@@ -23,6 +23,7 @@ export default async function AdminPostPreviewPage({
       active="posts"
       subtitle="Validacao visual antes da publicacao."
       title="Previa da materia"
+      userAvatarUrl={profile.avatarUrl}
       userName={profile.name}
       userRole={profile.role}
     >

@@ -72,6 +72,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
           {profile ? (
             <div className="hidden md:block">
               <UserMenu
+                avatarUrl={profile.avatarUrl}
                 dashboardHref={dashboardHref}
                 name={profile.name}
                 tone={scrolled ? "solid" : "light"}
@@ -136,7 +137,11 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
         </button>
         {profile ? (
           <div className="mt-3 self-start">
-            <UserMenu dashboardHref={dashboardHref} name={profile.name} />
+            <UserMenu
+              avatarUrl={profile.avatarUrl}
+              dashboardHref={dashboardHref}
+              name={profile.name}
+            />
           </div>
         ) : (
           <Link

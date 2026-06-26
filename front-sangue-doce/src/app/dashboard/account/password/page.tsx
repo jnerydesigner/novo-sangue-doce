@@ -32,7 +32,12 @@ export default async function PasswordSetupPage() {
         <DashboardSidebar showAdminItems={userData.role === "ADMIN"} />
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
-          <DashboardHeader userName={userData.name} />
+          <DashboardHeader
+            avatarUrl={userData.avatarUrl}
+            subtitle="Essa e uma area de atualizacao de dados."
+            title="Seguranca da conta"
+            userName={userData.name}
+          />
 
           <div className="mt-6 max-w-[640px] rounded-lg border border-line bg-card p-[clamp(22px,4vw,34px)] shadow-editorial">
             <span className="eyebrow">Seguranca</span>

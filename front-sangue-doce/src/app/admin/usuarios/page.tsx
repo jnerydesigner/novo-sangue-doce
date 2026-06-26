@@ -9,7 +9,12 @@ export default async function AdminUsersPage() {
   const users = await api.users.list({ accessToken });
 
   return (
-    <AdminShell active="users" userName={profile.name} userRole={profile.role}>
+    <AdminShell
+      active="users"
+      userAvatarUrl={profile.avatarUrl}
+      userName={profile.name}
+      userRole={profile.role}
+    >
       <section>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>

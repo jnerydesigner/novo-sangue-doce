@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type {
   CreatePostPayload,
   Post,
@@ -15,7 +15,10 @@ import {
   DRAFT_POST_STORAGE_KEY,
   type DraftPostPreview,
 } from "@/lib/draft-post";
+import { CoverImageField } from "./cover-image-field";
 import { PostContentEditor } from "./post-content-editor";
+
+const EMPTY_COVER_IMAGE_URL = "/images/sensor.png";
 
 function getValue(formData: FormData, name: string) {
   const value = formData.get(name);
@@ -45,14 +48,6 @@ function createSlug(value: string) {
     .replace(/^-|-$/g, "");
 }
 
-function getStoredPreviewDraft() {
-  try {
-    return localStorage.getItem(DRAFT_POST_STORAGE_KEY);
-  } catch {
-    return null;
-  }
-}
-
 type NewPostFormProps = {
   authors: PostAuthor[];
   categories: PostCategory[];
@@ -76,6 +71,7 @@ function mapPostToDraft(post: Post): DraftPostPreview {
     author: post.author,
     category: post.category,
     content: post.content,
+    coverImageAlt: post.coverImageAlt ?? "",
     coverImageUrl: post.coverImageUrl,
     excerpt: post.excerpt,
     id: post.id,
@@ -94,30 +90,7 @@ export function NewPostForm({
   initialPost,
   tags,
 }: NewPostFormProps) {
-  const storedDraft = useSyncExternalStore(
-    (listener) => {
-      window.addEventListener("storage", listener);
-
-      return () => window.removeEventListener("storage", listener);
-    },
-    () => getStoredPreviewDraft(),
-    () => null,
-  );
-  const initialDraft = useMemo(() => {
-    if (initialPost) {
-      return mapPostToDraft(initialPost);
-    }
-
-    if (!storedDraft) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(storedDraft) as DraftPostPreview;
-    } catch {
-      return null;
-    }
-  }, [initialPost, storedDraft]);
+  const initialDraft = initialPost ? mapPostToDraft(initialPost) : null;
 
   return (
     <NewPostFormFields
@@ -143,6 +116,21 @@ function NewPostFormFields({
 }) {
   const [title, setTitle] = useState(initialDraft?.title ?? "");
   const [slug, setSlug] = useState(initialDraft?.slug ?? "");
+  const [coverImageUrl, setCoverImageUrl] = useState(
+    initialDraft?.coverImageUrl === EMPTY_COVER_IMAGE_URL
+      ? ""
+      : (initialDraft?.coverImageUrl ?? ""),
+  );
+  const [coverImageAlt, setCoverImageAlt] = useState(
+    initialDraft?.coverImageAlt ?? "",
+  );
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState(
+    initialDraft?.coverImageUrl === EMPTY_COVER_IMAGE_URL
+      ? ""
+      : (initialDraft?.coverImageUrl ?? ""),
+  );
+  const [coverFileName, setCoverFileName] = useState("");
+  const [selectedCoverFile, setSelectedCoverFile] = useState<File | null>(null);
   const [draftId, setDraftId] = useState(initialDraft?.id ?? "");
   const [currentStatus, setCurrentStatus] = useState<PostStatus>(
     initialDraft?.status ?? "DRAFT",
@@ -167,6 +155,35 @@ function NewPostFormFields({
       ? initialDraft.tags.map((tag) => tag.id)
       : [],
   );
+
+  useEffect(() => {
+    return () => {
+      if (coverPreviewUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(coverPreviewUrl);
+      }
+    };
+  }, [coverPreviewUrl]);
+
+  function selectCoverImage(file: File) {
+    if (coverPreviewUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(coverPreviewUrl);
+    }
+
+    setSelectedCoverFile(file);
+    setCoverFileName(file.name);
+    setCoverPreviewUrl(URL.createObjectURL(file));
+  }
+
+  function removeCoverImage() {
+    if (coverPreviewUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(coverPreviewUrl);
+    }
+
+    setCoverImageUrl("");
+    setCoverPreviewUrl("");
+    setCoverFileName("");
+    setSelectedCoverFile(null);
+  }
 
   function handleTitleChange(value: string) {
     setTitle(value);
@@ -200,8 +217,8 @@ function NewPostFormFields({
       author: getSelectedAuthor(),
       category: getSelectedCategory(),
       content: parseContent(getValue(formData, "conteudo")),
-      coverImageUrl:
-        getValue(formData, "imagem-de-capa") || "/images/sensor.png",
+      coverImageAlt: coverImageAlt.trim() || undefined,
+      coverImageUrl: coverImageUrl || EMPTY_COVER_IMAGE_URL,
       excerpt:
         getValue(formData, "resumo") ||
         "Resumo da materia em rascunho para validar chamada e leitura.",
@@ -237,6 +254,13 @@ function NewPostFormFields({
       setDraftId(post.id);
     }
 
+    if (post?.coverImageUrl && post.coverImageUrl !== EMPTY_COVER_IMAGE_URL) {
+      setCoverImageUrl(post.coverImageUrl);
+      setCoverPreviewUrl(post.coverImageUrl);
+      setCoverFileName("");
+      setSelectedCoverFile(null);
+    }
+
     if (post?.status) {
       setCurrentStatus(post.status);
     }
@@ -266,6 +290,7 @@ function NewPostFormFields({
       authorId: draft.author.id,
       categoryId: draft.category.id,
       content: draft.content,
+      coverImageAlt: draft.coverImageAlt,
       coverImageUrl: draft.coverImageUrl,
       excerpt: draft.excerpt,
       publishedAt: status === "PUBLISHED" ? new Date().toISOString() : undefined,
@@ -302,6 +327,33 @@ function NewPostFormFields({
     return (await response.json()) as Post;
   }
 
+  async function uploadCoverImage(postId: string): Promise<string | null> {
+    if (!selectedCoverFile) {
+      return null;
+    }
+
+    const formData = new FormData();
+    formData.append("postId", postId);
+    formData.append("image", selectedCoverFile);
+
+    const response = await fetch("/api/uploads/post/cover", {
+      body: formData,
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      const error = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
+      throw new Error(error?.message ?? "Nao foi possivel enviar a imagem de capa.");
+    }
+
+    const upload = (await response.json()) as { coverUrl: string };
+
+    return upload.coverUrl;
+  }
+
   async function persistPost(
     draft: DraftPostPreview,
     status: Extract<PostStatus, "DRAFT" | "PUBLISHED">,
@@ -311,7 +363,12 @@ function NewPostFormFields({
 
     try {
       const post = await savePost(draft, status);
-      savePreviewDraft(draft, post);
+      const uploadedCoverUrl = await uploadCoverImage(post.id);
+      const savedPost = uploadedCoverUrl
+        ? { ...post, coverImageUrl: uploadedCoverUrl }
+        : post;
+
+      savePreviewDraft(draft, savedPost);
 
       if (status === "PUBLISHED") {
         setSubmitMessage({
@@ -345,11 +402,16 @@ function NewPostFormFields({
     try {
       const status = currentStatus === "PUBLISHED" ? "PUBLISHED" : "DRAFT";
       const post = await savePost(draft, status);
-      savePreviewDraft(draft, post);
+      const uploadedCoverUrl = await uploadCoverImage(post.id);
+      const savedPost = uploadedCoverUrl
+        ? { ...post, coverImageUrl: uploadedCoverUrl }
+        : post;
+
+      savePreviewDraft(draft, savedPost);
       window.location.href =
         status === "PUBLISHED"
-          ? `/materias/${post.slug}`
-          : `/admin/posts/preview?id=${post.id}`;
+          ? `/materias/${savedPost.slug}`
+          : `/admin/posts/preview?id=${savedPost.id}`;
     } catch (error) {
       setSubmitMessage({
         text:
@@ -485,15 +547,16 @@ function NewPostFormFields({
           type="text"
         />
       </label>
-      <label className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
-        Imagem de capa
-        <input
-          className="h-12 rounded-lg border border-line bg-paper px-4 text-base font-medium text-ink outline-none transition focus:border-green"
-          defaultValue={initialDraft?.coverImageUrl}
-          name="imagem-de-capa"
-          type="url"
+      <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
+        <CoverImageField
+          altText={coverImageAlt}
+          fileName={coverFileName}
+          imageUrl={coverPreviewUrl}
+          onAltTextChange={setCoverImageAlt}
+          onRemoveImage={removeCoverImage}
+          onSelectImage={selectCoverImage}
         />
-      </label>
+      </div>
       <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
         Tags
         <div className="flex flex-wrap gap-2 rounded-lg border border-line bg-paper p-3">

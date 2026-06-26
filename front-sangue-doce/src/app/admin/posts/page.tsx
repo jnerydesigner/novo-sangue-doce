@@ -14,7 +14,12 @@ export default async function AdminPostsPage() {
   });
 
   return (
-    <AdminShell active="posts" userName={profile.name} userRole={profile.role}>
+    <AdminShell
+      active="posts"
+      userAvatarUrl={profile.avatarUrl}
+      userName={profile.name}
+      userRole={profile.role}
+    >
       <section className="grid gap-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="max-w-[64ch] text-[1.02rem] leading-relaxed text-inkSoft">

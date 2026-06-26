@@ -28,6 +28,7 @@ export default async function NewAdminPostPage({
       active="posts"
       subtitle="Criacao e organizacao de conteudo editorial."
       title={post ? "Editar materia" : "Nova materia"}
+      userAvatarUrl={profile.avatarUrl}
       userName={profile.name}
       userRole={profile.role}
     >

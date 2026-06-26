@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { api, type Measurement, type MeasurementNoteType } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
@@ -139,6 +140,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   }
 
   const reportUrl = `/dashboard/reports?${reportUrlSearchParams.toString()}`;
+  const reportAvatarUrl = monthlyReport.userAvatarUrl ?? userData.avatarUrl;
   const periodLabel =
     queryStartDate && queryEndDate
       ? `${formatDate(queryStartDate)} a ${formatDate(queryEndDate)}`
@@ -153,7 +155,12 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6 print:p-0">
           <div className="print:hidden">
-            <DashboardHeader userName={userData.name} />
+            <DashboardHeader
+              avatarUrl={userData.avatarUrl}
+              subtitle="Essa e uma area de atualizacao de dados."
+              title="Relatorios de glicemia"
+              userName={userData.name}
+            />
           </div>
 
           <div className="mt-6 flex flex-wrap items-end justify-between gap-4 print:hidden">
@@ -208,9 +215,22 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
           </div>
 
           <article className="mt-6 overflow-hidden rounded-lg border border-line bg-card p-5 shadow-editorial print:m-0 print:min-h-screen print:rounded-none print:border-0 print:p-8 print:shadow-none">
-            <div className="grid gap-6 md:grid-cols-[130px_1fr] print:grid-cols-[96px_1fr]">
-              <div className="grid h-[120px] place-items-center rounded-lg border border-line bg-paper2 text-sm font-bold uppercase tracking-[0.12em] text-muted print:h-[90px] print:text-[11px]">
-                Foto
+            <div className="grid gap-6 md:grid-cols-[130px_1fr_auto] print:grid-cols-[96px_1fr_112px]">
+              <div
+                aria-label={`Foto de ${monthlyReport.userName}`}
+                className="grid h-[120px] place-items-center overflow-hidden rounded-lg border border-line bg-paper2 bg-cover bg-center text-sm font-bold uppercase tracking-[0.12em] text-muted print:h-[90px] print:text-[11px]"
+                role="img"
+                style={
+                  reportAvatarUrl
+                    ? { backgroundImage: `url(${reportAvatarUrl})` }
+                    : undefined
+                }
+              >
+                {reportAvatarUrl ? (
+                  <span className="sr-only">{monthlyReport.userName}</span>
+                ) : (
+                  "Foto"
+                )}
               </div>
 
               <div className="grid gap-2 text-[14px] print:text-[11px]">
@@ -237,6 +257,26 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Periodo:</span>
                   <span className="capitalize">{periodLabel}</span>
+                </div>
+              </div>
+
+              <div className="flex items-start justify-start md:justify-end print:justify-end">
+                <div className="flex items-center gap-3 rounded-lg border border-line bg-paper px-4 py-3 print:border-0 print:bg-transparent print:px-0 print:py-0">
+                  <Image
+                    alt="Sangue Doce"
+                    className="size-12 rounded-lg object-cover print:size-10"
+                    height={48}
+                    src="/sangue-doce-logo.png"
+                    width={48}
+                  />
+                  <div className="min-w-0">
+                    <strong className="block font-serif text-xl font-medium leading-none text-greenDeep print:text-[14px]">
+                      Sangue Doce
+                    </strong>
+                    <span className="mt-1 block text-[12px] font-bold uppercase tracking-[0.12em] text-muted print:text-[8px]">
+                      Relatorio de glicemia
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -277,8 +317,13 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               </table>
             </div>
 
-            <footer className="mt-7 text-center text-[12px] font-bold uppercase tracking-[0.08em] text-muted print:mt-5 print:text-[9px]">
-              Este relatorio foi gerado pelo site Sangue Doce
+            <footer className="mt-7 text-center text-muted print:mt-5">
+              <p className="text-[12px] font-bold uppercase tracking-[0.08em] print:text-[9px]">
+                Este relatorio foi gerado pelo site Sangue Doce
+              </p>
+              <p className="mt-1 break-all text-[11px] print:text-[7.5px]">
+                {reportUrl}
+              </p>
             </footer>
           </article>
         </section>

@@ -29,10 +29,6 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  if (userData.role === "ADMIN") {
-    redirect("/admin");
-  }
-
   if (userData.passwordSetupRequired) {
     redirect("/dashboard/account/password");
   }
@@ -64,10 +60,13 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
       <div className="grid min-h-screen lg:grid-cols-[248px_1fr]">
-        <DashboardSidebar />
+        <DashboardSidebar showAdminItems={userData.role === "ADMIN"} />
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
-          <DashboardHeader userName={userData.name} />
+          <DashboardHeader
+            avatarUrl={userData.avatarUrl}
+            userName={userData.name}
+          />
           <SummaryTiles tiles={dashboardSummaryTiles} />
 
           <div className="mt-5 grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">

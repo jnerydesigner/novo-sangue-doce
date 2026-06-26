@@ -9,6 +9,7 @@ type UserMenuProps = {
   actionLabel?: string;
   accountHref?: string;
   accountLabel?: string;
+  avatarUrl?: string;
   dashboardHref: string;
   name: string;
   sectionLabel?: string;
@@ -20,6 +21,7 @@ export function UserMenu({
   actionLabel = "Acessar area logada",
   accountHref = "/dashboard/account",
   accountLabel = "Minha conta",
+  avatarUrl,
   dashboardHref,
   name,
   sectionLabel = "Area logada",
@@ -67,7 +69,7 @@ export function UserMenu({
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
-        <UserAvatar name={name} />
+        <UserAvatar avatarUrl={avatarUrl} name={name} />
         <span className="max-w-[150px] truncate">{name}</span>
         <span className="text-xs" aria-hidden="true">
           v
@@ -84,7 +86,7 @@ export function UserMenu({
               {sectionLabel}
             </span>
             <div className="mt-2 flex items-center gap-3">
-              <UserAvatar name={name} />
+              <UserAvatar avatarUrl={avatarUrl} name={name} />
               <div className="min-w-0">
                 <div className="truncate text-sm font-bold text-ink">{name}</div>
                 <div className="text-xs text-muted">{statusLabel}</div>
