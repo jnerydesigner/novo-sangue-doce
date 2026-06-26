@@ -62,6 +62,11 @@ Thumbs.db
 .codex/
 **/.agents/
 **/.codex/
+skills-lock.json
+
+# Local secret-manager project binding
+.infisical.json
+**/.infisical.json
 
 # Generated archives and local captures
 *.zip
