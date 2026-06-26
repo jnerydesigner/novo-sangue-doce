@@ -16,7 +16,15 @@ import type {
 import { PrismaService } from '../prisma.service';
 
 const postInclude = {
-  author: true,
+  author: {
+    include: {
+      user: {
+        select: {
+          avatarUrl: true,
+        },
+      },
+    },
+  },
   category: true,
   tags: {
     include: {
@@ -241,6 +249,31 @@ export class PrismaPostsRepository implements PostRepository {
     return posts.map((post) => this.toEntity(post));
   }
 
+  async updatePostCoverImage(
+    postId: string,
+    imageUrl: string,
+  ): Promise<PostEntity> {
+    try {
+      const post = await this.prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          coverImageUrl: imageUrl,
+        },
+        include: postInclude,
+      });
+
+      return this.toEntity(post);
+    } catch (error) {
+      if (this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
   private toEntity(post: PostRecord): PostEntity {
     const props: PersistedPostEntityProps = {
       ...post,
@@ -250,7 +283,7 @@ export class PrismaPostsRepository implements PostRepository {
         slug: post.author.slug,
         role: post.author.role,
         bio: post.author.bio ?? undefined,
-        avatarUrl: post.author.avatarUrl ?? undefined,
+        avatarUrl: post.author.user.avatarUrl ?? undefined,
         email: post.author.email ?? undefined,
       },
       category: post.category,

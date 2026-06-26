@@ -8,6 +8,7 @@ import { MeasurementsModule } from './measurements/measurements.module';
 import { InfraModule } from '@infra/infra.module';
 import { SharedModule } from '@shared/shared.module';
 import { PostsModule } from './posts/posts.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PostsModule } from './posts/posts.module';
     UsersModule,
     PostsModule,
     MeasurementsModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [],

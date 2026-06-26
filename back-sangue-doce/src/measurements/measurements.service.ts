@@ -47,6 +47,7 @@ export type MonthlyMeasurementReportDay = {
 
 export type MonthlyMeasurementReport = {
   userId: string;
+  userAvatarUrl?: string;
   userName: string;
   year: number;
   month: number;
@@ -331,6 +332,7 @@ export class MeasurementsService {
 
     return {
       userId: userAuthenticated.sub,
+      userAvatarUrl: user.avatarUrl,
       userName: user.name,
       year: period.year,
       month: period.month,

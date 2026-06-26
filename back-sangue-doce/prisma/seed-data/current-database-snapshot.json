@@ -1,0 +1,1413 @@
+{
+  "exportedAt": "2026-06-25T16:06:14.907Z",
+  "users": [
+    {
+      "id": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "name": "Jander da Costa Nery",
+      "email": "jander.webmaster@gmail.com",
+      "passwordHash": "scrypt:dev-login-seed:4eba86229b662fc15e2f9931d87b29b319f50f8829d3955ed2cd2b6bd86970b1ce0721e0406407e479f40bf91f7b2ef45a19b95be382510c899d9fb87339c427",
+      "avatarUrl": "http://localhost:9610/sangue-doce/public/users/jander-nery/2902b306-2a4e-4efc-8b35-3ea86283a844.png",
+      "birthDate": "1978-01-23T00:00:00.000Z",
+      "diabetesType": "TYPE_1",
+      "role": "ADMIN",
+      "createdAt": "2026-06-22T13:43:13.716Z",
+      "updatedAt": "2026-06-25T14:54:40.230Z"
+    },
+    {
+      "id": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "name": "Ana Ribeiro",
+      "email": "ana.ribeiro@sanguedoce.com",
+      "passwordHash": "scrypt:dev-login-seed:4eba86229b662fc15e2f9931d87b29b319f50f8829d3955ed2cd2b6bd86970b1ce0721e0406407e479f40bf91f7b2ef45a19b95be382510c899d9fb87339c427",
+      "avatarUrl": null,
+      "birthDate": "1992-05-12T00:00:00.000Z",
+      "diabetesType": "TYPE_1",
+      "role": "USER",
+      "createdAt": "2026-06-22T13:43:13.778Z",
+      "updatedAt": "2026-06-22T14:13:35.092Z"
+    },
+    {
+      "id": "a5e4bef1-26d0-4497-863e-41ecf876d35f",
+      "name": "Helena Marques",
+      "email": "helena.marques@sanguedoce.com",
+      "passwordHash": "scrypt:dev-login-seed:4eba86229b662fc15e2f9931d87b29b319f50f8829d3955ed2cd2b6bd86970b1ce0721e0406407e479f40bf91f7b2ef45a19b95be382510c899d9fb87339c427",
+      "avatarUrl": null,
+      "birthDate": null,
+      "diabetesType": "UNKNOWN",
+      "role": "USER",
+      "createdAt": "2026-06-22T13:43:13.826Z",
+      "updatedAt": "2026-06-22T14:13:35.140Z"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "71d1653d-13c3-4161-b5f7-ce6c7d740ca2",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-08T09:35:00.000Z",
+      "glucoseValueMgDl": 103,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "ad19d1e8-9f3a-46f4-972e-84a750dff594",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-09T16:15:00.000Z",
+      "glucoseValueMgDl": 128,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_LUNCH",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "16ac0498-1ac7-4360-ab15-f4401d378a81",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-11T01:20:00.000Z",
+      "glucoseValueMgDl": 112,
+      "readingContext": "BEDTIME",
+      "source": "IMPORT",
+      "noteType": "BEFORE_SLEEP",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "79cef2ca-6e8e-4ea3-9e37-fd6f755624ff",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-11T10:45:00.000Z",
+      "glucoseValueMgDl": 118,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "f817aabc-b0c5-4d05-8eb4-02a48c64cdc5",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-12T14:30:00.000Z",
+      "glucoseValueMgDl": 97,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_LUNCH",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "42e441f5-e6dc-4a38-be3c-d01c61e163bd",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-13T22:50:00.000Z",
+      "glucoseValueMgDl": 141,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_DINNER",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "2f22bdad-b923-4445-a2fe-3cd30927fcf6",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-14T18:35:00.000Z",
+      "glucoseValueMgDl": 109,
+      "readingContext": "RANDOM",
+      "source": "IMPORT",
+      "noteType": "AFTERNOON_RANDOM_CHECK",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "64922b71-81dd-4e69-a0ca-6877d25aea94",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-15T09:25:00.000Z",
+      "glucoseValueMgDl": 92,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "0850e387-0266-4796-94c7-334681b0fb8a",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-16T15:40:00.000Z",
+      "glucoseValueMgDl": 136,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_LUNCH",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "c7aac070-dc24-4923-9072-e01f30c44792",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-17T21:15:00.000Z",
+      "glucoseValueMgDl": 101,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_DINNER",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "797c7f91-c56b-40ef-b30d-2bbcc1251b30",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-19T01:45:00.000Z",
+      "glucoseValueMgDl": 119,
+      "readingContext": "BEDTIME",
+      "source": "IMPORT",
+      "noteType": "BEFORE_SLEEP",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "e649c742-d18d-461a-82e7-301b76313eba",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-19T11:10:00.000Z",
+      "glucoseValueMgDl": 124,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "10c9c448-1e9a-45a1-87d6-658b0a8e6ff8",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-20T17:20:00.000Z",
+      "glucoseValueMgDl": 132,
+      "readingContext": "RANDOM",
+      "source": "IMPORT",
+      "noteType": "AFTERNOON_RANDOM_CHECK",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "2b9edaa0-5784-418d-8e3f-9be6eb9a4e52",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-21T09:40:00.000Z",
+      "glucoseValueMgDl": 99,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "f64325b6-4dfb-4860-984e-9ae84f02bf4c",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844",
+      "measuredAt": "2026-06-21T23:05:00.000Z",
+      "glucoseValueMgDl": 145,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_DINNER",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "8567e07b-467e-459d-9c40-5267953acc33",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-08T09:35:00.000Z",
+      "glucoseValueMgDl": 103,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "31c58859-6315-4e8e-a6d5-1755e9d63eec",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-09T16:15:00.000Z",
+      "glucoseValueMgDl": 128,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_LUNCH",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "d337957f-975e-4048-ab3d-da7d3a5f0172",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-11T01:20:00.000Z",
+      "glucoseValueMgDl": 112,
+      "readingContext": "BEDTIME",
+      "source": "IMPORT",
+      "noteType": "BEFORE_SLEEP",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "3c2bc94b-ea0a-466b-ae5f-68e05ba1c44c",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-11T10:45:00.000Z",
+      "glucoseValueMgDl": 118,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "208e7342-3ac2-4413-9091-38914d9e058a",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-12T14:30:00.000Z",
+      "glucoseValueMgDl": 97,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_LUNCH",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "5bede2ad-7587-4ae6-93df-ef149d08780c",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-13T22:50:00.000Z",
+      "glucoseValueMgDl": 141,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_DINNER",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "1c10e223-6bb6-4f15-abe1-3f65e8eef1c9",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-14T18:35:00.000Z",
+      "glucoseValueMgDl": 109,
+      "readingContext": "RANDOM",
+      "source": "IMPORT",
+      "noteType": "AFTERNOON_RANDOM_CHECK",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "2658de10-f850-40fa-9ee8-48c31535b424",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-15T09:25:00.000Z",
+      "glucoseValueMgDl": 92,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "e5aba2ab-8836-4074-8133-d1b531195eda",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-16T15:40:00.000Z",
+      "glucoseValueMgDl": 136,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_LUNCH",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "35703557-9584-42c9-a7e8-6463e0c25e04",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-17T21:15:00.000Z",
+      "glucoseValueMgDl": 101,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_DINNER",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "7e0fb7c3-560b-48b1-8dfb-91d4317446c2",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-19T01:45:00.000Z",
+      "glucoseValueMgDl": 119,
+      "readingContext": "BEDTIME",
+      "source": "IMPORT",
+      "noteType": "BEFORE_SLEEP",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "47803ffa-5dbf-4db1-9fa4-ddba2e823171",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-19T11:10:00.000Z",
+      "glucoseValueMgDl": 124,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "541aeadc-230b-48c0-a949-cece9784c1e3",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-20T17:20:00.000Z",
+      "glucoseValueMgDl": 132,
+      "readingContext": "RANDOM",
+      "source": "IMPORT",
+      "noteType": "AFTERNOON_RANDOM_CHECK",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "f29c1865-2b39-48a1-99e5-1a02a2e16e04",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-21T09:40:00.000Z",
+      "glucoseValueMgDl": 99,
+      "readingContext": "BEFORE_MEAL",
+      "source": "IMPORT",
+      "noteType": "BEFORE_BREAKFAST",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    },
+    {
+      "id": "3b4a66ea-cb53-4ba5-b9dd-d951e91c2043",
+      "userId": "8eb8043f-396b-42f6-b121-f69e9ee8f9d4",
+      "measuredAt": "2026-06-21T23:05:00.000Z",
+      "glucoseValueMgDl": 145,
+      "readingContext": "AFTER_MEAL",
+      "source": "IMPORT",
+      "noteType": "AFTER_DINNER",
+      "createdAt": "2026-06-22T14:13:35.231Z",
+      "updatedAt": "2026-06-22T14:13:35.231Z"
+    }
+  ],
+  "postAuthors": [
+    {
+      "id": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "name": "Jander Nery",
+      "slug": "jander-nery",
+      "role": "Editor e Desenvolvedor com Diabetes Tipo 1",
+      "bio": "Designer e desenvolvedor por tras do Sangue Doce. Vive com diabetes tipo 1 e escreve a partir do encontro entre experiencia pessoal, tecnologia e cuidado diario, buscando transformar dados, rotina e linguagem em ferramentas mais simples para quem convive com a condicao.",
+      "avatarUrl": "https://github.com/jnerydesigner.png",
+      "email": "jander.nery@sanguedoce.com",
+      "createdAt": "2026-06-22T13:43:13.831Z",
+      "updatedAt": "2026-06-22T14:13:35.144Z",
+      "userId": "2902b306-2a4e-4efc-8b35-3ea86283a844"
+    },
+    {
+      "id": "5d28e7fe-eac6-4aa7-8504-1dec36ff4d5a",
+      "name": "Helena Marques",
+      "slug": "helena-marques",
+      "role": "Editora de Saude Metabolica",
+      "bio": "Jornalista com mais de dez anos cobrindo saude e ciencia. Escreve sobre diabetes com foco no dia a dia de quem vive com a condicao, traduzindo evidencia em decisoes praticas, sem alarmismo.",
+      "avatarUrl": "/images/saudavel.png",
+      "email": "helena.marques@sanguedoce.com",
+      "createdAt": "2026-06-22T13:43:13.833Z",
+      "updatedAt": "2026-06-22T14:13:35.146Z",
+      "userId": "a5e4bef1-26d0-4497-863e-41ecf876d35f"
+    }
+  ],
+  "postCategories": [
+    {
+      "id": "5cd32e1e-846f-4514-b6f7-4bd9bab13aa6",
+      "name": "Cuidado diario",
+      "slug": "cuidado-diario",
+      "color": "GREEN",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "003fc75c-873b-4027-9f25-c897aaf334e5",
+      "name": "Alimentacao",
+      "slug": "alimentacao",
+      "color": "TOMATO",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "903f8020-4744-4113-a71e-3c16a19706d1",
+      "name": "Tecnologia",
+      "slug": "tecnologia",
+      "color": "BLUE",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "45af1b39-7cf8-44f7-adc2-fbdd57507948",
+      "name": "Prevencao",
+      "slug": "prevencao",
+      "color": "BLUE",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "8ff2f7cf-0b61-4a8c-968d-47e4034206b7",
+      "name": "Rotina",
+      "slug": "rotina",
+      "color": "GREEN",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "af4f5984-78a8-43a1-9d5c-e2b7b6a45fca",
+      "name": "Movimento",
+      "slug": "movimento",
+      "color": "TOMATO",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "0f817772-9e35-479e-80de-d86e4705688f",
+      "name": "Consulta",
+      "slug": "consulta",
+      "color": "BLUE",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "afa9e991-87ff-47c0-92f1-9d7719f4fdba",
+      "name": "Compras",
+      "slug": "compras",
+      "color": "GREEN",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    },
+    {
+      "id": "b476a38f-8cd3-42de-9eb5-60a419ef10de",
+      "name": "Seguranca",
+      "slug": "seguranca",
+      "color": "TOMATO",
+      "createdAt": "2026-06-22T13:43:13.836Z",
+      "updatedAt": "2026-06-22T14:13:35.149Z"
+    }
+  ],
+  "postTags": [
+    {
+      "id": "23c3f059-7d2c-4aef-8ae0-113234461e4c",
+      "name": "Monitoramento",
+      "slug": "monitoramento",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "659d58a8-4cdd-48dc-aada-e63db3fa9d74",
+      "name": "Glicemia",
+      "slug": "glicemia",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "973488fb-4a60-45c4-8793-ec399c5c5096",
+      "name": "Tecnologia",
+      "slug": "tecnologia",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "582744bb-b4da-4856-a18d-bedb45c3c7a0",
+      "name": "Autonomia",
+      "slug": "autonomia",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "56e7e534-ebd8-4373-a630-037026d6d872",
+      "name": "Alimentacao",
+      "slug": "alimentacao",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "57577883-422d-4fef-835f-02f50fc04057",
+      "name": "Prevencao",
+      "slug": "prevencao",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38",
+      "name": "Rotina",
+      "slug": "rotina",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "edbf508c-ecee-4142-83d9-435edfa1d53e",
+      "name": "Consulta",
+      "slug": "consulta",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "5f219c86-4eb8-4b4d-85d1-22d99dd476c0",
+      "name": "Sono",
+      "slug": "sono",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "4086e9c9-b266-46e6-96a3-dca6382802f8",
+      "name": "Movimento",
+      "slug": "movimento",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "c915003f-bf13-49af-b1c5-40186a7546c0",
+      "name": "Seguranca",
+      "slug": "seguranca",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    },
+    {
+      "id": "9511d07d-9070-47fc-88a8-b6619a18a020",
+      "name": "Compras",
+      "slug": "compras",
+      "createdAt": "2026-06-22T13:43:13.847Z",
+      "updatedAt": "2026-06-22T14:13:35.158Z"
+    }
+  ],
+  "posts": [
+    {
+      "id": "e842cec6-5b51-4238-a861-8d7cbe2544a4",
+      "slug": "nova-fase-dos-sensores",
+      "title": "Nova fase dos sensores: leitura continua vira aliada da autonomia",
+      "excerpt": "Monitores continuos sairam do hospital e entraram na rotina. Entenda como a leitura em tempo real muda decisoes sobre comida, movimento e descanso.",
+      "standfirst": "Monitores continuos sairam do hospital e entraram na rotina. Entenda como a leitura em tempo real muda decisoes sobre comida, movimento e descanso, sem transformar o dia em planilha.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Durante anos, medir a glicemia significou um ritual pontual: a picada no dedo, a fita, o numero isolado de um instante. Esse numero dizia pouco sobre o que acontecia antes e depois, e quase nada sobre o porque. A chegada dos sensores de leitura continua mudou essa relacao. Em vez de fotografias soltas, agora e possivel assistir ao filme inteiro do dia."
+        },
+        {
+          "type": "paragraph",
+          "content": "Um sensor de monitoramento continuo, tambem conhecido como CGM, e um pequeno filamento aplicado sob a pele que mede a glicose no liquido entre as celulas a cada poucos minutos. Os dados aparecem no celular como uma curva: sobe, desce, estabiliza. O que parecia abstrato vira visivel."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Do numero isolado a tendencia"
+        },
+        {
+          "type": "paragraph",
+          "content": "O ganho mais importante nao e o valor de agora, mas a direcao. Uma glicemia de 140 subindo rapido pede uma decisao diferente de uma glicemia de 140 ja em queda. Essa seta de tendencia, para cima, estavel ou para baixo, e o que transforma o dado em conduta."
+        },
+        {
+          "type": "paragraph",
+          "content": "Com o tempo, padroes emergem sozinhos. A pessoa percebe que aquele lanche da tarde provoca um pico mais alto do que imaginava, ou que uma caminhada curta depois do almoco suaviza a curva de forma consistente. Sao descobertas pessoais, nao regras de bula."
+        },
+        {
+          "type": "quote",
+          "content": "O sensor nao decide por voce. Ele devolve a informacao no momento em que ela ainda pode mudar a proxima escolha."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "O que a leitura continua revela"
+        },
+        {
+          "type": "paragraph",
+          "content": "Tres aspectos costumam surpreender quem comeca a acompanhar a curva de perto:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "As madrugadas. Variacoes noturnas que passavam despercebidas no exame de ponta de dedo agora aparecem e ajudam a ajustar jantar e rotina de sono.",
+            "O efeito do movimento. Pequenas atividades, como subir escadas ou uma caminhada leve, tem impacto mensuravel e imediato.",
+            "O tempo no alvo. Em vez de perseguir um numero perfeito, o foco passa a ser quanto do dia se mantem dentro de uma faixa saudavel."
+          ]
+        },
+        {
+          "alt": "Curva de glicemia ao longo do dia em um aplicativo",
+          "src": "/original-project/screenshots/01-scan.png",
+          "type": "image",
+          "caption": "A curva de um dia comum: refeicoes, exercicio e sono deixam marcas reconheciveis na linha."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tecnologia e meio, nao fim"
+        },
+        {
+          "type": "paragraph",
+          "content": "Ha um risco silencioso na abundancia de dados: transformar o cuidado em vigilancia ansiosa, checando a tela a cada minuto. O objetivo e o oposto. Bem usada, a leitura continua reduz a incerteza e devolve liberdade. Voce confia mais no proprio corpo porque entende melhor como ele responde."
+        },
+        {
+          "type": "callout",
+          "title": "Para levar com voce",
+          "content": "Antes de mudar qualquer rotina com base no que o sensor mostra, vale conversar com a equipe de saude. A leitura continua e uma ferramenta de apoio a decisao, nao substitui ajustes de tratamento, dose ou medicacao."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Por onde comecar"
+        },
+        {
+          "type": "paragraph",
+          "content": "Quem tem interesse pode pedir orientacao ao endocrinologista ou a equipe de saude sobre o modelo mais adequado ao seu caso. Vale lembrar que disponibilidade, custo e cobertura variam, e que o melhor sensor e aquele que cabe na sua vida e que voce consegue usar de forma consistente."
+        },
+        {
+          "type": "paragraph",
+          "content": "No fim, a tecnologia so cumpre seu papel quando se dissolve na rotina: deixa de ser novidade e vira habito, um aliado discreto a favor de decisoes mais tranquilas, dia apos dia."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": true,
+      "readingMinutes": 8,
+      "coverImageUrl": "/images/sensor.png",
+      "coverImageAlt": "Pessoa usando sensor de glicose no braco em uma rotina domestica",
+      "coverCaption": "Sensores de leitura continua passaram a fazer parte da rotina, com dados acessiveis pelo celular.",
+      "verticalImageUrl": "/images/sensor.png",
+      "metaTitle": "Nova fase dos sensores: leitura continua vira aliada da autonomia | Sangue Doce",
+      "metaDescription": "Monitores continuos sairam do hospital e entraram na rotina. Entenda como a leitura em tempo real muda decisoes sobre comida, movimento e descanso.",
+      "publishedAt": "2026-06-21T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.854Z",
+      "updatedAt": "2026-06-22T14:13:35.167Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "5cd32e1e-846f-4514-b6f7-4bd9bab13aa6"
+    },
+    {
+      "id": "f0eb9253-6cb4-472f-a49e-86dfbed6e1f4",
+      "slug": "prato-equilibrado-sem-contagem-complicada",
+      "title": "Prato equilibrado sem contagem complicada",
+      "excerpt": "Um metodo visual para montar refeicoes que sustentam a glicemia.",
+      "standfirst": "Um metodo visual para montar refeicoes que sustentam a glicemia.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Um metodo visual para montar refeicoes que sustentam a glicemia."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Prato equilibrado sem contagem complicada"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 5,
+      "coverImageUrl": "/original-project/screenshots/02-scan.png",
+      "coverImageAlt": "Prato colorido e equilibrado visto de cima",
+      "coverCaption": null,
+      "verticalImageUrl": "/images/comida_saudavel_vertical.png",
+      "metaTitle": "Prato equilibrado sem contagem complicada | Sangue Doce",
+      "metaDescription": "Um metodo visual para montar refeicoes que sustentam a glicemia.",
+      "publishedAt": "2026-06-20T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.864Z",
+      "updatedAt": "2026-06-22T14:13:35.177Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "003fc75c-873b-4027-9f25-c897aaf334e5"
+    },
+    {
+      "id": "fa00be72-5952-4bf1-a495-fa084fb834f6",
+      "slug": "sono-irregular-pode-afetar-a-resistencia-a-insulina",
+      "title": "Sono irregular pode afetar a resistencia a insulina",
+      "excerpt": "O que a ciencia do sono diz sobre noites curtas e picos de acucar.",
+      "standfirst": "O que a ciencia do sono diz sobre noites curtas e picos de acucar.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "O que a ciencia do sono diz sobre noites curtas e picos de acucar."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sono irregular pode afetar a resistencia a insulina"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 6,
+      "coverImageUrl": "/original-project/screenshots/03-scan.png",
+      "coverImageAlt": "Quarto tranquilo com luz suave de manha",
+      "coverCaption": null,
+      "verticalImageUrl": "/images/comida_saudavel_vertical.png",
+      "metaTitle": "Sono irregular pode afetar a resistencia a insulina | Sangue Doce",
+      "metaDescription": "O que a ciencia do sono diz sobre noites curtas e picos de acucar.",
+      "publishedAt": "2026-06-19T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.867Z",
+      "updatedAt": "2026-06-22T14:13:35.180Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "45af1b39-7cf8-44f7-adc2-fbdd57507948"
+    },
+    {
+      "id": "dcda6c5f-49a2-4320-942f-e330a159e51d",
+      "slug": "como-organizar-as-leituras-da-semana",
+      "title": "Como organizar as leituras da semana sem complicar a rotina",
+      "excerpt": "Um guia pratico para registrar horarios, contexto e sintomas sem transformar o cuidado em tarefa pesada.",
+      "standfirst": "Um guia pratico para registrar horarios, contexto e sintomas sem transformar o cuidado em tarefa pesada.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Um guia pratico para registrar horarios, contexto e sintomas sem transformar o cuidado em tarefa pesada."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Como organizar as leituras da semana sem complicar a rotina"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 7,
+      "coverImageUrl": "/images/sensor_vertical.png",
+      "coverImageAlt": "Pessoa consultando leituras de glicose no celular",
+      "coverCaption": null,
+      "verticalImageUrl": "/images/sensor_vertical.png",
+      "metaTitle": "Como organizar as leituras da semana sem complicar a rotina | Sangue Doce",
+      "metaDescription": "Um guia pratico para registrar horarios, contexto e sintomas sem transformar o cuidado em tarefa pesada.",
+      "publishedAt": "2026-06-18T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.871Z",
+      "updatedAt": "2026-06-22T14:13:35.185Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "8ff2f7cf-0b61-4a8c-968d-47e4034206b7"
+    },
+    {
+      "id": "4a8b033f-e7ea-4221-9484-39417d6ff832",
+      "slug": "cafe-da-manha-e-glicemia",
+      "title": "Cafe da manha e glicemia: ajustes pequenos que ajudam",
+      "excerpt": "Combinar fibras, proteinas e escolhas simples pode reduzir picos logo nas primeiras horas do dia.",
+      "standfirst": "Combinar fibras, proteinas e escolhas simples pode reduzir picos logo nas primeiras horas do dia.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Combinar fibras, proteinas e escolhas simples pode reduzir picos logo nas primeiras horas do dia."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Cafe da manha e glicemia: ajustes pequenos que ajudam"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 5,
+      "coverImageUrl": "/images/comida_saudavel.png",
+      "coverImageAlt": "Cafe da manha com alimentos variados e equilibrados",
+      "coverCaption": null,
+      "verticalImageUrl": "/images/comida_saudavel_vertical.png",
+      "metaTitle": "Cafe da manha e glicemia: ajustes pequenos que ajudam | Sangue Doce",
+      "metaDescription": "Combinar fibras, proteinas e escolhas simples pode reduzir picos logo nas primeiras horas do dia.",
+      "publishedAt": "2026-06-17T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.875Z",
+      "updatedAt": "2026-06-22T14:13:35.189Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "003fc75c-873b-4027-9f25-c897aaf334e5"
+    },
+    {
+      "id": "1dd8d9af-95b0-427a-8498-af47967ab160",
+      "slug": "quando-conversar-com-a-equipe-de-saude",
+      "title": "Quando conversar com a equipe de saude sobre variacoes recentes",
+      "excerpt": "Alguns sinais merecem ser levados para consulta com historico, horarios e observacoes bem organizados.",
+      "standfirst": "Alguns sinais merecem ser levados para consulta com historico, horarios e observacoes bem organizados.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Alguns sinais merecem ser levados para consulta com historico, horarios e observacoes bem organizados."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Quando conversar com a equipe de saude sobre variacoes recentes"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 8,
+      "coverImageUrl": "/antes_da_consulta.png",
+      "coverImageAlt": "Pessoa organizando anotacoes antes de uma consulta",
+      "coverCaption": null,
+      "verticalImageUrl": "/antes_da_consulta.png",
+      "metaTitle": "Quando conversar com a equipe de saude sobre variacoes recentes | Sangue Doce",
+      "metaDescription": "Alguns sinais merecem ser levados para consulta com historico, horarios e observacoes bem organizados.",
+      "publishedAt": "2026-06-16T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.877Z",
+      "updatedAt": "2026-06-22T14:13:35.192Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "0f817772-9e35-479e-80de-d86e4705688f"
+    },
+    {
+      "id": "c303d005-21e9-409c-b933-903337805ee1",
+      "slug": "mercado-sem-pressa-lendo-rotulos",
+      "title": "Mercado sem pressa: lendo rotulos de carboidratos",
+      "excerpt": "Carboidratos totais, acucares adicionados e fibras contam uma historia melhor quando vistos juntos.",
+      "standfirst": "Carboidratos totais, acucares adicionados e fibras contam uma historia melhor quando vistos juntos.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Carboidratos totais, acucares adicionados e fibras contam uma historia melhor quando vistos juntos."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Mercado sem pressa: lendo rotulos de carboidratos"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 6,
+      "coverImageUrl": "/no_mercado.png",
+      "coverImageAlt": "Pessoa lendo rotulo nutricional no mercado",
+      "coverCaption": null,
+      "verticalImageUrl": "/no_mercado.png",
+      "metaTitle": "Mercado sem pressa: lendo rotulos de carboidratos | Sangue Doce",
+      "metaDescription": "Carboidratos totais, acucares adicionados e fibras contam uma historia melhor quando vistos juntos.",
+      "publishedAt": "2026-06-14T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.879Z",
+      "updatedAt": "2026-06-22T14:13:35.196Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "afa9e991-87ff-47c0-92f1-9d7719f4fdba"
+    },
+    {
+      "id": "e4a30ec9-2141-4590-8a7e-2952b2b1d492",
+      "slug": "exercicio-no-fim-do-dia",
+      "title": "Exercicio no fim do dia: o que observar antes de dormir",
+      "excerpt": "Treinos podem impactar a glicose por horas. Veja sinais que ajudam a planejar recuperacao e descanso.",
+      "standfirst": "Treinos podem impactar a glicose por horas. Veja sinais que ajudam a planejar recuperacao e descanso.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Treinos podem impactar a glicose por horas. Veja sinais que ajudam a planejar recuperacao e descanso."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Exercicio no fim do dia: o que observar antes de dormir"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 7,
+      "coverImageUrl": "/depois_do_exercicio.png",
+      "coverImageAlt": "Pessoa descansando depois de exercicio fisico",
+      "coverCaption": null,
+      "verticalImageUrl": "/depois_do_exercicio.png",
+      "metaTitle": "Exercicio no fim do dia: o que observar antes de dormir | Sangue Doce",
+      "metaDescription": "Treinos podem impactar a glicose por horas. Veja sinais que ajudam a planejar recuperacao e descanso.",
+      "publishedAt": "2026-06-13T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.882Z",
+      "updatedAt": "2026-06-22T14:13:35.199Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "af4f5984-78a8-43a1-9d5c-e2b7b6a45fca"
+    },
+    {
+      "id": "be7e661a-b75e-4ef8-bc76-17abc56187c6",
+      "slug": "tecnologia-no-cuidado",
+      "title": "Tecnologia no cuidado: dados bons ainda precisam de contexto",
+      "excerpt": "Sensores e diarios ficam mais uteis quando cada leitura vem acompanhada de refeicao, sono e movimento.",
+      "standfirst": "Sensores e diarios ficam mais uteis quando cada leitura vem acompanhada de refeicao, sono e movimento.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Sensores e diarios ficam mais uteis quando cada leitura vem acompanhada de refeicao, sono e movimento."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Tecnologia no cuidado: dados bons ainda precisam de contexto"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 9,
+      "coverImageUrl": "/images/sensor.png",
+      "coverImageAlt": "Aplicativo de saude exibindo dados de glicose",
+      "coverCaption": null,
+      "verticalImageUrl": "/images/sensor_vertical.png",
+      "metaTitle": "Tecnologia no cuidado: dados bons ainda precisam de contexto | Sangue Doce",
+      "metaDescription": "Sensores e diarios ficam mais uteis quando cada leitura vem acompanhada de refeicao, sono e movimento.",
+      "publishedAt": "2026-06-07T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.884Z",
+      "updatedAt": "2026-06-22T14:13:35.203Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "903f8020-4744-4113-a71e-3c16a19706d1"
+    },
+    {
+      "id": "f9eb6073-1c9c-442c-9d9b-401045aff5cb",
+      "slug": "lanches-entre-refeicoes",
+      "title": "Lanches entre refeicoes: como evitar decisoes no improviso",
+      "excerpt": "Ter opcoes simples por perto ajuda a atravessar intervalos maiores com mais previsibilidade.",
+      "standfirst": "Ter opcoes simples por perto ajuda a atravessar intervalos maiores com mais previsibilidade.",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Ter opcoes simples por perto ajuda a atravessar intervalos maiores com mais previsibilidade."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Lanches entre refeicoes: como evitar decisoes no improviso"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 4,
+      "coverImageUrl": "/images/comida_saudavel_vertical.png",
+      "coverImageAlt": "Lanches simples organizados para a semana",
+      "coverCaption": null,
+      "verticalImageUrl": "/images/comida_saudavel_vertical.png",
+      "metaTitle": "Lanches entre refeicoes: como evitar decisoes no improviso | Sangue Doce",
+      "metaDescription": "Ter opcoes simples por perto ajuda a atravessar intervalos maiores com mais previsibilidade.",
+      "publishedAt": "2026-06-06T09:00:00.000Z",
+      "createdAt": "2026-06-22T13:43:13.886Z",
+      "updatedAt": "2026-06-22T14:13:35.206Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "003fc75c-873b-4027-9f25-c897aaf334e5"
+    },
+    {
+      "id": "98776639-1f01-41c3-af92-e87a7b3f06e7",
+      "slug": "sinais-de-alerta-que-nao-devem-ficar-so-na-memoria",
+      "title": "Sinais de alerta que nao devem ficar so na memoria",
+      "excerpt": "Tontura, tremores e confusao merecem registro com horario e leitura para orientar proximas decisoes.",
+      "standfirst": null,
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "Tontura, tremores e confusao merecem registro com horario e leitura para orientar proximas decisoes."
+        },
+        {
+          "type": "paragraph",
+          "content": "A proposta desta materia e transformar observacoes do cotidiano em decisoes mais claras, sem alarmismo e sem prometer respostas universais. Cada rotina tem contexto, historico e combinacoes proprias."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Sinais de alerta que nao devem ficar so na memoria"
+        },
+        {
+          "type": "paragraph",
+          "content": "O melhor ponto de partida e registrar o que aconteceu antes e depois da leitura: horario, refeicao, movimento, sono, sintomas e qualquer mudanca recente. Com esse conjunto, a conversa com a equipe de saude fica mais objetiva."
+        },
+        {
+          "type": "callout",
+          "title": "Nota de cuidado",
+          "content": "Este conteudo tem carater educativo e nao substitui avaliacao profissional. Ajustes de tratamento, dose ou medicacao devem ser combinados com a equipe de saude."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 6,
+      "coverImageUrl": "/images/saudavel.png",
+      "coverImageAlt": null,
+      "coverCaption": null,
+      "verticalImageUrl": null,
+      "metaTitle": null,
+      "metaDescription": null,
+      "publishedAt": "2026-06-23T11:53:59.954Z",
+      "createdAt": "2026-06-22T13:43:13.888Z",
+      "updatedAt": "2026-06-23T11:54:00.387Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "b476a38f-8cd3-42de-9eb5-60a419ef10de"
+    },
+    {
+      "id": "5b66a197-463e-4d62-9a54-42b27156af76",
+      "slug": "diabetes-como-controlar-e-tratar-os-diferentes-tipos-da-doenca",
+      "title": "Diabetes: como controlar e tratar os diferentes tipos da doença?",
+      "excerpt": "Como controlar e tratar sua diabetes e os Vários tipos que existem.",
+      "standfirst": null,
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "No Brasil, 12 milhões de pessoas convivem com diabetes, segundo dados de 2021 compartilhados pela Sociedade Brasileira de Endocrinologia e Metabologia. Há, no entanto, diferentes tipos da doença, com sintomas, tratamentos e cuidados próprios.\n\nA grande maioria (90%) tem o tipo 2, que exige, além de medicações específicas, mudanças nos hábitos de vida. O uso da insulina é mais prevalente nos pacientes com o tipo 1 da doença, que representa entre 5% a 10% dos diagnosticados, de acordo com a Sociedade Brasileira de Diabetes. Para essas pessoas, a descoberta do hormônio há 100 anos foi revolucionária, e permitiu a sobrevivência diante de uma doença, até então, fatal.\n\nNeste Dia Mundial do Diabetes, lembrado todo 14 de novembro, descubra os diferentes tipos da doença, os sinais de alerta, exames para o diagnóstico e os respectivos tratamentos, de acordo com informações dos especialistas do Hospital Albert Einstein: Adriana Martins Fernandes, endocrinologista do Programa de Diabetes e Gustavo Daher, endocrinologista e coordenador médico de Saúde Populacional."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Há quantos tipos de diabetes?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Há diferentes versões da doença, mas as principais e mais prevalentes são duas: o diabetes tipo 1 e o tipo 2.\n\nNo tipo 1, as células responsáveis pela produção da insulina no pâncreas são atacadas pelo próprio sistema imunológico, e a produção do hormônio é reduzida ou paralisada. O papel da insulina é ajudar as células a usarem o açúcar (glicose) — que vem dos alimentos consumidos — como fonte de energia. Sem insulina, a glicose em circulação no sangue (chamada também de glicemia) permanece em níveis altos, prejudicando outros sistemas do corpo.\n\nO problema apresentado pelo tipo 2 é diferente: o pâncreas não deixa de funcionar, mas algumas alterações no organismo prejudicam o trabalho da insulina. Pessoas com hipertensão, colesterol alterado e excesso de gordura abdominal, por exemplo, têm mais risco de desenvolver a chamada resistência à insulina. Se antes o corpo precisava de uma determinada quantidade de hormônio para promover o consumo adequado da glicose pelas células, nos pacientes com resistência insulínica, o organismo passa a exigir uma quantidade bem maior.\n\nHá ainda diabetes gestacional, que é um tipo à parte. Neste caso, a placenta produz o hormônio lactoplacentário, que aumenta o risco da resistência à insulina nesse período. Embora todas as gestantes desenvolvam esse hormônio, o surgimento do diabetes não é regra. Por isso a importância de ser testada pelo menos duas vezes durante o pré-natal: no início do acompanhamento e entre a 24ª e 28ª semana de gestação, quando a placenta já está maior, e produzindo mais o hormônio que poderia induzir à resistência."
+        },
+        {
+          "alt": "Tipos de diabets",
+          "src": "http://localhost:9610/sangue-doce/public/tipos.png",
+          "type": "image",
+          "caption": "Existem vários tipos de diabetes"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Como eu sei se tenho o tipo 1 ou 2?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Os sintomas se diferenciam entre os tipos de diabetes, assim como o perfil do paciente. Em geral, o diabético tipo 1 recebe o diagnóstico na infância, adolescência ou mesmo no início da fase adulta. O principal sinal de alerta é o surgimento de sintomas, como rápida perda de peso, apesar de um aumento no apetite, excesso de sede e aumento do volume urinário, além do crescimento nas taxas de açúcar no sangue.\n\nNo caso do tipo 2, a prevalência é maior entre adultos e idosos com comorbidades associadas, em especial a síndrome metabólica, que inclui alterações nos níveis de colesterol, hipertensão e o aumento na circunferência abdominal, que favorece a resistência à insulina.\n\nIsso não impede que pessoas mais jovens recebam o diagnóstico do tipo 2, ou mesmo mais velhos com o tipo 1. Gustavo Daher, endocrinologista, cita o exemplo da ex-primeira-ministra do Reino Unido Theresa May, que foi diagnosticada com quase 60 anos com o tipo 1 da doença.\n\nCrianças e adolescentes diagnosticados com o tipo 2 de diabetes chamam atenção para um problema: a obesidade infantil. “Temos uma alimentação mais baseada em ultraprocessados, e há uma menor mobilidade da população. Diagnóstico do tipo 2 em crianças está associado ao perfil metabólico”, explica Adriana Fernandes, endocrinologista."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "\nQuais são os sintomas no diabético tipo 1?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Como no tipo 1 o pâncreas está com dificuldade em produzir a insulina, há maior circulação do açúcar na corrente sanguínea, gerando a hiperglicemia. Ao filtrar esse açúcar e mandá-lo para fora do corpo, o volume urinário aumenta devido à osmose (que “puxa” mais água para dissolver tanto açúcar), e a pessoa tem mais vontade de fazer xixi.\n\n“Ela perde muita água e desidrata. Se tiver uma capacidade física adequada, consegue repor bebendo. Por isso aumenta a ingestão de líquidos, que é outro sintoma. Ela não urina mais porque bebeu mais água, mas bebe porque urinou demais”, explica Adriana Fernandes, endocrinologista.\n\nOutro sintoma é o aumento do apetite. Como a glicose que é ingerida não está sendo aproveitada, o paciente permanece com fome apesar de ter se alimentado. “Ela come, mas essa glicose não entra na célula para virar energia. É como se estivesse passando fome em meio à fartura. Ao não usar a energia que consome, perde peso”, destaca a especialista.\n\nFernandes lembra que os pacientes também podem ter queixas mais inespecíficas, como fraqueza, indisposição, alteração e turvação visual."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Quais são os sintomas no diabético tipo 2?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Os mesmos sintomas do tipo 1 podem surgir entre os diabéticos tipo 2 — visto que a hiperglicemia  está presente nesse grupo também — mas o perfil do paciente é diferente. Além de ocorrer mais em adultos e idosos, são pessoas com um conjunto de fatores de risco, chamado de síndrome metabólica:"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Alteração no perfil do colesterol;",
+            "Risco aumentado de hipertensão;",
+            "Aumento da circunferência abdominal;",
+            "Níveis alterados de glicemia."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": "Histórico familiar da doença também deve chamar atenção e, embora a idade seja fator de risco, há cada vez mais diagnósticos do tipo 2 em crianças e adolescentes.\n\nComo se trata de uma doença silenciosa, o rastreamento por exames é a melhor forma de diagnosticar precocemente. “A partir dos 40 anos, todo mundo deveria fazer um exame de glicemia em jejum pelo menos a cada três anos”, destaca a endocrinologista Adriana Fernandes."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Como é feito o diagnóstico do tipo 1 e do tipo 2?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Para o diagnóstico de diabetes tipo 1, além dos sinais clínicos, os especialistas solicitam um exame de dosagem da insulina e dos autoanticorpos, pois esta versão da doença é considerada autoimune (quando o sistema imune ataca o próprio organismo). \n\nJá para o tipo 2, é solicitada uma análise da glicemia em jejum, feita a partir de um exame de sangue comum. De acordo com Gustavo Daher, endocrinologista, é importante não confundir com teste de glicemia capilar, que avalia o açúcar em circulação no sangue a partir de uma picada na ponta do dedo. Este teste pode indicar um problema, mas não dará o diagnóstico final.\n\nO exame de curva glicêmica – quando o paciente precisa ingerir uma bebida açucarada e fazer a coleta da amostra de sangue na sequência – é usado principalmente para a confirmação do diagnóstico.\n\n“Para o diagnóstico, é preciso dois exames alterados. Podem ser dois do mesmo tipo, ou de tipos diferentes”, explica o endocrinologista.  "
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Quais são os níveis de referência?"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Glicemia em jejum:"
+        },
+        {
+          "type": "paragraph",
+          "content": "Menor que 100 mg/dL: normal;\n\nEntre 100 e até 125 mg/dL: alterada, ou possível pré-diabetes;\n\nAcima de 126 mg/dL: potencialmente diabéticos;"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "Hemoglobina glicada (exame de controle do diabetes):"
+        },
+        {
+          "type": "paragraph",
+          "content": "Menor que 5,7%: normal;\n\nEntre 5,7% e 6,4%: risco aumentado para diabetes ou pré-diabetes;\n\nMaior ou igual a 6,5%: diabetes para diagnóstico."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "content": "\nQual é o tratamento do diabetes tipo 1?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Duas horas após ingerir a solução de glicose:\n\nMenor que 140: normal;\n\nEntre 140 a 199: intolerância à glicose, ou mais um componente para a pré-diabetes;\n\nIgual ou acima de 200: diabetes."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "Qual é o tratamento do diabetes tipo 1?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Feito o diagnóstico do tipo 1, o paciente deverá repor a insulina faltante. Isso porque o organismo não é mais capaz de produzir o hormônio em quantidades suficientes.\n\nAo longo dos últimos 100 anos, o tratamento com a insulina evoluiu com um objetivo: imitar perfeitamente a função do pâncreas. As versões do hormônio disponíveis atualmente no mercado oferecem ações rápidas, ultrarrápidas, intermediárias, lentas e ultralentas.\n\nSegundo Adriana Fernandes, endocrinologista, o tratamento, em geral, inclui a mescla de pelo menos dois diferentes tipos. “Um para segurar nos momentos que o paciente não se alimenta e outro para aplicar imediatamente antes da alimentação.”\n\nPara saber exatamente quanto de insulina aplicar, segundo Fernandes, o paciente precisa ter conhecimento sobre o funcionamento do próprio corpo. “Um dia você come uma maçã no café da manhã e, no outro, torradas com ovo mexido e um suco. A quantidade de carboidrato ingerido em cada uma dessas refeições muda muito. A educação do paciente com insulina [sobre o próprio organismo] é importante para ele calcular a dose de insulina que precisa”, explica a especialista.\n\nDiabéticos tipo 1 também podem associar o tratamento com outras medicações, como os hipoglicemiantes, que vão reduzir a glicemia, mas apenas se apresentarem uma resistência insulínica, como os de tipo 2. “É exceção, e não a regra. Um paciente adolescente com diabetes tipo 1, por exemplo, que chega aos 50 anos com obesidade e resistência à insulina, esse pode usar algumas medicações. Mas não é uma troca de tratamento. Ele nunca vai ficar sem a insulina”, destaca."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "\nQual é o tratamento do diabetes tipo 2?"
+        },
+        {
+          "type": "paragraph",
+          "content": "Há várias classes de medicamentos que podem ser usados no diabético tipo 2, mas o objetivo é o mesmo: reduzir a quantidade de açúcar em circulação no sangue. Esses hipoglicemiantes podem ser administrados por via oral ou subcutânea.  \n\nA insulina pode ser usada no tratamento do tipo 2, mas em casos específicos, segundo Adriana Fernandes, endocrinologista. “Quando o paciente está com uma hiperglicemia muito importante logo após o diagnóstico e o médico sabe que, naquele momento, o hipoglicemiante oral não vai dar conta, lançamos mão da insulina. Ou em diabetes de muito difícil controle. Porém, na maioria dos casos, o tratamento é com medicação oral”.\n\nNo caso de crianças e adolescentes com diagnóstico do tipo 2, algumas medicações são liberadas, como a metformina, que é uma das mais antigas no tratamento de diabetes.\n\nTodos os pacientes têm a indicação de, além dos medicamentos, mudar os hábitos de vida. “A mudança no estilo de vida, que inclui adaptação da alimentação e atividade física, é entendida como parte do tratamento”, diz Fernandes."
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": "A cirurgia bariátrica/metabólica é indicada para tratamento de diabetes?"
+        },
+        {
+          "type": "paragraph",
+          "content": "O uso de técnicas cirúrgicas que melhorem os parâmetros metabólicos do paciente com diabetes ainda está sendo discutido pelos especialistas, de acordo com Gustavo Daher, endocrinologista. A princípio, se o diabetes é muito grave, de difícil controle, e a pessoa também for portadora de uma obesidade moderada e/ou severa, poderia passar pelo procedimento.\n\n“Hoje as Sociedades têm como critério bem estabelecido que indivíduos com IMC [Índice de Massa Corporal] acima de 35 e portadores de diabetes têm benefício considerável com o procedimento. Indivíduos com IMC entre 30 e 35, e diabetes grave, também, aparentemente, teriam uma boa indicação cirúrgica. Contudo, para este último grupo ainda há uma falta de consenso e, por isso, segue em discussão na literatura científica”, explica."
+        }
+      ],
+      "status": "PUBLISHED",
+      "featured": false,
+      "readingMinutes": 5,
+      "coverImageUrl": "http://localhost:9610/sangue-doce/public/diabetes-tratamentos-tipos-doenca-scaled.webp",
+      "coverImageAlt": null,
+      "coverCaption": null,
+      "verticalImageUrl": null,
+      "metaTitle": null,
+      "metaDescription": null,
+      "publishedAt": "2026-06-22T19:22:35.610Z",
+      "createdAt": "2026-06-22T17:46:06.699Z",
+      "updatedAt": "2026-06-22T19:22:35.666Z",
+      "authorId": "a52e858e-16fe-424e-9dfd-ae72bd65b34f",
+      "categoryId": "003fc75c-873b-4027-9f25-c897aaf334e5"
+    }
+  ],
+  "postTagRelations": [
+    {
+      "postId": "1dd8d9af-95b0-427a-8498-af47967ab160",
+      "tagId": "23c3f059-7d2c-4aef-8ae0-113234461e4c"
+    },
+    {
+      "postId": "1dd8d9af-95b0-427a-8498-af47967ab160",
+      "tagId": "c915003f-bf13-49af-b1c5-40186a7546c0"
+    },
+    {
+      "postId": "1dd8d9af-95b0-427a-8498-af47967ab160",
+      "tagId": "edbf508c-ecee-4142-83d9-435edfa1d53e"
+    },
+    {
+      "postId": "4a8b033f-e7ea-4221-9484-39417d6ff832",
+      "tagId": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38"
+    },
+    {
+      "postId": "4a8b033f-e7ea-4221-9484-39417d6ff832",
+      "tagId": "56e7e534-ebd8-4373-a630-037026d6d872"
+    },
+    {
+      "postId": "4a8b033f-e7ea-4221-9484-39417d6ff832",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "5b66a197-463e-4d62-9a54-42b27156af76",
+      "tagId": "23c3f059-7d2c-4aef-8ae0-113234461e4c"
+    },
+    {
+      "postId": "5b66a197-463e-4d62-9a54-42b27156af76",
+      "tagId": "56e7e534-ebd8-4373-a630-037026d6d872"
+    },
+    {
+      "postId": "5b66a197-463e-4d62-9a54-42b27156af76",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "98776639-1f01-41c3-af92-e87a7b3f06e7",
+      "tagId": "23c3f059-7d2c-4aef-8ae0-113234461e4c"
+    },
+    {
+      "postId": "98776639-1f01-41c3-af92-e87a7b3f06e7",
+      "tagId": "c915003f-bf13-49af-b1c5-40186a7546c0"
+    },
+    {
+      "postId": "98776639-1f01-41c3-af92-e87a7b3f06e7",
+      "tagId": "edbf508c-ecee-4142-83d9-435edfa1d53e"
+    },
+    {
+      "postId": "be7e661a-b75e-4ef8-bc76-17abc56187c6",
+      "tagId": "23c3f059-7d2c-4aef-8ae0-113234461e4c"
+    },
+    {
+      "postId": "be7e661a-b75e-4ef8-bc76-17abc56187c6",
+      "tagId": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38"
+    },
+    {
+      "postId": "be7e661a-b75e-4ef8-bc76-17abc56187c6",
+      "tagId": "973488fb-4a60-45c4-8793-ec399c5c5096"
+    },
+    {
+      "postId": "c303d005-21e9-409c-b933-903337805ee1",
+      "tagId": "56e7e534-ebd8-4373-a630-037026d6d872"
+    },
+    {
+      "postId": "c303d005-21e9-409c-b933-903337805ee1",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "c303d005-21e9-409c-b933-903337805ee1",
+      "tagId": "9511d07d-9070-47fc-88a8-b6619a18a020"
+    },
+    {
+      "postId": "dcda6c5f-49a2-4320-942f-e330a159e51d",
+      "tagId": "23c3f059-7d2c-4aef-8ae0-113234461e4c"
+    },
+    {
+      "postId": "dcda6c5f-49a2-4320-942f-e330a159e51d",
+      "tagId": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38"
+    },
+    {
+      "postId": "dcda6c5f-49a2-4320-942f-e330a159e51d",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "e4a30ec9-2141-4590-8a7e-2952b2b1d492",
+      "tagId": "4086e9c9-b266-46e6-96a3-dca6382802f8"
+    },
+    {
+      "postId": "e4a30ec9-2141-4590-8a7e-2952b2b1d492",
+      "tagId": "5f219c86-4eb8-4b4d-85d1-22d99dd476c0"
+    },
+    {
+      "postId": "e4a30ec9-2141-4590-8a7e-2952b2b1d492",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "e842cec6-5b51-4238-a861-8d7cbe2544a4",
+      "tagId": "23c3f059-7d2c-4aef-8ae0-113234461e4c"
+    },
+    {
+      "postId": "e842cec6-5b51-4238-a861-8d7cbe2544a4",
+      "tagId": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38"
+    },
+    {
+      "postId": "e842cec6-5b51-4238-a861-8d7cbe2544a4",
+      "tagId": "582744bb-b4da-4856-a18d-bedb45c3c7a0"
+    },
+    {
+      "postId": "e842cec6-5b51-4238-a861-8d7cbe2544a4",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "e842cec6-5b51-4238-a861-8d7cbe2544a4",
+      "tagId": "973488fb-4a60-45c4-8793-ec399c5c5096"
+    },
+    {
+      "postId": "f0eb9253-6cb4-472f-a49e-86dfbed6e1f4",
+      "tagId": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38"
+    },
+    {
+      "postId": "f0eb9253-6cb4-472f-a49e-86dfbed6e1f4",
+      "tagId": "56e7e534-ebd8-4373-a630-037026d6d872"
+    },
+    {
+      "postId": "f0eb9253-6cb4-472f-a49e-86dfbed6e1f4",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "f9eb6073-1c9c-442c-9d9b-401045aff5cb",
+      "tagId": "4a377fc6-41af-4fb7-b605-5dd6f6bffc38"
+    },
+    {
+      "postId": "f9eb6073-1c9c-442c-9d9b-401045aff5cb",
+      "tagId": "56e7e534-ebd8-4373-a630-037026d6d872"
+    },
+    {
+      "postId": "f9eb6073-1c9c-442c-9d9b-401045aff5cb",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    },
+    {
+      "postId": "fa00be72-5952-4bf1-a495-fa084fb834f6",
+      "tagId": "57577883-422d-4fef-835f-02f50fc04057"
+    },
+    {
+      "postId": "fa00be72-5952-4bf1-a495-fa084fb834f6",
+      "tagId": "5f219c86-4eb8-4b4d-85d1-22d99dd476c0"
+    },
+    {
+      "postId": "fa00be72-5952-4bf1-a495-fa084fb834f6",
+      "tagId": "659d58a8-4cdd-48dc-aada-e63db3fa9d74"
+    }
+  ]
+}

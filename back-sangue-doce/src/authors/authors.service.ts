@@ -2,8 +2,13 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateAuthorDto, createAuthorSchema } from './dto/create-author.dto';
+import {
+  type UpdateAuthorProfileDto,
+  updateAuthorProfileSchema,
+} from './dto/update-author-profile.dto';
 import { AuthorEntity, type PublicAuthor } from './entities/author.entity';
 import {
   AuthorAlreadyExistsError,
@@ -59,6 +64,33 @@ export class AuthorsService {
     return author.toPublic();
   }
 
+  async findMe(userId: string): Promise<PublicAuthor> {
+    const author = await this.authorRepository.findByUserId(userId);
+
+    if (!author) {
+      throw new NotFoundException('Author profile not found.');
+    }
+
+    return author.toPublic();
+  }
+
+  async updateMe(
+    userId: string,
+    updateAuthorProfileDto: UpdateAuthorProfileDto,
+  ): Promise<PublicAuthor> {
+    const payload = this.parseUpdateAuthorProfile(updateAuthorProfileDto);
+    const author = await this.authorRepository.updateProfileByUserId(userId, {
+      bio: payload.bio ?? null,
+      role: payload.role,
+    });
+
+    if (!author) {
+      throw new NotFoundException('Author profile not found.');
+    }
+
+    return author.toPublic();
+  }
+
   async findSlug(slug: string): Promise<PublicAuthor | null> {
     const author = await this.authorRepository.findBySlug(
       slug.trim().toLowerCase(),
@@ -77,6 +109,20 @@ export class AuthorsService {
 
   private parseCreateAuthor(createAuthorDto: CreateAuthorDto): CreateAuthorDto {
     const result = createAuthorSchema.safeParse(createAuthorDto);
+
+    if (!result.success) {
+      throw new BadRequestException(
+        result.error.issues.map((issue) => issue.message),
+      );
+    }
+
+    return result.data;
+  }
+
+  private parseUpdateAuthorProfile(
+    updateAuthorProfileDto: UpdateAuthorProfileDto,
+  ): UpdateAuthorProfileDto {
+    const result = updateAuthorProfileSchema.safeParse(updateAuthorProfileDto);
 
     if (!result.success) {
       throw new BadRequestException(

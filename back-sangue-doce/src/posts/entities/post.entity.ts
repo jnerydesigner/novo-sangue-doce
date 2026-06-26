@@ -22,7 +22,7 @@ export class PostEntity {
       status: props.status ?? 'DRAFT',
       featured: props.featured ?? false,
       readingMinutes: props.readingMinutes ?? 5,
-      coverImageUrl: props.coverImageUrl.trim(),
+      coverImageUrl: props.coverImageUrl?.trim() || null,
       coverImageAlt: props.coverImageAlt?.trim() || null,
       coverCaption: props.coverCaption?.trim() || null,
       verticalImageUrl: props.verticalImageUrl?.trim() || null,

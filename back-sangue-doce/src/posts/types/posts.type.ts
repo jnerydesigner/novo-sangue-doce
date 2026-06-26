@@ -35,7 +35,7 @@ export type CreatePostEntityProps = {
   status?: PostStatus;
   featured?: boolean;
   readingMinutes?: number;
-  coverImageUrl: string;
+  coverImageUrl?: string | null;
   coverImageAlt?: string | null;
   coverCaption?: string | null;
   verticalImageUrl?: string | null;
@@ -54,7 +54,7 @@ export type PostPersistence = {
   status: PostStatus;
   featured: boolean;
   readingMinutes: number;
-  coverImageUrl: string;
+  coverImageUrl: string | null;
   coverImageAlt: string | null;
   coverCaption: string | null;
   verticalImageUrl: string | null;

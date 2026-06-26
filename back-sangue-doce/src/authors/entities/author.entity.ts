@@ -4,7 +4,6 @@ export type CreateAuthorEntityProps = {
   role: string;
   userId: string;
   bio?: string | null;
-  avatarUrl?: string | null;
   email?: string | null;
 };
 
@@ -13,18 +12,19 @@ export type AuthorPersistence = {
   slug: string;
   role: string;
   bio: string | null;
-  avatarUrl: string | null;
   email: string | null;
   userId: string;
 };
 
 export type AuthorEntityProps = AuthorPersistence & {
+  avatarUrl?: string | null;
   id?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
 
 export type PersistedAuthorEntityProps = AuthorPersistence & {
+  avatarUrl?: string | null;
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -52,7 +52,6 @@ export class AuthorEntity {
       slug: props.slug.trim().toLowerCase(),
       role: props.role.trim(),
       bio: props.bio?.trim() || null,
-      avatarUrl: props.avatarUrl?.trim() || null,
       email: props.email?.trim().toLowerCase() || null,
       userId: props.userId,
     });
@@ -68,7 +67,6 @@ export class AuthorEntity {
       slug: this.props.slug,
       role: this.props.role,
       bio: this.props.bio,
-      avatarUrl: this.props.avatarUrl,
       email: this.props.email,
       userId: this.props.userId,
     };

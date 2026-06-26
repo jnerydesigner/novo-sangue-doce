@@ -17,7 +17,6 @@ export const createAuthorSchema = z.object({
     .trim()
     .min(2, { message: 'Role must have at least 2 characters.' }),
   bio: z.string().trim().min(10).optional(),
-  avatarUrl: z.url({ message: 'Avatar URL must be valid.' }).optional(),
   email: z
     .email({ message: 'A valid e-mail is required.' })
     .trim()

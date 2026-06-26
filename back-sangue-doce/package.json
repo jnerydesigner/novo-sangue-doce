@@ -11,7 +11,10 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "node prisma/seed.js",
+    "prisma:seed": "node prisma/seed-report-measurements.js",
+    "prisma:seed:dev-full": "node prisma/seed.js",
+    "prisma:seed:export": "node prisma/export-current-seed.js",
+    "prisma:seed:report": "node prisma/seed-report-measurements.js",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -21,7 +24,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "start:dev:infisical": "set -a; . ./.env; LOCAL_DATABASE_URL=\"${LOCAL_DATABASE_URL:-$DATABASE_URL}\"; LOCAL_MINIO_ENDPOINT=\"${LOCAL_MINIO_ENDPOINT:-$MINIO_ENDPOINT}\"; LOCAL_MINIO_API_PORT=\"${LOCAL_MINIO_API_PORT:-$MINIO_API_PORT}\"; set +a; infisical run --domain http://localhost:8095 --token \"$INFISICAL_TOKEN\" --projectId \"$INFISICAL_PROJECT_ID\" --env \"${INFISICAL_ENV:-dev}\" -- sh -c 'DATABASE_URL=\"$LOCAL_DATABASE_URL\" MINIO_ENDPOINT=\"$LOCAL_MINIO_ENDPOINT\" MINIO_API_PORT=\"$LOCAL_MINIO_API_PORT\" yarn start:dev'"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -32,6 +36,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "minio": "^8.0.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pdfkit": "^0.19.1",
@@ -47,6 +52,7 @@
     "@nestjs/testing": "^11.0.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
+    "@types/multer": "^2.1.0",
     "@types/node": "^22.10.7",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.17",

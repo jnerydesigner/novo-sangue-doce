@@ -176,6 +176,7 @@ export class AuthService {
       sub: user.id,
       name: user.name,
       email: user.email,
+      avatarUrl: user.avatarUrl,
       birthDate: user.birthDate
         ? formatDateToDayMonthYear(user.birthDate)
         : undefined,

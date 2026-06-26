@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import PDFDocument from 'pdfkit';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import type {
   MonthlyMeasurementReport,
   PublicMeasurement,
@@ -52,6 +54,10 @@ export class MeasurementReportPdfService {
     report: MonthlyMeasurementReport;
     reportUrl?: string;
   }): Promise<Buffer> {
+    const avatarImage = await this.fetchAvatarImage(
+      params.report.userAvatarUrl,
+    );
+
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument({
         margin: 28,
@@ -62,10 +68,11 @@ export class MeasurementReportPdfService {
       doc.on('data', (chunk: Buffer) => chunks.push(chunk));
       doc.on('end', () => resolve(Buffer.concat(chunks)));
       doc.on('error', reject);
+      const urlFullReport = `${process.env.URL_SITE}${params.reportUrl}`;
 
-      this.drawHeader(doc, params);
+      this.drawHeader(doc, { ...params, avatarImage });
       this.drawTable(doc, params.report);
-      this.drawFooter(doc);
+      this.drawFooter(doc, urlFullReport);
 
       doc.end();
     });
@@ -76,6 +83,7 @@ export class MeasurementReportPdfService {
     params: {
       birthDate?: string;
       diabetesType?: string;
+      avatarImage?: Buffer;
       report: MonthlyMeasurementReport;
       reportUrl?: string;
     },
@@ -85,29 +93,41 @@ export class MeasurementReportPdfService {
     const top = doc.page.margins.top;
     const photoSize = 70;
     const labelX = left + photoSize + 24;
-    const valueX = labelX + 165;
+    const brandWidth = 150;
+    const brandX = doc.page.width - doc.page.margins.right - brandWidth;
+    const labelWidth = 126;
+    const valueX = labelX + labelWidth + 12;
+    const valueWidth = brandX - valueX - 18;
     const rowHeight = 18;
     const rows = [
       ['NOME:', report.userName.toUpperCase()],
       ['DATA NASC:', params.birthDate ?? 'NAO INFORMADO'],
-      ['INICIO AMOSTRAGEM', this.formatDate(report.period.startDate)],
-      ['FIM AMOSTRAGEM', this.formatDate(report.period.endDate)],
-      ['TIPO DIABETES', this.formatDiabetesType(params.diabetesType)],
-      ['URL RELATORIO', params.reportUrl ?? ''],
+      ['INICIO AMOSTRAGEM:', this.formatDate(report.period.startDate)],
+      ['FIM AMOSTRAGEM:', this.formatDate(report.period.endDate)],
+      ['TIPO DIABETES:', this.formatDiabetesType(params.diabetesType)],
     ];
 
     doc
       .rect(left, top + 12, photoSize, photoSize)
       .strokeColor('#d8cdbb')
       .stroke();
-    doc
-      .font('Helvetica-Bold')
-      .fontSize(9)
-      .fillColor('#6f6558')
-      .text('FOTO', left, top + 42, {
+
+    if (params.avatarImage) {
+      doc.image(params.avatarImage, left, top + 12, {
+        fit: [photoSize, photoSize],
         align: 'center',
-        width: photoSize,
+        valign: 'center',
       });
+    } else {
+      doc
+        .font('Helvetica-Bold')
+        .fontSize(9)
+        .fillColor('#6f6558')
+        .text('FOTO', left, top + 42, {
+          align: 'center',
+          width: photoSize,
+        });
+    }
 
     rows.forEach(([label, value], index) => {
       const y = top + index * rowHeight;
@@ -116,13 +136,57 @@ export class MeasurementReportPdfService {
         .font('Helvetica-Bold')
         .fontSize(8.5)
         .fillColor('#6f6558')
-        .text(label, labelX, y, { width: 145 });
+        .text(label, labelX, y, { width: labelWidth });
       doc
         .font('Helvetica-Bold')
         .fontSize(8.5)
         .fillColor('#211d18')
-        .text(value, valueX, y, { width: 260 });
+        .text(value, valueX, y, { width: valueWidth });
     });
+
+    this.drawBrand(doc, brandX, top + 12, brandWidth);
+  }
+
+  private drawBrand(
+    doc: PDFKit.PDFDocument,
+    x: number,
+    y: number,
+    width: number,
+  ) {
+    const logoPath = join(
+      process.cwd(),
+      '..',
+      'front-sangue-doce',
+      'public',
+      'sangue-doce-logo.png',
+    );
+    const logoSize = 42;
+    const logoX = x + (width - logoSize) / 2;
+
+    if (existsSync(logoPath)) {
+      doc.image(logoPath, logoX, y, {
+        fit: [logoSize, logoSize],
+        align: 'center',
+        valign: 'center',
+      });
+    }
+
+    doc
+      .font('Helvetica-Bold')
+      .fontSize(11)
+      .fillColor('#0f4f2d')
+      .text('Sangue Doce', x, y + 47, {
+        align: 'center',
+        width,
+      });
+    doc
+      .font('Helvetica-Bold')
+      .fontSize(5.8)
+      .fillColor('#6f6558')
+      .text('RELATORIO DE GLICEMIA', x, y + 62, {
+        align: 'center',
+        width,
+      });
   }
 
   private drawTable(doc: PDFKit.PDFDocument, report: MonthlyMeasurementReport) {
@@ -210,7 +274,10 @@ export class MeasurementReportPdfService {
     return y + 22;
   }
 
-  private drawFooter(doc: PDFKit.PDFDocument) {
+  private drawFooter(doc: PDFKit.PDFDocument, reportUrl?: string) {
+    const footerWidth =
+      doc.page.width - doc.page.margins.left - doc.page.margins.right;
+
     doc
       .font('Helvetica-Bold')
       .fontSize(8)
@@ -218,13 +285,23 @@ export class MeasurementReportPdfService {
       .text(
         'ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE',
         doc.page.margins.left,
-        800,
+        reportUrl ? 790 : 800,
         {
           align: 'center',
-          width:
-            doc.page.width - doc.page.margins.left - doc.page.margins.right,
+          width: footerWidth,
         },
       );
+
+    if (reportUrl) {
+      doc
+        .font('Helvetica')
+        .fontSize(6.4)
+        .fillColor('#6f6558')
+        .text(reportUrl, doc.page.margins.left, 805, {
+          align: 'center',
+          width: footerWidth,
+        });
+    }
   }
 
   private getMeasurementForColumn(
@@ -258,5 +335,25 @@ export class MeasurementReportPdfService {
       .replace('Diabetes tipo ', '')
       .replace('Diabetes ', '')
       .toUpperCase();
+  }
+
+  private async fetchAvatarImage(
+    avatarUrl?: string,
+  ): Promise<Buffer | undefined> {
+    if (!avatarUrl) {
+      return undefined;
+    }
+
+    try {
+      const response = await fetch(avatarUrl);
+
+      if (!response.ok) {
+        return undefined;
+      }
+
+      return Buffer.from(await response.arrayBuffer());
+    } catch {
+      return undefined;
+    }
   }
 }

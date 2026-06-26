@@ -26,4 +26,5 @@ export abstract class UserRepository {
     id: string,
     passwordHash: string,
   ): Promise<UserEntity>;
+  abstract updateAvatarUrl(id: string, avatarUrl: string): Promise<UserEntity>;
 }
