@@ -1,5 +1,6 @@
 import { AuthService } from "@app/auth/auth.service";
 import type { JwtPayload } from "@app/auth/types/jwt-payload.type";
+import { ImageService } from "@app/image/image.service";
 import { PostRepository } from "@app/posts/repositories/post.repository";
 import { UserRepository } from "@app/users/repositories/user.repository";
 import {
@@ -26,7 +27,7 @@ type UploadCoverResponse = {
   objectName: string;
 };
 
-const ALLOWED_MIME_TYPES = new Set(["image/png"]);
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const DEFAULT_BUCKET = "sangue-doce";
 const DEFAULT_PUBLIC_PREFIX = "public";
 const DEFAULT_REGION = "us-east-1";
@@ -45,6 +46,7 @@ export class UploadsService {
     private readonly userRepository: UserRepository,
     private readonly postRepository: PostRepository,
     private readonly authService: AuthService,
+    private readonly imageService: ImageService,
   ) {
     const endPoint = configService.get<string>("MINIO_ENDPOINT") ?? "localhost";
     const port = Number(configService.get<string>("MINIO_API_PORT") ?? 9000);
@@ -70,17 +72,18 @@ export class UploadsService {
       throw new NotFoundException("User not found.");
     }
 
-    await this.ensureBucket();
-
     const publicUser = user.toPublic();
     const objectName = this.createUserAvatarObjectName({
       userId: publicUser.id,
       userName: publicUser.name,
     });
     const avatarUrl = this.createPublicObjectUrl(objectName);
+    const imageBuffer = await this.convertToWebp(file);
 
-    await this.getClient().putObject(this.bucket, objectName, file.buffer, file.size, {
-      "Content-Type": "image/png",
+    await this.ensureBucket();
+
+    await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
+      "Content-Type": "image/webp",
     });
 
     if (publicUser.avatarUrl && publicUser.avatarUrl !== avatarUrl) {
@@ -110,8 +113,6 @@ export class UploadsService {
       throw new NotFoundException("Post not found.");
     }
 
-    await this.ensureBucket();
-
     const publicPost = post.toPublic();
 
     const objectName = this.createPostCoverName({
@@ -119,9 +120,12 @@ export class UploadsService {
       slug: publicPost.slug,
     });
     const coverUrl = this.createPublicObjectUrl(objectName);
+    const imageBuffer = await this.convertToWebp(file);
 
-    await this.getClient().putObject(this.bucket, objectName, file.buffer, file.size, {
-      "Content-Type": "image/png",
+    await this.ensureBucket();
+
+    await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
+      "Content-Type": "image/webp",
     });
 
     if (publicPost.coverImageUrl && publicPost.coverImageUrl !== coverUrl) {
@@ -143,9 +147,17 @@ export class UploadsService {
     }
 
     if (!ALLOWED_MIME_TYPES.has(file.mimetype)) {
-      throw new BadRequestException(
-        "Por enquanto envie uma imagem PNG. Depois vamos converter automaticamente com Sharp.",
-      );
+      throw new BadRequestException("Envie uma imagem PNG, JPG ou WebP no campo image.");
+    }
+  }
+
+  private async convertToWebp(file: UploadedImageFile): Promise<Buffer> {
+    try {
+      return await this.imageService.toWebp(file.buffer);
+    } catch (error) {
+      throw new BadRequestException("Nao foi possivel processar a imagem enviada.", {
+        cause: error,
+      });
     }
   }
 
@@ -176,11 +188,11 @@ export class UploadsService {
     userId: string;
     userName: string;
   }): string {
-    return `${this.publicPrefix}/users/${this.slugify(userName)}/${userId}.png`;
+    return `${this.publicPrefix}/users/${this.slugify(userName)}/${userId}.webp`;
   }
 
   private createPostCoverName({ postId, slug }: { postId: string; slug: string }): string {
-    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.png`;
+    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.webp`;
   }
 
   private createPublicObjectUrl(objectName: string): string {
