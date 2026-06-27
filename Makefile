@@ -6,7 +6,7 @@ FRONT_PORT := 3010
 BACK_PORT := 3011
 API_URL := http://localhost:$(BACK_PORT)
 
-.PHONY: help install install-frontend install-backend infra-up infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-frontend biome-backend biome-fix biome-fix-frontend biome-fix-backend format format-frontend format-backend check clean
+.PHONY: help install install-frontend install-backend infra-up infra-wait-postgres infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-frontend biome-backend biome-fix biome-fix-frontend biome-fix-backend format format-frontend format-backend check clean
 
 help:
 	@printf "Comandos disponiveis na raiz:\\n"
@@ -42,6 +42,20 @@ install-backend:
 
 infra-up:
 	docker compose up -d --remove-orphans postgres
+	$(MAKE) infra-wait-postgres
+
+infra-wait-postgres:
+	@printf "Aguardando PostgreSQL ficar pronto...\\n"
+	@for i in $$(seq 1 60); do \
+		if docker compose exec -T postgres sh -c 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"' >/dev/null 2>&1; then \
+			printf "PostgreSQL pronto.\\n"; \
+			exit 0; \
+		fi; \
+		sleep 1; \
+	done; \
+	printf "PostgreSQL nao ficou pronto em 60 segundos.\\n"; \
+	docker compose ps postgres; \
+	exit 1
 
 infra-down:
 	docker compose down --remove-orphans
