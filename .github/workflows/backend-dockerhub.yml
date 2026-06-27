@@ -1,4 +1,5 @@
 name: Backend Docker Hub
+# Trigger-only update for Docker Hub workflow.
 
 on:
   push:
