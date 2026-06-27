@@ -1,79 +1,79 @@
 services:
-  backend:
-    build:
-      context: ./back-sangue-doce
-      dockerfile: Dockerfile.dev
-    container_name: sangue-doce-backend
-    restart: unless-stopped
-    profiles:
-      - app
-    ports:
-      - "${SERVER_PORT:-3011}:3011"
-    environment:
-      INFISICAL_TOKEN: ${INFISICAL_TOKEN:-}
-      INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
-      INFISICAL_ENV: ${INFISICAL_ENV:-dev}
-      INFISICAL_DOMAIN: http://infisical:8080
-    command: >
-      sh -c '
-      if [ -z "$${INFISICAL_TOKEN}" ] || [ -z "$${INFISICAL_PROJECT_ID}" ]; then
-        echo "Missing INFISICAL_TOKEN or INFISICAL_PROJECT_ID. Fill them in the root .env before starting the backend.";
-        exit 1;
-      fi;
-      infisical run
-      --domain "$${INFISICAL_DOMAIN}"
-      --token "$${INFISICAL_TOKEN}"
-      --projectId "$${INFISICAL_PROJECT_ID}"
-      --env "$${INFISICAL_ENV}"
-      -- printenv DATABASE_URL >/dev/null || {
-        echo "Could not fetch Infisical secrets. Create or rotate the token and make sure it can read the selected project/environment.";
-        exit 1;
-      };
-      infisical run
-      --domain "$${INFISICAL_DOMAIN}"
-      --token "$${INFISICAL_TOKEN}"
-      --projectId "$${INFISICAL_PROJECT_ID}"
-      --env "$${INFISICAL_ENV}"
-      -- sh -c "yarn prisma:generate && yarn start:dev"
-      '
-    depends_on:
-      postgres:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      infisical:
-        condition: service_started
-    networks:
-      - default
-      - infisical
-    volumes:
-      - ./back-sangue-doce:/app
-      - backend_node_modules:/app/node_modules
+  # backend:
+  #   build:
+  #     context: ./back-sangue-doce
+  #     dockerfile: Dockerfile.dev
+  #   container_name: sangue-doce-backend
+  #   restart: unless-stopped
+  #   profiles:
+  #     - app
+  #   ports:
+  #     - "${SERVER_PORT:-3011}:3011"
+  #   environment:
+  #     INFISICAL_TOKEN: ${INFISICAL_TOKEN:-}
+  #     INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
+  #     INFISICAL_ENV: ${INFISICAL_ENV:-dev}
+  #     INFISICAL_DOMAIN: http://infisical:8080
+  #   command: >
+  #     sh -c '
+  #     if [ -z "$${INFISICAL_TOKEN}" ] || [ -z "$${INFISICAL_PROJECT_ID}" ]; then
+  #       echo "Missing INFISICAL_TOKEN or INFISICAL_PROJECT_ID. Fill them in the root .env before starting the backend.";
+  #       exit 1;
+  #     fi;
+  #     infisical run
+  #     --domain "$${INFISICAL_DOMAIN}"
+  #     --token "$${INFISICAL_TOKEN}"
+  #     --projectId "$${INFISICAL_PROJECT_ID}"
+  #     --env "$${INFISICAL_ENV}"
+  #     -- printenv DATABASE_URL >/dev/null || {
+  #       echo "Could not fetch Infisical secrets. Create or rotate the token and make sure it can read the selected project/environment.";
+  #       exit 1;
+  #     };
+  #     infisical run
+  #     --domain "$${INFISICAL_DOMAIN}"
+  #     --token "$${INFISICAL_TOKEN}"
+  #     --projectId "$${INFISICAL_PROJECT_ID}"
+  #     --env "$${INFISICAL_ENV}"
+  #     -- sh -c "yarn prisma:generate && yarn start:dev"
+  #     '
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     minio:
+  #       condition: service_healthy
+  #     infisical:
+  #       condition: service_started
+  #   networks:
+  #     - default
+  #     - infisical
+  #   volumes:
+  #     - ./back-sangue-doce:/app
+  #     - backend_node_modules:/app/node_modules
 
-  frontend:
-    build:
-      context: ./front-sangue-doce
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${FRONTEND_API_URL:-http://localhost:3011}
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3010}
-        NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
-    container_name: sangue-doce-frontend
-    restart: unless-stopped
-    profiles:
-      - app
-    ports:
-      - "${FRONTEND_PORT:-3010}:3010"
-    environment:
-      INTERNAL_API_URL: ${FRONTEND_INTERNAL_API_URL:-http://backend:3011}
-      NEXT_PUBLIC_API_URL: ${FRONTEND_INTERNAL_API_URL:-http://backend:3011}
-      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3010}
-      NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
-      PORT: 3010
-      HOSTNAME: 0.0.0.0
-    depends_on:
-      backend:
-        condition: service_started
+  # frontend:
+  #   build:
+  #     context: ./front-sangue-doce
+  #     dockerfile: Dockerfile
+  #     args:
+  #       NEXT_PUBLIC_API_URL: ${FRONTEND_API_URL:-http://localhost:3011}
+  #       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3010}
+  #       NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
+  #   container_name: sangue-doce-frontend
+  #   restart: unless-stopped
+  #   profiles:
+  #     - app
+  #   ports:
+  #     - "${FRONTEND_PORT:-3010}:3010"
+  #   environment:
+  #     INTERNAL_API_URL: ${FRONTEND_INTERNAL_API_URL:-http://backend:3011}
+  #     NEXT_PUBLIC_API_URL: ${FRONTEND_INTERNAL_API_URL:-http://backend:3011}
+  #     NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3010}
+  #     NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
+  #     PORT: 3010
+  #     HOSTNAME: 0.0.0.0
+  #   depends_on:
+  #     backend:
+  #       condition: service_started
 
   postgres:
     image: postgres:16-alpine
@@ -81,8 +81,6 @@ services:
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT:-5433}:5432"
-    env_file:
-      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -104,8 +102,6 @@ services:
     ports:
       - "${MINIO_API_PORT:-9000}:9000"
       - "${MINIO_CONSOLE_PORT:-9001}:9001"
-    env_file:
-      - .env
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
@@ -121,8 +117,6 @@ services:
   minio-init:
     image: minio/mc:latest
     container_name: sangue-doce-minio-init
-    env_file:
-      - .env
     depends_on:
       minio:
         condition: service_healthy
@@ -142,8 +136,6 @@ services:
       - secrets
     ports:
       - "${INFISICAL_PORT:-8080}:8080"
-    env_file:
-      - .env
     environment:
       NODE_ENV: production
       SITE_URL: ${INFISICAL_SITE_URL:-http://localhost:8080}
@@ -165,8 +157,6 @@ services:
     restart: unless-stopped
     profiles:
       - secrets
-    env_file:
-      - .env
     environment:
       POSTGRES_USER: ${INFISICAL_POSTGRES_USER:-infisical}
       POSTGRES_PASSWORD: ${INFISICAL_POSTGRES_PASSWORD:-}
@@ -178,11 +168,7 @@ services:
     networks:
       - infisical
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}",
-        ]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 10
