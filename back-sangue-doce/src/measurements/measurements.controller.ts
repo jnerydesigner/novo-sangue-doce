@@ -1,28 +1,15 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Request,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
-import type { Response } from 'express';
-import type { CreateMeasurementDto } from './dto/create-measurement.dto';
+import { type AuthenticatedRequest, AuthGuard } from "@app/@infra/guard/auth.guard";
+import { Body, Controller, Get, Param, Post, Query, Request, Res, UseGuards } from "@nestjs/common";
+import type { Response } from "express";
+import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
+import { MeasurementReportPdfService } from "./measurement-report-pdf.service";
 import {
   MeasurementsService,
   type MonthlyMeasurementReport,
   type PublicMeasurement,
-} from './measurements.service';
-import {
-  type AuthenticatedRequest,
-  AuthGuard,
-} from '@app/@infra/guard/auth.guard';
-import { MeasurementReportPdfService } from './measurement-report-pdf.service';
+} from "./measurements.service";
 
-@Controller('measurements')
+@Controller("measurements")
 export class MeasurementsController {
   constructor(
     private readonly measurementsService: MeasurementsService,
@@ -42,51 +29,45 @@ export class MeasurementsController {
   @UseGuards(AuthGuard)
   findAll(
     @Request() req: AuthenticatedRequest,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
+    @Query("startDate") startDate?: string,
+    @Query("endDate") endDate?: string,
   ): Promise<PublicMeasurement[]> {
     return this.measurementsService.findAll(req, startDate, endDate);
   }
 
-  @Get('today')
+  @Get("today")
   @UseGuards(AuthGuard)
   findToday(
     @Request() req: AuthenticatedRequest,
-    @Query('timeZone') timeZone?: string,
+    @Query("timeZone") timeZone?: string,
   ): Promise<PublicMeasurement[]> {
     return this.measurementsService.findToday(req, timeZone);
   }
 
-  @Get('reports/monthly')
+  @Get("reports/monthly")
   @UseGuards(AuthGuard)
   getMonthlyFormalReport(
     @Request() req: AuthenticatedRequest,
-    @Query('year') year?: string,
-    @Query('month') month?: string,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
+    @Query("year") year?: string,
+    @Query("month") month?: string,
+    @Query("startDate") startDate?: string,
+    @Query("endDate") endDate?: string,
   ): Promise<MonthlyMeasurementReport> {
-    return this.measurementsService.getMonthlyFormalReport(
-      req,
-      year,
-      month,
-      startDate,
-      endDate,
-    );
+    return this.measurementsService.getMonthlyFormalReport(req, year, month, startDate, endDate);
   }
 
-  @Get('reports/monthly.pdf')
+  @Get("reports/monthly.pdf")
   @UseGuards(AuthGuard)
   async getMonthlyFormalReportPdf(
     @Request() req: AuthenticatedRequest,
     @Res() res: Response,
-    @Query('year') year?: string,
-    @Query('month') month?: string,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-    @Query('birthDate') birthDate?: string,
-    @Query('diabetesType') diabetesType?: string,
-    @Query('reportUrl') reportUrl?: string,
+    @Query("year") year?: string,
+    @Query("month") month?: string,
+    @Query("startDate") startDate?: string,
+    @Query("endDate") endDate?: string,
+    @Query("birthDate") birthDate?: string,
+    @Query("diabetesType") diabetesType?: string,
+    @Query("reportUrl") reportUrl?: string,
   ) {
     const report = await this.measurementsService.getMonthlyFormalReport(
       req,
@@ -95,35 +76,33 @@ export class MeasurementsController {
       startDate,
       endDate,
     );
-    const pdf = await this.measurementReportPdfService.generateMonthlyReportPdf(
-      {
-        birthDate,
-        diabetesType,
-        report,
-        reportUrl,
-      },
-    );
+    const pdf = await this.measurementReportPdfService.generateMonthlyReportPdf({
+      birthDate,
+      diabetesType,
+      report,
+      reportUrl,
+    });
     const firstReportDay = report.days[0]?.date;
     const lastReportDay = report.days.at(-1)?.date;
     const filePeriod =
       firstReportDay && lastReportDay
         ? `${firstReportDay}-${lastReportDay}`
-        : `${report.year}-${String(report.month).padStart(2, '0')}`;
+        : `${report.year}-${String(report.month).padStart(2, "0")}`;
 
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
-      'Content-Disposition',
+      "Content-Disposition",
       `attachment; filename="relatorio-glicemia-${filePeriod}.pdf"`,
     );
-    res.setHeader('Content-Length', pdf.length);
+    res.setHeader("Content-Length", pdf.length);
 
     return res.send(pdf);
   }
 
-  @Get(':id')
+  @Get(":id")
   @UseGuards(AuthGuard)
   findOne(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Request() req: AuthenticatedRequest,
   ): Promise<PublicMeasurement> {
     return this.measurementsService.findOne(req, id);

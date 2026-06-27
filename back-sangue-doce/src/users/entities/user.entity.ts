@@ -1,13 +1,8 @@
-import type { PublicUserType } from '@shared/types/user-public.type';
+import type { PublicUserType } from "@shared/types/user-public.type";
 
-export type UserDiabetesType =
-  | 'TYPE_1'
-  | 'TYPE_2'
-  | 'GESTATIONAL'
-  | 'OTHER'
-  | 'UNKNOWN';
+export type UserDiabetesType = "TYPE_1" | "TYPE_2" | "GESTATIONAL" | "OTHER" | "UNKNOWN";
 
-export type UserRole = 'ADMIN' | 'USER';
+export type UserRole = "ADMIN" | "USER";
 
 export type CreateUserEntityProps = {
   name: string;
@@ -51,8 +46,8 @@ export class UserEntity {
       passwordHash: props.passwordHash,
       avatarUrl: props.avatarUrl ?? null,
       birthDate: props.birthDate ? new Date(props.birthDate) : null,
-      diabetesType: props.diabetesType ?? 'UNKNOWN',
-      role: props.role ?? 'USER',
+      diabetesType: props.diabetesType ?? "UNKNOWN",
+      role: props.role ?? "USER",
     });
   }
 

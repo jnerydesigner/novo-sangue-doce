@@ -3,21 +3,20 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { CreateAuthorDto, createAuthorSchema } from './dto/create-author.dto';
+} from "@nestjs/common";
+import { type CreateAuthorDto, createAuthorSchema } from "./dto/create-author.dto";
 import {
   type UpdateAuthorProfileDto,
   updateAuthorProfileSchema,
-} from './dto/update-author-profile.dto';
-import { AuthorEntity, type PublicAuthor } from './entities/author.entity';
+} from "./dto/update-author-profile.dto";
+import { AuthorEntity, type PublicAuthor } from "./entities/author.entity";
 import {
   AuthorAlreadyExistsError,
   AuthorRepository,
   AuthorUserNotFoundError,
-} from './repositories/author.repository';
+} from "./repositories/author.repository";
 
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 @Injectable()
 export class AuthorsService {
@@ -33,11 +32,11 @@ export class AuthorsService {
       return author.toPublic();
     } catch (error) {
       if (error instanceof AuthorAlreadyExistsError) {
-        throw new ConflictException('Author slug or e-mail already exists.');
+        throw new ConflictException("Author slug or e-mail already exists.");
       }
 
       if (error instanceof AuthorUserNotFoundError) {
-        throw new BadRequestException('Author user not found.');
+        throw new BadRequestException("Author user not found.");
       }
 
       throw error;
@@ -52,13 +51,13 @@ export class AuthorsService {
 
   async findOne(id: string): Promise<PublicAuthor> {
     if (!this.isValidUuid(id)) {
-      throw new BadRequestException('Invalid author id.');
+      throw new BadRequestException("Invalid author id.");
     }
 
     const author = await this.authorRepository.findById(id);
 
     if (!author) {
-      throw new BadRequestException('Author not found.');
+      throw new BadRequestException("Author not found.");
     }
 
     return author.toPublic();
@@ -68,7 +67,7 @@ export class AuthorsService {
     const author = await this.authorRepository.findByUserId(userId);
 
     if (!author) {
-      throw new NotFoundException('Author profile not found.');
+      throw new NotFoundException("Author profile not found.");
     }
 
     return author.toPublic();
@@ -85,24 +84,20 @@ export class AuthorsService {
     });
 
     if (!author) {
-      throw new NotFoundException('Author profile not found.');
+      throw new NotFoundException("Author profile not found.");
     }
 
     return author.toPublic();
   }
 
   async findSlug(slug: string): Promise<PublicAuthor | null> {
-    const author = await this.authorRepository.findBySlug(
-      slug.trim().toLowerCase(),
-    );
+    const author = await this.authorRepository.findBySlug(slug.trim().toLowerCase());
 
     return author ? author.toPublic() : null;
   }
 
   async findEmail(email: string): Promise<PublicAuthor | null> {
-    const author = await this.authorRepository.findByEmail(
-      email.trim().toLowerCase(),
-    );
+    const author = await this.authorRepository.findByEmail(email.trim().toLowerCase());
 
     return author ? author.toPublic() : null;
   }
@@ -111,9 +106,7 @@ export class AuthorsService {
     const result = createAuthorSchema.safeParse(createAuthorDto);
 
     if (!result.success) {
-      throw new BadRequestException(
-        result.error.issues.map((issue) => issue.message),
-      );
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
     }
 
     return result.data;
@@ -125,9 +118,7 @@ export class AuthorsService {
     const result = updateAuthorProfileSchema.safeParse(updateAuthorProfileDto);
 
     if (!result.success) {
-      throw new BadRequestException(
-        result.error.issues.map((issue) => issue.message),
-      );
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
     }
 
     return result.data;

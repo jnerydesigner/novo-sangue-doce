@@ -5,8 +5,8 @@ export type JwtPayload = {
   avatarUrl?: string;
   birthDate?: string;
   diabetesType: string;
-  role: 'ADMIN' | 'USER';
-  roles: ('ADMIN' | 'USER')[];
+  role: "ADMIN" | "USER";
+  roles: ("ADMIN" | "USER")[];
   passwordSetupRequired: boolean;
   createdAt: string;
   updatedAt: string;

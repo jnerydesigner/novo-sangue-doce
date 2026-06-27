@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { PostEntity } from '@app/posts/entities/post.entity';
+import { PostEntity } from "@app/posts/entities/post.entity";
 import {
   type PaginatedPosts,
   PostAlreadyExistsError,
   type PostPaginationParams,
   PostRelationNotFoundError,
-  PostRepository,
-} from '@app/posts/repositories/post.repository';
+  type PostRepository,
+} from "@app/posts/repositories/post.repository";
 import type {
   PersistedPostEntityProps,
   PublicPostCategory,
   PublicPostTag,
-} from '@app/posts/types/posts.type';
-import { PrismaService } from '../prisma.service';
+} from "@app/posts/types/posts.type";
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "../prisma.service";
 
 const postInclude = {
   author: {
@@ -152,12 +152,12 @@ export class PrismaPostsRepository implements PostRepository {
     const [posts, total] = await this.prisma.$transaction([
       this.prisma.post.findMany({
         include: postInclude,
-        orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
-        where: { status: 'PUBLISHED' },
+        orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+        where: { status: "PUBLISHED" },
         skip,
         take: params.limit,
       }),
-      this.prisma.post.count({ where: { status: 'PUBLISHED' } }),
+      this.prisma.post.count({ where: { status: "PUBLISHED" } }),
     ]);
     const totalPages = Math.max(1, Math.ceil(total / params.limit));
 
@@ -179,7 +179,7 @@ export class PrismaPostsRepository implements PostRepository {
     const [posts, total] = await this.prisma.$transaction([
       this.prisma.post.findMany({
         include: postInclude,
-        orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
+        orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
         skip,
         take: params.limit,
       }),
@@ -202,13 +202,13 @@ export class PrismaPostsRepository implements PostRepository {
 
   async findCategories(): Promise<PublicPostCategory[]> {
     return this.prisma.postCategory.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: { name: "asc" },
     });
   }
 
   async findTags(): Promise<PublicPostTag[]> {
     return this.prisma.postTag.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: { name: "asc" },
     });
   }
 
@@ -223,7 +223,7 @@ export class PrismaPostsRepository implements PostRepository {
 
   async findBySlug(slug: string): Promise<PostEntity | null> {
     const post = await this.prisma.post.findFirst({
-      where: { slug, status: 'PUBLISHED' },
+      where: { slug, status: "PUBLISHED" },
       include: postInclude,
     });
 
@@ -243,16 +243,13 @@ export class PrismaPostsRepository implements PostRepository {
     const posts = await this.prisma.post.findMany({
       where: { authorId },
       include: postInclude,
-      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+      orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
     });
 
     return posts.map((post) => this.toEntity(post));
   }
 
-  async updatePostCoverImage(
-    postId: string,
-    imageUrl: string,
-  ): Promise<PostEntity> {
+  async updatePostCoverImage(postId: string, imageUrl: string): Promise<PostEntity> {
     try {
       const post = await this.prisma.post.update({
         where: {
@@ -298,23 +295,14 @@ export class PrismaPostsRepository implements PostRepository {
   }
 
   private isDuplicateKeyError(error: unknown): boolean {
-    return (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2002'
-    );
+    return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
   }
 
   private isForeignKeyError(error: unknown): boolean {
-    return (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2003'
-    );
+    return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003";
   }
 
   private isRecordNotFoundError(error: unknown): boolean {
-    return (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2025'
-    );
+    return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025";
   }
 }

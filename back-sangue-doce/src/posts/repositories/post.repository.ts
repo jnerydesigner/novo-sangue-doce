@@ -1,5 +1,5 @@
-import { PostEntity } from '../entities/post.entity';
-import { PublicPostCategory, PublicPostTag } from '../types/posts.type';
+import type { PostEntity } from "../entities/post.entity";
+import type { PublicPostCategory, PublicPostTag } from "../types/posts.type";
 
 export type PostPaginationParams = {
   page: number;
@@ -20,15 +20,15 @@ export type PaginatedPosts = {
 
 export class PostAlreadyExistsError extends Error {
   constructor() {
-    super('Post already exists.');
-    this.name = 'PostAlreadyExistsError';
+    super("Post already exists.");
+    this.name = "PostAlreadyExistsError";
   }
 }
 
 export class PostRelationNotFoundError extends Error {
   constructor() {
-    super('Post relation not found.');
-    this.name = 'PostRelationNotFoundError';
+    super("Post relation not found.");
+    this.name = "PostRelationNotFoundError";
   }
 }
 
@@ -44,8 +44,5 @@ export abstract class PostRepository {
   abstract findBySlug(slug: string): Promise<PostEntity | null>;
   abstract findAnyBySlug(slug: string): Promise<PostEntity | null>;
   abstract findByAuthorId(authorId: string): Promise<PostEntity[]>;
-  abstract updatePostCoverImage(
-    postId: string,
-    imageUrl: string,
-  ): Promise<PostEntity>;
+  abstract updatePostCoverImage(postId: string, imageUrl: string): Promise<PostEntity>;
 }

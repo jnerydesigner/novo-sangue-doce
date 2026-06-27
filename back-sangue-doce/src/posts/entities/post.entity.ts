@@ -1,13 +1,13 @@
-import { PostStatus } from '@prisma/client';
-import {
+import type { PostStatus } from "@prisma/client";
+import type {
   CreatePostEntityProps,
-  PostEntityProps,
   PersistedPostEntityProps,
+  PostEntityProps,
   PostPersistence,
   PublicPost,
   PublicPostAuthor,
   PublicPostCategory,
-} from '../types/posts.type';
+} from "../types/posts.type";
 
 export class PostEntity {
   private constructor(private readonly props: PostEntityProps) {}
@@ -19,7 +19,7 @@ export class PostEntity {
       excerpt: props.excerpt.trim(),
       standfirst: props.standfirst?.trim() || null,
       content: props.content ?? [],
-      status: props.status ?? 'DRAFT',
+      status: props.status ?? "DRAFT",
       featured: props.featured ?? false,
       readingMinutes: props.readingMinutes ?? 5,
       coverImageUrl: props.coverImageUrl?.trim() || null,

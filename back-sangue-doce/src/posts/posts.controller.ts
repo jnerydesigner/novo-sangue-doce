@@ -1,3 +1,7 @@
+import { AuthGuard } from "@app/@infra/guard/auth.guard";
+import { RolesGuard } from "@app/@infra/guard/roles.guard";
+import { Roles } from "@app/auth/decorators/roles.decorator";
+import { Role } from "@app/auth/enums/role.enum";
 import {
   Body,
   Controller,
@@ -8,15 +12,11 @@ import {
   Post,
   Query,
   UseGuards,
-} from '@nestjs/common';
-import type { CreatePostDto } from './dto/create-post.dto';
-import { PostsService } from './posts.service';
-import { AuthGuard } from '@app/@infra/guard/auth.guard';
-import { RolesGuard } from '@app/@infra/guard/roles.guard';
-import { Roles } from '@app/auth/decorators/roles.decorator';
-import { Role } from '@app/auth/enums/role.enum';
+} from "@nestjs/common";
+import type { CreatePostDto } from "./dto/create-post.dto";
+import { PostsService } from "./posts.service";
 
-@Controller('posts')
+@Controller("posts")
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
@@ -27,58 +27,58 @@ export class PostsController {
     return this.postsService.create(createPostDto);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  update(@Param('id') id: string, @Body() updatePostDto: CreatePostDto) {
+  update(@Param("id") id: string, @Body() updatePostDto: CreatePostDto) {
     return this.postsService.update(id, updatePostDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  async delete(@Param('id') id: string) {
+  async delete(@Param("id") id: string) {
     await this.postsService.delete(id);
 
     return { ok: true };
   }
 
   @Get()
-  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+  findAll(@Query("page") page?: string, @Query("limit") limit?: string) {
     return this.postsService.findAll({ page, limit });
   }
 
-  @Get('admin')
+  @Get("admin")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  findAllAdmin(@Query('page') page?: string, @Query('limit') limit?: string) {
+  findAllAdmin(@Query("page") page?: string, @Query("limit") limit?: string) {
     return this.postsService.findAllAdmin({ page, limit });
   }
 
-  @Get('categories')
+  @Get("categories")
   findCategories() {
     return this.postsService.findCategories();
   }
 
-  @Get('tags')
+  @Get("tags")
   findTags() {
     return this.postsService.findTags();
   }
 
-  @Get('slug/:slug')
-  findSlug(@Param('slug') slug: string) {
+  @Get("slug/:slug")
+  findSlug(@Param("slug") slug: string) {
     return this.postsService.findSlug(slug);
   }
 
-  @Get('authors/:authorId')
-  findPostsByAuthor(@Param('authorId') authorId: string) {
+  @Get("authors/:authorId")
+  findPostsByAuthor(@Param("authorId") authorId: string) {
     return this.postsService.findPostsByAuthor(authorId);
   }
 
-  @Get(':id')
+  @Get(":id")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  findOne(@Param('id') id: string) {
+  findOne(@Param("id") id: string) {
     return this.postsService.findOne(id);
   }
 }

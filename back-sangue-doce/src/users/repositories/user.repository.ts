@@ -1,10 +1,9 @@
-import { UserEntity } from '../entities/user.entity';
-import type { UserDiabetesType } from '../entities/user.entity';
+import type { UserDiabetesType, UserEntity } from "../entities/user.entity";
 
 export class UserEmailAlreadyExistsError extends Error {
   constructor() {
-    super('User e-mail already exists.');
-    this.name = 'UserEmailAlreadyExistsError';
+    super("User e-mail already exists.");
+    this.name = "UserEmailAlreadyExistsError";
   }
 }
 
@@ -22,9 +21,6 @@ export abstract class UserRepository {
       diabetesType: UserDiabetesType;
     },
   ): Promise<UserEntity>;
-  abstract updatePasswordHash(
-    id: string,
-    passwordHash: string,
-  ): Promise<UserEntity>;
+  abstract updatePasswordHash(id: string, passwordHash: string): Promise<UserEntity>;
   abstract updateAvatarUrl(id: string, avatarUrl: string): Promise<UserEntity>;
 }

@@ -1,14 +1,14 @@
+import type { JwtPayload } from "@app/auth/types/jwt-payload.type";
 import {
-  CanActivate,
-  ExecutionContext,
+  type CanActivate,
+  type ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import type { Request } from 'express';
-import type { JwtPayload } from '@app/auth/types/jwt-payload.type';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import type { Request } from "express";
 
-export type AuthenticatedRequest = Omit<Request, 'user'> & {
+export type AuthenticatedRequest = Omit<Request, "user"> & {
   user?: JwtPayload;
 };
 
@@ -35,8 +35,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    const [type, token] = request.headers.authorization?.split(" ") ?? [];
 
-    return type === 'Bearer' ? token : undefined;
+    return type === "Bearer" ? token : undefined;
   }
 }

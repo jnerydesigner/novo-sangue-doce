@@ -1,16 +1,16 @@
-import { AuthorEntity } from '../entities/author.entity';
+import type { AuthorEntity } from "../entities/author.entity";
 
 export class AuthorAlreadyExistsError extends Error {
   constructor() {
-    super('Author already exists.');
-    this.name = 'AuthorAlreadyExistsError';
+    super("Author already exists.");
+    this.name = "AuthorAlreadyExistsError";
   }
 }
 
 export class AuthorUserNotFoundError extends Error {
   constructor() {
-    super('Author user not found.');
-    this.name = 'AuthorUserNotFoundError';
+    super("Author user not found.");
+    this.name = "AuthorUserNotFoundError";
   }
 }
 

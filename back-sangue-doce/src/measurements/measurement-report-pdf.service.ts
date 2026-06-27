@@ -1,11 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import PDFDocument from 'pdfkit';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-import type {
-  MonthlyMeasurementReport,
-  PublicMeasurement,
-} from './measurements.service';
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { Injectable } from "@nestjs/common";
+import PDFDocument from "pdfkit";
+import type { MonthlyMeasurementReport, PublicMeasurement } from "./measurements.service";
 
 type ReportColumn = {
   label: string;
@@ -15,33 +12,33 @@ type ReportColumn = {
 
 const REPORT_COLUMNS: ReportColumn[] = [
   {
-    label: 'ANTES DO CAFE',
-    noteTypes: ['FASTING_WAKE_UP', 'BEFORE_BREAKFAST'],
+    label: "ANTES DO CAFE",
+    noteTypes: ["FASTING_WAKE_UP", "BEFORE_BREAKFAST"],
     width: 78,
   },
   {
-    label: 'DEPOIS DO CAFE',
-    noteTypes: ['AFTER_BREAKFAST'],
+    label: "DEPOIS DO CAFE",
+    noteTypes: ["AFTER_BREAKFAST"],
     width: 78,
   },
   {
-    label: 'ANTES DO ALMOCO',
-    noteTypes: ['BEFORE_LUNCH'],
+    label: "ANTES DO ALMOCO",
+    noteTypes: ["BEFORE_LUNCH"],
     width: 82,
   },
   {
-    label: 'DEPOIS DO ALMOCO',
-    noteTypes: ['AFTER_LUNCH'],
+    label: "DEPOIS DO ALMOCO",
+    noteTypes: ["AFTER_LUNCH"],
     width: 82,
   },
   {
-    label: 'ANTES DA JANTA',
-    noteTypes: ['BEFORE_DINNER'],
+    label: "ANTES DA JANTA",
+    noteTypes: ["BEFORE_DINNER"],
     width: 80,
   },
   {
-    label: 'DEPOIS DA JANTA',
-    noteTypes: ['AFTER_DINNER', 'BEFORE_SLEEP'],
+    label: "DEPOIS DA JANTA",
+    noteTypes: ["AFTER_DINNER", "BEFORE_SLEEP"],
     width: 80,
   },
 ];
@@ -54,20 +51,18 @@ export class MeasurementReportPdfService {
     report: MonthlyMeasurementReport;
     reportUrl?: string;
   }): Promise<Buffer> {
-    const avatarImage = await this.fetchAvatarImage(
-      params.report.userAvatarUrl,
-    );
+    const avatarImage = await this.fetchAvatarImage(params.report.userAvatarUrl);
 
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument({
         margin: 28,
-        size: 'A4',
+        size: "A4",
       });
       const chunks: Buffer[] = [];
 
-      doc.on('data', (chunk: Buffer) => chunks.push(chunk));
-      doc.on('end', () => resolve(Buffer.concat(chunks)));
-      doc.on('error', reject);
+      doc.on("data", (chunk: Buffer) => chunks.push(chunk));
+      doc.on("end", () => resolve(Buffer.concat(chunks)));
+      doc.on("error", reject);
       const urlFullReport = `${process.env.URL_SITE}${params.reportUrl}`;
 
       this.drawHeader(doc, { ...params, avatarImage });
@@ -100,31 +95,31 @@ export class MeasurementReportPdfService {
     const valueWidth = brandX - valueX - 18;
     const rowHeight = 18;
     const rows = [
-      ['NOME:', report.userName.toUpperCase()],
-      ['DATA NASC:', params.birthDate ?? 'NAO INFORMADO'],
-      ['INICIO AMOSTRAGEM:', this.formatDate(report.period.startDate)],
-      ['FIM AMOSTRAGEM:', this.formatDate(report.period.endDate)],
-      ['TIPO DIABETES:', this.formatDiabetesType(params.diabetesType)],
+      ["NOME:", report.userName.toUpperCase()],
+      ["DATA NASC:", params.birthDate ?? "NAO INFORMADO"],
+      ["INICIO AMOSTRAGEM:", this.formatDate(report.period.startDate)],
+      ["FIM AMOSTRAGEM:", this.formatDate(report.period.endDate)],
+      ["TIPO DIABETES:", this.formatDiabetesType(params.diabetesType)],
     ];
 
     doc
       .rect(left, top + 12, photoSize, photoSize)
-      .strokeColor('#d8cdbb')
+      .strokeColor("#d8cdbb")
       .stroke();
 
     if (params.avatarImage) {
       doc.image(params.avatarImage, left, top + 12, {
         fit: [photoSize, photoSize],
-        align: 'center',
-        valign: 'center',
+        align: "center",
+        valign: "center",
       });
     } else {
       doc
-        .font('Helvetica-Bold')
+        .font("Helvetica-Bold")
         .fontSize(9)
-        .fillColor('#6f6558')
-        .text('FOTO', left, top + 42, {
-          align: 'center',
+        .fillColor("#6f6558")
+        .text("FOTO", left, top + 42, {
+          align: "center",
           width: photoSize,
         });
     }
@@ -133,32 +128,27 @@ export class MeasurementReportPdfService {
       const y = top + index * rowHeight;
 
       doc
-        .font('Helvetica-Bold')
+        .font("Helvetica-Bold")
         .fontSize(8.5)
-        .fillColor('#6f6558')
+        .fillColor("#6f6558")
         .text(label, labelX, y, { width: labelWidth });
       doc
-        .font('Helvetica-Bold')
+        .font("Helvetica-Bold")
         .fontSize(8.5)
-        .fillColor('#211d18')
+        .fillColor("#211d18")
         .text(value, valueX, y, { width: valueWidth });
     });
 
     this.drawBrand(doc, brandX, top + 12, brandWidth);
   }
 
-  private drawBrand(
-    doc: PDFKit.PDFDocument,
-    x: number,
-    y: number,
-    width: number,
-  ) {
+  private drawBrand(doc: PDFKit.PDFDocument, x: number, y: number, width: number) {
     const logoPath = join(
       process.cwd(),
-      '..',
-      'front-sangue-doce',
-      'public',
-      'sangue-doce-logo.png',
+      "..",
+      "front-sangue-doce",
+      "public",
+      "sangue-doce-logo.png",
     );
     const logoSize = 42;
     const logoX = x + (width - logoSize) / 2;
@@ -166,25 +156,25 @@ export class MeasurementReportPdfService {
     if (existsSync(logoPath)) {
       doc.image(logoPath, logoX, y, {
         fit: [logoSize, logoSize],
-        align: 'center',
-        valign: 'center',
+        align: "center",
+        valign: "center",
       });
     }
 
     doc
-      .font('Helvetica-Bold')
+      .font("Helvetica-Bold")
       .fontSize(11)
-      .fillColor('#0f4f2d')
-      .text('Sangue Doce', x, y + 47, {
-        align: 'center',
+      .fillColor("#0f4f2d")
+      .text("Sangue Doce", x, y + 47, {
+        align: "center",
         width,
       });
     doc
-      .font('Helvetica-Bold')
+      .font("Helvetica-Bold")
       .fontSize(5.8)
-      .fillColor('#6f6558')
-      .text('RELATORIO DE GLICEMIA', x, y + 62, {
-        align: 'center',
+      .fillColor("#6f6558")
+      .text("RELATORIO DE GLICEMIA", x, y + 62, {
+        align: "center",
         width,
       });
   }
@@ -195,8 +185,7 @@ export class MeasurementReportPdfService {
     const rowHeight = 19;
     const dateWidth = 70;
     const tableWidth =
-      dateWidth +
-      REPORT_COLUMNS.reduce((total, column) => total + column.width, 0);
+      dateWidth + REPORT_COLUMNS.reduce((total, column) => total + column.width, 0);
     let currentY = this.drawTableHeader(doc, startY, dateWidth, tableWidth);
 
     report.days.forEach((day) => {
@@ -208,27 +197,19 @@ export class MeasurementReportPdfService {
       const y = currentY;
 
       doc.text(this.formatDate(day.date), left, y, {
-        align: 'center',
+        align: "center",
         width: dateWidth,
       });
 
       let columnX = left + dateWidth;
 
       REPORT_COLUMNS.forEach((column) => {
-        const measurement = this.getMeasurementForColumn(
-          day.measurements,
-          column,
-        );
+        const measurement = this.getMeasurementForColumn(day.measurements, column);
 
-        doc.text(
-          measurement ? String(measurement.glucoseValueMgDl) : '',
-          columnX,
-          y,
-          {
-            align: 'center',
-            width: column.width,
-          },
-        );
+        doc.text(measurement ? String(measurement.glucoseValueMgDl) : "", columnX, y, {
+          align: "center",
+          width: column.width,
+        });
         columnX += column.width;
       });
 
@@ -247,17 +228,17 @@ export class MeasurementReportPdfService {
     doc
       .moveTo(left, y - 9)
       .lineTo(left + tableWidth, y - 9)
-      .strokeColor('#d8cdbb')
+      .strokeColor("#d8cdbb")
       .stroke();
 
-    doc.font('Helvetica-Bold').fontSize(7.6).fillColor('#211d18');
-    doc.text('DIA', left, y, { width: dateWidth, align: 'center' });
+    doc.font("Helvetica-Bold").fontSize(7.6).fillColor("#211d18");
+    doc.text("DIA", left, y, { width: dateWidth, align: "center" });
 
     let x = left + dateWidth;
 
     REPORT_COLUMNS.forEach((column) => {
       doc.text(column.label, x, y, {
-        align: 'center',
+        align: "center",
         width: column.width,
       });
       x += column.width;
@@ -266,39 +247,38 @@ export class MeasurementReportPdfService {
     doc
       .moveTo(left, y + 14)
       .lineTo(left + tableWidth, y + 14)
-      .strokeColor('#d8cdbb')
+      .strokeColor("#d8cdbb")
       .stroke();
 
-    doc.font('Helvetica').fontSize(8.4).fillColor('#211d18');
+    doc.font("Helvetica").fontSize(8.4).fillColor("#211d18");
 
     return y + 22;
   }
 
   private drawFooter(doc: PDFKit.PDFDocument, reportUrl?: string) {
-    const footerWidth =
-      doc.page.width - doc.page.margins.left - doc.page.margins.right;
+    const footerWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
 
     doc
-      .font('Helvetica-Bold')
+      .font("Helvetica-Bold")
       .fontSize(8)
-      .fillColor('#6f6558')
+      .fillColor("#6f6558")
       .text(
-        'ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE',
+        "ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE",
         doc.page.margins.left,
         reportUrl ? 790 : 800,
         {
-          align: 'center',
+          align: "center",
           width: footerWidth,
         },
       );
 
     if (reportUrl) {
       doc
-        .font('Helvetica')
+        .font("Helvetica")
         .fontSize(6.4)
-        .fillColor('#6f6558')
+        .fillColor("#6f6558")
         .text(reportUrl, doc.page.margins.left, 805, {
-          align: 'center',
+          align: "center",
           width: footerWidth,
         });
     }
@@ -310,36 +290,29 @@ export class MeasurementReportPdfService {
   ): PublicMeasurement | null {
     return (
       measurements.find(
-        (measurement) =>
-          measurement.noteType &&
-          column.noteTypes.includes(measurement.noteType),
+        (measurement) => measurement.noteType && column.noteTypes.includes(measurement.noteType),
       ) ?? null
     );
   }
 
   private formatDate(value: Date | string) {
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      timeZone: 'UTC',
-      year: 'numeric',
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      timeZone: "UTC",
+      year: "numeric",
     }).format(new Date(value));
   }
 
   private formatDiabetesType(value?: string) {
     if (!value) {
-      return 'NAO INFORMADO';
+      return "NAO INFORMADO";
     }
 
-    return value
-      .replace('Diabetes tipo ', '')
-      .replace('Diabetes ', '')
-      .toUpperCase();
+    return value.replace("Diabetes tipo ", "").replace("Diabetes ", "").toUpperCase();
   }
 
-  private async fetchAvatarImage(
-    avatarUrl?: string,
-  ): Promise<Buffer | undefined> {
+  private async fetchAvatarImage(avatarUrl?: string): Promise<Buffer | undefined> {
     if (!avatarUrl) {
       return undefined;
     }

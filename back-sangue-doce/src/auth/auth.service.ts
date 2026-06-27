@@ -1,33 +1,19 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import {
-  randomBytes,
-  scrypt as scryptCallback,
-  timingSafeEqual,
-} from 'node:crypto';
-import { promisify } from 'node:util';
+import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
+import { promisify } from "node:util";
+import { formatDateToDayMonthYear } from "@app/@helper/format-date.helper";
+import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
+import { UserEntity } from "@app/users/entities/user.entity";
 import {
   UserEmailAlreadyExistsError,
   UserRepository,
-} from '@app/users/repositories/user.repository';
-import { JwtService } from '@nestjs/jwt';
-import { formatDateToDayMonthYear } from '@app/@helper/format-date.helper';
-import { DiabetesTypeEnum } from '@shared/enum/diabets-type.enum';
-import type { JwtPayload } from './types/jwt-payload.type';
-import { AuthenticatedRequest } from '@app/@infra/guard/auth.guard';
-import { UserEntity } from '@app/users/entities/user.entity';
-import type {
-  GoogleAuthUser,
-  GoogleProfileUser,
-} from './types/google-auth-user.type';
-import {
-  type UpdateProfileDto,
-  updateProfileSchema,
-} from './dto/update-profile.dto';
-import { type SetPasswordDto, setPasswordSchema } from './dto/set-password.dto';
+} from "@app/users/repositories/user.repository";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { DiabetesTypeEnum } from "@shared/enum/diabets-type.enum";
+import { type SetPasswordDto, setPasswordSchema } from "./dto/set-password.dto";
+import { type UpdateProfileDto, updateProfileSchema } from "./dto/update-profile.dto";
+import type { GoogleAuthUser, GoogleProfileUser } from "./types/google-auth-user.type";
+import type { JwtPayload } from "./types/jwt-payload.type";
 
 const scrypt = promisify(scryptCallback);
 
@@ -38,20 +24,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string } | null> {
+  async validateUser(email: string, password: string): Promise<{ access_token: string } | null> {
     const user = await this.userRepository.findByEmailWithPassword(email);
 
     if (!user) {
       return null;
     }
 
-    const passwordMatches = await this.comparePassword(
-      password,
-      user.getPasswordHash(),
-    );
+    const passwordMatches = await this.comparePassword(password, user.getPasswordHash());
 
     if (!passwordMatches) {
       return null;
@@ -66,9 +46,7 @@ export class AuthService {
     };
   }
 
-  async validateGoogleUser(
-    profile: GoogleProfileUser,
-  ): Promise<GoogleAuthUser> {
+  async validateGoogleUser(profile: GoogleProfileUser): Promise<GoogleAuthUser> {
     const email = profile.email.trim().toLowerCase();
     let user = await this.userRepository.findByEmail(email);
 
@@ -137,7 +115,7 @@ export class AuthService {
     }
 
     if (!this.isPasswordSetupRequired(user)) {
-      throw new BadRequestException('Password is already configured.');
+      throw new BadRequestException("Password is already configured.");
     }
 
     const updatedUser = await this.userRepository.updatePasswordHash(
@@ -150,23 +128,24 @@ export class AuthService {
     return { access_token, profile };
   }
 
-  private async comparePassword(
-    plainPassword: string,
-    passwordHash: string,
-  ): Promise<boolean> {
-    const [algorithm, salt, storedHash] = passwordHash.split(':');
+  async createSession(user: UserEntity): Promise<{ access_token: string; profile: JwtPayload }> {
+    const profile = this.createJwtPayload(user);
+    const access_token = await this.signJwt(profile);
 
-    if (algorithm !== 'scrypt' || !salt || !storedHash) {
+    return { access_token, profile };
+  }
+
+  private async comparePassword(plainPassword: string, passwordHash: string): Promise<boolean> {
+    const [algorithm, salt, storedHash] = passwordHash.split(":");
+
+    if (algorithm !== "scrypt" || !salt || !storedHash) {
       return false;
     }
 
     const derivedKey = (await scrypt(plainPassword, salt, 64)) as Buffer;
-    const storedKey = Buffer.from(storedHash, 'hex');
+    const storedKey = Buffer.from(storedHash, "hex");
 
-    return (
-      derivedKey.length === storedKey.length &&
-      timingSafeEqual(derivedKey, storedKey)
-    );
+    return derivedKey.length === storedKey.length && timingSafeEqual(derivedKey, storedKey);
   }
 
   private createJwtPayload(userEntity: UserEntity): JwtPayload {
@@ -177,12 +156,10 @@ export class AuthService {
       name: user.name,
       email: user.email,
       avatarUrl: user.avatarUrl,
-      birthDate: user.birthDate
-        ? formatDateToDayMonthYear(user.birthDate)
-        : undefined,
+      birthDate: user.birthDate ? formatDateToDayMonthYear(user.birthDate) : undefined,
       diabetesType: this.formatDiabetesType(user.diabetesType),
-      role: user.role as 'ADMIN' | 'USER',
-      roles: [user.role as 'ADMIN' | 'USER'],
+      role: user.role as "ADMIN" | "USER",
+      roles: [user.role as "ADMIN" | "USER"],
       passwordSetupRequired: this.isPasswordSetupRequired(userEntity),
       createdAt: formatDateToDayMonthYear(user.createdAt),
       updatedAt: formatDateToDayMonthYear(user.updatedAt),
@@ -196,14 +173,12 @@ export class AuthService {
   private parseUpdateProfile(updateProfileDto: UpdateProfileDto): {
     name: string;
     birthDate: string | null;
-    diabetesType: NonNullable<UpdateProfileDto['diabetesType']>;
+    diabetesType: NonNullable<UpdateProfileDto["diabetesType"]>;
   } {
     const result = updateProfileSchema.safeParse(updateProfileDto);
 
     if (!result.success) {
-      throw new BadRequestException(
-        result.error.issues.map((issue) => issue.message),
-      );
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
     }
 
     return {
@@ -217,33 +192,30 @@ export class AuthService {
     const result = setPasswordSchema.safeParse(setPasswordDto);
 
     if (!result.success) {
-      throw new BadRequestException(
-        result.error.issues.map((issue) => issue.message),
-      );
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
     }
 
     return result.data;
   }
 
   private async hashPassword(password: string): Promise<string> {
-    const salt = randomBytes(16).toString('hex');
+    const salt = randomBytes(16).toString("hex");
     const derivedKey = (await scrypt(password, salt, 64)) as Buffer;
 
-    return `scrypt:${salt}:${derivedKey.toString('hex')}`;
+    return `scrypt:${salt}:${derivedKey.toString("hex")}`;
   }
 
   private createOAuthPasswordHash(providerUserId: string): string {
-    return `oauth:google:${providerUserId}:${randomBytes(16).toString('hex')}`;
+    return `oauth:google:${providerUserId}:${randomBytes(16).toString("hex")}`;
   }
 
   private isPasswordSetupRequired(user: UserEntity): boolean {
-    return user.getPasswordHash().startsWith('oauth:');
+    return user.getPasswordHash().startsWith("oauth:");
   }
 
   private formatDiabetesType(diabetesType: string): string {
     return (
-      DiabetesTypeEnum[diabetesType as keyof typeof DiabetesTypeEnum] ??
-      DiabetesTypeEnum.UNKNOWN
+      DiabetesTypeEnum[diabetesType as keyof typeof DiabetesTypeEnum] ?? DiabetesTypeEnum.UNKNOWN
     );
   }
 

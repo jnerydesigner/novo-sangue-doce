@@ -1,5 +1,5 @@
-export type PostStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-export type PostAccentColor = 'GREEN' | 'TOMATO' | 'BLUE';
+export type PostStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
+export type PostAccentColor = "GREEN" | "TOMATO" | "BLUE";
 
 export type PublicPostAuthor = {
   id: string;

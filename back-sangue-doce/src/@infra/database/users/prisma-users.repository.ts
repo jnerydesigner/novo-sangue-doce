@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { UserEntity } from '@app/users/entities/user.entity';
+import { UserEntity } from "@app/users/entities/user.entity";
 import {
   UserEmailAlreadyExistsError,
-  UserRepository,
-} from '@app/users/repositories/user.repository';
-import { PrismaService } from '../prisma.service';
+  type UserRepository,
+} from "@app/users/repositories/user.repository";
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "../prisma.service";
 
 type UserRecord = Prisma.UserGetPayload<Record<string, never>>;
 
@@ -31,7 +31,7 @@ export class PrismaUsersRepository implements UserRepository {
 
   async findAll(): Promise<UserEntity[]> {
     const users = await this.prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     return users.map((user) => this.toEntity(user));
@@ -57,7 +57,7 @@ export class PrismaUsersRepository implements UserRepository {
 
   async updateProfile(
     id: string,
-    data: Parameters<UserRepository['updateProfile']>[1],
+    data: Parameters<UserRepository["updateProfile"]>[1],
   ): Promise<UserEntity> {
     const user = await this.prisma.user.update({
       where: { id },
@@ -67,10 +67,7 @@ export class PrismaUsersRepository implements UserRepository {
     return this.toEntity(user);
   }
 
-  async updatePasswordHash(
-    id: string,
-    passwordHash: string,
-  ): Promise<UserEntity> {
+  async updatePasswordHash(id: string, passwordHash: string): Promise<UserEntity> {
     const user = await this.prisma.user.update({
       where: { id },
       data: { passwordHash },
@@ -93,9 +90,6 @@ export class PrismaUsersRepository implements UserRepository {
   }
 
   private isDuplicateKeyError(error: unknown): boolean {
-    return (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2002'
-    );
+    return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
   }
 }

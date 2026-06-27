@@ -1,12 +1,11 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const { PrismaPg } = require('@prisma/adapter-pg');
-const { PrismaClient } = require('@prisma/client');
-const { createHash } = require('node:crypto');
+const { PrismaPg } = require("@prisma/adapter-pg");
+const { PrismaClient } = require("@prisma/client");
+const { createHash } = require("node:crypto");
 
-const MEASUREMENT_TIME_ZONE = 'America/Manaus';
-const REPORT_USER_EMAIL =
-  process.env.REPORT_SEED_USER_EMAIL ?? 'jander.webmaster@gmail.com';
+const MEASUREMENT_TIME_ZONE = "America/Manaus";
+const REPORT_USER_EMAIL = process.env.REPORT_SEED_USER_EMAIL ?? "jander.webmaster@gmail.com";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -17,47 +16,44 @@ const reportMeasurementSlots = [
   {
     hour: 6,
     minute: 45,
-    noteType: 'BEFORE_BREAKFAST',
-    readingContext: 'BEFORE_MEAL',
+    noteType: "BEFORE_BREAKFAST",
+    readingContext: "BEFORE_MEAL",
   },
   {
     hour: 9,
     minute: 10,
-    noteType: 'AFTER_BREAKFAST',
-    readingContext: 'AFTER_MEAL',
+    noteType: "AFTER_BREAKFAST",
+    readingContext: "AFTER_MEAL",
   },
   {
     hour: 11,
     minute: 35,
-    noteType: 'BEFORE_LUNCH',
-    readingContext: 'BEFORE_MEAL',
+    noteType: "BEFORE_LUNCH",
+    readingContext: "BEFORE_MEAL",
   },
   {
     hour: 13,
     minute: 20,
-    noteType: 'AFTER_LUNCH',
-    readingContext: 'AFTER_MEAL',
+    noteType: "AFTER_LUNCH",
+    readingContext: "AFTER_MEAL",
   },
   {
     hour: 18,
     minute: 25,
-    noteType: 'BEFORE_DINNER',
-    readingContext: 'BEFORE_MEAL',
+    noteType: "BEFORE_DINNER",
+    readingContext: "BEFORE_MEAL",
   },
   {
     hour: 21,
     minute: 40,
-    noteType: 'AFTER_DINNER',
-    readingContext: 'BEDTIME',
+    noteType: "AFTER_DINNER",
+    readingContext: "BEDTIME",
   },
 ];
 
 function createDateInTimeZone(year, month, day, hour, minute, timeZone) {
   const localTimestamp = Date.UTC(year, month - 1, day, hour, minute, 0, 0);
-  const firstOffset = getTimeZoneOffsetInMilliseconds(
-    new Date(localTimestamp),
-    timeZone,
-  );
+  const firstOffset = getTimeZoneOffsetInMilliseconds(new Date(localTimestamp), timeZone);
   const secondOffset = getTimeZoneOffsetInMilliseconds(
     new Date(localTimestamp - firstOffset),
     timeZone,
@@ -67,21 +63,19 @@ function createDateInTimeZone(year, month, day, hour, minute, timeZone) {
 }
 
 function getDateTimePartsInTimeZone(date, timeZone) {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    day: '2-digit',
-    hour: '2-digit',
-    hourCycle: 'h23',
-    minute: '2-digit',
-    month: '2-digit',
-    second: '2-digit',
+  const parts = new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+    minute: "2-digit",
+    month: "2-digit",
+    second: "2-digit",
     timeZone,
-    year: 'numeric',
+    year: "numeric",
   }).formatToParts(date);
 
   const values = Object.fromEntries(
-    parts
-      .filter((part) => part.type !== 'literal')
-      .map((part) => [part.type, part.value]),
+    parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]),
   );
 
   return {
@@ -110,15 +104,14 @@ function getTimeZoneOffsetInMilliseconds(date, timeZone) {
 }
 
 function createDeterministicUuid(value) {
-  const hash = createHash('sha256').update(value).digest('hex');
+  const hash = createHash("sha256").update(value).digest("hex");
   const uuid = [
     hash.slice(0, 8),
     hash.slice(8, 12),
     `5${hash.slice(13, 16)}`,
-    ((parseInt(hash.slice(16, 18), 16) & 0x3f) | 0x80).toString(16) +
-      hash.slice(18, 20),
+    ((parseInt(hash.slice(16, 18), 16) & 0x3f) | 0x80).toString(16) + hash.slice(18, 20),
     hash.slice(20, 32),
-  ].join('-');
+  ].join("-");
 
   return uuid;
 }
@@ -161,7 +154,7 @@ function buildReportMeasurements(userId) {
         measuredAt,
         glucoseValueMgDl: getSeedGlucoseValue(day, month, slotIndex),
         readingContext: slot.readingContext,
-        source: 'IMPORT',
+        source: "IMPORT",
         noteType: slot.noteType,
       });
     });
@@ -181,8 +174,8 @@ async function main() {
 
   await prisma.user.update({
     data: {
-      birthDate: new Date('1978-01-23T00:00:00.000Z'),
-      diabetesType: 'TYPE_1',
+      birthDate: new Date("1978-01-23T00:00:00.000Z"),
+      diabetesType: "TYPE_1",
     },
     where: { id: user.id },
   });
@@ -203,9 +196,7 @@ async function main() {
     });
   }
 
-  console.log(
-    `Seeded ${measurements.length} report measurements for ${REPORT_USER_EMAIL}.`,
-  );
+  console.log(`Seeded ${measurements.length} report measurements for ${REPORT_USER_EMAIL}.`);
 }
 
 main()

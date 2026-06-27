@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { AuthorEntity } from '@app/authors/entities/author.entity';
+import { AuthorEntity } from "@app/authors/entities/author.entity";
 import {
   AuthorAlreadyExistsError,
-  AuthorRepository,
+  type AuthorRepository,
   AuthorUserNotFoundError,
-} from '@app/authors/repositories/author.repository';
-import { PrismaService } from '../prisma.service';
+} from "@app/authors/repositories/author.repository";
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "../prisma.service";
 
 const authorInclude = {
   user: {
@@ -48,7 +48,7 @@ export class PrismaAuthorsRepository implements AuthorRepository {
   async findAll(): Promise<AuthorEntity[]> {
     const authors = await this.prisma.postAuthor.findMany({
       include: authorInclude,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     return authors.map((author) => this.toEntity(author));
@@ -67,7 +67,7 @@ export class PrismaAuthorsRepository implements AuthorRepository {
     const author = await this.prisma.postAuthor.findFirst({
       include: authorInclude,
       where: { userId },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: "asc" },
     });
 
     return author ? this.toEntity(author) : null;
@@ -97,7 +97,7 @@ export class PrismaAuthorsRepository implements AuthorRepository {
   ): Promise<AuthorEntity | null> {
     const author = await this.prisma.postAuthor.findFirst({
       where: { userId },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: "asc" },
       select: { id: true },
     });
 
@@ -122,16 +122,10 @@ export class PrismaAuthorsRepository implements AuthorRepository {
   }
 
   private isDuplicateKeyError(error: unknown): boolean {
-    return (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2002'
-    );
+    return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
   }
 
   private isForeignKeyError(error: unknown): boolean {
-    return (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2003'
-    );
+    return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003";
   }
 }

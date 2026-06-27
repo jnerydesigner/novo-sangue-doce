@@ -1,20 +1,16 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const { PrismaPg } = require('@prisma/adapter-pg');
-const { PrismaClient } = require('@prisma/client');
-const { mkdir, writeFile } = require('node:fs/promises');
-const path = require('node:path');
+const { PrismaPg } = require("@prisma/adapter-pg");
+const { PrismaClient } = require("@prisma/client");
+const { mkdir, writeFile } = require("node:fs/promises");
+const path = require("node:path");
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
 
-const outputPath = path.join(
-  __dirname,
-  'seed-data',
-  'current-database-snapshot.json',
-);
+const outputPath = path.join(__dirname, "seed-data", "current-database-snapshot.json");
 
 function serialize(value) {
   return JSON.stringify(
@@ -28,25 +24,25 @@ function serialize(value) {
 async function main() {
   const snapshot = {
     exportedAt: new Date().toISOString(),
-    users: await prisma.user.findMany({ orderBy: { createdAt: 'asc' } }),
+    users: await prisma.user.findMany({ orderBy: { createdAt: "asc" } }),
     measurements: await prisma.measurement.findMany({
-      orderBy: [{ userId: 'asc' }, { measuredAt: 'asc' }],
+      orderBy: [{ userId: "asc" }, { measuredAt: "asc" }],
     }),
     postAuthors: await prisma.postAuthor.findMany({
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: "asc" },
     }),
     postCategories: await prisma.postCategory.findMany({
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: "asc" },
     }),
-    postTags: await prisma.postTag.findMany({ orderBy: { createdAt: 'asc' } }),
-    posts: await prisma.post.findMany({ orderBy: { createdAt: 'asc' } }),
+    postTags: await prisma.postTag.findMany({ orderBy: { createdAt: "asc" } }),
+    posts: await prisma.post.findMany({ orderBy: { createdAt: "asc" } }),
     postTagRelations: await prisma.postTagRelation.findMany({
-      orderBy: [{ postId: 'asc' }, { tagId: 'asc' }],
+      orderBy: [{ postId: "asc" }, { tagId: "asc" }],
     }),
   };
 
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${serialize(snapshot)}\n`, 'utf8');
+  await writeFile(outputPath, `${serialize(snapshot)}\n`, "utf8");
 
   console.log(`Snapshot exported to ${outputPath}`);
   console.table({

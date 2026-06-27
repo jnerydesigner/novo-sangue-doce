@@ -1,8 +1,8 @@
-import { Injectable, Logger, type LoggerService } from '@nestjs/common';
+import { Injectable, Logger, type LoggerService } from "@nestjs/common";
 
 @Injectable()
 export class AppLogger implements LoggerService {
-  private readonly logger = new Logger('SangueDoce');
+  private readonly logger = new Logger("SangueDoce");
 
   log(message: string, context?: string) {
     this.logger.log(message, context);

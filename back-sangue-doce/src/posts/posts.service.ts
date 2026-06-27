@@ -1,24 +1,15 @@
+import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
+import { type CreatePostDto, createPostSchema } from "./dto/create-post.dto";
+import { PostEntity } from "./entities/post.entity";
 import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
-import { CreatePostDto, createPostSchema } from './dto/create-post.dto';
-import { PostEntity } from './entities/post.entity';
-import {
-  PostAlreadyExistsError,
   type PaginatedPosts,
+  PostAlreadyExistsError,
   PostRelationNotFoundError,
   PostRepository,
-} from './repositories/post.repository';
-import {
-  PublicPost,
-  PublicPostCategory,
-  PublicPostTag,
-} from './types/posts.type';
+} from "./repositories/post.repository";
+import type { PublicPost, PublicPostCategory, PublicPostTag } from "./types/posts.type";
 
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 @Injectable()
 export class PostsService {
@@ -34,32 +25,21 @@ export class PostsService {
       return post.toPublic();
     } catch (error) {
       if (error instanceof PostAlreadyExistsError) {
-        const existingPost = await this.postRepository.findAnyBySlug(
-          payload.slug,
-        );
+        const existingPost = await this.postRepository.findAnyBySlug(payload.slug);
 
         const existingPostId = existingPost?.getId();
 
-        if (
-          existingPost &&
-          existingPostId &&
-          existingPost.getStatus() === 'DRAFT'
-        ) {
-          const updatedPost = await this.postRepository.update(
-            existingPostId,
-            postEntity,
-          );
+        if (existingPost && existingPostId && existingPost.getStatus() === "DRAFT") {
+          const updatedPost = await this.postRepository.update(existingPostId, postEntity);
 
           return updatedPost.toPublic();
         }
 
-        throw new ConflictException('Post slug already exists.');
+        throw new ConflictException("Post slug already exists.");
       }
 
       if (error instanceof PostRelationNotFoundError) {
-        throw new BadRequestException(
-          'Post author, category or one of the tags was not found.',
-        );
+        throw new BadRequestException("Post author, category or one of the tags was not found.");
       }
 
       throw error;
@@ -68,7 +48,7 @@ export class PostsService {
 
   async update(id: string, updatePostDto: CreatePostDto): Promise<PublicPost> {
     if (!this.isValidUuid(id)) {
-      throw new BadRequestException('Invalid post id.');
+      throw new BadRequestException("Invalid post id.");
     }
 
     const payload = this.parseCreatePost(updatePostDto);
@@ -80,12 +60,12 @@ export class PostsService {
       return post.toPublic();
     } catch (error) {
       if (error instanceof PostAlreadyExistsError) {
-        throw new ConflictException('Post slug already exists.');
+        throw new ConflictException("Post slug already exists.");
       }
 
       if (error instanceof PostRelationNotFoundError) {
         throw new BadRequestException(
-          'Post not found, author, category or one of the tags was not found.',
+          "Post not found, author, category or one of the tags was not found.",
         );
       }
 
@@ -95,14 +75,14 @@ export class PostsService {
 
   async delete(id: string): Promise<void> {
     if (!this.isValidUuid(id)) {
-      throw new BadRequestException('Invalid post id.');
+      throw new BadRequestException("Invalid post id.");
     }
 
     try {
       await this.postRepository.delete(id);
     } catch (error) {
       if (error instanceof PostRelationNotFoundError) {
-        throw new BadRequestException('Post not found.');
+        throw new BadRequestException("Post not found.");
       }
 
       throw error;
@@ -111,13 +91,13 @@ export class PostsService {
 
   async findAll(params?: { page?: string; limit?: string }): Promise<{
     data: PublicPost[];
-    meta: PaginatedPosts['meta'];
+    meta: PaginatedPosts["meta"];
   }> {
-    const page = this.parsePositiveInteger(params?.page, 'page', 1);
-    const limit = this.parsePositiveInteger(params?.limit, 'limit', 10);
+    const page = this.parsePositiveInteger(params?.page, "page", 1);
+    const limit = this.parsePositiveInteger(params?.limit, "limit", 10);
 
     if (limit > 50) {
-      throw new BadRequestException('Limit must be less than or equal to 50.');
+      throw new BadRequestException("Limit must be less than or equal to 50.");
     }
 
     const posts = await this.postRepository.findAll({ page, limit });
@@ -130,13 +110,13 @@ export class PostsService {
 
   async findAllAdmin(params?: { page?: string; limit?: string }): Promise<{
     data: PublicPost[];
-    meta: PaginatedPosts['meta'];
+    meta: PaginatedPosts["meta"];
   }> {
-    const page = this.parsePositiveInteger(params?.page, 'page', 1);
-    const limit = this.parsePositiveInteger(params?.limit, 'limit', 25);
+    const page = this.parsePositiveInteger(params?.page, "page", 1);
+    const limit = this.parsePositiveInteger(params?.limit, "limit", 25);
 
     if (limit > 100) {
-      throw new BadRequestException('Limit must be less than or equal to 100.');
+      throw new BadRequestException("Limit must be less than or equal to 100.");
     }
 
     const posts = await this.postRepository.findAllAdmin({ page, limit });
@@ -157,25 +137,23 @@ export class PostsService {
 
   async findOne(id: string): Promise<PublicPost> {
     if (!this.isValidUuid(id)) {
-      throw new BadRequestException('Invalid post id.');
+      throw new BadRequestException("Invalid post id.");
     }
 
     const post = await this.postRepository.findById(id);
 
     if (!post) {
-      throw new BadRequestException('Post not found.');
+      throw new BadRequestException("Post not found.");
     }
 
     return post.toPublic();
   }
 
   async findSlug(slug: string): Promise<PublicPost> {
-    const post = await this.postRepository.findBySlug(
-      slug.trim().toLowerCase(),
-    );
+    const post = await this.postRepository.findBySlug(slug.trim().toLowerCase());
 
     if (!post) {
-      throw new BadRequestException('Post not found.');
+      throw new BadRequestException("Post not found.");
     }
 
     return post.toPublic();
@@ -185,9 +163,7 @@ export class PostsService {
     const result = createPostSchema.safeParse(createPostDto);
 
     if (!result.success) {
-      throw new BadRequestException(
-        result.error.issues.map((issue) => issue.message),
-      );
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
     }
 
     return result.data;
@@ -202,7 +178,7 @@ export class PostsService {
     fieldName: string,
     defaultValue: number,
   ): number {
-    if (value === undefined || value === '') {
+    if (value === undefined || value === "") {
       return defaultValue;
     }
 
@@ -217,7 +193,7 @@ export class PostsService {
 
   async findPostsByAuthor(authorId: string): Promise<PublicPost[]> {
     if (!this.isValidUuid(authorId)) {
-      throw new BadRequestException('Invalid author id.');
+      throw new BadRequestException("Invalid author id.");
     }
 
     const posts = await this.postRepository.findByAuthorId(authorId);

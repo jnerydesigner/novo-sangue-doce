@@ -1,3 +1,7 @@
+import { type AuthenticatedRequest, AuthGuard } from "@app/@infra/guard/auth.guard";
+import { RolesGuard } from "@app/@infra/guard/roles.guard";
+import { Roles } from "@app/auth/decorators/roles.decorator";
+import { Role } from "@app/auth/enums/role.enum";
 import {
   Body,
   Controller,
@@ -9,19 +13,12 @@ import {
   Request,
   UnauthorizedException,
   UseGuards,
-} from '@nestjs/common';
-import type { CreateAuthorDto } from './dto/create-author.dto';
-import type { UpdateAuthorProfileDto } from './dto/update-author-profile.dto';
-import { AuthorsService } from './authors.service';
-import {
-  type AuthenticatedRequest,
-  AuthGuard,
-} from '@app/@infra/guard/auth.guard';
-import { RolesGuard } from '@app/@infra/guard/roles.guard';
-import { Roles } from '@app/auth/decorators/roles.decorator';
-import { Role } from '@app/auth/enums/role.enum';
+} from "@nestjs/common";
+import { AuthorsService } from "./authors.service";
+import type { CreateAuthorDto } from "./dto/create-author.dto";
+import type { UpdateAuthorProfileDto } from "./dto/update-author-profile.dto";
 
-@Controller('authors')
+@Controller("authors")
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
@@ -37,7 +34,7 @@ export class AuthorsController {
     return this.authorsService.findAll();
   }
 
-  @Get('me')
+  @Get("me")
   @UseGuards(AuthGuard)
   findMe(@Request() req: AuthenticatedRequest) {
     if (!req.user) {
@@ -47,7 +44,7 @@ export class AuthorsController {
     return this.authorsService.findMe(req.user.sub);
   }
 
-  @Patch('me')
+  @Patch("me")
   @UseGuards(AuthGuard)
   updateMe(
     @Request() req: AuthenticatedRequest,
@@ -60,18 +57,18 @@ export class AuthorsController {
     return this.authorsService.updateMe(req.user.sub, updateAuthorProfileDto);
   }
 
-  @Get('search')
-  findEmail(@Query('email') email: string) {
+  @Get("search")
+  findEmail(@Query("email") email: string) {
     return this.authorsService.findEmail(email);
   }
 
-  @Get('slug/:slug')
-  findSlug(@Param('slug') slug: string) {
+  @Get("slug/:slug")
+  findSlug(@Param("slug") slug: string) {
     return this.authorsService.findSlug(slug);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.authorsService.findOne(id);
   }
 }

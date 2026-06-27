@@ -1,20 +1,12 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import type { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from './users.service';
-import { Roles } from '@app/auth/decorators/roles.decorator';
-import { Role } from '@app/auth/enums/role.enum';
-import { AuthGuard } from '@app/@infra/guard/auth.guard';
-import { RolesGuard } from '@app/@infra/guard/roles.guard';
+import { AuthGuard } from "@app/@infra/guard/auth.guard";
+import { RolesGuard } from "@app/@infra/guard/roles.guard";
+import { Roles } from "@app/auth/decorators/roles.decorator";
+import { Role } from "@app/auth/enums/role.enum";
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
+import type { CreateUserDto } from "./dto/create-user.dto";
+import { UsersService } from "./users.service";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -30,17 +22,17 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('search')
+  @Get("search")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  findEmail(@Query('email') email: string) {
+  findEmail(@Query("email") email: string) {
     return this.usersService.findEmail(email);
   }
 
-  @Get(':id')
+  @Get(":id")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  findOne(@Param('id') id: string) {
+  findOne(@Param("id") id: string) {
     return this.usersService.findOne(id);
   }
 }

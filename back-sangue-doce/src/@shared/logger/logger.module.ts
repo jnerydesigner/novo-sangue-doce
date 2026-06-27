@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { AppLogger } from './app-logger.provider';
+import { Module } from "@nestjs/common";
+import { AppLogger } from "./app-logger.provider";
 
 @Module({
   providers: [AppLogger],
