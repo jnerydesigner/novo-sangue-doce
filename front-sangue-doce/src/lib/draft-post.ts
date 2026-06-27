@@ -1,10 +1,4 @@
-import type {
-  PostAuthor,
-  PostCategory,
-  PostContentBlock,
-  PostStatus,
-  PostTag,
-} from "./api";
+import type { PostAuthor, PostCategory, PostContentBlock, PostStatus, PostTag } from "./api";
 
 export const DRAFT_POST_STORAGE_KEY = "sangue-doce:draft-post-preview";
 

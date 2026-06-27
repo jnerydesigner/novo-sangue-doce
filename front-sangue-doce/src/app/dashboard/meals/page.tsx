@@ -1,6 +1,6 @@
+import { requireDashboardUser } from "../_lib/require-dashboard-user";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
-import { requireDashboardUser } from "../_lib/require-dashboard-user";
 
 export const dynamic = "force-dynamic";
 

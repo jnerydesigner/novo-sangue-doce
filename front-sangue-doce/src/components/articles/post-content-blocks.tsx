@@ -44,10 +44,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
 
         if (block.type === "list") {
           return (
-            <ul
-              key={`${block.type}-${index}`}
-              className="mb-7 grid list-none gap-3 p-0"
-            >
+            <ul key={`${block.type}-${index}`} className="mb-7 grid list-none gap-3 p-0">
               {block.items
                 .filter((item) => item.trim().length > 0)
                 .map((item, itemIndex) => (
@@ -82,9 +79,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
                 />
               </div>
               {block.caption ? (
-                <figcaption className="mt-3 text-[13px] text-muted">
-                  {block.caption}
-                </figcaption>
+                <figcaption className="mt-3 text-[13px] text-muted">{block.caption}</figcaption>
               ) : null}
             </figure>
           );

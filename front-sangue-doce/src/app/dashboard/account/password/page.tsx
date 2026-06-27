@@ -45,7 +45,8 @@ export default async function PasswordSetupPage() {
               Crie sua senha
             </h1>
             <p className="mt-3 text-[15px] leading-7 text-inkSoft">
-              Sua conta foi criada com Google. Defina uma senha para manter seu acesso tambem pelo login tradicional.
+              Sua conta foi criada com Google. Defina uma senha para manter seu acesso tambem pelo
+              login tradicional.
             </p>
 
             <PasswordSetupForm />

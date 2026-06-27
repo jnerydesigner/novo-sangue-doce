@@ -220,11 +220,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 aria-label={`Foto de ${monthlyReport.userName}`}
                 className="grid h-[120px] place-items-center overflow-hidden rounded-lg border border-line bg-paper2 bg-cover bg-center text-sm font-bold uppercase tracking-[0.12em] text-muted print:h-[90px] print:text-[11px]"
                 role="img"
-                style={
-                  reportAvatarUrl
-                    ? { backgroundImage: `url(${reportAvatarUrl})` }
-                    : undefined
-                }
+                style={reportAvatarUrl ? { backgroundImage: `url(${reportAvatarUrl})` } : undefined}
               >
                 {reportAvatarUrl ? (
                   <span className="sr-only">{monthlyReport.userName}</span>
@@ -296,14 +292,9 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 <tbody>
                   {monthlyReport.days.map((day) => (
                     <tr className="border-b border-line/70" key={day.date}>
-                      <td className="px-2 py-2 text-left font-semibold">
-                        {formatDate(day.date)}
-                      </td>
+                      <td className="px-2 py-2 text-left font-semibold">{formatDate(day.date)}</td>
                       {reportColumns.map((column) => {
-                        const measurement = getMeasurementForColumn(
-                          day.measurements,
-                          column,
-                        );
+                        const measurement = getMeasurementForColumn(day.measurements, column);
 
                         return (
                           <td className="px-2 py-2" key={column.key}>
@@ -321,9 +312,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               <p className="text-[12px] font-bold uppercase tracking-[0.08em] print:text-[9px]">
                 Este relatorio foi gerado pelo site Sangue Doce
               </p>
-              <p className="mt-1 break-all text-[11px] print:text-[7.5px]">
-                {reportUrl}
-              </p>
+              <p className="mt-1 break-all text-[11px] print:text-[7.5px]">{reportUrl}</p>
             </footer>
           </article>
         </section>

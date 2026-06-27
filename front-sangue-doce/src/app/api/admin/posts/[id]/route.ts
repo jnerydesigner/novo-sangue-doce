@@ -23,10 +23,7 @@ function getErrorMessage(error: unknown) {
   }
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
@@ -42,17 +39,11 @@ export async function PATCH(
 
     return NextResponse.json(post);
   } catch (error) {
-    return NextResponse.json(
-      { message: getErrorMessage(error) },
-      { status: 400 },
-    );
+    return NextResponse.json({ message: getErrorMessage(error) }, { status: 400 });
   }
 }
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
@@ -67,9 +58,6 @@ export async function DELETE(
 
     return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json(
-      { message: getErrorMessage(error) },
-      { status: 400 },
-    );
+    return NextResponse.json({ message: getErrorMessage(error) }, { status: 400 });
   }
 }

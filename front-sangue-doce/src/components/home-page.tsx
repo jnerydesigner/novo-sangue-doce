@@ -13,11 +13,7 @@ type HomePageProps = {
   recentReadings: Measurement[];
 };
 
-export function HomePage({
-  isAuthenticated,
-  profile,
-  recentReadings,
-}: HomePageProps) {
+export function HomePage({ isAuthenticated, profile, recentReadings }: HomePageProps) {
   const glucoseEntryKey = `${isAuthenticated}-${recentReadings.map((reading) => reading.id).join("-")}`;
 
   return (

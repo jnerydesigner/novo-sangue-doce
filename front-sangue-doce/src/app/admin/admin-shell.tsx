@@ -2,10 +2,7 @@ import Link from "next/link";
 import type React from "react";
 import { Brand } from "@/components/home/brand";
 import { UserMenu } from "@/components/home/user-menu";
-import {
-  adminSidebarItems,
-  dashboardSidebarItems,
-} from "../dashboard/dashboard.data";
+import { adminSidebarItems, dashboardSidebarItems } from "../dashboard/dashboard.data";
 
 type AdminShellProps = {
   active: "overview" | "posts" | "users" | "authors";
@@ -26,10 +23,7 @@ const adminActiveByHref = {
 
 const navItems = [...adminSidebarItems, ...dashboardSidebarItems];
 
-const pageTitles: Record<
-  AdminShellProps["active"],
-  { title: string; subtitle: string }
-> = {
+const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: string }> = {
   overview: {
     title: "Bom te ver por aqui",
     subtitle: "Ola, acompanhe sua rotina e as ferramentas de gestao no mesmo lugar.",
@@ -75,10 +69,7 @@ export function AdminShell({
               {navItems.map((item) => {
                 const isActive =
                   item.href in adminActiveByHref &&
-                  active ===
-                    adminActiveByHref[
-                      item.href as keyof typeof adminActiveByHref
-                    ];
+                  active === adminActiveByHref[item.href as keyof typeof adminActiveByHref];
                 const mark =
                   "mark" in item && typeof item.mark === "string"
                     ? item.mark
@@ -109,9 +100,7 @@ export function AdminShell({
             <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
               Acesso
             </span>
-            <p className="mt-2 text-sm font-semibold text-ink">
-              {userName ?? "Painel"}
-            </p>
+            <p className="mt-2 text-sm font-semibold text-ink">{userName ?? "Painel"}</p>
             {userRole ? (
               <span className="mt-3 inline-flex rounded-full border border-green/30 bg-green/10 px-3 py-1 text-xs font-bold text-greenDeep">
                 {userRole}
@@ -124,9 +113,7 @@ export function AdminShell({
           <header className="border-b border-line pb-5">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="text-sm font-semibold text-muted">
-                  {pageTitle.subtitle}
-                </span>
+                <span className="text-sm font-semibold text-muted">{pageTitle.subtitle}</span>
                 <h1 className="font-serif text-[clamp(2rem,4vw,3.1rem)] font-medium leading-[1.04] tracking-normal">
                   {pageTitle.title}
                 </h1>
@@ -153,10 +140,7 @@ export function AdminShell({
               {adminSidebarItems.map((item) => (
                 <Link
                   className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                    active ===
-                    adminActiveByHref[
-                      item.href as keyof typeof adminActiveByHref
-                    ]
+                    active === adminActiveByHref[item.href as keyof typeof adminActiveByHref]
                       ? "border-green/30 bg-green/10 text-greenDeep"
                       : "border-lineStrong text-inkSoft hover:bg-paper2"
                   }`}

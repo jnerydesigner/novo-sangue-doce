@@ -43,7 +43,7 @@ function getBlockLabel(block: EditableBlock) {
   }
 
   if (block.type === "quote") {
-    return "\"";
+    return '"';
   }
 
   if (block.type === "list") {
@@ -98,7 +98,7 @@ const blockOptions = [
     block: { type: "heading", level: 3, content: "" },
   },
   {
-    label: "\"",
+    label: '"',
     title: "Citacao",
     block: { type: "quote", content: "" },
   },
@@ -123,21 +123,14 @@ const blockOptions = [
   block: PostContentBlock;
 }>;
 
-export function PostContentEditor({
-  initialContent,
-}: {
-  initialContent?: PostContentBlock[];
-}) {
+export function PostContentEditor({ initialContent }: { initialContent?: PostContentBlock[] }) {
   const [blocks, setBlocks] = useState<EditableBlock[]>(
     Array.isArray(initialContent) && initialContent.length
       ? initialContent.map(toEditableBlock)
       : initialBlocks,
   );
 
-  const serializedContent = useMemo(
-    () => JSON.stringify(blocks.map(toPostBlock)),
-    [blocks],
-  );
+  const serializedContent = useMemo(() => JSON.stringify(blocks.map(toPostBlock)), [blocks]);
 
   function addBlock(block: PostContentBlock) {
     setBlocks((current) => [...current, { ...block, key: makeKey() }]);
@@ -245,9 +238,7 @@ export function PostContentEditor({
                 <BlockFields block={block} updateBlock={updateBlock} />
               </article>
 
-              <BlockConnector
-                insertBlock={(nextBlock) => insertBlockAfter(index, nextBlock)}
-              />
+              <BlockConnector insertBlock={(nextBlock) => insertBlockAfter(index, nextBlock)} />
             </div>
           ))}
         </div>
@@ -256,11 +247,7 @@ export function PostContentEditor({
   );
 }
 
-function BlockConnector({
-  insertBlock,
-}: {
-  insertBlock: (block: PostContentBlock) => void;
-}) {
+function BlockConnector({ insertBlock }: { insertBlock: (block: PostContentBlock) => void }) {
   const [open, setOpen] = useState(false);
 
   return (

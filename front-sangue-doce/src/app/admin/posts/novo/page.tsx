@@ -1,7 +1,7 @@
-import { AdminShell } from "../../admin-shell";
-import { requireAdmin } from "../../_lib/require-admin";
-import { NewPostForm } from "./new-post-form";
 import { api } from "@/lib/api";
+import { requireAdmin } from "../../_lib/require-admin";
+import { AdminShell } from "../../admin-shell";
+import { NewPostForm } from "./new-post-form";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +11,7 @@ type NewAdminPostPageProps = {
   }>;
 };
 
-export default async function NewAdminPostPage({
-  searchParams,
-}: NewAdminPostPageProps) {
+export default async function NewAdminPostPage({ searchParams }: NewAdminPostPageProps) {
   const { accessToken, profile } = await requireAdmin();
   const { id } = await searchParams;
   const [authors, categories, tags] = await Promise.all([
@@ -33,12 +31,7 @@ export default async function NewAdminPostPage({
       userRole={profile.role}
     >
       <section>
-        <NewPostForm
-          authors={authors}
-          categories={categories}
-          initialPost={post}
-          tags={tags}
-        />
+        <NewPostForm authors={authors} categories={categories} initialPost={post} tags={tags} />
       </section>
     </AdminShell>
   );

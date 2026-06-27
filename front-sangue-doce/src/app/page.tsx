@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { JsonLd } from "@/components/json-ld";
 import { api } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, buildWebsiteJsonLd } from "@/lib/seo";
+import { buildWebsiteJsonLd, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import { HomePage } from "../components/home-page";
 
 export const metadata: Metadata = {

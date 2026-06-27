@@ -13,9 +13,7 @@ function getPublicHref(href: string) {
 export async function PublicSiteHeader() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
-  const profile = accessToken
-    ? await api.auth.profile(accessToken).catch(() => null)
-    : null;
+  const profile = accessToken ? await api.auth.profile(accessToken).catch(() => null) : null;
   const dashboardHref = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
 
   return (
@@ -24,10 +22,7 @@ export async function PublicSiteHeader() {
         <div className="text-greenDeep">
           <Brand />
         </div>
-        <nav
-          className="ml-auto hidden items-center gap-[30px] md:flex"
-          aria-label="Principal"
-        >
+        <nav className="ml-auto hidden items-center gap-[30px] md:flex" aria-label="Principal">
           {navItems.map((link) => (
             <Link
               className="relative py-1 text-[15px] font-medium text-inkSoft transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-green after:transition-all hover:text-ink hover:after:w-full"

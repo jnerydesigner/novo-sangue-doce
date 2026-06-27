@@ -48,13 +48,11 @@ export function CoverImageField({
             Imagem de capa
           </span>
           <p className="mt-2 max-w-[58ch] text-sm leading-6 text-inkSoft">
-            Escolha uma imagem PNG para pre-visualizar aqui. Ao salvar o
-            rascunho ou publicar, a imagem sera enviada e vinculada a materia.
+            Escolha uma imagem PNG para pre-visualizar aqui. Ao salvar o rascunho ou publicar, a
+            imagem sera enviada e vinculada a materia.
           </p>
           {fileName ? (
-            <p className="mt-2 truncate text-sm font-semibold text-greenDeep">
-              {fileName}
-            </p>
+            <p className="mt-2 truncate text-sm font-semibold text-greenDeep">{fileName}</p>
           ) : null}
 
           <div className="mt-4 flex flex-wrap gap-2">

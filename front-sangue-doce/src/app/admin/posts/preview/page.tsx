@@ -1,7 +1,7 @@
-import { AdminShell } from "../../admin-shell";
-import { requireAdmin } from "../../_lib/require-admin";
-import { DraftPreview } from "./draft-preview";
 import { api } from "@/lib/api";
+import { requireAdmin } from "../../_lib/require-admin";
+import { AdminShell } from "../../admin-shell";
+import { DraftPreview } from "./draft-preview";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +11,7 @@ type AdminPostPreviewPageProps = {
   }>;
 };
 
-export default async function AdminPostPreviewPage({
-  searchParams,
-}: AdminPostPreviewPageProps) {
+export default async function AdminPostPreviewPage({ searchParams }: AdminPostPreviewPageProps) {
   const { accessToken, profile } = await requireAdmin();
   const { id } = await searchParams;
   const post = id ? await api.posts.get(id, { accessToken }).catch(() => null) : null;

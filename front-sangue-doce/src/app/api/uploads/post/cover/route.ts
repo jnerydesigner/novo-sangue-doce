@@ -3,9 +3,7 @@ import { NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
 
 const API_URL =
-  process.env.INTERNAL_API_URL ??
-  process.env.NEXT_PUBLIC_API_URL ??
-  "http://localhost:3011";
+  process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3011";
 
 function getErrorMessage(error: unknown) {
   if (!(error instanceof Error)) {
@@ -51,9 +49,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(await response.json());
   } catch (error) {
-    return NextResponse.json(
-      { message: getErrorMessage(error) },
-      { status: 400 },
-    );
+    return NextResponse.json({ message: getErrorMessage(error) }, { status: 400 });
   }
 }

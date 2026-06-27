@@ -3,14 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostContentBlocks } from "@/components/articles/post-content-blocks";
-import { JsonLd } from "@/components/json-ld";
 import { ArticleCard } from "@/components/home/article-card";
 import { ArrowIcon } from "@/components/home/icons";
 import { PublicSiteHeader } from "@/components/home/public-site-header";
 import { SiteFooter } from "@/components/home/site-footer";
+import { JsonLd } from "@/components/json-ld";
 import { api } from "@/lib/api";
 import { formatPostDate, mapPostToArticle } from "@/lib/posts";
-import { SITE_NAME, SITE_URL, buildArticleJsonLd, truncateMetaTitle } from "@/lib/seo";
+import { buildArticleJsonLd, SITE_NAME, SITE_URL, truncateMetaTitle } from "@/lib/seo";
 import { ArticleActions, ReadingProgress } from "./article-actions";
 
 type ArticlePageProps = {
@@ -19,9 +19,7 @@ type ArticlePageProps = {
   }>;
 };
 
-export async function generateMetadata({
-  params,
-}: ArticlePageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await api.posts.getBySlug(slug).catch(() => null);
 
@@ -112,10 +110,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 Inicio
               </Link>
               <span>/</span>
-              <Link
-                href="/materias"
-                className="transition hover:text-greenDeep"
-              >
+              <Link href="/materias" className="transition hover:text-greenDeep">
                 Materias
               </Link>
               <span>/</span>
@@ -150,12 +145,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   <div className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-paper2" />
                 )}
                 <div className="text-left">
-                  <div className="text-[15.5px] font-semibold text-ink">
-                    {post.author.name}
-                  </div>
-                  <div className="text-[13.5px] text-muted">
-                    {post.author.role}
-                  </div>
+                  <div className="text-[15.5px] font-semibold text-ink">{post.author.name}</div>
+                  <div className="text-[13.5px] text-muted">{post.author.role}</div>
                 </div>
                 <span className="hidden h-8 w-px bg-lineStrong sm:block" />
                 <div className="flex items-center gap-2 text-[13.5px] text-muted">
@@ -235,12 +226,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <h2 className="m-0 font-serif text-2xl font-medium tracking-normal text-ink">
                   {post.author.name}
                 </h2>
-                <p className="mb-3 mt-1 text-sm text-muted">
-                  {post.author.role}
-                </p>
-                <p className="m-0 text-[15.5px] leading-relaxed text-inkSoft">
-                  {post.author.bio}
-                </p>
+                <p className="mb-3 mt-1 text-sm text-muted">{post.author.role}</p>
+                <p className="m-0 text-[15.5px] leading-relaxed text-inkSoft">{post.author.bio}</p>
               </div>
             </aside>
           </div>

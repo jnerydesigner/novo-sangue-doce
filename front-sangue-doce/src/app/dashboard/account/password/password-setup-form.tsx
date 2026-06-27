@@ -91,10 +91,7 @@ export function PasswordSetupForm() {
         />
       </label>
 
-      <label
-        className="block text-[13px] font-semibold text-muted"
-        htmlFor="passwordConfirmation"
-      >
+      <label className="block text-[13px] font-semibold text-muted" htmlFor="passwordConfirmation">
         Confirmar senha
         <input
           className="mt-2 block w-full rounded-lg border border-lineStrong bg-paper px-4 py-3 text-base text-ink outline-none transition placeholder:text-muted/60 focus:border-green"

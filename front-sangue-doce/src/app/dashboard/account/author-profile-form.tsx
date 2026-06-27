@@ -43,10 +43,7 @@ export function AuthorProfileForm({ author }: AuthorProfileFormProps) {
   const [successMessage, setSuccessMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const updateField = <Field extends keyof FormState>(
-    field: Field,
-    value: FormState[Field],
-  ) => {
+  const updateField = <Field extends keyof FormState>(field: Field, value: FormState[Field]) => {
     setFormState((current) => ({ ...current, [field]: value }));
   };
 

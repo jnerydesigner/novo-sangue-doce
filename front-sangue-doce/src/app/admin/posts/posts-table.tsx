@@ -35,9 +35,7 @@ function buildPayload(post: Post, status: PostStatus): CreatePostPayload {
     metaDescription: post.metaDescription,
     metaTitle: post.metaTitle,
     publishedAt:
-      status === "PUBLISHED"
-        ? (post.publishedAt ?? new Date().toISOString())
-        : undefined,
+      status === "PUBLISHED" ? (post.publishedAt ?? new Date().toISOString()) : undefined,
     readingMinutes: post.readingMinutes,
     slug: post.slug,
     status,
@@ -75,11 +73,7 @@ export function PostsTable({ posts }: PostsTableProps) {
 
       router.refresh();
     } catch (error) {
-      setMessage(
-        error instanceof Error
-          ? error.message
-          : "Nao foi possivel atualizar a materia.",
-      );
+      setMessage(error instanceof Error ? error.message : "Nao foi possivel atualizar a materia.");
     } finally {
       setBusyPostId(null);
     }
@@ -128,9 +122,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                     <div className="font-serif text-[1.2rem] font-medium leading-tight text-ink">
                       {post.title}
                     </div>
-                    <div className="mt-1 truncate text-sm text-muted">
-                      /{post.slug}
-                    </div>
+                    <div className="mt-1 truncate text-sm text-muted">/{post.slug}</div>
                   </td>
                   <td className="px-4 py-4">
                     <span
@@ -142,12 +134,8 @@ export function PostsTable({ posts }: PostsTableProps) {
                   <td className="px-4 py-4 text-sm font-semibold text-inkSoft">
                     {post.category.name}
                   </td>
-                  <td className="px-4 py-4 text-sm text-inkSoft">
-                    {post.author.name}
-                  </td>
-                  <td className="px-4 py-4 text-sm text-muted">
-                    {formatPostDate(post.updatedAt)}
-                  </td>
+                  <td className="px-4 py-4 text-sm text-inkSoft">{post.author.name}</td>
+                  <td className="px-4 py-4 text-sm text-muted">{formatPostDate(post.updatedAt)}</td>
                   <td className="px-4 py-4">
                     <div className="flex flex-wrap justify-end gap-2">
                       <Link
@@ -175,12 +163,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                         className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:opacity-50"
                         disabled={busy}
                         onClick={() =>
-                          updateStatus(
-                            post,
-                            post.status === "PUBLISHED"
-                              ? "DRAFT"
-                              : "PUBLISHED",
-                          )
+                          updateStatus(post, post.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED")
                         }
                         type="button"
                       >

@@ -61,9 +61,7 @@ export function DraftPreview({ post }: DraftPreviewProps) {
             <span className="ml-3 text-sm text-muted">
               Salvo em {formatPostDate(post.updatedAt)}
             </span>
-            <span className="ml-3 text-sm font-semibold text-inkSoft">
-              /{post.slug}
-            </span>
+            <span className="ml-3 text-sm font-semibold text-inkSoft">/{post.slug}</span>
           </div>
           <Link
             className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
@@ -123,9 +121,7 @@ export function DraftPreview({ post }: DraftPreviewProps) {
               <div className="text-[15.5px] font-semibold text-ink">
                 {post.author?.name ?? "Autor desconhecido"}
               </div>
-              <div className="text-[13.5px] text-muted">
-                {post.author?.role ?? "Editorial"}
-              </div>
+              <div className="text-[13.5px] text-muted">{post.author?.role ?? "Editorial"}</div>
             </div>
             <span className="hidden h-8 w-px bg-lineStrong sm:block" />
             <div className="flex items-center gap-2 text-[13.5px] text-muted">

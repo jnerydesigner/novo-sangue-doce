@@ -25,7 +25,14 @@ function ShareIcon({ type }: { type: "whatsapp" | "x" | "facebook" | "link" }) {
 
   if (type === "link") {
     return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-[18px] w-[18px]" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        className="h-[18px] w-[18px]"
+        aria-hidden="true"
+      >
         <path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1" />
         <path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1" />
       </svg>
@@ -59,7 +66,9 @@ export function ReadingProgress() {
     };
   }, []);
 
-  return <div className="fixed left-0 top-0 z-[101] h-[3px] bg-tomato" style={{ width: `${width}%` }} />;
+  return (
+    <div className="fixed left-0 top-0 z-[101] h-[3px] bg-tomato" style={{ width: `${width}%` }} />
+  );
 }
 
 export function ArticleActions({ title }: ArticleActionsProps) {

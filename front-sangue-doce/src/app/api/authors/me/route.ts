@@ -38,9 +38,6 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json(author);
   } catch (error) {
-    return NextResponse.json(
-      { message: getErrorMessage(error) },
-      { status: 400 },
-    );
+    return NextResponse.json({ message: getErrorMessage(error) }, { status: 400 });
   }
 }

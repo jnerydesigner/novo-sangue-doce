@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { AdminShell } from "../admin-shell";
 import { api } from "@/lib/api";
 import { requireAdmin } from "../_lib/require-admin";
+import { AdminShell } from "../admin-shell";
 
 export const dynamic = "force-dynamic";
 

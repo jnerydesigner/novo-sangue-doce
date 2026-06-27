@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type FormEvent } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import type {
   CreatePostPayload,
   Post,
@@ -11,10 +11,7 @@ import type {
   PostStatus,
   PostTag,
 } from "@/lib/api";
-import {
-  DRAFT_POST_STORAGE_KEY,
-  type DraftPostPreview,
-} from "@/lib/draft-post";
+import { DRAFT_POST_STORAGE_KEY, type DraftPostPreview } from "@/lib/draft-post";
 import { CoverImageField } from "./cover-image-field";
 import { PostContentEditor } from "./post-content-editor";
 
@@ -55,10 +52,7 @@ type NewPostFormProps = {
   tags: PostTag[];
 };
 
-function parseInitialRelation<T extends { id: string }>(
-  value: unknown,
-  items: T[],
-): T | null {
+function parseInitialRelation<T extends { id: string }>(value: unknown, items: T[]): T | null {
   if (!value || typeof value !== "object" || !("id" in value)) return null;
 
   const id = String(value.id);
@@ -84,12 +78,7 @@ function mapPostToDraft(post: Post): DraftPostPreview {
   };
 }
 
-export function NewPostForm({
-  authors,
-  categories,
-  initialPost,
-  tags,
-}: NewPostFormProps) {
+export function NewPostForm({ authors, categories, initialPost, tags }: NewPostFormProps) {
   const initialDraft = initialPost ? mapPostToDraft(initialPost) : null;
 
   return (
@@ -121,9 +110,7 @@ function NewPostFormFields({
       ? ""
       : (initialDraft?.coverImageUrl ?? ""),
   );
-  const [coverImageAlt, setCoverImageAlt] = useState(
-    initialDraft?.coverImageAlt ?? "",
-  );
+  const [coverImageAlt, setCoverImageAlt] = useState(initialDraft?.coverImageAlt ?? "");
   const [coverPreviewUrl, setCoverPreviewUrl] = useState(
     initialDraft?.coverImageUrl === EMPTY_COVER_IMAGE_URL
       ? ""
@@ -132,12 +119,8 @@ function NewPostFormFields({
   const [coverFileName, setCoverFileName] = useState("");
   const [selectedCoverFile, setSelectedCoverFile] = useState<File | null>(null);
   const [draftId, setDraftId] = useState(initialDraft?.id ?? "");
-  const [currentStatus, setCurrentStatus] = useState<PostStatus>(
-    initialDraft?.status ?? "DRAFT",
-  );
-  const [savedAt, setSavedAt] = useState<string | null>(
-    initialDraft?.savedAt ?? null,
-  );
+  const [currentStatus, setCurrentStatus] = useState<PostStatus>(initialDraft?.status ?? "DRAFT");
+  const [savedAt, setSavedAt] = useState<string | null>(initialDraft?.savedAt ?? null);
   const [submitMessage, setSubmitMessage] = useState<{
     tone: "error" | "success";
     text: string;
@@ -151,9 +134,7 @@ function NewPostFormFields({
     initialCategory?.id ?? categories[0]?.id ?? "",
   );
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
-    Array.isArray(initialDraft?.tags)
-      ? initialDraft.tags.map((tag) => tag.id)
-      : [],
+    Array.isArray(initialDraft?.tags) ? initialDraft.tags.map((tag) => tag.id) : [],
   );
 
   useEffect(() => {
@@ -205,8 +186,7 @@ function NewPostFormFields({
   function buildDraft(form: HTMLFormElement): DraftPostPreview {
     const formData = new FormData(form);
     const readingMinutes = Number(getValue(formData, "tempo-de-leitura"));
-    const titleValue =
-      getValue(formData, "titulo") || title.trim() || "Materia em rascunho";
+    const titleValue = getValue(formData, "titulo") || title.trim() || "Materia em rascunho";
     const slugValue = createSlug(titleValue) || "rascunho";
     const tagIds = formData
       .getAll("tagIds")
@@ -222,10 +202,7 @@ function NewPostFormFields({
       excerpt:
         getValue(formData, "resumo") ||
         "Resumo da materia em rascunho para validar chamada e leitura.",
-      readingMinutes:
-        Number.isFinite(readingMinutes) && readingMinutes > 0
-          ? readingMinutes
-          : 5,
+      readingMinutes: Number.isFinite(readingMinutes) && readingMinutes > 0 ? readingMinutes : 5,
       savedAt: now,
       slug: slugValue,
       status: currentStatus,
@@ -364,9 +341,7 @@ function NewPostFormFields({
     try {
       const post = await savePost(draft, status);
       const uploadedCoverUrl = await uploadCoverImage(post.id);
-      const savedPost = uploadedCoverUrl
-        ? { ...post, coverImageUrl: uploadedCoverUrl }
-        : post;
+      const savedPost = uploadedCoverUrl ? { ...post, coverImageUrl: uploadedCoverUrl } : post;
 
       savePreviewDraft(draft, savedPost);
 
@@ -384,10 +359,7 @@ function NewPostFormFields({
       });
     } catch (error) {
       setSubmitMessage({
-        text:
-          error instanceof Error
-            ? error.message
-            : "Nao foi possivel salvar a materia.",
+        text: error instanceof Error ? error.message : "Nao foi possivel salvar a materia.",
         tone: "error",
       });
     } finally {
@@ -403,9 +375,7 @@ function NewPostFormFields({
       const status = currentStatus === "PUBLISHED" ? "PUBLISHED" : "DRAFT";
       const post = await savePost(draft, status);
       const uploadedCoverUrl = await uploadCoverImage(post.id);
-      const savedPost = uploadedCoverUrl
-        ? { ...post, coverImageUrl: uploadedCoverUrl }
-        : post;
+      const savedPost = uploadedCoverUrl ? { ...post, coverImageUrl: uploadedCoverUrl } : post;
 
       savePreviewDraft(draft, savedPost);
       window.location.href =
@@ -414,10 +384,7 @@ function NewPostFormFields({
           : `/admin/posts/preview?id=${savedPost.id}`;
     } catch (error) {
       setSubmitMessage({
-        text:
-          error instanceof Error
-            ? error.message
-            : "Nao foi possivel salvar a materia.",
+        text: error instanceof Error ? error.message : "Nao foi possivel salvar a materia.",
         tone: "error",
       });
       setPreviewing(false);
@@ -435,8 +402,7 @@ function NewPostFormFields({
     void saveAndPreview(buildDraft(form));
   }
 
-  const previewButtonText =
-    currentStatus === "PUBLISHED" ? "Ver site" : "Ver previa";
+  const previewButtonText = currentStatus === "PUBLISHED" ? "Ver site" : "Ver previa";
   const previewingButtonText =
     currentStatus === "PUBLISHED" ? "Abrindo site..." : "Salvando previa...";
 

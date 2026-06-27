@@ -29,9 +29,7 @@ export function DashboardSidebar({ showAdminItems = false }: DashboardSidebarPro
                 ? pathname === item.href && item.label === "Hoje"
                 : pathname === item.href;
             const mark =
-              "mark" in item && typeof item.mark === "string"
-                ? item.mark
-                : item.label.slice(0, 1);
+              "mark" in item && typeof item.mark === "string" ? item.mark : item.label.slice(0, 1);
 
             return (
               <li key={item.label}>

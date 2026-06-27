@@ -14,9 +14,7 @@ export async function generateMetadata({ searchParams }: MateriasPageProps): Pro
   const params = await searchParams;
   const page = parsePage(params?.pagina);
   const isPaginated = page > 1;
-  const canonicalUrl = isPaginated
-    ? `${SITE_URL}/materias?pagina=${page}`
-    : `${SITE_URL}/materias`;
+  const canonicalUrl = isPaginated ? `${SITE_URL}/materias?pagina=${page}` : `${SITE_URL}/materias`;
 
   return {
     title: isPaginated ? `Matérias — Página ${page}` : "Matérias",
