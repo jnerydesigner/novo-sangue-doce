@@ -20,21 +20,11 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "*": [
-        "./*"
-      ],
-      "@app/*": [
-        "./src/*"
-      ],
-      "@infra/*": [
-        "./src/@infra/*"
-      ],
-      "@helper/*": [
-        "./src/@helper/*"
-      ],
-      "@shared/*": [
-        "./src/@shared/*"
-      ]
+      "*": ["./*"],
+      "@app/*": ["./src/*"],
+      "@infra/*": ["./src/@infra/*"],
+      "@helper/*": ["./src/@helper/*"],
+      "@shared/*": ["./src/@shared/*"]
     }
   }
 }

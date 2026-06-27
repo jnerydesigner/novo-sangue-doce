@@ -6,7 +6,7 @@ FRONT_PORT := 3010
 BACK_PORT := 3011
 API_URL := http://localhost:$(BACK_PORT)
 
-.PHONY: help install install-frontend install-backend infra-up infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-fix format check clean
+.PHONY: help install install-frontend install-backend infra-up infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-frontend biome-backend biome-fix biome-fix-frontend biome-fix-backend format format-frontend format-backend check clean
 
 help:
 	@printf "Comandos disponiveis na raiz:\\n"
@@ -25,9 +25,9 @@ help:
 	@printf "  make restart    Reinicia backend e frontend\\n"
 	@printf "  make build      Gera build do backend e frontend\\n"
 	@printf "  make lint       Roda ESLint no backend e frontend\\n"
-	@printf "  make biome      Roda Biome check no frontend\\n"
+	@printf "  make biome      Roda Biome check no backend e frontend\\n"
 	@printf "  make biome-fix  Corrige com Biome quando possivel\\n"
-	@printf "  make format     Formata arquivos do frontend com Biome\\n"
+	@printf "  make format     Formata arquivos com Biome no backend e frontend\\n"
 	@printf "  make check      Roda lint, biome e build\\n"
 	@printf "  make clean      Remove builds do backend e frontend\\n"
 
@@ -131,14 +131,29 @@ lint-frontend:
 lint-backend:
 	cd $(BACK_DIR) && yarn lint
 
-biome:
+biome: biome-backend biome-frontend
+
+biome-frontend:
 	$(MAKE) -C $(FRONT_DIR) biome
 
-biome-fix:
+biome-backend:
+	cd $(BACK_DIR) && yarn biome
+
+biome-fix: biome-fix-backend biome-fix-frontend
+
+biome-fix-frontend:
 	$(MAKE) -C $(FRONT_DIR) biome-fix
 
-format:
+biome-fix-backend:
+	cd $(BACK_DIR) && yarn biome:fix
+
+format: format-backend format-frontend
+
+format-frontend:
 	$(MAKE) -C $(FRONT_DIR) format
+
+format-backend:
+	cd $(BACK_DIR) && yarn biome:format
 
 check:
 	$(MAKE) lint biome build
