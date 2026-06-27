@@ -1,12 +1,10 @@
-/*
-https://docs.nestjs.com/modules
-*/
+import { ImageService } from "./image.service";
 
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 
 @Module({
-    imports: [],
-    controllers: [],
-    providers: [],
+  imports: [],
+  controllers: [],
+  providers: [ImageService],
 })
 export class ImageModule {}
