@@ -34,11 +34,14 @@ export default async function DashboardPage() {
   }
 
   const today = new Date();
-  const monthlyReport = await api.measurements.monthlyReport({
-    accessToken,
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-  });
+  const [monthlyReport, recentReadings] = await Promise.all([
+    api.measurements.monthlyReport({
+      accessToken,
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+    }),
+    api.measurements.list({ accessToken }).catch(() => []),
+  ]);
 
   const dashboardData = mapDashboardData({ monthlyReport });
   const lastMedition = dashboardData.lastMedition;
@@ -63,15 +66,12 @@ export default async function DashboardPage() {
         <DashboardSidebar showAdminItems={userData.role === "ADMIN"} />
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
-          <DashboardHeader
-            avatarUrl={userData.avatarUrl}
-            userName={userData.name}
-          />
+          <DashboardHeader avatarUrl={userData.avatarUrl} userName={userData.name} />
           <SummaryTiles tiles={dashboardSummaryTiles} />
 
           <div className="mt-5 grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
             <GlucosePanel />
-            <RecentReadings />
+            <RecentReadings measurements={recentReadings} />
           </div>
 
           <div className="mt-5 grid gap-5 xl:grid-cols-[0.85fr_1.15fr]">

@@ -53,10 +53,7 @@ export default async function AccountPage() {
                 Mantenha seus dados principais atualizados para personalizar melhor seu diario.
               </p>
 
-              <ImageUploadField
-                initialImageUrl={userData.avatarUrl}
-                profileName={userData.name}
-              />
+              <ImageUploadField initialImageUrl={userData.avatarUrl} profileName={userData.name} />
 
               <ProfileForm profile={userData} />
             </div>

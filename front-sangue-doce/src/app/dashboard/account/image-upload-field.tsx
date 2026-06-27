@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 type ImageUploadFieldProps = {
@@ -16,13 +17,34 @@ function getInitials(name: string) {
     .join("");
 }
 
-export function ImageUploadField({
-  initialImageUrl,
-  profileName,
-}: ImageUploadFieldProps) {
+function getErrorMessage(error: unknown) {
+  if (!(error instanceof Error)) {
+    return "Nao foi possivel atualizar sua imagem de perfil.";
+  }
+
+  try {
+    const parsed = JSON.parse(error.message) as {
+      message?: string | string[];
+    };
+
+    if (Array.isArray(parsed.message)) {
+      return parsed.message.join(" ");
+    }
+
+    return parsed.message ?? error.message;
+  } catch {
+    return error.message;
+  }
+}
+
+export function ImageUploadField({ initialImageUrl, profileName }: ImageUploadFieldProps) {
   const inputId = useId();
+  const router = useRouter();
   const [previewUrl, setPreviewUrl] = useState(initialImageUrl ?? "");
   const [fileName, setFileName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -32,19 +54,54 @@ export function ImageUploadField({
     };
   }, [previewUrl]);
 
-  const selectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (!file) {
       return;
     }
 
+    setErrorMessage("");
+    setSuccessMessage("");
+
     if (previewUrl.startsWith("blob:")) {
       URL.revokeObjectURL(previewUrl);
     }
 
-    setPreviewUrl(URL.createObjectURL(file));
+    const objectUrl = URL.createObjectURL(file);
+
+    setPreviewUrl(objectUrl);
     setFileName(file.name);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    setUploading(true);
+
+    try {
+      const response = await fetch("/api/uploads/users/avatar", {
+        body: formData,
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const payload = (await response.json()) as { avatarUrl: string };
+
+      URL.revokeObjectURL(objectUrl);
+
+      setPreviewUrl(payload.avatarUrl);
+      setFileName("");
+      setSuccessMessage("Imagem de perfil atualizada.");
+      router.refresh();
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
   };
 
   const removePreview = () => {
@@ -73,13 +130,18 @@ export function ImageUploadField({
             Imagem de perfil
           </span>
           <p className="mt-2 text-sm leading-6 text-inkSoft">
-            Escolha uma imagem PNG para pre-visualizar aqui. O envio definitivo
-            sera conectado na proxima etapa.
+            Escolha uma imagem PNG. Ela sera enviada e vinculada ao seu perfil.
           </p>
           {fileName ? (
             <p className="mt-2 truncate text-sm font-semibold text-greenDeep">
-              {fileName}
+              {uploading ? `Enviando ${fileName}...` : fileName}
             </p>
+          ) : null}
+          {errorMessage ? (
+            <p className="mt-2 text-sm font-semibold text-tomato">{errorMessage}</p>
+          ) : null}
+          {successMessage ? (
+            <p className="mt-2 text-sm font-semibold text-greenDeep">{successMessage}</p>
           ) : null}
         </div>
 
@@ -92,6 +154,7 @@ export function ImageUploadField({
             <input
               accept="image/png"
               className="sr-only"
+              disabled={uploading}
               id={inputId}
               onChange={selectImage}
               type="file"
@@ -101,6 +164,7 @@ export function ImageUploadField({
           {previewUrl ? (
             <button
               className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 hover:text-ink"
+              disabled={uploading}
               onClick={removePreview}
               type="button"
             >

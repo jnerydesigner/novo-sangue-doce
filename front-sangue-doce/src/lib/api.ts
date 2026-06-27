@@ -1,7 +1,5 @@
 const API_URL =
-  process.env.INTERNAL_API_URL ??
-  process.env.NEXT_PUBLIC_API_URL ??
-  "http://localhost:3011";
+  process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3011";
 
 type RequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
@@ -466,14 +464,11 @@ export const api = {
 
       const query = searchParams.toString();
 
-      return apiFetch<PaginatedResponse<Post>>(
-        `/posts/admin${query ? `?${query}` : ""}`,
-        {
-          headers: {
-            Authorization: `Bearer ${params.accessToken}`,
-          },
+      return apiFetch<PaginatedResponse<Post>>(`/posts/admin${query ? `?${query}` : ""}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
         },
-      );
+      });
     },
     update: (id: string, payload: CreatePostPayload, params: AuthenticatedApiParams) =>
       apiFetch<Post>(`/posts/${id}`, {

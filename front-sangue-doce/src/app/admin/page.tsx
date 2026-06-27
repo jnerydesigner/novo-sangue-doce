@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { api, type MonthlyMeasurementReport, type Post } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
-import { AdminShell } from "./admin-shell";
+import { QuickGlucoseForm } from "./_lib/quick-glucose-form";
 import { requireAdmin } from "./_lib/require-admin";
+import { AdminShell } from "./admin-shell";
 
 export const dynamic = "force-dynamic";
 
@@ -42,8 +43,7 @@ function getLatestMeasurement(report: MonthlyMeasurementReport | null) {
     report?.days
       .flatMap((day) => day.measurements)
       .sort(
-        (left, right) =>
-          new Date(right.measuredAt).getTime() - new Date(left.measuredAt).getTime(),
+        (left, right) => new Date(right.measuredAt).getTime() - new Date(left.measuredAt).getTime(),
       )[0] ?? null
   );
 }
@@ -78,9 +78,7 @@ export default async function AdminPage() {
   const routineCards = [
     {
       title: "Glicemia",
-      value: latestMeasurement
-        ? String(latestMeasurement.glucoseValueMgDl)
-        : "--",
+      value: latestMeasurement ? String(latestMeasurement.glucoseValueMgDl) : "--",
       unit: latestMeasurement ? "mg/dL" : "",
       detail: latestMeasurement
         ? `Ultima leitura as ${getMeasurementTime(latestMeasurement.measuredAt)}`
@@ -111,7 +109,8 @@ export default async function AdminPage() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="max-w-[62ch] text-[1.05rem] leading-relaxed text-inkSoft">
-              Ola, {profile.name}. Acompanhe as ferramentas editoriais e os dados da plataforma no mesmo lugar.
+              Ola, {profile.name}. Acompanhe as ferramentas editoriais e os dados da plataforma no
+              mesmo lugar.
             </p>
           </div>
           <span className="rounded-full border border-green/30 bg-green/10 px-4 py-2 text-sm font-bold text-greenDeep">
@@ -130,12 +129,11 @@ export default async function AdminPage() {
                   {card.value}
                 </strong>
                 {card.unit ? (
-                  <span className="pb-1 text-sm font-semibold text-inkSoft">
-                    {card.unit}
-                  </span>
+                  <span className="pb-1 text-sm font-semibold text-inkSoft">{card.unit}</span>
                 ) : null}
               </div>
               <p className="mt-3 text-sm leading-6 text-inkSoft">{card.detail}</p>
+              {card.title === "Glicemia" ? <QuickGlucoseForm /> : null}
             </article>
           ))}
         </div>
@@ -228,9 +226,7 @@ export default async function AdminPage() {
               <h2 className="font-serif text-2xl font-medium tracking-normal text-ink">
                 {action.title}
               </h2>
-              <p className="mt-3 text-[15px] leading-relaxed text-inkSoft">
-                {action.description}
-              </p>
+              <p className="mt-3 text-[15px] leading-relaxed text-inkSoft">{action.description}</p>
             </Link>
           ))}
         </div>
