@@ -67,7 +67,7 @@ jobs:
 
   deploy:
     name: Deploy backend image to VPS
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     needs: build
     if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     concurrency:
@@ -75,30 +75,15 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Configure SSH
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT || '22' }}
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-
       - name: Pull and restart stack
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT || '22' }}
-          VPS_USER: ${{ secrets.VPS_USER }}
           VPS_APP_DIR: ${{ vars.VPS_APP_DIR || '/opt/sangue-doce' }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "APP_DIR='$VPS_APP_DIR' bash -s" <<'EOF'
           set -euo pipefail
-          cd "$APP_DIR"
+          cd "$VPS_APP_DIR"
 
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml pull backend frontend
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d postgres minio
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml run --rm migrate
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d --force-recreate backend frontend
           docker image prune -f
-          EOF
