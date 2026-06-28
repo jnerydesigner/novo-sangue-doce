@@ -24,7 +24,7 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-5 pt-6">
           <p className="m-0 text-[13.5px] text-paper/50">
-            © 2026 Sangue Doce. Todos os direitos reservados.
+            © 2026 Sangue Doce, uma criacao da Seligadev Tech. Todos os direitos reservados.
           </p>
           <div className="flex gap-2.5">
             {["Instagram", "YouTube", "Newsletter"].map((item) => (
