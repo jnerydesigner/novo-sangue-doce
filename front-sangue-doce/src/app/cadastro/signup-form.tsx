@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { api, type DiabetesType } from "@/lib/api";
+import type { DiabetesType, User } from "@/lib/api";
 
 const diabetesOptions: Array<{ label: string; value: DiabetesType }> = [
   { label: "Tipo 1", value: "TYPE_1" },
@@ -64,13 +64,25 @@ export function SignupForm() {
     setSubmitting(true);
 
     try {
-      const user = await api.users.create({
-        name: formState.name,
-        email: formState.email,
-        password: formState.password,
-        birthDate: formState.birthDate || undefined,
-        diabetesType: formState.diabetesType,
+      const response = await fetch("/api/users", {
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          password: formState.password,
+          birthDate: formState.birthDate || undefined,
+          diabetesType: formState.diabetesType,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
       });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      const user = (await response.json()) as User;
 
       router.push(`/dashboard?email=${encodeURIComponent(user.email)}`);
     } catch (error) {
