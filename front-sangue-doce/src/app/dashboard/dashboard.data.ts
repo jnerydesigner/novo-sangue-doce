@@ -14,6 +14,7 @@ export const glucosePoints = glucoseValues.map((value, index) => ({
 export const adminSidebarItems = [
   { href: "/admin", label: "Visao geral", mark: "V" },
   { href: "/admin/posts", label: "Materias", mark: "M" },
+  { href: "/admin/taxonomia", label: "Categorias e tags", mark: "T" },
   { href: "/admin/usuarios", label: "Usuarios", mark: "U" },
   { href: "/admin/autores", label: "Autores", mark: "A" },
 ];

@@ -5,6 +5,7 @@ import {
   type PostImageRecord,
   type PostPaginationParams,
   PostRelationNotFoundError,
+  PostTaxonomyAlreadyExistsError,
   type PostRepository,
   type UpdatePostImageMetadata,
 } from "@app/posts/repositories/post.repository";
@@ -206,6 +207,41 @@ export class PrismaPostsRepository implements PostRepository {
     return this.prisma.postCategory.findMany({
       orderBy: { name: "asc" },
     });
+  }
+
+  async createCategory(category: PublicPostCategory): Promise<PublicPostCategory> {
+    try {
+      return await this.prisma.postCategory.create({
+        data: {
+          color: category.color,
+          name: category.name,
+          slug: category.slug,
+        },
+      });
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new PostTaxonomyAlreadyExistsError();
+      }
+
+      throw error;
+    }
+  }
+
+  async createTag(tag: PublicPostTag): Promise<PublicPostTag> {
+    try {
+      return await this.prisma.postTag.create({
+        data: {
+          name: tag.name,
+          slug: tag.slug,
+        },
+      });
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new PostTaxonomyAlreadyExistsError();
+      }
+
+      throw error;
+    }
   }
 
   async findTags(): Promise<PublicPostTag[]> {

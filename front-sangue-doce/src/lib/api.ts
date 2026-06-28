@@ -60,6 +60,17 @@ export type CreateAuthorPayload = {
   userId: string;
 };
 
+export type CreatePostCategoryPayload = {
+  name: string;
+  slug: string;
+  color: PostAccentColor;
+};
+
+export type CreatePostTagPayload = {
+  name: string;
+  slug: string;
+};
+
 export type AuthProfile = {
   sub: string;
   name: string;
@@ -506,7 +517,23 @@ export const api = {
     listByAuthor: (authorId: string) => apiFetch<Post[]>(`/posts/authors/${authorId}`),
     getBySlug: (slug: string) => apiFetch<Post>(`/posts/slug/${slug}`),
     categories: () => apiFetch<PostCategory[]>("/posts/categories"),
+    createCategory: (payload: CreatePostCategoryPayload, params: AuthenticatedApiParams) =>
+      apiFetch<PostCategory>("/posts/categories", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "POST",
+        body: payload,
+      }),
     tags: () => apiFetch<PostTag[]>("/posts/tags"),
+    createTag: (payload: CreatePostTagPayload, params: AuthenticatedApiParams) =>
+      apiFetch<PostTag>("/posts/tags", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "POST",
+        body: payload,
+      }),
   },
   authors: {
     list: () => apiFetch<PostAuthor[]>("/authors"),

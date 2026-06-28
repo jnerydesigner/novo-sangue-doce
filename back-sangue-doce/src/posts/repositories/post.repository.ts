@@ -48,12 +48,21 @@ export class PostRelationNotFoundError extends Error {
   }
 }
 
+export class PostTaxonomyAlreadyExistsError extends Error {
+  constructor() {
+    super("Post taxonomy already exists.");
+    this.name = "PostTaxonomyAlreadyExistsError";
+  }
+}
+
 export abstract class PostRepository {
   abstract create(post: PostEntity): Promise<PostEntity>;
   abstract update(id: string, post: PostEntity): Promise<PostEntity>;
   abstract delete(id: string): Promise<void>;
   abstract findAll(params: PostPaginationParams): Promise<PaginatedPosts>;
   abstract findAllAdmin(params: PostPaginationParams): Promise<PaginatedPosts>;
+  abstract createCategory(category: PublicPostCategory): Promise<PublicPostCategory>;
+  abstract createTag(tag: PublicPostTag): Promise<PublicPostTag>;
   abstract findCategories(): Promise<PublicPostCategory[]>;
   abstract findTags(): Promise<PublicPostTag[]>;
   abstract findById(id: string): Promise<PostEntity | null>;

@@ -14,6 +14,8 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import type { CreatePostDto } from "./dto/create-post.dto";
+import type { CreatePostCategoryDto } from "./dto/create-post-category.dto";
+import type { CreatePostTagDto } from "./dto/create-post-tag.dto";
 import { PostsService } from "./posts.service";
 
 @Controller("posts")
@@ -60,9 +62,23 @@ export class PostsController {
     return this.postsService.findCategories();
   }
 
+  @Post("categories")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  createCategory(@Body() createCategoryDto: CreatePostCategoryDto) {
+    return this.postsService.createCategory(createCategoryDto);
+  }
+
   @Get("tags")
   findTags() {
     return this.postsService.findTags();
+  }
+
+  @Post("tags")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  createTag(@Body() createTagDto: CreatePostTagDto) {
+    return this.postsService.createTag(createTagDto);
   }
 
   @Get("slug/:slug")

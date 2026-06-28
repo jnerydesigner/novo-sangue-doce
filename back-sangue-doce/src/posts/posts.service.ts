@@ -1,11 +1,17 @@
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
+import {
+  type CreatePostCategoryDto,
+  createPostCategorySchema,
+} from "./dto/create-post-category.dto";
 import { type CreatePostDto, createPostSchema } from "./dto/create-post.dto";
+import { type CreatePostTagDto, createPostTagSchema } from "./dto/create-post-tag.dto";
 import { PostEntity } from "./entities/post.entity";
 import {
   type PaginatedPosts,
   PostAlreadyExistsError,
   PostRelationNotFoundError,
   PostRepository,
+  PostTaxonomyAlreadyExistsError,
 } from "./repositories/post.repository";
 import type { PublicPost, PublicPostCategory, PublicPostTag } from "./types/posts.type";
 
@@ -141,8 +147,45 @@ export class PostsService {
     return this.postRepository.findCategories();
   }
 
+  async createCategory(createCategoryDto: CreatePostCategoryDto): Promise<PublicPostCategory> {
+    const payload = this.parseCreateCategory(createCategoryDto);
+
+    try {
+      return await this.postRepository.createCategory({
+        id: "",
+        color: payload.color,
+        name: payload.name,
+        slug: payload.slug,
+      });
+    } catch (error) {
+      if (error instanceof PostTaxonomyAlreadyExistsError) {
+        throw new ConflictException("Category slug already exists.");
+      }
+
+      throw error;
+    }
+  }
+
   async findTags(): Promise<PublicPostTag[]> {
     return this.postRepository.findTags();
+  }
+
+  async createTag(createTagDto: CreatePostTagDto): Promise<PublicPostTag> {
+    const payload = this.parseCreateTag(createTagDto);
+
+    try {
+      return await this.postRepository.createTag({
+        id: "",
+        name: payload.name,
+        slug: payload.slug,
+      });
+    } catch (error) {
+      if (error instanceof PostTaxonomyAlreadyExistsError) {
+        throw new ConflictException("Tag slug already exists.");
+      }
+
+      throw error;
+    }
   }
 
   async findOne(id: string): Promise<PublicPost> {
@@ -171,6 +214,26 @@ export class PostsService {
 
   private parseCreatePost(createPostDto: CreatePostDto): CreatePostDto {
     const result = createPostSchema.safeParse(createPostDto);
+
+    if (!result.success) {
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
+    }
+
+    return result.data;
+  }
+
+  private parseCreateCategory(createCategoryDto: CreatePostCategoryDto): CreatePostCategoryDto {
+    const result = createPostCategorySchema.safeParse(createCategoryDto);
+
+    if (!result.success) {
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message));
+    }
+
+    return result.data;
+  }
+
+  private parseCreateTag(createTagDto: CreatePostTagDto): CreatePostTagDto {
+    const result = createPostTagSchema.safeParse(createTagDto);
 
     if (!result.success) {
       throw new BadRequestException(result.error.issues.map((issue) => issue.message));
