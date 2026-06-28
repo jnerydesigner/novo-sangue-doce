@@ -1,5 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
+
+const brandLogoUrl = resolvePublicImageUrl(
+  process.env.NEXT_PUBLIC_BRAND_LOGO_PATH ?? "sangue-doce-logo.png",
+);
 
 export function Brand({ dark = false }: { dark?: boolean }) {
   return (
@@ -10,7 +15,7 @@ export function Brand({ dark = false }: { dark?: boolean }) {
       }`}
     >
       <Image
-        src="http://localhost:9610/sangue-doce/public/sangue-doce-logo.png"
+        src={brandLogoUrl}
         alt="sangue doce logo"
         width={44}
         height={44}

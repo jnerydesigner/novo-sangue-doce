@@ -1,4 +1,5 @@
 import type { Post, PostAccentColor } from "./api";
+import { resolvePublicImageUrl } from "./public-image-url";
 
 export type ArticleSummary = {
   slug: string;
@@ -25,8 +26,8 @@ export function mapPostToArticle(post: Post): ArticleSummary {
     tag: post.category.name,
     color: colorMap[post.category.color],
     meta: `Por ${post.author.name} | ${post.readingMinutes} min de leitura`,
-    image: post.coverImageUrl,
-    imageVertical: post.verticalImageUrl ?? post.coverImageUrl,
+    image: resolvePublicImageUrl(post.coverImageUrl),
+    imageVertical: resolvePublicImageUrl(post.verticalImageUrl ?? post.coverImageUrl),
   };
 }
 

@@ -10,6 +10,7 @@ import { SiteFooter } from "@/components/home/site-footer";
 import { JsonLd } from "@/components/json-ld";
 import { api } from "@/lib/api";
 import { formatPostDate, mapPostToArticle } from "@/lib/posts";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { buildArticleJsonLd, SITE_NAME, SITE_URL, truncateMetaTitle } from "@/lib/seo";
 import { ArticleActions, ReadingProgress } from "./article-actions";
 
@@ -28,6 +29,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   }
 
   const canonicalUrl = `${SITE_URL}/materias/${post.slug}`;
+  const coverImageUrl = resolvePublicImageUrl(post.coverImageUrl);
   const metaTitle = truncateMetaTitle(post.metaTitle ?? post.title);
 
   return {
@@ -41,13 +43,13 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       description: post.metaDescription ?? post.excerpt,
       url: canonicalUrl,
       type: "article",
-      publishedTime: post.publishedAt,
+      publishedTime: post.publishedAt ?? undefined,
       modifiedTime: post.updatedAt,
       authors: [post.author.name],
       siteName: SITE_NAME,
       images: [
         {
-          url: post.coverImageUrl,
+          url: coverImageUrl,
           alt: post.coverImageAlt ?? post.title,
         },
       ],
@@ -56,7 +58,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       card: "summary_large_image",
       title: post.metaTitle ?? post.title,
       description: post.metaDescription ?? post.excerpt,
-      images: [post.coverImageUrl],
+      images: [coverImageUrl],
     },
   };
 }
@@ -91,7 +93,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         .map(mapPostToArticle),
     )
     .catch(() => []);
-  const publishedDate = formatPostDate(post.publishedAt);
+  const publishedDate = formatPostDate(post.publishedAt ?? undefined);
+  const authorAvatarUrl = resolvePublicImageUrl(post.author.avatarUrl);
+  const coverImageUrl = resolvePublicImageUrl(post.coverImageUrl);
 
   return (
     <>
@@ -131,11 +135,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                {post.author.avatarUrl ? (
+                {authorAvatarUrl ? (
                   <Image
                     width={50}
                     height={50}
-                    src={post.author.avatarUrl}
+                    src={authorAvatarUrl}
                     alt={post.author.name}
                     className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-paper2 object-cover"
                     loading="eager"
@@ -162,7 +166,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <figure>
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-paper2 md:aspect-[21/9]">
                 <Image
-                  src={post.coverImageUrl}
+                  src={coverImageUrl}
                   alt={post.coverImageAlt ?? ""}
                   width={1112}
                   height={477}
@@ -208,11 +212,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           <div className="wrap">
             <aside className="mx-auto mt-2 grid max-w-[720px] gap-6 rounded-xl border border-line bg-card p-8 sm:grid-cols-[84px_1fr]">
-              {post.author.avatarUrl ? (
+              {authorAvatarUrl ? (
                 <Image
                   width={84}
                   height={84}
-                  src={post.author.avatarUrl}
+                  src={authorAvatarUrl}
                   alt={post.author.name}
                   className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-paper2 object-cover"
                   loading="lazy"

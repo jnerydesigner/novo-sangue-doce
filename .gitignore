@@ -18,6 +18,7 @@ test-results/
 # Environment files
 .env
 .env.*
+.env.stack.portainer
 !.env.example
 !.env.*.example
 dev.env

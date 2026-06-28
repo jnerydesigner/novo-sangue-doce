@@ -1,4 +1,5 @@
 import type { Post } from "./api";
+import { resolvePublicImageUrl } from "./public-image-url";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sanguedoce.com.br";
 export const SITE_NAME = "Sangue Doce";
@@ -27,7 +28,7 @@ export function buildArticleJsonLd(post: Post) {
         "@type": "Article",
         headline: post.title,
         description: post.excerpt,
-        image: post.coverImageUrl,
+        image: resolvePublicImageUrl(post.coverImageUrl),
         datePublished: post.publishedAt ?? post.createdAt,
         dateModified: post.updatedAt,
         author: {
