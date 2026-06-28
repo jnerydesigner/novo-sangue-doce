@@ -51,6 +51,15 @@ export type UpdateAuthorProfilePayload = {
   role: string;
 };
 
+export type CreateAuthorPayload = {
+  name: string;
+  slug: string;
+  role: string;
+  bio?: string | null;
+  email?: string;
+  userId: string;
+};
+
 export type AuthProfile = {
   sub: string;
   name: string;
@@ -160,6 +169,7 @@ export type PostAuthor = {
   bio?: string;
   avatarUrl?: string;
   email?: string;
+  userId: string;
 };
 
 export type PostCategory = {
@@ -500,6 +510,14 @@ export const api = {
   },
   authors: {
     list: () => apiFetch<PostAuthor[]>("/authors"),
+    create: (payload: CreateAuthorPayload, params: AuthenticatedApiParams) =>
+      apiFetch<PostAuthor>("/authors", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "POST",
+        body: payload,
+      }),
     me: (params: AuthenticatedApiParams) =>
       apiFetch<PostAuthor>("/authors/me", {
         headers: {

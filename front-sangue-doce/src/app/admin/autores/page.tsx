@@ -3,12 +3,15 @@ import { api } from "@/lib/api";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { requireAdmin } from "../_lib/require-admin";
 import { AdminShell } from "../admin-shell";
+import { AuthorCreateForm } from "./author-create-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminAuthorsPage() {
-  const { profile } = await requireAdmin();
-  const authors = await api.authors.list();
+  const { accessToken, profile } = await requireAdmin();
+  const [authors, users] = await Promise.all([api.authors.list(), api.users.list({ accessToken })]);
+  const authorUserIds = new Set(authors.map((author) => author.userId));
+  const availableUsers = users.filter((user) => !authorUserIds.has(user.id));
 
   return (
     <AdminShell
@@ -18,7 +21,9 @@ export default async function AdminAuthorsPage() {
       userRole={profile.role}
     >
       <section>
-        <div className="grid gap-5 md:grid-cols-2">
+        <AuthorCreateForm users={availableUsers} />
+
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
           {authors.map((author) => (
             <article className="rounded-lg border border-line bg-card p-5" key={author.id}>
               <div className="flex items-start gap-4">
