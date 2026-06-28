@@ -12,11 +12,15 @@ export function UserAvatar({ avatarUrl, name }: UserAvatarProps) {
   return (
     <div
       aria-label={name}
-      className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-green bg-cover bg-center text-sm font-bold text-white"
+      className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-green text-sm font-bold text-white"
       role="img"
-      style={resolvedAvatarUrl ? { backgroundImage: `url(${resolvedAvatarUrl})` } : undefined}
     >
-      {resolvedAvatarUrl ? <span className="sr-only">{name}</span> : getInitials(name)}
+      {resolvedAvatarUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img alt="" className="h-full w-full object-cover" src={resolvedAvatarUrl} />
+      ) : (
+        getInitials(name)
+      )}
     </div>
   );
 }

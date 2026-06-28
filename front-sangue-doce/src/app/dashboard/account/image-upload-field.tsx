@@ -120,12 +120,16 @@ export function ImageUploadField({ initialImageUrl, profileName }: ImageUploadFi
       <div className="flex flex-wrap items-center gap-4">
         <div
           aria-label={`Previa da imagem de ${profileName}`}
-          className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-lg border border-lineStrong bg-card bg-cover bg-center font-serif text-3xl font-medium text-greenDeep"
+          className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-lg border border-lineStrong bg-card font-serif text-3xl font-medium text-greenDeep"
           role="img"
-          style={resolvedPreviewUrl ? { backgroundImage: `url(${resolvedPreviewUrl})` } : undefined}
         >
           {resolvedPreviewUrl ? (
-            <span className="sr-only">{profileName}</span>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              alt=""
+              className="h-full w-full object-cover"
+              src={resolvedPreviewUrl}
+            />
           ) : (
             getInitials(profileName)
           )}

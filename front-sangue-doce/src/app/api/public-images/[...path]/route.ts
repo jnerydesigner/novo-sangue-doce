@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 
 const MINIO_INTERNAL_PUBLIC_URL =
   process.env.MINIO_INTERNAL_PUBLIC_URL ??
-  process.env.MINIO_PUBLIC_URL ??
-  process.env.NEXT_PUBLIC_MINIO_PUBLIC_URL ??
-  "http://localhost:9610";
+  (process.env.NODE_ENV === "production" ? "http://minio:9000" : "http://localhost:9610");
 const MINIO_PUBLIC_PATH = process.env.MINIO_PUBLIC_PATH ?? "/sangue-doce/public";
 
 type RouteContext = {
