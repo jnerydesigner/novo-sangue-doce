@@ -25,6 +25,7 @@ env:
   NEXT_PUBLIC_MINIO_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_URL || 'http://localhost:9610' }}
   NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_PATH || '/sangue-doce/public' }}
   NEXT_PUBLIC_BRAND_LOGO_PATH: ${{ vars.NEXT_PUBLIC_BRAND_LOGO_PATH || '/sangue-doce-logo.png' }}
+  NEXT_PUBLIC_GOOGLE_AUTH_ENABLED: ${{ vars.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED || 'false' }}
 
 jobs:
   build:
@@ -74,5 +75,6 @@ jobs:
             NEXT_PUBLIC_MINIO_PUBLIC_URL=${{ env.NEXT_PUBLIC_MINIO_PUBLIC_URL }}
             NEXT_PUBLIC_MINIO_PUBLIC_PATH=${{ env.NEXT_PUBLIC_MINIO_PUBLIC_PATH }}
             NEXT_PUBLIC_BRAND_LOGO_PATH=${{ env.NEXT_PUBLIC_BRAND_LOGO_PATH }}
+            NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=${{ env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

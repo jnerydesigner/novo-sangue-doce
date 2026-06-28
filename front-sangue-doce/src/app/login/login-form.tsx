@@ -3,11 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const defaultLogin = {
-  email: "jander.webmaster@gmail.com",
-  password: "12345678",
-};
-
+const googleAuthEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
 const googleAuthUrl = `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3011"}/auth/google`;
 
 function getErrorMessage(error: unknown) {
@@ -32,8 +28,8 @@ function getErrorMessage(error: unknown) {
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState(defaultLogin.email);
-  const [password, setPassword] = useState(defaultLogin.password);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -70,27 +66,34 @@ export function LoginForm() {
 
   return (
     <form className="mt-7 grid gap-4" onSubmit={submitForm}>
-      <button
-        className="flex w-full items-center justify-center gap-3 rounded-lg border border-lineStrong bg-paper px-4 py-3 text-sm font-semibold text-ink transition hover:-translate-y-px hover:bg-paper2"
-        onClick={() => {
-          window.location.assign(googleAuthUrl);
-        }}
-        type="button"
-      >
-        <span
-          aria-hidden="true"
-          className="grid size-5 place-items-center rounded-full bg-white text-[13px] font-bold text-ink shadow-sm"
-        >
-          G
-        </span>
-        Entrar com Google
-      </button>
+      {googleAuthEnabled ? (
+        <>
+          <button
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-lineStrong bg-paper px-4 py-3 text-sm font-semibold text-ink transition hover:-translate-y-px hover:bg-paper2"
+            onClick={() => {
+              window.location.assign(googleAuthUrl);
+            }}
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+              className="grid size-5 place-items-center rounded-full bg-white text-[13px] font-bold text-ink shadow-sm"
+            >
+              G
+            </span>
+            Entrar com Google
+          </button>
 
-      <div className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-normal text-muted">
-        <span className="h-px flex-1 bg-line" />
-        ou
-        <span className="h-px flex-1 bg-line" />
-      </div>
+          <div
+            className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-normal text-muted"
+            aria-hidden="true"
+          >
+            <span className="h-px flex-1 bg-line" />
+            ou
+            <span className="h-px flex-1 bg-line" />
+          </div>
+        </>
+      ) : null}
 
       <label className="block text-[13px] font-semibold text-muted" htmlFor="email">
         E-mail
