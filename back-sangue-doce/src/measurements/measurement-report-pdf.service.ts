@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import PDFDocument from "pdfkit";
 import type { MonthlyMeasurementReport, PublicMeasurement } from "./measurements.service";
 
@@ -45,6 +46,8 @@ const REPORT_COLUMNS: ReportColumn[] = [
 
 @Injectable()
 export class MeasurementReportPdfService {
+  constructor(private readonly configService: ConfigService) {}
+
   async generateMonthlyReportPdf(params: {
     birthDate?: string;
     diabetesType?: string;
@@ -318,7 +321,7 @@ export class MeasurementReportPdfService {
     }
 
     try {
-      const response = await fetch(avatarUrl);
+      const response = await fetch(this.resolvePublicImageUrl(avatarUrl));
 
       if (!response.ok) {
         return undefined;
@@ -328,5 +331,24 @@ export class MeasurementReportPdfService {
     } catch {
       return undefined;
     }
+  }
+
+  private resolvePublicImageUrl(value: string): string {
+    if (/^https?:\/\//i.test(value)) {
+      return value;
+    }
+
+    const publicBaseUrl = this.configService.get<string>("MINIO_PUBLIC_URL") ?? "";
+    const publicPath = this.configService.get<string>("MINIO_PUBLIC_PATH") ?? "";
+
+    if (!publicBaseUrl || !value.startsWith("/")) {
+      return value;
+    }
+
+    if (publicPath && !value.startsWith(publicPath)) {
+      return `${publicBaseUrl.replace(/\/$/, "")}/${publicPath.replace(/^\/|\/$/g, "")}/${value.replace(/^\/+/, "")}`;
+    }
+
+    return `${publicBaseUrl.replace(/\/$/, "")}${value}`;
   }
 }
