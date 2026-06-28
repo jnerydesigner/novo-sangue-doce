@@ -525,6 +525,18 @@ export const api = {
         method: "POST",
         body: payload,
       }),
+    updateCategory: (
+      id: string,
+      payload: CreatePostCategoryPayload,
+      params: AuthenticatedApiParams,
+    ) =>
+      apiFetch<PostCategory>(`/posts/categories/${id}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "PATCH",
+        body: payload,
+      }),
     tags: () => apiFetch<PostTag[]>("/posts/tags"),
     createTag: (payload: CreatePostTagPayload, params: AuthenticatedApiParams) =>
       apiFetch<PostTag>("/posts/tags", {
@@ -532,6 +544,14 @@ export const api = {
           Authorization: `Bearer ${params.accessToken}`,
         },
         method: "POST",
+        body: payload,
+      }),
+    updateTag: (id: string, payload: CreatePostTagPayload, params: AuthenticatedApiParams) =>
+      apiFetch<PostTag>(`/posts/tags/${id}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        method: "PATCH",
         body: payload,
       }),
   },

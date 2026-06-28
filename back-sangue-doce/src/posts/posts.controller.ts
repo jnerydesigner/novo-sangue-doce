@@ -69,6 +69,13 @@ export class PostsController {
     return this.postsService.createCategory(createCategoryDto);
   }
 
+  @Patch("categories/:id")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  updateCategory(@Param("id") id: string, @Body() updateCategoryDto: CreatePostCategoryDto) {
+    return this.postsService.updateCategory(id, updateCategoryDto);
+  }
+
   @Get("tags")
   findTags() {
     return this.postsService.findTags();
@@ -79,6 +86,13 @@ export class PostsController {
   @Roles(Role.ADMIN)
   createTag(@Body() createTagDto: CreatePostTagDto) {
     return this.postsService.createTag(createTagDto);
+  }
+
+  @Patch("tags/:id")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  updateTag(@Param("id") id: string, @Body() updateTagDto: CreatePostTagDto) {
+    return this.postsService.updateTag(id, updateTagDto);
   }
 
   @Get("slug/:slug")

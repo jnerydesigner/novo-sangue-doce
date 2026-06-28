@@ -63,6 +63,8 @@ export abstract class PostRepository {
   abstract findAllAdmin(params: PostPaginationParams): Promise<PaginatedPosts>;
   abstract createCategory(category: PublicPostCategory): Promise<PublicPostCategory>;
   abstract createTag(tag: PublicPostTag): Promise<PublicPostTag>;
+  abstract updateCategory(id: string, category: PublicPostCategory): Promise<PublicPostCategory>;
+  abstract updateTag(id: string, tag: PublicPostTag): Promise<PublicPostTag>;
   abstract findCategories(): Promise<PublicPostCategory[]>;
   abstract findTags(): Promise<PublicPostTag[]>;
   abstract findById(id: string): Promise<PostEntity | null>;

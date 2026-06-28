@@ -244,6 +244,51 @@ export class PrismaPostsRepository implements PostRepository {
     }
   }
 
+  async updateCategory(id: string, category: PublicPostCategory): Promise<PublicPostCategory> {
+    try {
+      return await this.prisma.postCategory.update({
+        data: {
+          color: category.color,
+          name: category.name,
+          slug: category.slug,
+        },
+        where: { id },
+      });
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new PostTaxonomyAlreadyExistsError();
+      }
+
+      if (this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
+  async updateTag(id: string, tag: PublicPostTag): Promise<PublicPostTag> {
+    try {
+      return await this.prisma.postTag.update({
+        data: {
+          name: tag.name,
+          slug: tag.slug,
+        },
+        where: { id },
+      });
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new PostTaxonomyAlreadyExistsError();
+      }
+
+      if (this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
   async findTags(): Promise<PublicPostTag[]> {
     return this.prisma.postTag.findMany({
       orderBy: { name: "asc" },

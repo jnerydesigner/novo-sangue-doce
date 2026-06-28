@@ -166,6 +166,36 @@ export class PostsService {
     }
   }
 
+  async updateCategory(
+    id: string,
+    updateCategoryDto: CreatePostCategoryDto,
+  ): Promise<PublicPostCategory> {
+    if (!this.isValidUuid(id)) {
+      throw new BadRequestException("Invalid category id.");
+    }
+
+    const payload = this.parseCreateCategory(updateCategoryDto);
+
+    try {
+      return await this.postRepository.updateCategory(id, {
+        id,
+        color: payload.color,
+        name: payload.name,
+        slug: payload.slug,
+      });
+    } catch (error) {
+      if (error instanceof PostTaxonomyAlreadyExistsError) {
+        throw new ConflictException("Category slug already exists.");
+      }
+
+      if (error instanceof PostRelationNotFoundError) {
+        throw new BadRequestException("Category not found.");
+      }
+
+      throw error;
+    }
+  }
+
   async findTags(): Promise<PublicPostTag[]> {
     return this.postRepository.findTags();
   }
@@ -182,6 +212,32 @@ export class PostsService {
     } catch (error) {
       if (error instanceof PostTaxonomyAlreadyExistsError) {
         throw new ConflictException("Tag slug already exists.");
+      }
+
+      throw error;
+    }
+  }
+
+  async updateTag(id: string, updateTagDto: CreatePostTagDto): Promise<PublicPostTag> {
+    if (!this.isValidUuid(id)) {
+      throw new BadRequestException("Invalid tag id.");
+    }
+
+    const payload = this.parseCreateTag(updateTagDto);
+
+    try {
+      return await this.postRepository.updateTag(id, {
+        id,
+        name: payload.name,
+        slug: payload.slug,
+      });
+    } catch (error) {
+      if (error instanceof PostTaxonomyAlreadyExistsError) {
+        throw new ConflictException("Tag slug already exists.");
+      }
+
+      if (error instanceof PostRelationNotFoundError) {
+        throw new BadRequestException("Tag not found.");
       }
 
       throw error;

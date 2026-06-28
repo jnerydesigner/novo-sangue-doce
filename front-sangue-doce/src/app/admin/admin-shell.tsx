@@ -34,7 +34,7 @@ const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: s
     subtitle: "Publicacao, rascunhos e organizacao editorial.",
   },
   taxonomy: {
-    title: "Categorias e tags",
+    title: "Tags e Categorias",
     subtitle: "Organizacao editorial para materias e filtros.",
   },
   users: {
