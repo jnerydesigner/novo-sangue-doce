@@ -1,6 +1,7 @@
 const MINIO_PUBLIC_URL = process.env.NEXT_PUBLIC_MINIO_PUBLIC_URL ?? "http://localhost:9610";
 const MINIO_PUBLIC_PATH = process.env.NEXT_PUBLIC_MINIO_PUBLIC_PATH ?? "/sangue-doce/public";
 const PUBLIC_IMAGE_PROXY_PATH = "/api/public-images";
+const PUBLIC_PREFIX = "public";
 
 export function resolvePublicImageUrl(value?: string | null): string {
   if (!value) {
@@ -13,13 +14,15 @@ export function resolvePublicImageUrl(value?: string | null): string {
 
   const normalizedPublicUrl = MINIO_PUBLIC_URL.replace(/\/$/, "");
   const normalizedPublicPath = normalizePath(MINIO_PUBLIC_PATH);
+  const publicImagePath = toPublicImagePathFromValue(value, normalizedPublicPath);
 
   if (/^https?:/i.test(value)) {
     try {
       const url = new URL(value);
+      const publicUrlPath = toPublicImagePathFromValue(url.pathname, normalizedPublicPath);
 
-      if (normalizedPublicPath && url.pathname.startsWith(normalizedPublicPath)) {
-        return toPublicImageProxyPath(url.pathname);
+      if (publicUrlPath) {
+        return toPublicImageProxyPath(publicUrlPath);
       }
     } catch {
       return value;
@@ -28,8 +31,8 @@ export function resolvePublicImageUrl(value?: string | null): string {
     return value;
   }
 
-  if (normalizedPublicUrl && normalizedPublicPath && value.startsWith(normalizedPublicPath)) {
-    return toPublicImageProxyPath(value);
+  if (publicImagePath) {
+    return toPublicImageProxyPath(publicImagePath);
   }
 
   if (normalizedPublicUrl && normalizedPublicPath && !value.startsWith("/")) {
@@ -66,4 +69,24 @@ function normalizePath(value: string): string {
 
 function toPublicImageProxyPath(value: string): string {
   return `${PUBLIC_IMAGE_PROXY_PATH}/${value.replace(/^\/+/, "")}`;
+}
+
+function toPublicImagePathFromValue(value: string, normalizedPublicPath: string): string {
+  const normalizedValue = normalizePath(value);
+  const publicPathParts = normalizedPublicPath.split("/").filter(Boolean);
+  const bucketName = publicPathParts[0];
+
+  if (!normalizedValue || !normalizedPublicPath) {
+    return "";
+  }
+
+  if (normalizedValue.startsWith(normalizedPublicPath)) {
+    return normalizedValue;
+  }
+
+  if (bucketName && normalizedValue.startsWith(`/${PUBLIC_PREFIX}/`)) {
+    return `/${bucketName}${normalizedValue}`;
+  }
+
+  return "";
 }
