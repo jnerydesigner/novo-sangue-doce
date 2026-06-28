@@ -3,6 +3,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { api, type Measurement, type MeasurementNoteType } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
 import { ExportReportButton } from "./export-report-button";
@@ -140,7 +141,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   }
 
   const reportUrl = `/dashboard/reports?${reportUrlSearchParams.toString()}`;
-  const reportAvatarUrl = monthlyReport.userAvatarUrl ?? userData.avatarUrl;
+  const reportAvatarUrl = resolvePublicImageUrl(monthlyReport.userAvatarUrl ?? userData.avatarUrl);
   const periodLabel =
     queryStartDate && queryEndDate
       ? `${formatDate(queryStartDate)} a ${formatDate(queryEndDate)}`

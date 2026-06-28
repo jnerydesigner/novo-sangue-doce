@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 type ImageUploadFieldProps = {
   initialImageUrl?: string;
@@ -45,6 +46,7 @@ export function ImageUploadField({ initialImageUrl, profileName }: ImageUploadFi
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [uploading, setUploading] = useState(false);
+  const resolvedPreviewUrl = resolvePublicImageUrl(previewUrl);
 
   useEffect(() => {
     return () => {
@@ -120,9 +122,13 @@ export function ImageUploadField({ initialImageUrl, profileName }: ImageUploadFi
           aria-label={`Previa da imagem de ${profileName}`}
           className="grid size-24 shrink-0 place-items-center overflow-hidden rounded-lg border border-lineStrong bg-card bg-cover bg-center font-serif text-3xl font-medium text-greenDeep"
           role="img"
-          style={previewUrl ? { backgroundImage: `url(${previewUrl})` } : undefined}
+          style={resolvedPreviewUrl ? { backgroundImage: `url(${resolvedPreviewUrl})` } : undefined}
         >
-          {previewUrl ? <span className="sr-only">{profileName}</span> : getInitials(profileName)}
+          {resolvedPreviewUrl ? (
+            <span className="sr-only">{profileName}</span>
+          ) : (
+            getInitials(profileName)
+          )}
         </div>
 
         <div className="min-w-[220px] flex-1">

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import type {
   CreatePostPayload,
   Post,
@@ -12,6 +12,7 @@ import type {
   PostTag,
 } from "@/lib/api";
 import { DRAFT_POST_STORAGE_KEY, type DraftPostPreview } from "@/lib/draft-post";
+import { resolvePublicImageUrl, toPublicImagePath } from "@/lib/public-image-url";
 import { CoverImageField } from "./cover-image-field";
 import { PostContentEditor } from "./post-content-editor";
 
@@ -43,6 +44,12 @@ function createSlug(value: string) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
+}
+
+function normalizeContentImagePaths(content: PostContentBlock[]): PostContentBlock[] {
+  return content.map((block) =>
+    block.type === "image" ? { ...block, src: toPublicImagePath(block.src) } : block,
+  );
 }
 
 type NewPostFormProps = {
@@ -119,6 +126,7 @@ function NewPostFormFields({
   const [coverFileName, setCoverFileName] = useState("");
   const [selectedCoverFile, setSelectedCoverFile] = useState<File | null>(null);
   const [draftId, setDraftId] = useState(initialDraft?.id ?? "");
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [currentStatus, setCurrentStatus] = useState<PostStatus>(initialDraft?.status ?? "DRAFT");
   const [savedAt, setSavedAt] = useState<string | null>(initialDraft?.savedAt ?? null);
   const [submitMessage, setSubmitMessage] = useState<{
@@ -266,9 +274,9 @@ function NewPostFormFields({
     return {
       authorId: draft.author.id,
       categoryId: draft.category.id,
-      content: draft.content,
+      content: normalizeContentImagePaths(draft.content),
       coverImageAlt: draft.coverImageAlt,
-      coverImageUrl: draft.coverImageUrl,
+      coverImageUrl: toPublicImagePath(draft.coverImageUrl),
       excerpt: draft.excerpt,
       publishedAt: status === "PUBLISHED" ? new Date().toISOString() : undefined,
       readingMinutes: draft.readingMinutes,
@@ -329,6 +337,49 @@ function NewPostFormFields({
     const upload = (await response.json()) as { coverUrl: string };
 
     return upload.coverUrl;
+  }
+
+  async function ensurePostIdForContentImage(): Promise<string> {
+    if (draftId) {
+      return draftId;
+    }
+
+    if (!formRef.current) {
+      throw new Error("Nao foi possivel preparar o rascunho para enviar a imagem.");
+    }
+
+    const draft = buildDraft(formRef.current);
+    const post = await savePost(draft, "DRAFT");
+    const uploadedCoverUrl = await uploadCoverImage(post.id);
+    const savedPost = uploadedCoverUrl ? { ...post, coverImageUrl: uploadedCoverUrl } : post;
+
+    savePreviewDraft(draft, savedPost);
+
+    return savedPost.id;
+  }
+
+  async function uploadPostContentImage(file: File): Promise<string> {
+    const postId = await ensurePostIdForContentImage();
+    const formData = new FormData();
+    formData.append("postId", postId);
+    formData.append("image", file);
+
+    const response = await fetch("/api/uploads/post/images", {
+      body: formData,
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      const error = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
+      throw new Error(error?.message ?? "Nao foi possivel enviar a imagem da materia.");
+    }
+
+    const upload = (await response.json()) as { imageUrl: string };
+
+    return upload.imageUrl;
   }
 
   async function persistPost(
@@ -410,6 +461,7 @@ function NewPostFormFields({
     <form
       className="grid gap-5 rounded-lg border border-line bg-card p-5 md:grid-cols-2"
       onSubmit={handleSubmit}
+      ref={formRef}
     >
       <label className="grid gap-2 text-sm font-bold text-inkSoft">
         Titulo
@@ -472,14 +524,14 @@ function NewPostFormFields({
         </select>
         {getSelectedAuthor() && (
           <div className="flex items-center gap-3 rounded-lg border border-line bg-paper2 px-3 py-2.5">
-            {getSelectedAuthor()?.avatarUrl ? (
+            {resolvePublicImageUrl(getSelectedAuthor()?.avatarUrl) ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 alt={getSelectedAuthor()?.name ?? ""}
                 className="h-9 w-9 flex-shrink-0 rounded-full object-cover"
                 height={36}
                 loading="lazy"
-                src={getSelectedAuthor()?.avatarUrl}
+                src={resolvePublicImageUrl(getSelectedAuthor()?.avatarUrl)}
                 title={getSelectedAuthor()?.name ?? ""}
                 width={36}
               />
@@ -560,7 +612,10 @@ function NewPostFormFields({
       </div>
       <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
         <span>Conteudo</span>
-        <PostContentEditor initialContent={initialDraft?.content} />
+        <PostContentEditor
+          initialContent={initialDraft?.content}
+          onUploadImage={uploadPostContentImage}
+        />
       </div>
       <div className="flex flex-wrap items-center justify-end gap-3 md:col-span-2">
         {savedAt && (

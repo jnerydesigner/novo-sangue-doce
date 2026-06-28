@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { CreatePostPayload, Post, PostStatus } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
+import { toPublicImagePath } from "@/lib/public-image-url";
 
 type PostsTableProps = {
   posts: Post[];
@@ -22,18 +23,24 @@ const statusClasses: Record<PostStatus, string> = {
   PUBLISHED: "border-green/30 bg-green/10 text-greenDeep",
 };
 
+function optionalString(value: string | null | undefined): string | undefined {
+  return value?.trim() || undefined;
+}
+
 function buildPayload(post: Post, status: PostStatus): CreatePostPayload {
   return {
     authorId: post.authorId,
     categoryId: post.categoryId,
-    content: post.content,
-    coverCaption: post.coverCaption,
-    coverImageAlt: post.coverImageAlt,
-    coverImageUrl: post.coverImageUrl,
+    content: post.content.map((block) =>
+      block.type === "image" ? { ...block, src: toPublicImagePath(block.src) } : block,
+    ),
+    coverCaption: optionalString(post.coverCaption),
+    coverImageAlt: optionalString(post.coverImageAlt),
+    coverImageUrl: toPublicImagePath(post.coverImageUrl),
     excerpt: post.excerpt,
     featured: post.featured,
-    metaDescription: post.metaDescription,
-    metaTitle: post.metaTitle,
+    metaDescription: optionalString(post.metaDescription),
+    metaTitle: optionalString(post.metaTitle),
     publishedAt:
       status === "PUBLISHED" ? (post.publishedAt ?? new Date().toISOString()) : undefined,
     readingMinutes: post.readingMinutes,
@@ -41,7 +48,7 @@ function buildPayload(post: Post, status: PostStatus): CreatePostPayload {
     status,
     tagIds: post.tags.map((tag) => tag.id),
     title: post.title,
-    verticalImageUrl: post.verticalImageUrl,
+    verticalImageUrl: post.verticalImageUrl ? toPublicImagePath(post.verticalImageUrl) : undefined,
   };
 }
 

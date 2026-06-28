@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { api } from "@/lib/api";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { requireAdmin } from "../_lib/require-admin";
 import { AdminShell } from "../admin-shell";
 
@@ -21,13 +22,13 @@ export default async function AdminAuthorsPage() {
           {authors.map((author) => (
             <article className="rounded-lg border border-line bg-card p-5" key={author.id}>
               <div className="flex items-start gap-4">
-                {author.avatarUrl ? (
+                {resolvePublicImageUrl(author.avatarUrl) ? (
                   <Image
                     alt={author.name}
                     className="size-14 rounded-full border border-line object-cover"
                     height={56}
                     loading="lazy"
-                    src={author.avatarUrl}
+                    src={resolvePublicImageUrl(author.avatarUrl)}
                     title={author.name}
                     width={56}
                   />

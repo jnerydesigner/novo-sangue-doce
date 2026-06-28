@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { PostContentBlock } from "@/lib/api";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 type EditableBlock = PostContentBlock & {
   key: string;
@@ -123,7 +124,12 @@ const blockOptions = [
   block: PostContentBlock;
 }>;
 
-export function PostContentEditor({ initialContent }: { initialContent?: PostContentBlock[] }) {
+type PostContentEditorProps = {
+  initialContent?: PostContentBlock[];
+  onUploadImage?: (file: File) => Promise<string>;
+};
+
+export function PostContentEditor({ initialContent, onUploadImage }: PostContentEditorProps) {
   const [blocks, setBlocks] = useState<EditableBlock[]>(
     Array.isArray(initialContent) && initialContent.length
       ? initialContent.map(toEditableBlock)
@@ -235,7 +241,11 @@ export function PostContentEditor({ initialContent }: { initialContent?: PostCon
                   </div>
                 </div>
 
-                <BlockFields block={block} updateBlock={updateBlock} />
+                <BlockFields
+                  block={block}
+                  onUploadImage={onUploadImage}
+                  updateBlock={updateBlock}
+                />
               </article>
 
               <BlockConnector insertBlock={(nextBlock) => insertBlockAfter(index, nextBlock)} />
@@ -291,24 +301,63 @@ function BlockConnector({ insertBlock }: { insertBlock: (block: PostContentBlock
 
 function BlockFields({
   block,
+  onUploadImage,
   updateBlock,
 }: {
   block: EditableBlock;
+  onUploadImage?: (file: File) => Promise<string>;
   updateBlock: (key: string, nextBlock: Partial<EditableBlock>) => void;
 }) {
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fieldClassName =
     "w-full rounded-lg border border-line bg-paper px-4 py-3 text-base font-medium text-ink outline-none transition focus:border-green";
 
+  async function selectImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] ?? null;
+
+    if (!file || !onUploadImage) {
+      return;
+    }
+
+    setUploadError(null);
+    setUploading(true);
+
+    try {
+      const imageUrl = await onUploadImage(file);
+      updateBlock(block.key, { src: imageUrl });
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : "Nao foi possivel enviar a imagem.");
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
+  }
+
   if (block.type === "image") {
+    const imageUrl = resolvePublicImageUrl(block.src);
+
     return (
       <div className="grid gap-2">
-        <input
-          className={fieldClassName}
-          onChange={(event) => updateBlock(block.key, { src: event.target.value })}
-          placeholder="URL"
-          type="url"
-          value={block.src}
-        />
+        {imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            alt={block.alt ?? ""}
+            className="max-h-72 w-full rounded-lg border border-line object-cover"
+            src={imageUrl}
+          />
+        ) : null}
+        <label className="inline-flex w-fit cursor-pointer items-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2">
+          {uploading ? "Enviando..." : "Escolher imagem"}
+          <input
+            accept="image/png,image/jpeg,image/webp"
+            className="sr-only"
+            disabled={uploading || !onUploadImage}
+            onChange={selectImage}
+            type="file"
+          />
+        </label>
+        {uploadError ? <p className="text-sm font-semibold text-tomato">{uploadError}</p> : null}
         <input
           className={fieldClassName}
           onChange={(event) => updateBlock(block.key, { alt: event.target.value })}

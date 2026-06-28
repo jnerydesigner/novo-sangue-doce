@@ -3,6 +3,8 @@ import Link from "next/link";
 import { PostContentBlocks } from "@/components/articles/post-content-blocks";
 import type { Post } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
+import { PublishPostButton } from "./publish-post-button";
 
 type DraftPreviewProps = {
   post: Post | null;
@@ -47,6 +49,8 @@ export function DraftPreview({ post }: DraftPreviewProps) {
   }
 
   const status = statusCopy[post.status];
+  const authorAvatarUrl = resolvePublicImageUrl(post.author?.avatarUrl);
+  const coverImageUrl = resolvePublicImageUrl(post.coverImageUrl);
 
   return (
     <article className="overflow-hidden rounded-lg border border-line bg-paper">
@@ -63,12 +67,15 @@ export function DraftPreview({ post }: DraftPreviewProps) {
             </span>
             <span className="ml-3 text-sm font-semibold text-inkSoft">/{post.slug}</span>
           </div>
-          <Link
-            className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
-            href={`/admin/posts/novo?id=${post.id}`}
-          >
-            Editar
-          </Link>
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <PublishPostButton post={post} />
+            <Link
+              className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
+              href={`/admin/posts/novo?id=${post.id}`}
+            >
+              Editar
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -97,13 +104,13 @@ export function DraftPreview({ post }: DraftPreviewProps) {
           ) : null}
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            {post.author?.avatarUrl ? (
+            {authorAvatarUrl ? (
               <Image
                 alt={post.author.name}
                 className="rounded-full border border-lineStrong object-cover"
                 height={50}
                 loading="lazy"
-                src={post.author.avatarUrl}
+                src={authorAvatarUrl}
                 title={post.author.name}
                 width={50}
               />
@@ -135,7 +142,7 @@ export function DraftPreview({ post }: DraftPreviewProps) {
         <figure className="mt-9">
           <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-paper2 md:aspect-[21/9]">
             <Image
-              src={post.coverImageUrl}
+              src={coverImageUrl}
               alt={post.coverImageAlt ?? ""}
               width={1112}
               height={477}

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { api, type MonthlyMeasurementReport, type Post } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { QuickGlucoseForm } from "./_lib/quick-glucose-form";
 import { requireAdmin } from "./_lib/require-admin";
 import { AdminShell } from "./admin-shell";
@@ -73,6 +74,7 @@ export default async function AdminPage() {
       .catch(() => null),
   ]);
   const authorPosts = author ? await api.posts.listByAuthor(author.id).catch(() => []) : [];
+  const authorAvatarUrl = resolvePublicImageUrl(author?.avatarUrl);
   const latestMeasurement = getLatestMeasurement(monthlyReport);
   const latestPost = authorPosts[0] ?? null;
   const routineCards = [
@@ -141,12 +143,12 @@ export default async function AdminPage() {
         <div className="grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
           <article className="rounded-lg border border-line bg-card p-5">
             <div className="flex items-start gap-4">
-              {author?.avatarUrl ? (
+              {author && authorAvatarUrl ? (
                 <Image
                   alt={author.name}
                   className="size-14 rounded-full border border-line object-cover"
                   height={56}
-                  src={author.avatarUrl}
+                  src={authorAvatarUrl}
                   width={56}
                 />
               ) : (

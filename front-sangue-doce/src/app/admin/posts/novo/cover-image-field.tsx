@@ -1,6 +1,7 @@
 "use client";
 
 import { useId } from "react";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 type CoverImageFieldProps = {
   altText: string;
@@ -20,6 +21,7 @@ export function CoverImageField({
   onSelectImage,
 }: CoverImageFieldProps) {
   const inputId = useId();
+  const resolvedImageUrl = resolvePublicImageUrl(imageUrl);
 
   function selectImage(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
@@ -38,9 +40,9 @@ export function CoverImageField({
           aria-label={imageUrl ? "Previa da imagem de capa" : "Sem imagem"}
           className="grid min-h-[150px] place-items-center overflow-hidden rounded-lg border border-lineStrong bg-card bg-cover bg-center text-sm font-bold uppercase tracking-[0.12em] text-muted"
           role="img"
-          style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
+          style={resolvedImageUrl ? { backgroundImage: `url(${resolvedImageUrl})` } : undefined}
         >
-          {imageUrl ? <span className="sr-only">Imagem de capa</span> : "Sem imagem"}
+          {resolvedImageUrl ? <span className="sr-only">Imagem de capa</span> : "Sem imagem"}
         </div>
 
         <div className="flex flex-col justify-center">

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { PostContentBlock } from "@/lib/api";
+import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 type PostContentBlocksProps = {
   blocks: PostContentBlock[];
@@ -64,11 +65,13 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
             return null;
           }
 
+          const imageUrl = resolvePublicImageUrl(block.src);
+
           return (
             <figure key={`${block.type}-${index}`} className="my-10">
               <div className="relative aspect-video overflow-hidden rounded-[10px] bg-paper2">
                 <Image
-                  src={block.src}
+                  src={imageUrl}
                   alt={block.alt ?? ""}
                   width={720}
                   height={405}
