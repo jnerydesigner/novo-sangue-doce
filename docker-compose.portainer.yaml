@@ -132,7 +132,7 @@ services:
       NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
       NEXT_PUBLIC_MINIO_PUBLIC_URL: ${NEXT_PUBLIC_MINIO_PUBLIC_URL:-http://minio:9000}
       NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${NEXT_PUBLIC_MINIO_PUBLIC_PATH:-/sangue-doce/public}
-      NEXT_PUBLIC_BRAND_LOGO_PATH: ${NEXT_PUBLIC_BRAND_LOGO_PATH:-sangue-doce-logo.png}
+      NEXT_PUBLIC_BRAND_LOGO_PATH: ${NEXT_PUBLIC_BRAND_LOGO_PATH:-/sangue-doce-logo.png}
     depends_on:
       backend:
         condition: service_started
