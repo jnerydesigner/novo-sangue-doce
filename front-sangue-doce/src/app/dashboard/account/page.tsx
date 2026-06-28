@@ -5,6 +5,7 @@ import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
 import { AuthorProfileForm } from "./author-profile-form";
+import { AuthorSelfCreateForm } from "./author-self-create-form";
 import { ImageUploadField } from "./image-upload-field";
 import { ProfileForm } from "./profile-form";
 
@@ -69,6 +70,8 @@ export default async function AccountPage() {
 
               {authorProfile ? (
                 <AuthorProfileForm author={authorProfile} />
+              ) : userData.role === "ADMIN" ? (
+                <AuthorSelfCreateForm profile={userData} />
               ) : (
                 <p className="mt-6 rounded-lg border border-line bg-paper px-4 py-3 text-[14px] leading-6 text-inkSoft">
                   Nenhum perfil de autor esta vinculado a esta conta.
