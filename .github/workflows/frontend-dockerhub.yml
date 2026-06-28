@@ -24,6 +24,7 @@ env:
   NEXT_IMAGE_UNOPTIMIZED: ${{ vars.NEXT_IMAGE_UNOPTIMIZED || 'false' }}
   NEXT_PUBLIC_MINIO_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_URL || 'http://localhost:9610' }}
   NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_PATH || '/sangue-doce/public' }}
+  NEXT_PUBLIC_BRAND_LOGO_PATH: ${{ vars.NEXT_PUBLIC_BRAND_LOGO_PATH || 'sangue-doce-logo.png' }}
 
 jobs:
   build:
@@ -72,5 +73,6 @@ jobs:
             NEXT_IMAGE_UNOPTIMIZED=${{ env.NEXT_IMAGE_UNOPTIMIZED }}
             NEXT_PUBLIC_MINIO_PUBLIC_URL=${{ env.NEXT_PUBLIC_MINIO_PUBLIC_URL }}
             NEXT_PUBLIC_MINIO_PUBLIC_PATH=${{ env.NEXT_PUBLIC_MINIO_PUBLIC_PATH }}
+            NEXT_PUBLIC_BRAND_LOGO_PATH=${{ env.NEXT_PUBLIC_BRAND_LOGO_PATH }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
