@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { PostAccentColor, PostCategory, PostTag } from "@/lib/api";
 
@@ -79,13 +79,6 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const rows = useMemo<TaxonomyItem[]>(
-    () => [
-      ...categories.map((category) => ({ ...category, type: "category" as const })),
-      ...tags.map((tag) => ({ ...tag, type: "tag" as const })),
-    ],
-    [categories, tags],
-  );
 
   const openModal = (nextModalState: ModalState) => {
     setErrorMessage("");
@@ -157,25 +150,17 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
 
   return (
     <>
-      <section className="rounded-lg border border-line bg-card">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
-          <div>
-            <h2 className="font-serif text-2xl font-medium tracking-normal text-ink">
-              Taxonomia editorial
-            </h2>
-            <p className="mt-1 text-sm text-inkSoft">
-              {categories.length} categorias e {tags.length} tags cadastradas
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <button
-              className="btn btn-secondary"
-              onClick={() => openModal({ mode: "create", type: "tag" })}
-              type="button"
-            >
-              Nova tag
-            </button>
+      <section className="grid gap-5 xl:grid-cols-2">
+        <div className="rounded-lg border border-line bg-card">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
+            <div>
+              <h2 className="font-serif text-2xl font-medium tracking-normal text-ink">
+                Categorias
+              </h2>
+              <p className="mt-1 text-sm text-inkSoft">
+                {categories.length} categorias cadastradas
+              </p>
+            </div>
             <button
               className="btn btn-primary"
               onClick={() => openModal({ mode: "create", type: "category" })}
@@ -184,45 +169,94 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
               Nova categoria
             </button>
           </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-line bg-paper2 text-[12px] uppercase tracking-[0.08em] text-muted">
+                  <th className="px-5 py-3 font-bold">Nome</th>
+                  <th className="px-5 py-3 font-bold">Slug</th>
+                  <th className="px-5 py-3 font-bold">Cor</th>
+                  <th className="px-5 py-3 text-right font-bold">Acoes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((category) => (
+                  <tr className="border-b border-line last:border-b-0" key={category.id}>
+                    <td className="px-5 py-4 font-semibold text-ink">{category.name}</td>
+                    <td className="px-5 py-4 text-inkSoft">{category.slug}</td>
+                    <td className="px-5 py-4 text-inkSoft">{colorLabel[category.color]}</td>
+                    <td className="px-5 py-4 text-right">
+                      <button
+                        className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2"
+                        onClick={() =>
+                          openModal({
+                            item: { ...category, type: "category" },
+                            mode: "edit",
+                            type: "category",
+                          })
+                        }
+                        type="button"
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-line bg-paper2 text-[12px] uppercase tracking-[0.08em] text-muted">
-                <th className="px-5 py-3 font-bold">Nome</th>
-                <th className="px-5 py-3 font-bold">Slug</th>
-                <th className="px-5 py-3 font-bold">Tipo</th>
-                <th className="px-5 py-3 font-bold">Cor</th>
-                <th className="px-5 py-3 text-right font-bold">Acoes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr className="border-b border-line last:border-b-0" key={`${row.type}-${row.id}`}>
-                  <td className="px-5 py-4 font-semibold text-ink">{row.name}</td>
-                  <td className="px-5 py-4 text-inkSoft">{row.slug}</td>
-                  <td className="px-5 py-4">
-                    <span className="rounded-full border border-lineStrong bg-paper px-3 py-1 text-xs font-bold text-inkSoft">
-                      {row.type === "category" ? "Categoria" : "Tag"}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-inkSoft">
-                    {row.type === "category" ? colorLabel[row.color] : "-"}
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <button
-                      className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2"
-                      onClick={() => openModal({ item: row, mode: "edit", type: row.type })}
-                      type="button"
-                    >
-                      Editar
-                    </button>
-                  </td>
+        <div className="rounded-lg border border-line bg-card">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
+            <div>
+              <h2 className="font-serif text-2xl font-medium tracking-normal text-ink">Tags</h2>
+              <p className="mt-1 text-sm text-inkSoft">{tags.length} tags cadastradas</p>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={() => openModal({ mode: "create", type: "tag" })}
+              type="button"
+            >
+              Nova tag
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[420px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-line bg-paper2 text-[12px] uppercase tracking-[0.08em] text-muted">
+                  <th className="px-5 py-3 font-bold">Nome</th>
+                  <th className="px-5 py-3 font-bold">Slug</th>
+                  <th className="px-5 py-3 text-right font-bold">Acoes</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tags.map((tag) => (
+                  <tr className="border-b border-line last:border-b-0" key={tag.id}>
+                    <td className="px-5 py-4 font-semibold text-ink">{tag.name}</td>
+                    <td className="px-5 py-4 text-inkSoft">{tag.slug}</td>
+                    <td className="px-5 py-4 text-right">
+                      <button
+                        className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2"
+                        onClick={() =>
+                          openModal({
+                            item: { ...tag, type: "tag" },
+                            mode: "edit",
+                            type: "tag",
+                          })
+                        }
+                        type="button"
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
