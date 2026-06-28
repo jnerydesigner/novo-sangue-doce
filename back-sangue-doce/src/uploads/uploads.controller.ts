@@ -72,11 +72,21 @@ export class UploadsController {
       },
     }),
   )
-  uploadPostImages(@Request() req: AuthenticatedRequest, @UploadedFile() file?: UploadedImageFile) {
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  uploadPostImages(
+    @Request() req: AuthenticatedRequest,
+    @Body("postId") postId: string,
+    @UploadedFile() file?: UploadedImageFile,
+  ) {
     if (!req.user) {
       throw new UnauthorizedException();
     }
 
-    return this.uploadsService.uploadUserAvatar(req.user, file);
+    if (!postId) {
+      throw new BadRequestException("Envie o postId no body usando multipart/form-data.");
+    }
+
+    return this.uploadsService.uploadPostImages(postId, file);
   }
 }

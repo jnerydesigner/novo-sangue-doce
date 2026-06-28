@@ -11,6 +11,13 @@ import type { PublicPost, PublicPostCategory, PublicPostTag } from "./types/post
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+type PostImageContentBlock = {
+  type: "image";
+  src: string;
+  alt?: string;
+  caption?: string;
+};
+
 @Injectable()
 export class PostsService {
   constructor(private readonly postRepository: PostRepository) {}
@@ -21,6 +28,7 @@ export class PostsService {
 
     try {
       const post = await this.postRepository.create(postEntity);
+      await this.syncPostImageMetadata(post.getId(), payload);
 
       return post.toPublic();
     } catch (error) {
@@ -31,6 +39,7 @@ export class PostsService {
 
         if (existingPost && existingPostId && existingPost.getStatus() === "DRAFT") {
           const updatedPost = await this.postRepository.update(existingPostId, postEntity);
+          await this.syncPostImageMetadata(updatedPost.getId(), payload);
 
           return updatedPost.toPublic();
         }
@@ -56,6 +65,7 @@ export class PostsService {
 
     try {
       const post = await this.postRepository.update(id, postEntity);
+      await this.syncPostImageMetadata(post.getId(), payload);
 
       return post.toPublic();
     } catch (error) {
@@ -199,5 +209,42 @@ export class PostsService {
     const posts = await this.postRepository.findByAuthorId(authorId);
 
     return posts.map((post) => post.toPublic());
+  }
+
+  private async syncPostImageMetadata(
+    postId: string | undefined,
+    payload: CreatePostDto,
+  ): Promise<void> {
+    if (!postId) {
+      return;
+    }
+
+    const imageBlock = payload.content.find((block): block is PostImageContentBlock => {
+      if (!block || typeof block !== "object" || !("type" in block) || !("src" in block)) {
+        return false;
+      }
+
+      const candidate = block as { type?: unknown; src?: unknown };
+
+      return (
+        candidate.type === "image" && typeof candidate.src === "string" && !!candidate.src.trim()
+      );
+    });
+
+    if (!imageBlock) {
+      return;
+    }
+
+    await this.postRepository.updatePostImageMetadata(postId, {
+      imageUrl: imageBlock.src.trim(),
+      imageAlt: this.toNullableTrimmedString(imageBlock.alt),
+      imageLegend: this.toNullableTrimmedString(imageBlock.caption),
+    });
+  }
+
+  private toNullableTrimmedString(value: string | undefined): string | null {
+    const trimmed = value?.trim();
+
+    return trimmed ? trimmed : null;
   }
 }

@@ -2,9 +2,11 @@ import { PostEntity } from "@app/posts/entities/post.entity";
 import {
   type PaginatedPosts,
   PostAlreadyExistsError,
+  type PostImageRecord,
   type PostPaginationParams,
   PostRelationNotFoundError,
   type PostRepository,
+  type UpdatePostImageMetadata,
 } from "@app/posts/repositories/post.repository";
 import type {
   PersistedPostEntityProps,
@@ -264,6 +266,67 @@ export class PrismaPostsRepository implements PostRepository {
       return this.toEntity(post);
     } catch (error) {
       if (this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
+  async findPostImageByPostId(postId: string): Promise<PostImageRecord | null> {
+    return this.prisma.postImages.findUnique({
+      where: {
+        postId,
+      },
+    });
+  }
+
+  async upsertPostImage(postId: string, imageUrl: string): Promise<PostImageRecord> {
+    try {
+      return await this.prisma.postImages.upsert({
+        where: {
+          postId,
+        },
+        create: {
+          postId,
+          imageUrl,
+        },
+        update: {
+          imageUrl,
+        },
+      });
+    } catch (error) {
+      if (this.isForeignKeyError(error) || this.isRecordNotFoundError(error)) {
+        throw new PostRelationNotFoundError();
+      }
+
+      throw error;
+    }
+  }
+
+  async updatePostImageMetadata(
+    postId: string,
+    metadata: UpdatePostImageMetadata,
+  ): Promise<PostImageRecord | null> {
+    try {
+      return await this.prisma.postImages.upsert({
+        where: {
+          postId,
+        },
+        create: {
+          postId,
+          imageUrl: metadata.imageUrl,
+          imageAlt: metadata.imageAlt,
+          imageLegend: metadata.imageLegend,
+        },
+        update: {
+          imageUrl: metadata.imageUrl,
+          imageAlt: metadata.imageAlt,
+          imageLegend: metadata.imageLegend,
+        },
+      });
+    } catch (error) {
+      if (this.isForeignKeyError(error) || this.isRecordNotFoundError(error)) {
         throw new PostRelationNotFoundError();
       }
 

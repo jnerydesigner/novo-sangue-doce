@@ -183,10 +183,14 @@ model Post {
 }
 
 model PostImages {
-  id       String @id @default(uuid()) @db.Uuid
-  postId   String @map("post_id") @db.Uuid
-  post     Post   @relation(fields: [postId], references: [id])
-  imageUrl String
+  id          String   @id @default(uuid()) @db.Uuid
+  postId      String   @unique @map("post_id") @db.Uuid
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  imageUrl    String
+  imageAlt    String?
+  imageLegend String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("post_images")
 }

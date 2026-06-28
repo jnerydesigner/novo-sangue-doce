@@ -18,6 +18,22 @@ export type PaginatedPosts = {
   };
 };
 
+export type PostImageRecord = {
+  id: string;
+  postId: string;
+  imageUrl: string;
+  imageAlt: string | null;
+  imageLegend: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type UpdatePostImageMetadata = {
+  imageUrl: string;
+  imageAlt: string | null;
+  imageLegend: string | null;
+};
+
 export class PostAlreadyExistsError extends Error {
   constructor() {
     super("Post already exists.");
@@ -45,4 +61,10 @@ export abstract class PostRepository {
   abstract findAnyBySlug(slug: string): Promise<PostEntity | null>;
   abstract findByAuthorId(authorId: string): Promise<PostEntity[]>;
   abstract updatePostCoverImage(postId: string, imageUrl: string): Promise<PostEntity>;
+  abstract findPostImageByPostId(postId: string): Promise<PostImageRecord | null>;
+  abstract upsertPostImage(postId: string, imageUrl: string): Promise<PostImageRecord>;
+  abstract updatePostImageMetadata(
+    postId: string,
+    metadata: UpdatePostImageMetadata,
+  ): Promise<PostImageRecord | null>;
 }

@@ -1,7 +1,8 @@
+import { randomUUID } from "node:crypto";
 import { AuthService } from "@app/auth/auth.service";
 import type { JwtPayload } from "@app/auth/types/jwt-payload.type";
 import { ImageService } from "@app/image/image.service";
-import { PostRepository } from "@app/posts/repositories/post.repository";
+import { type PostImageRecord, PostRepository } from "@app/posts/repositories/post.repository";
 import { UserRepository } from "@app/users/repositories/user.repository";
 import {
   BadRequestException,
@@ -11,21 +12,10 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Client } from "minio";
+import type { UploadAvatarResponse } from "./types/upload-avatar-response.type";
+import type { UploadCoverResponse } from "./types/upload-cover-response.type";
+import type { UploadPostImagesResponse } from "./types/upload-post-images-response.type";
 import type { UploadedImageFile } from "./types/uploaded-image-file.type";
-
-type UploadAvatarResponse = {
-  access_token: string;
-  avatarUrl: string;
-  bucket: string;
-  objectName: string;
-  profile: JwtPayload;
-};
-
-type UploadCoverResponse = {
-  coverUrl: string;
-  bucket: string;
-  objectName: string;
-};
 
 const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const DEFAULT_BUCKET = "sangue-doce";
@@ -35,7 +25,7 @@ const DEFAULT_REGION = "us-east-1";
 @Injectable()
 export class UploadsService {
   private readonly bucket: string;
-  private readonly publicBaseUrl: string;
+  private readonly publicPath: string;
   private readonly publicPrefix: string;
   private readonly region: string;
   private bucketReady?: Promise<void>;
@@ -48,16 +38,11 @@ export class UploadsService {
     private readonly authService: AuthService,
     private readonly imageService: ImageService,
   ) {
-    const endPoint = configService.get<string>("MINIO_ENDPOINT") ?? "localhost";
-    const port = Number(configService.get<string>("MINIO_API_PORT") ?? 9000);
-    const useSSL = configService.get<string>("MINIO_USE_SSL") === "true";
-
     this.bucket = configService.get<string>("MINIO_BUCKET") ?? DEFAULT_BUCKET;
     this.publicPrefix = configService.get<string>("MINIO_PUBLIC_PREFIX") ?? DEFAULT_PUBLIC_PREFIX;
+    this.publicPath =
+      configService.get<string>("MINIO_PUBLIC_PATH") ?? `/${this.bucket}/${this.publicPrefix}`;
     this.region = configService.get<string>("MINIO_REGION") ?? DEFAULT_REGION;
-    this.publicBaseUrl =
-      configService.get<string>("MINIO_PUBLIC_URL") ??
-      `${useSSL ? "https" : "http"}://${endPoint}:${port}`;
   }
 
   async uploadUserAvatar(
@@ -77,7 +62,7 @@ export class UploadsService {
       userId: publicUser.id,
       userName: publicUser.name,
     });
-    const avatarUrl = this.createPublicObjectUrl(objectName);
+    const avatarUrl = this.createPublicObjectPath(objectName);
     const imageBuffer = await this.convertToWebp(file);
 
     await this.ensureBucket();
@@ -87,7 +72,7 @@ export class UploadsService {
     });
 
     if (publicUser.avatarUrl && publicUser.avatarUrl !== avatarUrl) {
-      await this.removePreviousAvatar(publicUser.avatarUrl);
+      await this.removePreviousPublicObject(publicUser.avatarUrl);
     }
 
     const updatedUser = await this.userRepository.updateAvatarUrl(publicUser.id, avatarUrl);
@@ -119,23 +104,64 @@ export class UploadsService {
       postId: publicPost.id,
       slug: publicPost.slug,
     });
-    const coverUrl = this.createPublicObjectUrl(objectName);
-    const imageBuffer = await this.convertToWebp(file);
+    const coverUrl = this.createPublicObjectPath(objectName);
+    const imageBuffer = await this.convertToPng(file);
 
     await this.ensureBucket();
 
     await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
-      "Content-Type": "image/webp",
+      "Content-Type": "image/png",
     });
 
     if (publicPost.coverImageUrl && publicPost.coverImageUrl !== coverUrl) {
-      await this.removePreviousCover(publicPost.coverImageUrl);
+      await this.removePreviousPublicObject(publicPost.coverImageUrl);
     }
 
     await this.postRepository.updatePostCoverImage(postId, coverUrl);
 
     return {
       coverUrl,
+      bucket: this.bucket,
+      objectName,
+    };
+  }
+
+  async uploadPostImages(
+    postId: string,
+    file?: UploadedImageFile,
+  ): Promise<UploadPostImagesResponse> {
+    this.validateImage(file);
+
+    const post = await this.postRepository.findById(postId);
+
+    if (!post) {
+      throw new NotFoundException("Post not found.");
+    }
+
+    const publicPost = post.toPublic();
+
+    const objectName = this.createPostImageName({
+      postId: publicPost.id,
+      slug: publicPost.slug,
+    });
+    const imageUrl = this.createPublicObjectPath(objectName);
+    const imageBuffer = await this.convertToPng(file);
+    const previousImageUrl = await this.postRepository.findPostImageByPostId(postId);
+
+    await this.ensureBucket();
+
+    await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
+      "Content-Type": "image/png",
+    });
+
+    const postImage = await this.upsertPostImageOrRemoveObject(postId, imageUrl);
+
+    if (previousImageUrl && previousImageUrl.imageUrl !== postImage.imageUrl) {
+      await this.removePreviousPublicObject(previousImageUrl.imageUrl);
+    }
+
+    return {
+      imageUrl: postImage.imageUrl,
       bucket: this.bucket,
       objectName,
     };
@@ -158,6 +184,30 @@ export class UploadsService {
       throw new BadRequestException("Nao foi possivel processar a imagem enviada.", {
         cause: error,
       });
+    }
+  }
+
+  private async convertToPng(file: UploadedImageFile): Promise<Buffer> {
+    try {
+      return await this.imageService.png(file.buffer);
+    } catch (error) {
+      throw new BadRequestException("Nao foi possivel processar a imagem enviada.", {
+        cause: error,
+      });
+    }
+  }
+
+  private async upsertPostImageOrRemoveObject(
+    postId: string,
+    imageUrl: string,
+  ): Promise<PostImageRecord> {
+    try {
+      const postImage = await this.postRepository.upsertPostImage(postId, imageUrl);
+
+      return postImage;
+    } catch (error) {
+      await this.removePreviousPublicObject(imageUrl);
+      throw error;
     }
   }
 
@@ -192,20 +242,25 @@ export class UploadsService {
   }
 
   private createPostCoverName({ postId, slug }: { postId: string; slug: string }): string {
-    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.webp`;
+    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.png`;
   }
 
-  private createPublicObjectUrl(objectName: string): string {
+  private createPostImageName({ postId, slug }: { postId: string; slug: string }): string {
+    return `${this.publicPrefix}/posts/images/${this.slugify(slug)}/${randomUUID()}-${postId}.png`;
+  }
+
+  private createPublicObjectPath(objectName: string): string {
     const encodedObjectName = objectName
       .split("/")
       .map((part) => encodeURIComponent(part))
       .join("/");
+    const publicObjectPath = this.stripPublicPrefix(encodedObjectName);
 
-    return `${this.publicBaseUrl.replace(/\/$/, "")}/${this.bucket}/${encodedObjectName}`;
+    return `${this.publicPath.replace(/\/$/, "")}/${publicObjectPath}`;
   }
 
-  private async removePreviousAvatar(avatarUrl: string): Promise<void> {
-    const objectName = this.getObjectNameFromAvatarUrl(avatarUrl);
+  private async removePreviousPublicObject(publicPathOrUrl: string): Promise<void> {
+    const objectName = this.getObjectNameFromPublicPathOrUrl(publicPathOrUrl);
 
     if (!objectName) {
       return;
@@ -218,56 +273,61 @@ export class UploadsService {
     }
   }
 
-  private async removePreviousCover(coverUrl: string): Promise<void> {
-    const objectName = this.getObjectNameFromCoverUrl(coverUrl);
-
-    if (!objectName) {
-      return;
+  private getObjectNameFromPublicPathOrUrl(publicPathOrUrl: string): string | null {
+    if (publicPathOrUrl.startsWith("/")) {
+      return this.getObjectNameFromPublicPath(publicPathOrUrl);
     }
 
     try {
-      await this.getClient().removeObject(this.bucket, objectName);
-    } catch {
-      return;
-    }
-  }
+      const url = new URL(publicPathOrUrl);
 
-  private getObjectNameFromAvatarUrl(avatarUrl: string): string | null {
-    try {
-      const url = new URL(avatarUrl);
-      const pathParts = url.pathname.split("/").filter(Boolean);
-      const bucketIndex = pathParts.findIndex((part) => part === this.bucket);
-
-      if (bucketIndex < 0) {
-        return null;
-      }
-
-      return pathParts
-        .slice(bucketIndex + 1)
-        .map(decodeURIComponent)
-        .join("/");
+      return this.getObjectNameFromPublicPath(url.pathname);
     } catch {
       return null;
     }
   }
 
-  private getObjectNameFromCoverUrl(coverUrl: string): string | null {
-    try {
-      const url = new URL(coverUrl);
-      const pathParts = url.pathname.split("/").filter(Boolean);
-      const bucketIndex = pathParts.findIndex((part) => part === this.bucket);
+  private getObjectNameFromPublicPath(publicPath: string): string | null {
+    const pathParts = publicPath.split("/").filter(Boolean);
+    const bucketIndex = pathParts.findIndex((part) => part === this.bucket);
 
-      if (bucketIndex < 0) {
-        return null;
-      }
-
+    if (bucketIndex >= 0) {
       return pathParts
         .slice(bucketIndex + 1)
         .map(decodeURIComponent)
         .join("/");
-    } catch {
+    }
+
+    const configuredPublicPathParts = this.publicPath.split("/").filter(Boolean);
+    const startsWithConfiguredPath = configuredPublicPathParts.every(
+      (part, index) => pathParts[index] === part,
+    );
+
+    if (!startsWithConfiguredPath) {
       return null;
     }
+
+    const objectPath = pathParts.slice(configuredPublicPathParts.length).map(decodeURIComponent);
+
+    return [this.publicPrefix, ...objectPath].join("/");
+  }
+
+  private stripPublicPrefix(objectName: string): string {
+    const normalizedPrefix = this.publicPrefix.replace(/^\/+|\/+$/g, "");
+
+    if (!normalizedPrefix) {
+      return objectName.replace(/^\/+/, "");
+    }
+
+    if (objectName === normalizedPrefix) {
+      return "";
+    }
+
+    if (objectName.startsWith(`${normalizedPrefix}/`)) {
+      return objectName.slice(normalizedPrefix.length + 1);
+    }
+
+    return objectName.replace(/^\/+/, "");
   }
 
   private slugify(value: string): string {
