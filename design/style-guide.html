@@ -1,0 +1,1006 @@
+<title>Sangue Doce — Style Guide</title>
+<style>
+/* ── TOKENS ── */
+:root {
+  --navy:   #1A3868;
+  --azure:  #2E80C2;
+  --spark:  #18C0E4;
+  --energy: #F07418;
+  --white:  #FFFFFF;
+
+  --ink:    #0D1E32;
+  --muted:  #5C7A96;
+  --line:   #C2D6EA;
+  --bg:     #EBF3FA;
+  --surface:#FFFFFF;
+  --subtle: #DCE9F5;
+
+  --navy-10: #EBF0F8;
+  --azure-10:#E6F2FB;
+  --energy-10:#FEF0E4;
+  --spark-10: #E4F8FC;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink:    #D4E8F6;
+    --muted:  #7AA0BC;
+    --line:   #1A3050;
+    --bg:     #0A1824;
+    --surface:#0F2038;
+    --subtle: #0C1C30;
+  }
+}
+:root[data-theme="dark"] {
+  --ink:    #D4E8F6;
+  --muted:  #7AA0BC;
+  --line:   #1A3050;
+  --bg:     #0A1824;
+  --surface:#0F2038;
+  --subtle: #0C1C30;
+}
+:root[data-theme="light"] {
+  --ink:    #0D1E32;
+  --muted:  #5C7A96;
+  --line:   #C2D6EA;
+  --bg:     #EBF3FA;
+  --surface:#FFFFFF;
+  --subtle: #DCE9F5;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TYPOGRAPHY ── */
+.serif { font-family: Georgia, "Times New Roman", serif; }
+.mono  { font-family: "SF Mono", "Fira Code", "Consolas", monospace; }
+
+/* ── LAYOUT ── */
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 56px);
+}
+
+/* ── HEADER ── */
+.sg-header {
+  background: var(--navy);
+  color: var(--white);
+  padding: clamp(48px, 8vw, 96px) 0 clamp(40px, 7vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+.sg-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: var(--bg);
+  clip-path: ellipse(56% 100% at 50% 100%);
+}
+.sg-header .wrap { position: relative; z-index: 1; }
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+.brand-mark {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--azure) 0%, var(--navy) 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  font-family: Georgia, serif;
+}
+.brand-name {
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.brand-name span {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.6;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.sg-header h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: normal;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  max-width: 16ch;
+  margin-bottom: 16px;
+}
+.sg-header h1 em {
+  font-style: italic;
+  color: var(--energy);
+}
+.sg-header p {
+  font-size: clamp(15px, 1.8vw, 17px);
+  opacity: 0.72;
+  max-width: 52ch;
+  line-height: 1.55;
+}
+
+/* spark decoration */
+.sparks {
+  position: absolute;
+  top: 20%;
+  right: clamp(20px, 8vw, 80px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.spark-line {
+  height: 2px;
+  background: linear-gradient(90deg, var(--spark), transparent);
+  border-radius: 2px;
+}
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--azure);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 40px 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.callout strong { color: var(--ink); font-weight: 600; }
+
+/* ── SECTION ── */
+.sg-section {
+  padding: clamp(40px, 7vw, 72px) 0;
+}
+.sg-section + .sg-section {
+  border-top: 1px solid var(--line);
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: Georgia, serif;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  font-weight: normal;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 28px;
+  line-height: 1.15;
+}
+
+/* ── PALETTE ── */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+@media (max-width: 680px) {
+  .palette-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+}
+.swatch-color {
+  height: 160px;
+  position: relative;
+  flex-shrink: 0;
+}
+.swatch-info {
+  padding: 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  flex: 1;
+}
+.swatch-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+.swatch-hex {
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.swatch-use {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ── TONAL RAMP ── */
+.tonal-section {
+  background: var(--subtle);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+}
+.tonal-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.tonal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.tonal-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+.tonal-chip {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 4px;
+}
+.tonal-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: monospace;
+  text-align: center;
+}
+
+/* ── COMBINATIONS ── */
+.combos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.combo-chip {
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+}
+.combo-top {
+  padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.25;
+}
+.combo-bottom {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ratio-pass { color: #22863a; }
+.ratio-fail { color: #cb2431; }
+
+/* ── TYPOGRAPHY ── */
+.type-specimens {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.type-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 24px;
+  padding: 24px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  background: var(--surface);
+}
+.type-row:last-child { border-bottom: none; }
+.type-meta {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.type-meta strong {
+  display: block;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.t-display {
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--navy);
+  font-weight: normal;
+  text-wrap: balance;
+}
+.t-headline {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  font-weight: normal;
+}
+.t-subhead {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.t-body {
+  font-size: 17px;
+  line-height: 1.62;
+  color: var(--ink);
+  max-width: 62ch;
+}
+.t-small {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.t-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.t-mono {
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  color: var(--azure);
+  background: var(--azure-10, #E6F2FB);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── COMPONENTS ── */
+.components-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .components-grid { grid-template-columns: 1fr; }
+}
+
+.component-block {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.component-preview {
+  padding: 32px 24px;
+  background: var(--subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: 100px;
+}
+.component-label {
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, opacity 0.15s;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:focus-visible { outline: 2px solid var(--spark); outline-offset: 2px; }
+
+.btn-primary  { background: var(--navy); color: var(--white); }
+.btn-secondary{ background: var(--azure); color: var(--white); }
+.btn-accent   { background: var(--energy); color: var(--white); }
+.btn-outline  { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+.btn-ghost    { background: rgba(24, 56, 104, 0.08); color: var(--navy); }
+
+/* tags/badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.badge-navy   { background: rgba(26,56,104,0.12); color: var(--navy); }
+.badge-azure  { background: rgba(46,128,194,0.12); color: var(--azure); }
+.badge-energy { background: rgba(240,116,24,0.12); color: var(--energy); }
+.badge-spark  { background: rgba(24,192,228,0.15); color: #0A8CAA; }
+.badge-ok     { background: #E6F4EA; color: #2A7D3E; }
+.badge-warn   { background: #FEF0E4; color: #B85A10; }
+.badge-err    { background: #FDECEA; color: #B02626; }
+
+/* card */
+.demo-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 320px;
+}
+.demo-card-top {
+  background: var(--navy);
+  padding: 20px;
+  color: var(--white);
+}
+.demo-card-reading {
+  font-family: Georgia, serif;
+  font-size: 2.6rem;
+  line-height: 1;
+  font-weight: normal;
+  letter-spacing: -0.02em;
+}
+.demo-card-unit {
+  font-size: 13px;
+  opacity: 0.6;
+  letter-spacing: 0.04em;
+}
+.demo-card-body {
+  padding: 16px 20px;
+}
+.demo-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.demo-card-text {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* inputs */
+.demo-input {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px 16px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  transition: border-color 0.15s;
+  outline: none;
+}
+.demo-input:focus { border-color: var(--azure); }
+
+/* ── DO / DON'T ── */
+.guidance-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 600px) {
+  .guidance-grid { grid-template-columns: 1fr; }
+  .components-grid { grid-template-columns: 1fr; }
+}
+.guidance-block {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.guidance-header {
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.guidance-header.do   { background: #E6F4EA; color: #1D6530; }
+.guidance-header.dont { background: #FDECEA; color: #8B1E1E; }
+.guidance-list {
+  padding: 16px;
+  background: var(--surface);
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.guidance-list li {
+  font-size: 14px;
+  color: var(--ink);
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.45;
+}
+.guidance-list li::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  font-size: 13px;
+}
+.guidance-header.do + .guidance-list li::before { content: "✓"; color: #1D6530; }
+.guidance-header.dont + .guidance-list li::before { content: "✕"; color: #8B1E1E; }
+
+/* ── DARK OVERRIDE for surfaces ── */
+@media (prefers-color-scheme: dark) {
+  .swatch-info { background: var(--surface); }
+  .type-row { background: var(--surface); }
+  .combo-chip .combo-bottom { background: rgba(255,255,255,0.04); }
+  .t-mono { background: rgba(46,128,194,0.2); }
+  .badge-ok  { background: rgba(34,134,58,0.2);  color: #5DCB7C; }
+  .badge-warn{ background: rgba(240,116,24,0.2); color: var(--energy); }
+  .badge-err { background: rgba(203,36,49,0.2);  color: #F48080; }
+  .badge-spark { color: var(--spark); }
+  .demo-input { color: var(--ink); background: var(--surface); border-color: var(--line); }
+  .guidance-header.do   { background: rgba(34,134,58,0.2);  color: #5DCB7C; }
+  .guidance-header.dont { background: rgba(203,36,49,0.2);  color: #F48080; }
+  .guidance-block { border-color: var(--line); }
+  .component-preview { background: rgba(255,255,255,0.04); }
+  .demo-card { background: var(--surface); border-color: var(--line); }
+  .demo-card-body { background: var(--surface); }
+}
+:root[data-theme="dark"] .swatch-info { background: var(--surface); }
+:root[data-theme="dark"] .type-row { background: var(--surface); }
+:root[data-theme="dark"] .t-mono { background: rgba(46,128,194,0.2); }
+:root[data-theme="dark"] .badge-ok   { background: rgba(34,134,58,0.2);  color: #5DCB7C; }
+:root[data-theme="dark"] .badge-warn { background: rgba(240,116,24,0.2); color: var(--energy); }
+:root[data-theme="dark"] .badge-err  { background: rgba(203,36,49,0.2);  color: #F48080; }
+:root[data-theme="dark"] .badge-spark { color: var(--spark); }
+:root[data-theme="dark"] .demo-input { color: var(--ink); background: var(--surface); border-color: var(--line); }
+:root[data-theme="dark"] .guidance-header.do   { background: rgba(34,134,58,0.2);  color: #5DCB7C; }
+:root[data-theme="dark"] .guidance-header.dont { background: rgba(203,36,49,0.2);  color: #F48080; }
+:root[data-theme="dark"] .component-preview { background: rgba(255,255,255,0.04); }
+:root[data-theme="dark"] .demo-card { background: var(--surface); border-color: var(--line); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+}
+</style>
+
+<!-- HEADER -->
+<header class="sg-header">
+  <div class="sparks" aria-hidden="true">
+    <div class="spark-line" style="width:180px"></div>
+    <div class="spark-line" style="width:120px"></div>
+    <div class="spark-line" style="width:220px"></div>
+    <div class="spark-line" style="width:90px"></div>
+  </div>
+  <div class="wrap">
+    <div class="brand-lockup">
+      <div class="brand-mark serif">S</div>
+      <div class="brand-name">
+        Sangue Doce
+        <span>Sistema de Identidade Visual</span>
+      </div>
+    </div>
+    <h1 class="serif">Style <em>Guide</em></h1>
+    <p>Paleta, tipografia e componentes extraídos da marca Sangue Doce. Referência canônica para desenvolvimento de produto e comunicação.</p>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="wrap">
+
+    <div class="callout">
+      <strong>Nota de alinhamento:</strong> A logo usa <strong>navy + laranja</strong> como identidade primária, enquanto a implementação atual do site adota verde (#3f7a4f) e papel quente (#faf6ee). Este guia documenta as cores da <em>logo</em> como referência canônica. Alinhar o site a esta paleta é um passo estratégico que vale discutir.
+    </div>
+
+    <!-- PALETTE -->
+    <section class="sg-section">
+      <p class="section-label">Cores</p>
+      <h2 class="section-title">Paleta da Marca</h2>
+
+      <div class="palette-grid">
+        <!-- Navy -->
+        <div class="swatch">
+          <div class="swatch-color" style="background:#1A3868;">
+            <div style="position:absolute;bottom:12px;left:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.15);"></div>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Navy</div>
+            <div class="swatch-hex mono">#1A3868</div>
+            <div class="swatch-use">Cor primária. Fundo de header, botão principal, texto de display</div>
+          </div>
+        </div>
+        <!-- Azure -->
+        <div class="swatch">
+          <div class="swatch-color" style="background:#2E80C2;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Azure</div>
+            <div class="swatch-hex mono">#2E80C2</div>
+            <div class="swatch-use">Cor secundária. Links, elementos de destaque, ícones</div>
+          </div>
+        </div>
+        <!-- Spark -->
+        <div class="swatch">
+          <div class="swatch-color" style="background:#18C0E4;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Spark</div>
+            <div class="swatch-hex mono">#18C0E4</div>
+            <div class="swatch-use">Brilho e energia. Hover de links, badges de status positivo, acentos gráficos</div>
+          </div>
+        </div>
+        <!-- Energy -->
+        <div class="swatch">
+          <div class="swatch-color" style="background:#F07418;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Energy</div>
+            <div class="swatch-hex mono">#F07418</div>
+            <div class="swatch-use">Acento principal. CTAs, destaques, alertas de atenção, texto "Doce"</div>
+          </div>
+        </div>
+        <!-- White -->
+        <div class="swatch">
+          <div class="swatch-color" style="background:#FFFFFF;border-bottom:1px solid #E0ECF5;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">White</div>
+            <div class="swatch-hex mono">#FFFFFF</div>
+            <div class="swatch-use">Superfícies limpas. Texto sobre navy/azure, fundo de card</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tonal ramps -->
+      <div class="tonal-section">
+        <p class="tonal-title">Escala tonal</p>
+        <div style="display:grid;gap:16px;">
+          <!-- Navy ramp -->
+          <div>
+            <p style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:0.04em;">Navy</p>
+            <div class="tonal-grid">
+              <div class="tonal-step"><div class="tonal-chip" style="background:#EBF0F8;"></div><span class="tonal-label">50</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#C8D5E8;"></div><span class="tonal-label">100</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#8FACC8;"></div><span class="tonal-label">200</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#5680A8;"></div><span class="tonal-label">400</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#1A3868;"></div><span class="tonal-label">600</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#102248;"></div><span class="tonal-label">800</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#060E1C;"></div><span class="tonal-label">950</span></div>
+            </div>
+          </div>
+          <!-- Energy ramp -->
+          <div>
+            <p style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:0.04em;">Energy</p>
+            <div class="tonal-grid">
+              <div class="tonal-step"><div class="tonal-chip" style="background:#FEF0E4;"></div><span class="tonal-label">50</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#FDD5B0;"></div><span class="tonal-label">100</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#F9A668;"></div><span class="tonal-label">200</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#F48830;"></div><span class="tonal-label">400</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#F07418;"></div><span class="tonal-label">600</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#C05510;"></div><span class="tonal-label">800</span></div>
+              <div class="tonal-step"><div class="tonal-chip" style="background:#6C2C04;"></div><span class="tonal-label">950</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMBINATIONS -->
+    <section class="sg-section">
+      <p class="section-label">Combinações</p>
+      <h2 class="section-title">Texto sobre cor</h2>
+      <div class="combos-grid">
+
+        <div class="combo-chip">
+          <div class="combo-top" style="background:#1A3868;color:#FFFFFF;">
+            <div>
+              <div style="font-size:15px;font-weight:600;">Branco em Navy</div>
+              <div style="font-size:13px;opacity:0.75;">Texto corrido e headings</div>
+            </div>
+          </div>
+          <div class="combo-bottom" style="background:#F0F4F8;color:#444;">
+            <span>#FFF / #1A3868</span>
+            <span class="ratio-pass">✓ 10.8:1 AAA</span>
+          </div>
+        </div>
+
+        <div class="combo-chip">
+          <div class="combo-top" style="background:#F07418;color:#FFFFFF;">
+            <div>
+              <div style="font-size:15px;font-weight:600;">Branco em Energy</div>
+              <div style="font-size:13px;opacity:0.85;">Botões de CTA</div>
+            </div>
+          </div>
+          <div class="combo-bottom" style="background:#FEF0E4;color:#444;">
+            <span>#FFF / #F07418</span>
+            <span class="ratio-pass">✓ 3.1:1 AA lg</span>
+          </div>
+        </div>
+
+        <div class="combo-chip">
+          <div class="combo-top" style="background:#FFFFFF;color:#1A3868;">
+            <div>
+              <div style="font-size:15px;font-weight:600;">Navy em Branco</div>
+              <div style="font-size:13px;color:#5C7A96;">Corpo de texto padrão</div>
+            </div>
+          </div>
+          <div class="combo-bottom" style="background:#F0F4F8;color:#444;">
+            <span>#1A3868 / #FFF</span>
+            <span class="ratio-pass">✓ 10.8:1 AAA</span>
+          </div>
+        </div>
+
+        <div class="combo-chip">
+          <div class="combo-top" style="background:#2E80C2;color:#FFFFFF;">
+            <div>
+              <div style="font-size:15px;font-weight:600;">Branco em Azure</div>
+              <div style="font-size:13px;opacity:0.85;">Links, botões secundários</div>
+            </div>
+          </div>
+          <div class="combo-bottom" style="background:#E6F2FB;color:#444;">
+            <span>#FFF / #2E80C2</span>
+            <span class="ratio-pass">✓ 4.6:1 AA</span>
+          </div>
+        </div>
+
+        <div class="combo-chip">
+          <div class="combo-top" style="background:#F07418;color:#1A3868;">
+            <div>
+              <div style="font-size:15px;font-weight:600;">Navy em Energy</div>
+              <div style="font-size:13px;opacity:0.8;">Uso decorativo apenas</div>
+            </div>
+          </div>
+          <div class="combo-bottom" style="background:#FEF0E4;color:#444;">
+            <span>#1A3868 / #F07418</span>
+            <span class="ratio-fail">✕ 3.4:1 (só AA lg)</span>
+          </div>
+        </div>
+
+        <div class="combo-chip">
+          <div class="combo-top" style="background:#18C0E4;color:#0D1E32;">
+            <div>
+              <div style="font-size:15px;font-weight:600;">Ink em Spark</div>
+              <div style="font-size:13px;opacity:0.75;">Tags de status positivo</div>
+            </div>
+          </div>
+          <div class="combo-bottom" style="background:#E4F8FC;color:#444;">
+            <span>#0D1E32 / #18C0E4</span>
+            <span class="ratio-pass">✓ 5.2:1 AA</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section class="sg-section">
+      <p class="section-label">Tipografia</p>
+      <h2 class="section-title">Escala de tipo</h2>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:24px;max-width:58ch;line-height:1.55;">O site usa <strong style="color:var(--ink);">Newsreader</strong> (serif editorial) para display e <strong style="color:var(--ink);">Hanken Grotesk</strong> (sans humanista) para corpo. Abaixo, o comportamento de cada nível com a paleta da marca.</p>
+
+      <div class="type-specimens">
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Display</strong>
+            Newsreader<br>48px / normal<br>leading 1.02
+          </div>
+          <div class="t-display serif">Glicose 96 mg/dL</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Headline</strong>
+            Newsreader<br>30px / normal<br>leading 1.1
+          </div>
+          <div class="t-headline serif">Cuidado diário para viver melhor com diabetes</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Subheading</strong>
+            Hanken Grotesk<br>20px / 600<br>leading 1.25
+          </div>
+          <div class="t-subhead">Registre leituras e acompanhe padrões</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Body</strong>
+            Hanken Grotesk<br>17px / 400<br>leading 1.62
+          </div>
+          <div class="t-body">Toda semana, uma seleção curta: uma matéria que importa, um guia prático e uma ideia para a rotina. Sem alarmismo, sem ruído.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Small</strong>
+            Hanken Grotesk<br>14px / 400<br>color: muted
+          </div>
+          <div class="t-small">As informações publicadas têm caráter jornalístico e educativo e não substituem avaliação por profissional de saúde.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Label</strong>
+            Hanken Grotesk<br>11.5px / 700<br>uppercase
+          </div>
+          <div class="t-label">Saúde metabólica, todo dia</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <strong>Mono</strong>
+            System mono<br>14px<br>code / values
+          </div>
+          <div><span class="t-mono">#1A3868</span> &nbsp; <span class="t-mono">96 mg/dL</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPONENTS -->
+    <section class="sg-section">
+      <p class="section-label">Componentes</p>
+      <h2 class="section-title">Primitivos de Interface</h2>
+
+      <div class="components-grid">
+        <!-- Buttons -->
+        <div class="component-block">
+          <div class="component-preview">
+            <button class="btn btn-primary">Entrar</button>
+            <button class="btn btn-secondary">Ver matérias</button>
+            <button class="btn btn-accent">Assinar boletim</button>
+          </div>
+          <div class="component-label">Botões — Primary · Secondary · Accent</div>
+        </div>
+
+        <!-- Ghost / Outline -->
+        <div class="component-block">
+          <div class="component-preview">
+            <button class="btn btn-outline">Cancelar</button>
+            <button class="btn btn-ghost">Ver mais</button>
+          </div>
+          <div class="component-label">Botões — Outline · Ghost</div>
+        </div>
+
+        <!-- Tags -->
+        <div class="component-block">
+          <div class="component-preview" style="gap:8px;">
+            <span class="badge badge-navy">Diabetes</span>
+            <span class="badge badge-azure">Alimentação</span>
+            <span class="badge badge-energy">Em destaque</span>
+            <span class="badge badge-spark">Novo</span>
+            <span class="badge badge-ok">Na faixa</span>
+            <span class="badge badge-warn">Alta</span>
+            <span class="badge badge-err">Baixa</span>
+          </div>
+          <div class="component-label">Badges — Categórico · Semântico</div>
+        </div>
+
+        <!-- Input -->
+        <div class="component-block">
+          <div class="component-preview" style="flex-direction:column;align-items:flex-start;">
+            <label style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:0.04em;">NOVA LEITURA</label>
+            <div style="display:flex;gap:8px;align-items:center;width:100%;max-width:280px;">
+              <input class="demo-input" type="number" placeholder="96" style="flex:1;" />
+              <span style="font-size:13px;font-weight:600;color:var(--muted);">mg/dL</span>
+            </div>
+          </div>
+          <div class="component-label">Input de Glicose</div>
+        </div>
+
+        <!-- Card -->
+        <div class="component-block" style="grid-column: span 2;">
+          <div class="component-preview" style="justify-content:center;padding:32px;">
+            <div class="demo-card">
+              <div class="demo-card-top">
+                <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6;margin-bottom:8px;">Última leitura</p>
+                <div class="demo-card-reading serif">96 <span class="demo-card-unit">mg/dL</span></div>
+                <div style="margin-top:10px;display:flex;gap:8px;align-items:center;">
+                  <span class="badge" style="background:rgba(24,192,228,0.25);color:#A8EAF8;font-size:11px;">Na faixa</span>
+                  <span style="font-size:12px;opacity:0.55;">há 32 minutos</span>
+                </div>
+              </div>
+              <div class="demo-card-body">
+                <p class="demo-card-label">Contexto</p>
+                <p class="demo-card-text">Jejum · Segunda-feira, 07:14</p>
+                <p style="margin-top:8px;font-size:13px;color:var(--muted);line-height:1.45;">Boa referência para acompanhar padrões ao longo da rotina.</p>
+              </div>
+            </div>
+          </div>
+          <div class="component-label">Card de Leitura — estado "Na faixa"</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DO / DON'T -->
+    <section class="sg-section">
+      <p class="section-label">Uso</p>
+      <h2 class="section-title">Diretrizes de Aplicação</h2>
+      <div class="guidance-grid">
+        <div class="guidance-block">
+          <div class="guidance-header do">Fazer</div>
+          <ul class="guidance-list">
+            <li>Usar navy como fundo de header e hero — ele ancora a identidade da logo</li>
+            <li>Reservar Energy (laranja) para o único CTA de maior hierarquia na tela</li>
+            <li>Usar Spark (ciano) para estados positivos, confirmações e hover</li>
+            <li>Combinar Navy + Azure + White para seções informativas neutras</li>
+            <li>Manter texto sobre Energy em branco puro, sem meios-tons</li>
+            <li>Usar a escala tonal de Navy para superfícies e fundos de seção</li>
+          </ul>
+        </div>
+        <div class="guidance-block">
+          <div class="guidance-header dont">Não fazer</div>
+          <ul class="guidance-list">
+            <li>Usar Energy como cor de fundo de seções inteiras — é um acento, não uma base</li>
+            <li>Misturar a paleta verde do site (#3f7a4f) com Navy sem transição de contexto</li>
+            <li>Colocar texto em Azure sobre fundo branco em tamanho menor que 18px</li>
+            <li>Usar Spark como cor de texto em fundo claro — contraste insuficiente</li>
+            <li>Combinar Navy escuro com Energy em texto corrido — 3.4:1, abaixo de AA</li>
+            <li>Usar gradiente de Navy → Energy como fundo de card ou hero decorativo</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer style="background:var(--navy);color:rgba(255,255,255,0.5);padding:32px 0;margin-top:48px;">
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <span style="font-size:13px;">Sangue Doce — Style Guide · Paleta da logo</span>
+    <span style="font-size:13px;font-family:monospace;">Navy #1A3868 · Azure #2E80C2 · Spark #18C0E4 · Energy #F07418</span>
+  </div>
+</footer>

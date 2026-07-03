@@ -65,14 +65,14 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 function tagClass(color: string) {
   if (color === "tomato") {
-    return "bg-[#f7e9e4] text-tomato";
+    return "bg-[#FEF0E4] text-energy";
   }
 
   if (color === "blue") {
-    return "bg-[#e7eef5] text-blue";
+    return "bg-[#E6F2FB] text-azure";
   }
 
-  return "bg-[#eaf1e8] text-greenDeep";
+  return "bg-[#E4F8FC] text-navy";
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
@@ -110,11 +110,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               className="flex flex-wrap items-center gap-2 text-[13.5px] font-medium text-muted"
               aria-label="Trilha"
             >
-              <Link href="/" className="transition hover:text-greenDeep">
+              <Link href="/" className="transition hover:text-navy">
                 Inicio
               </Link>
               <span>/</span>
-              <Link href="/materias" className="transition hover:text-greenDeep">
+              <Link href="/materias" className="transition hover:text-navy">
                 Materias
               </Link>
               <span>/</span>
@@ -141,12 +141,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     height={50}
                     src={authorAvatarUrl}
                     alt={post.author.name}
-                    className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-paper2 object-cover"
+                    className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle object-cover"
                     loading="eager"
                     title={post.author.name}
                   />
                 ) : (
-                  <div className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-paper2" />
+                  <div className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle" />
                 )}
                 <div className="text-left">
                   <div className="text-[15.5px] font-semibold text-ink">{post.author.name}</div>
@@ -164,7 +164,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           <div className="wrap">
             <figure>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-paper2 md:aspect-[21/9]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-subtle md:aspect-[21/9]">
                 <Image
                   src={coverImageUrl}
                   alt={post.coverImageAlt ?? ""}
@@ -199,7 +199,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   <Link
                     key={tag.id}
                     href="/materias"
-                    className="rounded-full border border-lineStrong px-4 py-1.5 text-[13px] font-medium text-inkSoft transition hover:border-muted hover:bg-paper2"
+                    className="rounded-full border border-lineStrong px-4 py-1.5 text-[13px] font-medium text-inkSoft transition hover:border-muted hover:bg-subtle"
                   >
                     {tag.name}
                   </Link>
@@ -211,19 +211,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           <div className="wrap">
-            <aside className="mx-auto mt-2 grid max-w-[720px] gap-6 rounded-xl border border-line bg-card p-8 sm:grid-cols-[84px_1fr]">
+            <aside className="mx-auto mt-2 grid max-w-[720px] gap-6 rounded-xl border border-line bg-surface p-8 sm:grid-cols-[84px_1fr]">
               {authorAvatarUrl ? (
                 <Image
                   width={84}
                   height={84}
                   src={authorAvatarUrl}
                   alt={post.author.name}
-                  className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-paper2 object-cover"
+                  className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-subtle object-cover"
                   loading="lazy"
                   title={post.author.name}
                 />
               ) : (
-                <div className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-paper2" />
+                <div className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-subtle" />
               )}
               <div>
                 <span className="eyebrow mb-2">Sobre a autor (a)</span>
@@ -237,7 +237,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </article>
 
-        <section className="mt-[clamp(64px,8vw,96px)] border-t border-line bg-paper2 py-[clamp(56px,8vw,88px)]">
+        <section className="mt-[clamp(64px,8vw,96px)] border-t border-line bg-subtle py-[clamp(56px,8vw,88px)]">
           <div className="wrap">
             <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
               <div>
@@ -248,7 +248,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </div>
               <Link
                 href="/materias"
-                className="inline-flex items-center gap-2 text-[15px] font-semibold text-greenDeep transition hover:gap-3"
+                className="inline-flex items-center gap-2 text-[15px] font-semibold text-navy transition hover:gap-3"
               >
                 Todas as materias
                 <span className="h-4 w-4">

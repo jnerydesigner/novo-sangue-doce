@@ -22,13 +22,14 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
+    "start:dev:local": "set -a; . ./.env; set +a; yarn start:dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "start:dev:infisical": "set -a; . ./.env; LOCAL_DATABASE_URL=\"${LOCAL_DATABASE_URL:-$DATABASE_URL}\"; LOCAL_MINIO_ENDPOINT=\"${LOCAL_MINIO_ENDPOINT:-$MINIO_ENDPOINT}\"; LOCAL_MINIO_API_PORT=\"${LOCAL_MINIO_API_PORT:-$MINIO_API_PORT}\"; set +a; infisical run --domain http://localhost:8095 --token \"$INFISICAL_TOKEN\" --projectId \"$INFISICAL_PROJECT_ID\" --env \"${INFISICAL_ENV:-dev}\" -- sh -c 'DATABASE_URL=\"$LOCAL_DATABASE_URL\" MINIO_ENDPOINT=\"$LOCAL_MINIO_ENDPOINT\" MINIO_API_PORT=\"$LOCAL_MINIO_API_PORT\" yarn start:dev'"
+    "start:dev:infisical": "set -a; . ./.env; LOCAL_DATABASE_URL=\"${LOCAL_DATABASE_URL:-$DATABASE_URL}\"; LOCAL_MINIO_ENDPOINT=\"${LOCAL_MINIO_ENDPOINT:-$MINIO_ENDPOINT}\"; LOCAL_MINIO_API_PORT=\"${LOCAL_MINIO_API_PORT:-$MINIO_API_PORT}\"; INFISICAL_DOMAIN=\"${INFISICAL_DOMAIN:-http://localhost:8095}\"; set +a; infisical run --domain \"$INFISICAL_DOMAIN\" --token \"$INFISICAL_TOKEN\" --projectId \"$INFISICAL_PROJECT_ID\" --env \"${INFISICAL_ENV:-dev}\" -- sh -c 'DATABASE_URL=\"$LOCAL_DATABASE_URL\" MINIO_ENDPOINT=\"$LOCAL_MINIO_ENDPOINT\" MINIO_API_PORT=\"$LOCAL_MINIO_API_PORT\" yarn start:dev'"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

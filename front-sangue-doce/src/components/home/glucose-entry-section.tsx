@@ -23,7 +23,7 @@ function getReadingState(value: number) {
   if (value < 70) {
     return {
       label: "Baixa",
-      className: "bg-tomato/10 text-tomato",
+      className: "bg-energy10 text-energy",
       message: "Registre sintomas e confirme a conduta com sua equipe de saude.",
     };
   }
@@ -31,14 +31,14 @@ function getReadingState(value: number) {
   if (value <= 180) {
     return {
       label: "Na faixa",
-      className: "bg-green/10 text-greenDeep",
+      className: "bg-spark10 text-[#0A8CAA]",
       message: "Boa referencia para acompanhar padroes ao longo da rotina.",
     };
   }
 
   return {
     label: "Alta",
-    className: "bg-blue/10 text-blue",
+    className: "bg-azure10 text-azure",
     message: "Vale observar horario, refeicao e atividade para entender o contexto.",
   };
 }
@@ -88,11 +88,11 @@ function mapMeasurementToReading(measurement: Measurement): Reading {
 
 function LoginRequiredCard() {
   return (
-    <div className="rounded-lg border border-line bg-paper p-[clamp(22px,3vw,30px)] shadow-editorial">
+    <div className="rounded-lg border border-line bg-bg p-[clamp(22px,3vw,30px)] shadow-editorial">
       <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
         Acesso protegido
       </span>
-      <h3 className="mt-3 font-serif text-[1.65rem] font-medium leading-tight tracking-normal text-ink">
+      <h3 className="mt-3 font-serif text-[1.65rem] font-normal leading-tight tracking-[-0.015em] text-ink">
         Entre para registrar suas leituras
       </h3>
       <p className="mt-3 text-[15px] text-inkSoft">
@@ -119,7 +119,7 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
   const latestState = latestReading
     ? getReadingState(latestReading.value)
     : {
-        className: "bg-green/10 text-greenDeep",
+        className: "bg-spark10 text-[#0A8CAA]",
         label: "Na faixa",
         message: "Entre para acompanhar padroes reais ao longo da rotina.",
       };
@@ -179,12 +179,12 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
   }
 
   return (
-    <section className="border-y border-line bg-card py-[clamp(58px,8vw,100px)]" id="glicose">
+    <section className="border-y border-line bg-surface py-[clamp(58px,8vw,100px)]" id="glicose">
       <div className="wrap">
         <div className="grid gap-[clamp(30px,5vw,56px)] lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <span className="eyebrow">Diario de glicose</span>
-            <h2 className="mt-3 max-w-[15ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-medium leading-[1.05] tracking-normal">
+            <h2 className="mt-3 max-w-[15ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-normal leading-[1.05] tracking-[-0.015em] text-ink">
               Registre leituras e prepare a evolucao basal
             </h2>
             <p className="mt-4 max-w-[48ch] text-[1.03rem] text-inkSoft">
@@ -225,10 +225,10 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
           </div>
 
           <div className="grid gap-5">
-            <div className="rounded-lg border border-line bg-paper p-[clamp(22px,3vw,30px)]">
+            <div className="rounded-lg border border-line bg-bg p-[clamp(22px,3vw,30px)]">
               {isAuthenticated ? (
                 <form
-                  className="mb-5 rounded-lg border border-line bg-card p-4"
+                  className="mb-5 rounded-lg border border-line bg-surface p-4"
                   onSubmit={submitReading}
                   noValidate
                 >
@@ -238,7 +238,7 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
                   <div className="mt-2 grid gap-3 sm:grid-cols-[1fr_auto]">
                     <div className="flex items-end gap-2">
                       <input
-                        className="min-w-0 flex-1 rounded-lg border border-lineStrong bg-paper px-4 py-3 text-[1.35rem] font-semibold text-ink outline-none transition placeholder:text-muted/60 focus:border-green"
+                        className="min-w-0 flex-1 rounded-lg border border-lineStrong bg-bg px-4 py-3 text-[1.35rem] font-semibold text-ink outline-none transition placeholder:text-muted/80 focus:border-azure"
                         id="glucose"
                         name="glucose"
                         type="number"
@@ -266,10 +266,10 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
               )}
 
               <div className="mb-4 flex items-center justify-between gap-4">
-                <h3 className="font-serif text-[1.5rem] font-medium leading-tight tracking-normal">
+                <h3 className="font-serif text-[1.5rem] font-normal leading-tight tracking-[-0.01em] text-ink">
                   Ultimas leituras
                 </h3>
-                <span className="rounded-full bg-green/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-greenDeep">
+                <span className="rounded-full bg-azure10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-navy">
                   Basal em breve
                 </span>
               </div>
@@ -283,7 +283,7 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
                         className="grid grid-cols-[auto_1fr] gap-3 border-t border-line pt-3 first:border-t-0 first:pt-0"
                         key={reading.id}
                       >
-                        <div className="grid h-12 w-12 place-items-center rounded-lg bg-card font-serif text-[1.35rem] text-greenDeep">
+                        <div className="grid h-12 w-12 place-items-center rounded-lg bg-surface font-serif text-[1.35rem] text-navy">
                           {reading.value}
                         </div>
                         <div>
@@ -302,7 +302,7 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
                     );
                   })
                 ) : (
-                  <p className="rounded-lg border border-line bg-card px-4 py-5 text-sm text-inkSoft">
+                  <p className="rounded-lg border border-line bg-surface px-4 py-5 text-sm text-inkSoft">
                     Entre para ver suas leituras recentes por aqui.
                   </p>
                 )}

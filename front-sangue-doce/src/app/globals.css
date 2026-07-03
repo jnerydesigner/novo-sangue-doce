@@ -1,11 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: light;
+  --navy: #1a3868;
+  --azure: #2e80c2;
+  --spark: #18c0e4;
+  --energy: #f07418;
+  --ink: #0d1e32;
+  --muted: #5c7a96;
+  --line: #c2d6ea;
+  --bg: #ebf3fa;
+  --surface: #ffffff;
+  --subtle: #dce9f5;
 }
 
 * {
@@ -18,17 +26,17 @@ html {
 
 body {
   margin: 0;
-  background: #faf6ee;
-  color: #211d18;
-  font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
-  font-size: 17px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+  font-size: 16px;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: #3f7a4f;
+  background: var(--azure);
   color: #fff;
 }
 
@@ -38,12 +46,12 @@ body {
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2.5 text-[12.5px] font-semibold uppercase tracking-[0.16em] text-muted;
+    @apply inline-flex items-center gap-2.5 text-[11.5px] font-bold uppercase tracking-[0.13em] text-muted;
   }
 
   .eyebrow::before {
     content: "";
-    @apply inline-block h-[1.5px] w-[22px] bg-green;
+    @apply inline-block h-[2px] w-[22px] bg-azure;
   }
 
   .btn {
@@ -51,11 +59,11 @@ body {
   }
 
   .btn-primary {
-    @apply bg-green text-white hover:-translate-y-px hover:bg-greenDeep hover:shadow-[0_8px_22px_-10px_#3f7a4f];
+    @apply bg-navy text-white hover:-translate-y-px hover:bg-azure hover:shadow-[0_8px_18px_-14px_#1A3868];
   }
 
   .btn-ghost {
-    @apply border border-white/35 bg-white/15 text-paper backdrop-blur hover:-translate-y-px hover:bg-white/25;
+    @apply border border-white/35 bg-white/15 text-white backdrop-blur hover:-translate-y-px hover:bg-white/25;
   }
 }
 

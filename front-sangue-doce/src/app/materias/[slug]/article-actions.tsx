@@ -67,7 +67,7 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div className="fixed left-0 top-0 z-[101] h-[3px] bg-tomato" style={{ width: `${width}%` }} />
+    <div className="fixed left-0 top-0 z-[101] h-[3px] bg-energy" style={{ width: `${width}%` }} />
   );
 }
 
@@ -101,7 +101,7 @@ export function ArticleActions({ title }: ArticleActionsProps) {
         type="button"
         aria-label="Compartilhar no WhatsApp"
         onClick={() => openShare("whatsapp")}
-        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-green hover:bg-green hover:text-white"
+        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-azure hover:bg-azure hover:text-white"
       >
         <ShareIcon type="whatsapp" />
       </button>
@@ -109,7 +109,7 @@ export function ArticleActions({ title }: ArticleActionsProps) {
         type="button"
         aria-label="Compartilhar no X"
         onClick={() => openShare("x")}
-        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-green hover:bg-green hover:text-white"
+        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-azure hover:bg-azure hover:text-white"
       >
         <ShareIcon type="x" />
       </button>
@@ -117,7 +117,7 @@ export function ArticleActions({ title }: ArticleActionsProps) {
         type="button"
         aria-label="Compartilhar no Facebook"
         onClick={() => openShare("facebook")}
-        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-green hover:bg-green hover:text-white"
+        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-azure hover:bg-azure hover:text-white"
       >
         <ShareIcon type="facebook" />
       </button>
@@ -125,7 +125,7 @@ export function ArticleActions({ title }: ArticleActionsProps) {
         type="button"
         aria-label={copied ? "Link copiado" : "Copiar link"}
         onClick={copyLink}
-        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-green hover:bg-green hover:text-white"
+        className="grid h-[42px] w-[42px] place-items-center rounded-full border border-lineStrong text-inkSoft transition hover:-translate-y-0.5 hover:border-azure hover:bg-azure hover:text-white"
       >
         <ShareIcon type="link" />
       </button>

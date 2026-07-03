@@ -57,8 +57,8 @@ export function UserMenu({
 
   const triggerClass =
     tone === "light"
-      ? "border-white/35 bg-white/10 text-paper hover:bg-white/20"
-      : "border-lineStrong text-greenDeep hover:bg-paper2";
+      ? "border-white/35 bg-white/10 text-white hover:bg-white/20"
+      : "border-lineStrong text-navy hover:bg-subtle";
 
   return (
     <div className="relative" ref={containerRef}>
@@ -78,10 +78,10 @@ export function UserMenu({
 
       {open ? (
         <div
-          className="absolute right-0 top-[calc(100%+8px)] z-[110] grid min-w-[240px] gap-2 rounded-lg border border-line bg-card p-2 shadow-editorial"
+          className="absolute right-0 top-[calc(100%+8px)] z-[110] grid min-w-[240px] gap-2 rounded-lg border border-line bg-surface p-2 shadow-editorial"
           role="menu"
         >
-          <div className="rounded-md bg-paper2 px-3 py-3">
+          <div className="rounded-md bg-subtle px-3 py-3">
             <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-muted">
               {sectionLabel}
             </span>
@@ -94,7 +94,7 @@ export function UserMenu({
             </div>
           </div>
           <Link
-            className="rounded-md px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 hover:text-ink"
+            className="rounded-md px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-subtle hover:text-ink"
             href={dashboardHref}
             onClick={() => setOpen(false)}
             role="menuitem"
@@ -103,7 +103,7 @@ export function UserMenu({
           </Link>
           {accountHref ? (
             <Link
-              className="rounded-md px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 hover:text-ink"
+              className="rounded-md px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-subtle hover:text-ink"
               href={accountHref}
               onClick={() => setOpen(false)}
               role="menuitem"

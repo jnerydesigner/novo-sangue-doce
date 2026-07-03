@@ -38,12 +38,12 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
       <header
         className={`fixed inset-x-0 top-0 z-[100] border-b transition duration-300 ${
           scrolled
-            ? "border-line bg-paper/80 shadow-sm backdrop-blur-xl"
+            ? "border-line bg-bg/88 shadow-sm backdrop-blur-xl"
             : "border-transparent bg-transparent"
         }`}
       >
         <div className="wrap flex h-[76px] items-center justify-between gap-6">
-          <div className={scrolled ? "text-ink" : "text-paper"}>
+          <div className={scrolled ? "text-navy" : "text-white"}>
             <Brand />
           </div>
 
@@ -52,8 +52,8 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
               <a
                 key={item.href}
                 href={item.href}
-                className={`relative py-1 text-[15px] font-medium transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-green after:transition-all hover:after:w-full ${
-                  scrolled ? "text-inkSoft" : "text-paper/85"
+                className={`relative py-1 text-[15px] font-medium transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-spark after:transition-all hover:after:w-full ${
+                  scrolled ? "text-inkSoft hover:text-navy" : "text-white/85 hover:text-white"
                 }`}
               >
                 {item.label}
@@ -82,8 +82,8 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
             <Link
               className={`hidden rounded-lg border px-5 py-3 text-[15px] font-semibold transition hover:-translate-y-px md:inline-flex ${
                 scrolled
-                  ? "border-lineStrong text-greenDeep hover:bg-paper2"
-                  : "border-white/35 bg-white/10 text-paper hover:bg-white/20"
+                  ? "border-lineStrong text-navy hover:bg-subtle"
+                  : "border-white/35 bg-white/10 text-white hover:bg-white/20"
               }`}
               href={isAuthenticated ? dashboardHref : "/login"}
             >
@@ -92,7 +92,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
           )}
 
           <button
-            className={`grid h-11 w-11 place-items-center md:hidden ${scrolled ? "text-ink" : "text-paper"}`}
+            className={`grid h-11 w-11 place-items-center md:hidden ${scrolled ? "text-ink" : "text-white"}`}
             type="button"
             aria-label="Abrir menu"
             onClick={() => setMenuOpen(true)}
@@ -103,7 +103,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
       </header>
 
       <div
-        className={`fixed inset-0 z-[99] flex flex-col justify-center bg-paper/95 px-[clamp(20px,5vw,64px)] backdrop-blur-lg transition duration-300 md:hidden ${
+        className={`fixed inset-0 z-[99] flex flex-col justify-center bg-bg/95 px-[clamp(20px,5vw,64px)] backdrop-blur-lg transition duration-300 md:hidden ${
           menuOpen ? "visible translate-y-0" : "invisible -translate-y-full"
         }`}
       >
@@ -145,7 +145,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
           </div>
         ) : (
           <Link
-            className="mt-3 inline-flex self-start rounded-lg border border-lineStrong px-7 py-4 text-base font-semibold text-greenDeep"
+            className="mt-3 inline-flex self-start rounded-lg border border-lineStrong px-7 py-4 text-base font-semibold text-navy"
             href={isAuthenticated ? dashboardHref : "/login"}
             onClick={() => setMenuOpen(false)}
           >

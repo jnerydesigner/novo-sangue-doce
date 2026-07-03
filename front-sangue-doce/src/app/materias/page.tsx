@@ -68,7 +68,7 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
       <PublicSiteHeader />
 
       <main>
-        <section className="border-b border-line bg-paper2 py-[clamp(72px,10vw,128px)]">
+        <section className="border-b border-line bg-subtle py-[clamp(72px,10vw,128px)]">
           <div className="wrap grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
             <div>
               <span className="eyebrow">Materias</span>
@@ -81,28 +81,28 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
                 Conteudos editoriais sobre glicemia, alimentacao, sensores, consultas e pequenas
                 decisoes que ajudam a tornar o cuidado mais claro no dia a dia.
               </p>
-              <div className="mt-6 grid grid-cols-3 divide-x divide-line rounded-lg border border-line bg-card">
-                <div className="px-4 py-4">
-                  <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+              <div className="mt-6 grid grid-cols-3 divide-x divide-line overflow-hidden rounded-lg border border-line bg-surface">
+                <div className="flex min-h-[86px] flex-col items-center justify-center px-4 py-3 text-center">
+                  <span className="block text-[11.5px] font-semibold uppercase tracking-[0.13em] text-muted">
                     Total
                   </span>
-                  <strong className="font-serif text-[2rem] font-medium leading-none text-ink">
+                  <strong className="mt-1 block font-serif text-[2rem] font-normal leading-none text-ink tabular-nums">
                     {postsPage.meta.total}
                   </strong>
                 </div>
-                <div className="px-4 py-4">
-                  <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+                <div className="flex min-h-[86px] flex-col items-center justify-center px-4 py-3 text-center">
+                  <span className="block text-[11.5px] font-semibold uppercase tracking-[0.13em] text-muted">
                     Pagina
                   </span>
-                  <strong className="font-serif text-[2rem] font-medium leading-none text-ink">
+                  <strong className="mt-1 block font-serif text-[2rem] font-normal leading-none text-ink tabular-nums">
                     {currentPage}
                   </strong>
                 </div>
-                <div className="px-4 py-4">
-                  <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+                <div className="flex min-h-[86px] flex-col items-center justify-center px-4 py-3 text-center">
+                  <span className="block text-[11.5px] font-semibold uppercase tracking-[0.13em] text-muted">
                     Serie
                   </span>
-                  <strong className="font-serif text-[2rem] font-medium leading-none text-ink">
+                  <strong className="mt-1 block font-serif text-[2rem] font-normal leading-none text-ink tabular-nums">
                     {totalPages}
                   </strong>
                 </div>
@@ -111,7 +111,7 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
           </div>
         </section>
 
-        <section className="bg-paper py-[clamp(56px,8vw,96px)]">
+        <section className="bg-bg py-[clamp(56px,8vw,96px)]">
           <div className="wrap">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -143,7 +143,7 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
                 className={`rounded-lg border px-4 py-2.5 text-sm font-semibold transition ${
                   currentPage === 1
                     ? "pointer-events-none border-line text-muted"
-                    : "border-lineStrong text-greenDeep hover:-translate-y-px hover:bg-paper2"
+                    : "border-lineStrong text-navy hover:-translate-y-px hover:bg-subtle"
                 }`}
                 href={getPageHref(Math.max(1, currentPage - 1))}
               >
@@ -159,8 +159,8 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
                     aria-current={isCurrent ? "page" : undefined}
                     className={`grid h-11 w-11 place-items-center rounded-lg border text-sm font-bold transition ${
                       isCurrent
-                        ? "border-green bg-green text-white"
-                        : "border-lineStrong text-greenDeep hover:-translate-y-px hover:bg-paper2"
+                        ? "border-azure bg-azure text-white"
+                        : "border-lineStrong text-navy hover:-translate-y-px hover:bg-subtle"
                     }`}
                     href={getPageHref(page)}
                     key={page}
@@ -175,7 +175,7 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
                 className={`rounded-lg border px-4 py-2.5 text-sm font-semibold transition ${
                   currentPage === totalPages
                     ? "pointer-events-none border-line text-muted"
-                    : "border-lineStrong text-greenDeep hover:-translate-y-px hover:bg-paper2"
+                    : "border-lineStrong text-navy hover:-translate-y-px hover:bg-subtle"
                 }`}
                 href={getPageHref(Math.min(totalPages, currentPage + 1))}
               >
