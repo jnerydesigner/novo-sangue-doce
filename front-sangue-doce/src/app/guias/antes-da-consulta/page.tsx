@@ -51,7 +51,7 @@ const otherGuides = [
     number: "02",
     title: "No mercado",
     copy: "Como ler rotulos sem estresse e montar uma cesta que ajuda a estabilizar a glicemia.",
-    color: "text-green",
+    color: "text-azure",
     href: "/guias/no-mercado",
     image: "/no_mercado.png",
   },
@@ -59,7 +59,7 @@ const otherGuides = [
     number: "03",
     title: "Depois do exercicio",
     copy: "Reposicao, hidratacao e sinais de atencao para fechar o treino com seguranca.",
-    color: "text-blue",
+    color: "text-azure",
     href: "/guias/depois-do-exercicio",
     image: "/depois_do_exercicio.png",
   },
@@ -68,9 +68,9 @@ const otherGuides = [
 export default function AntesDaConsultaPage() {
   return (
     <>
-      <header className="sticky top-0 z-[100] border-b border-line bg-paper/80 shadow-sm backdrop-blur-xl">
+      <header className="sticky top-0 z-[100] border-b border-line bg-bg/80 shadow-sm backdrop-blur-xl">
         <div className="wrap flex h-[76px] items-center justify-between gap-6">
-          <div className="text-greenDeep">
+          <div className="text-navy">
             <Brand />
           </div>
           <nav className="flex items-center gap-5">
@@ -82,7 +82,7 @@ export default function AntesDaConsultaPage() {
             </Link>
             <Link
               href="/"
-              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 sm:inline-flex"
+              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-subtle sm:inline-flex"
             >
               Voltar para home
             </Link>
@@ -108,11 +108,11 @@ export default function AntesDaConsultaPage() {
 
           <div className="wrap w-full pb-16 pt-[120px]">
             <div className="max-w-[700px]">
-              <span className="eyebrow text-paper/85 before:bg-tomato">Guia rapido 01</span>
-              <h1 className="mt-4 text-balance font-serif text-[clamp(2.8rem,6vw,4.8rem)] font-medium leading-[1.02] tracking-normal text-paper drop-shadow-2xl">
+              <span className="eyebrow text-white/85 before:bg-energy">Guia rapido 01</span>
+              <h1 className="mt-4 text-balance font-serif text-[clamp(2.8rem,6vw,4.8rem)] font-medium leading-[1.02] tracking-normal text-white drop-shadow-2xl">
                 Antes da consulta
               </h1>
-              <p className="mt-5 max-w-[52ch] text-[clamp(1.05rem,1.7vw,1.25rem)] leading-[1.55] text-paper/85 drop-shadow">
+              <p className="mt-5 max-w-[52ch] text-[clamp(1.05rem,1.7vw,1.25rem)] leading-[1.55] text-white/85 drop-shadow">
                 Chegue preparado para aproveitar melhor o tempo com o medico.
               </p>
             </div>
@@ -120,7 +120,7 @@ export default function AntesDaConsultaPage() {
         </section>
 
         {/* Content */}
-        <section className="bg-paper py-[clamp(64px,9vw,110px)]">
+        <section className="bg-bg py-[clamp(64px,9vw,110px)]">
           <div className="wrap">
             <div className="mx-auto max-w-[780px]">
               {/* Intro */}
@@ -131,9 +131,9 @@ export default function AntesDaConsultaPage() {
               </p>
 
               {/* Section 1 — O que levar */}
-              <div className="mb-12 rounded-lg border border-line bg-card p-[clamp(26px,4vw,42px)] shadow-editorial">
+              <div className="mb-12 rounded-lg border border-line bg-surface p-[clamp(26px,4vw,42px)] shadow-editorial">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="font-serif text-[3rem] leading-none text-tomato">01</span>
+                  <span className="font-serif text-[3rem] leading-none text-energy">01</span>
                   <div>
                     <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
                       Preparacao
@@ -146,7 +146,7 @@ export default function AntesDaConsultaPage() {
                 <ul className="grid gap-3.5">
                   {itemsToCarry.map((item) => (
                     <li key={item} className="flex items-start gap-3.5">
-                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-tomato" />
+                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-energy" />
                       <span className="text-[1rem] leading-[1.6] text-inkSoft">{item}</span>
                     </li>
                   ))}
@@ -154,9 +154,9 @@ export default function AntesDaConsultaPage() {
               </div>
 
               {/* Section 2 — O que observar */}
-              <div className="mb-12 rounded-lg border border-line bg-card p-[clamp(26px,4vw,42px)] shadow-editorial">
+              <div className="mb-12 rounded-lg border border-line bg-surface p-[clamp(26px,4vw,42px)] shadow-editorial">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="font-serif text-[3rem] leading-none text-blue">02</span>
+                  <span className="font-serif text-[3rem] leading-none text-azure">02</span>
                   <div>
                     <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
                       Atencao
@@ -169,7 +169,7 @@ export default function AntesDaConsultaPage() {
                 <ul className="grid gap-3.5">
                   {observationItems.map((item) => (
                     <li key={item} className="flex items-start gap-3.5">
-                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-blue" />
+                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-azure" />
                       <span className="text-[1rem] leading-[1.6] text-inkSoft">{item}</span>
                     </li>
                   ))}
@@ -177,9 +177,9 @@ export default function AntesDaConsultaPage() {
               </div>
 
               {/* Section 3 — Perguntas importantes */}
-              <div className="rounded-lg border border-line bg-card p-[clamp(26px,4vw,42px)] shadow-editorial">
+              <div className="rounded-lg border border-line bg-surface p-[clamp(26px,4vw,42px)] shadow-editorial">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="font-serif text-[3rem] leading-none text-greenDeep">03</span>
+                  <span className="font-serif text-[3rem] leading-none text-navy">03</span>
                   <div>
                     <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
                       Dialogo
@@ -192,7 +192,7 @@ export default function AntesDaConsultaPage() {
                 <ul className="grid gap-3.5">
                   {questionItems.map((item) => (
                     <li key={item} className="flex items-start gap-3.5">
-                      <span className="mt-[5px] shrink-0 rounded-sm bg-green/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-greenDeep">
+                      <span className="mt-[5px] shrink-0 rounded-sm bg-azure/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-navy">
                         ?
                       </span>
                       <span className="text-[1rem] leading-[1.6] text-inkSoft">{item}</span>
@@ -211,7 +211,7 @@ export default function AntesDaConsultaPage() {
         </section>
 
         {/* Other guides */}
-        <section className="border-t border-line bg-paper2 py-[clamp(56px,8vw,96px)]">
+        <section className="border-t border-line bg-subtle py-[clamp(56px,8vw,96px)]">
           <div className="wrap">
             <div className="mb-10">
               <span className="eyebrow">Continue lendo</span>
@@ -223,9 +223,9 @@ export default function AntesDaConsultaPage() {
               {otherGuides.map((guide) => (
                 <article
                   key={guide.number}
-                  className="group overflow-hidden rounded-lg border border-line bg-card transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial"
+                  className="group overflow-hidden rounded-lg border border-line bg-surface transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial"
                 >
-                  <div className="relative aspect-[16/9] bg-paper2">
+                  <div className="relative aspect-[16/9] bg-subtle">
                     <Image
                       src={guide.image}
                       alt={guide.title}
@@ -243,13 +243,13 @@ export default function AntesDaConsultaPage() {
                     >
                       {guide.number}
                     </span>
-                    <h3 className="mb-2 font-serif text-[1.35rem] font-medium leading-tight tracking-normal text-ink transition group-hover:text-greenDeep">
+                    <h3 className="mb-2 font-serif text-[1.35rem] font-medium leading-tight tracking-normal text-ink transition group-hover:text-navy">
                       {guide.title}
                     </h3>
                     <p className="mb-5 text-[15px] leading-[1.55] text-inkSoft">{guide.copy}</p>
                     <Link
                       href={guide.href}
-                      className="inline-flex items-center gap-2 text-[14px] font-semibold text-greenDeep transition group-hover:gap-3"
+                      className="inline-flex items-center gap-2 text-[14px] font-semibold text-navy transition group-hover:gap-3"
                     >
                       Abrir guia
                       <svg

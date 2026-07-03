@@ -11,7 +11,7 @@ export function Brand({ dark = false }: { dark?: boolean }) {
     <Link
       href="/"
       className={`inline-flex items-center gap-[11px] font-serif text-2xl font-medium tracking-normal ${
-        dark ? "text-paper" : "text-inherit"
+        dark ? "text-white" : "text-inherit"
       }`}
     >
       <Image

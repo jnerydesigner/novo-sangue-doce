@@ -13,20 +13,20 @@ export function ArticleCard({
 }) {
   const tagClass =
     article.color === "green"
-      ? "bg-[#eaf1e8] text-greenDeep"
+      ? "bg-azure10 text-navy"
       : article.color === "tomato"
-        ? "bg-[#f7e9e4] text-tomato"
-        : "bg-[#e7eef5] text-blue";
+        ? "bg-energy10 text-energy"
+        : "bg-spark10 text-[#0A8CAA]";
 
   return (
     <Link
       href={`/materias/${article.slug}`}
-      className={`group overflow-hidden rounded-lg border border-line bg-card transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial ${
+      className={`group overflow-hidden rounded-lg border border-line bg-surface transition hover:-translate-y-1 hover:border-azure hover:shadow-editorial ${
         compact ? "grid md:grid-cols-[42%_1fr] lg:min-h-[216px]" : ""
       }`}
     >
       <div
-        className={`relative bg-paper2 ${compact ? "min-h-[180px] md:h-full" : "aspect-[16/10]"}`}
+        className={`relative bg-subtle ${compact ? "min-h-[180px] md:h-full" : "aspect-[16/10]"}`}
       >
         <Image
           src={seq === 1 ? article.image : article.imageVertical}
@@ -46,7 +46,7 @@ export function ArticleCard({
           {article.tag}
         </span>
         <h3
-          className={`text-balance font-serif font-medium leading-[1.12] tracking-normal text-ink transition group-hover:text-greenDeep ${
+          className={`text-balance font-serif font-normal leading-[1.12] tracking-[-0.015em] text-ink transition group-hover:text-navy ${
             compact ? "text-[1.28rem]" : "text-[clamp(1.6rem,2.6vw,2.15rem)]"
           }`}
         >

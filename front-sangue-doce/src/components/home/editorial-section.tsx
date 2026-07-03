@@ -18,12 +18,12 @@ export async function EditorialSection() {
         <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
           <div>
             <span className="eyebrow">Em destaque</span>
-            <h2 className="mt-3 max-w-[18ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-medium leading-[1.05] tracking-normal">
+            <h2 className="mt-3 max-w-[18ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-normal leading-[1.05] tracking-[-0.015em] text-ink">
               O que esta movendo o cuidado esta semana
             </h2>
           </div>
           <Link
-            className="group inline-flex items-center gap-2 text-[15px] font-semibold text-greenDeep"
+            className="group inline-flex items-center gap-2 text-[15px] font-semibold text-navy"
             href="/materias"
           >
             Todas as materias

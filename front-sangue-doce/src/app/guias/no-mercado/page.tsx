@@ -52,7 +52,7 @@ const otherGuides = [
     number: "01",
     title: "Antes da consulta",
     copy: "O que anotar, quais perguntas levar e como chegar preparado para uma conversa que rende.",
-    color: "text-tomato",
+    color: "text-energy",
     href: "/guias/antes-da-consulta",
     image: "/antes_da_consulta.png",
   },
@@ -60,7 +60,7 @@ const otherGuides = [
     number: "03",
     title: "Depois do exercicio",
     copy: "Reposicao, hidratacao e sinais de atencao para fechar o treino com seguranca.",
-    color: "text-blue",
+    color: "text-azure",
     href: "/guias/depois-do-exercicio",
     image: "/depois_do_exercicio.png",
   },
@@ -69,9 +69,9 @@ const otherGuides = [
 export default function NoMercadoPage() {
   return (
     <>
-      <header className="sticky top-0 z-[100] border-b border-line bg-paper/80 shadow-sm backdrop-blur-xl">
+      <header className="sticky top-0 z-[100] border-b border-line bg-bg/80 shadow-sm backdrop-blur-xl">
         <div className="wrap flex h-[76px] items-center justify-between gap-6">
-          <div className="text-greenDeep">
+          <div className="text-navy">
             <Brand />
           </div>
           <nav className="flex items-center gap-5">
@@ -83,7 +83,7 @@ export default function NoMercadoPage() {
             </Link>
             <Link
               href="/"
-              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 sm:inline-flex"
+              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-subtle sm:inline-flex"
             >
               Voltar para home
             </Link>
@@ -108,18 +108,18 @@ export default function NoMercadoPage() {
 
           <div className="wrap w-full pb-16 pt-[120px]">
             <div className="max-w-[720px]">
-              <span className="eyebrow text-paper/85 before:bg-green">Guia rapido 02</span>
-              <h1 className="mt-4 text-balance font-serif text-[clamp(2.8rem,6vw,4.8rem)] font-medium leading-[1.02] tracking-normal text-paper drop-shadow-2xl">
+              <span className="eyebrow text-white/85 before:bg-azure">Guia rapido 02</span>
+              <h1 className="mt-4 text-balance font-serif text-[clamp(2.8rem,6vw,4.8rem)] font-medium leading-[1.02] tracking-normal text-white drop-shadow-2xl">
                 No mercado
               </h1>
-              <p className="mt-5 max-w-[52ch] text-[clamp(1.05rem,1.7vw,1.25rem)] leading-[1.55] text-paper/85 drop-shadow">
+              <p className="mt-5 max-w-[52ch] text-[clamp(1.05rem,1.7vw,1.25rem)] leading-[1.55] text-white/85 drop-shadow">
                 Pequenas escolhas no carrinho fazem grande diferenca no controle glicemico.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="bg-paper py-[clamp(64px,9vw,110px)]">
+        <section className="bg-bg py-[clamp(64px,9vw,110px)]">
           <div className="wrap">
             <div className="mx-auto max-w-[780px]">
               <p className="mb-12 max-w-[58ch] text-[1.1rem] leading-[1.65] text-inkSoft">
@@ -128,9 +128,9 @@ export default function NoMercadoPage() {
                 a glicemia ao longo da semana.
               </p>
 
-              <div className="mb-12 rounded-lg border border-line bg-card p-[clamp(26px,4vw,42px)] shadow-editorial">
+              <div className="mb-12 rounded-lg border border-line bg-surface p-[clamp(26px,4vw,42px)] shadow-editorial">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="font-serif text-[3rem] leading-none text-greenDeep">01</span>
+                  <span className="font-serif text-[3rem] leading-none text-navy">01</span>
                   <div>
                     <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
                       Carrinho base
@@ -143,16 +143,16 @@ export default function NoMercadoPage() {
                 <ul className="grid gap-3.5 sm:grid-cols-2">
                   {priorityItems.map((item) => (
                     <li key={item} className="flex items-start gap-3.5">
-                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-green" />
+                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-azure" />
                       <span className="text-[1rem] leading-[1.6] text-inkSoft">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mb-12 rounded-lg border border-line bg-card p-[clamp(26px,4vw,42px)] shadow-editorial">
+              <div className="mb-12 rounded-lg border border-line bg-surface p-[clamp(26px,4vw,42px)] shadow-editorial">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="font-serif text-[3rem] leading-none text-blue">02</span>
+                  <span className="font-serif text-[3rem] leading-none text-azure">02</span>
                   <div>
                     <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
                       Rotulo
@@ -166,7 +166,7 @@ export default function NoMercadoPage() {
                 <ul className="grid gap-3.5">
                   {labelItems.map((item) => (
                     <li key={item} className="flex items-start gap-3.5">
-                      <span className="mt-[5px] shrink-0 rounded-sm bg-blue/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-blue">
+                      <span className="mt-[5px] shrink-0 rounded-sm bg-azure/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-azure">
                         Ver
                       </span>
                       <span className="text-[1rem] leading-[1.6] text-inkSoft">{item}</span>
@@ -175,9 +175,9 @@ export default function NoMercadoPage() {
                 </ul>
               </div>
 
-              <div className="mb-12 rounded-lg border border-line bg-card p-[clamp(26px,4vw,42px)] shadow-editorial">
+              <div className="mb-12 rounded-lg border border-line bg-surface p-[clamp(26px,4vw,42px)] shadow-editorial">
                 <div className="mb-6 flex items-center gap-4">
-                  <span className="font-serif text-[3rem] leading-none text-tomato">03</span>
+                  <span className="font-serif text-[3rem] leading-none text-energy">03</span>
                   <div>
                     <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
                       Limites
@@ -190,15 +190,15 @@ export default function NoMercadoPage() {
                 <ul className="grid gap-3.5">
                   {avoidItems.map((item) => (
                     <li key={item} className="flex items-start gap-3.5">
-                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-tomato" />
+                      <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-energy" />
                       <span className="text-[1rem] leading-[1.6] text-inkSoft">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="rounded-lg bg-greenDeep p-[clamp(26px,4vw,42px)] text-paper">
-                <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-paper/70">
+              <div className="rounded-lg bg-navy p-[clamp(26px,4vw,42px)] text-white">
+                <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-white/70">
                   Regra rapida
                 </span>
                 <p className="mt-3 max-w-[54ch] font-serif text-[clamp(1.65rem,3vw,2.25rem)] font-medium leading-[1.12] tracking-normal">
@@ -214,7 +214,7 @@ export default function NoMercadoPage() {
           </div>
         </section>
 
-        <section className="border-t border-line bg-paper2 py-[clamp(56px,8vw,96px)]">
+        <section className="border-t border-line bg-subtle py-[clamp(56px,8vw,96px)]">
           <div className="wrap">
             <div className="mb-10">
               <span className="eyebrow">Continue lendo</span>
@@ -226,9 +226,9 @@ export default function NoMercadoPage() {
               {otherGuides.map((guide) => (
                 <article
                   key={guide.number}
-                  className="group overflow-hidden rounded-lg border border-line bg-card transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial"
+                  className="group overflow-hidden rounded-lg border border-line bg-surface transition hover:-translate-y-1 hover:border-lineStrong hover:shadow-editorial"
                 >
-                  <div className="relative aspect-[16/9] bg-paper2">
+                  <div className="relative aspect-[16/9] bg-subtle">
                     <Image
                       src={guide.image}
                       alt={guide.title}
@@ -246,13 +246,13 @@ export default function NoMercadoPage() {
                     >
                       {guide.number}
                     </span>
-                    <h3 className="mb-2 font-serif text-[1.35rem] font-medium leading-tight tracking-normal text-ink transition group-hover:text-greenDeep">
+                    <h3 className="mb-2 font-serif text-[1.35rem] font-medium leading-tight tracking-normal text-ink transition group-hover:text-navy">
                       {guide.title}
                     </h3>
                     <p className="mb-5 text-[15px] leading-[1.55] text-inkSoft">{guide.copy}</p>
                     <Link
                       href={guide.href}
-                      className="inline-flex items-center gap-2 text-[14px] font-semibold text-greenDeep transition group-hover:gap-3"
+                      className="inline-flex items-center gap-2 text-[14px] font-semibold text-navy transition group-hover:gap-3"
                     >
                       Abrir guia
                       <svg

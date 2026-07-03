@@ -36,7 +36,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
           return (
             <blockquote
               key={`${block.type}-${index}`}
-              className="my-11 border-l-[3px] border-tomato py-1 pl-7 font-serif text-[clamp(1.5rem,2.8vw,2rem)] font-medium italic leading-[1.3] text-ink"
+              className="my-11 border-l-[3px] border-energy py-1 pl-7 font-serif text-[clamp(1.5rem,2.8vw,2rem)] font-medium italic leading-[1.3] text-ink"
             >
               &quot;{block.content}&quot;
             </blockquote>
@@ -51,7 +51,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
                 .map((item, itemIndex) => (
                   <li
                     key={`${item}-${itemIndex}`}
-                    className="relative pl-8 before:absolute before:left-1 before:top-[0.72em] before:h-2 before:w-2 before:rounded-full before:bg-green"
+                    className="relative pl-8 before:absolute before:left-1 before:top-[0.72em] before:h-2 before:w-2 before:rounded-full before:bg-azure"
                   >
                     {item}
                   </li>
@@ -69,7 +69,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
 
           return (
             <figure key={`${block.type}-${index}`} className="my-10">
-              <div className="relative aspect-video overflow-hidden rounded-[10px] bg-paper2">
+              <div className="relative aspect-video overflow-hidden rounded-[10px] bg-subtle">
                 <Image
                   src={imageUrl}
                   alt={block.alt ?? ""}
@@ -92,9 +92,9 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
           return (
             <div
               key={`${block.type}-${index}`}
-              className="my-10 rounded-[10px] border border-green/25 bg-[#eaf1e8] px-7 py-6 text-[1.02rem]"
+              className="my-10 rounded-[10px] border border-azure/25 bg-[#E4F8FC] px-7 py-6 text-[1.02rem]"
             >
-              <div className="mb-3 text-[13px] font-bold uppercase tracking-[0.06em] text-greenDeep">
+              <div className="mb-3 text-[13px] font-bold uppercase tracking-[0.06em] text-navy">
                 {block.title}
               </div>
               <p className="m-0 text-inkSoft">{block.content}</p>
@@ -109,7 +109,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
         return (
           <p
             key={`${block.type}-${index}`}
-            className={`mb-7 text-pretty ${index === 0 ? "first-letter:float-left first-letter:pr-3 first-letter:pt-2 first-letter:font-serif first-letter:text-[4.6rem] first-letter:font-medium first-letter:leading-[0.82] first-letter:text-tomato" : ""}`}
+            className={`mb-7 text-pretty ${index === 0 ? "first-letter:float-left first-letter:pr-3 first-letter:pt-2 first-letter:font-serif first-letter:text-[4.6rem] first-letter:font-medium first-letter:leading-[0.82] first-letter:text-energy" : ""}`}
           >
             {block.content}
           </p>

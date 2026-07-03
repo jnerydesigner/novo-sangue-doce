@@ -17,15 +17,15 @@ export async function PublicSiteHeader() {
   const dashboardHref = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
 
   return (
-    <header className="sticky top-0 z-[100] border-b border-line bg-paper/90 shadow-sm backdrop-blur-xl">
+    <header className="sticky top-0 z-[100] border-b border-line bg-bg/90 shadow-sm backdrop-blur-xl">
       <div className="wrap flex h-[76px] items-center justify-between gap-6">
-        <div className="text-greenDeep">
+        <div className="text-navy">
           <Brand />
         </div>
         <nav className="ml-auto hidden items-center gap-[30px] md:flex" aria-label="Principal">
           {navItems.map((link) => (
             <Link
-              className="relative py-1 text-[15px] font-medium text-inkSoft transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-green after:transition-all hover:text-ink hover:after:w-full"
+              className="relative py-1 text-[15px] font-medium text-inkSoft transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-spark after:transition-all hover:text-navy hover:after:w-full"
               href={getPublicHref(link.href)}
               key={link.href}
             >
@@ -36,7 +36,7 @@ export async function PublicSiteHeader() {
 
         <div className="flex items-center gap-4">
           <Link
-            className="hidden rounded-lg bg-green px-5 py-3 text-[15px] font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep sm:inline-flex"
+            className="hidden rounded-lg bg-navy px-5 py-3 text-[15px] font-bold text-white transition hover:-translate-y-px hover:bg-azure sm:inline-flex"
             href="/#news"
           >
             Receber boletim
@@ -52,7 +52,7 @@ export async function PublicSiteHeader() {
             </div>
           ) : (
             <Link
-              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 sm:inline-flex"
+              className="hidden rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-navy transition hover:-translate-y-px hover:bg-subtle sm:inline-flex"
               href="/login"
             >
               Entrar

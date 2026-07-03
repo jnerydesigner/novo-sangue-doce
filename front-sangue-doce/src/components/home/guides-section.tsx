@@ -4,11 +4,11 @@ import { ArrowIcon } from "./icons";
 
 export function GuidesSection() {
   return (
-    <section className="border-y border-line bg-paper2 py-[clamp(56px,8vw,96px)]" id="guias">
+    <section className="border-y border-line bg-subtle py-[clamp(56px,8vw,96px)]" id="guias">
       <div className="wrap">
         <div className="mb-10">
           <span className="eyebrow">Guias rapidos</span>
-          <h2 className="mt-3 max-w-[18ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-medium leading-[1.05] tracking-normal">
+          <h2 className="mt-3 max-w-[18ch] text-balance font-serif text-[clamp(1.9rem,3.4vw,2.7rem)] font-normal leading-[1.05] tracking-[-0.015em] text-ink">
             Passos simples para os momentos que importam
           </h2>
         </div>
@@ -23,7 +23,7 @@ export function GuidesSection() {
               <span className={`mb-4 block font-serif text-[3.2rem] leading-none ${guide.color}`}>
                 {guide.number}
               </span>
-              <h3 className="mb-2 font-serif text-[1.45rem] font-medium tracking-normal">
+              <h3 className="mb-2 font-serif text-[1.45rem] font-normal tracking-[-0.01em] text-ink">
                 {guide.title}
               </h3>
               <p className="mb-4 text-[15.5px] text-inkSoft">{guide.copy}</p>
