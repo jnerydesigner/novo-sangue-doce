@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import PDFDocument from "pdfkit";
+import sharp from "sharp";
 import type { MonthlyMeasurementReport, PublicMeasurement } from "./measurements.service";
 
 type ReportColumn = {
@@ -66,7 +67,7 @@ export class MeasurementReportPdfService {
       doc.on("data", (chunk: Buffer) => chunks.push(chunk));
       doc.on("end", () => resolve(Buffer.concat(chunks)));
       doc.on("error", reject);
-      const urlFullReport = `${process.env.URL_SITE}${params.reportUrl}`;
+      const urlFullReport = this.buildReportUrl(params.reportUrl);
 
       this.drawHeader(doc, { ...params, avatarImage });
       this.drawTable(doc, params.report);
@@ -110,13 +111,10 @@ export class MeasurementReportPdfService {
       .strokeColor("#d8cdbb")
       .stroke();
 
-    if (params.avatarImage) {
-      doc.image(params.avatarImage, left, top + 12, {
-        fit: [photoSize, photoSize],
-        align: "center",
-        valign: "center",
-      });
-    } else {
+    const avatarWasDrawn =
+      params.avatarImage && this.drawImage(doc, params.avatarImage, left, top + 12, photoSize);
+
+    if (!avatarWasDrawn) {
       doc
         .font("Helvetica-Bold")
         .fontSize(9)
@@ -315,6 +313,47 @@ export class MeasurementReportPdfService {
     return value.replace("Diabetes tipo ", "").replace("Diabetes ", "").toUpperCase();
   }
 
+  private drawImage(
+    doc: PDFKit.PDFDocument,
+    image: Buffer,
+    x: number,
+    y: number,
+    size: number,
+  ): boolean {
+    try {
+      doc.image(image, x, y, {
+        fit: [size, size],
+        align: "center",
+        valign: "center",
+      });
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private buildReportUrl(reportUrl?: string): string | undefined {
+    if (!reportUrl) {
+      return undefined;
+    }
+
+    if (/^https?:\/\//i.test(reportUrl)) {
+      return reportUrl;
+    }
+
+    const siteUrl =
+      this.configService.get<string>("URL_SITE") ??
+      this.configService.get<string>("FRONTEND_URL") ??
+      "";
+
+    if (!siteUrl) {
+      return reportUrl;
+    }
+
+    return `${siteUrl.replace(/\/$/, "")}/${reportUrl.replace(/^\/+/, "")}`;
+  }
+
   private async fetchAvatarImage(avatarUrl?: string): Promise<Buffer | undefined> {
     if (!avatarUrl) {
       return undefined;
@@ -327,7 +366,15 @@ export class MeasurementReportPdfService {
         return undefined;
       }
 
-      return Buffer.from(await response.arrayBuffer());
+      return this.normalizeImageForPdf(Buffer.from(await response.arrayBuffer()));
+    } catch {
+      return undefined;
+    }
+  }
+
+  private async normalizeImageForPdf(image: Buffer): Promise<Buffer | undefined> {
+    try {
+      return await sharp(image).rotate().png().toBuffer();
     } catch {
       return undefined;
     }

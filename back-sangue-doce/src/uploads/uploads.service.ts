@@ -64,11 +64,11 @@ export class UploadsService {
       userId: publicUser.id,
       userName: publicUser.name,
     });
-    const imageBuffer = await this.convertToWebp(file);
+    const imageBuffer = await this.convertToPng(file);
 
     const uploadedObject = await this.awsS3Service.uploadObject({
       buffer: imageBuffer,
-      contentType: "image/webp",
+      contentType: "image/png",
       key: objectName,
     });
     const avatarUrl = uploadedObject.url;
@@ -184,16 +184,6 @@ export class UploadsService {
     }
   }
 
-  private async convertToWebp(file: UploadedImageFile): Promise<Buffer> {
-    try {
-      return await this.imageService.toWebp(file.buffer);
-    } catch (error) {
-      throw new BadRequestException("Nao foi possivel processar a imagem enviada.", {
-        cause: error,
-      });
-    }
-  }
-
   private async convertToPng(file: UploadedImageFile): Promise<Buffer> {
     try {
       return await this.imageService.png(file.buffer);
@@ -243,7 +233,7 @@ export class UploadsService {
     userId: string;
     userName: string;
   }): string {
-    return `${this.publicPrefix}/users/${this.slugify(userName)}/${userId}.webp`;
+    return `${this.publicPrefix}/users/${this.slugify(userName)}/${userId}.png`;
   }
 
   private createPostCoverName({ postId, slug }: { postId: string; slug: string }): string {

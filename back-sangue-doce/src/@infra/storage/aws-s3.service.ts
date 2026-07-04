@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 type UploadObjectInput = {
@@ -23,6 +23,7 @@ const DEFAULT_REGION = "us-east-1";
 
 @Injectable()
 export class AwsS3Service {
+  private readonly logger = new Logger(AwsS3Service.name);
   private readonly bucket: string;
   private readonly region: string;
   private client?: S3Client;
@@ -45,6 +46,10 @@ export class AwsS3Service {
     const objectKey = key ?? this.createObjectKey(keyPrefix, fileName);
 
     try {
+      this.logger.log(
+        `Uploading object to S3 bucket=${this.bucket} region=${this.region} key=${objectKey} contentType=${contentType ?? "unknown"} size=${buffer.length}`,
+      );
+
       await this.getClient().send(
         new PutObjectCommand({
           Bucket: this.bucket,
@@ -60,6 +65,10 @@ export class AwsS3Service {
         url: this.createPublicUrl(objectKey),
       };
     } catch (error) {
+      this.logger.error(
+        `Failed to upload object to S3 bucket=${this.bucket} region=${this.region} key=${objectKey}: ${this.formatAwsError(error)}`,
+      );
+
       throw new InternalServerErrorException("Nao foi possivel enviar o arquivo para o S3.", {
         cause: error,
       });
@@ -68,6 +77,8 @@ export class AwsS3Service {
 
   async deleteObject(key: string): Promise<void> {
     try {
+      this.logger.log(`Deleting object from S3 bucket=${this.bucket} region=${this.region} key=${key}`);
+
       await this.getClient().send(
         new DeleteObjectCommand({
           Bucket: this.bucket,
@@ -75,6 +86,10 @@ export class AwsS3Service {
         }),
       );
     } catch (error) {
+      this.logger.error(
+        `Failed to delete object from S3 bucket=${this.bucket} region=${this.region} key=${key}: ${this.formatAwsError(error)}`,
+      );
+
       throw new InternalServerErrorException("Nao foi possivel remover o arquivo do S3.", {
         cause: error,
       });
@@ -138,5 +153,25 @@ export class AwsS3Service {
       .join("/");
 
     return `https://${this.bucket}.s3.${this.region}.amazonaws.com/${encodedKey}`;
+  }
+
+  private formatAwsError(error: unknown): string {
+    if (!(error instanceof Error)) {
+      return String(error);
+    }
+
+    const metadata = "$metadata" in error ? error.$metadata : undefined;
+    const statusCode =
+      metadata && typeof metadata === "object" && "httpStatusCode" in metadata
+        ? metadata.httpStatusCode
+        : undefined;
+
+    return [
+      `name=${error.name}`,
+      statusCode ? `status=${statusCode}` : null,
+      `message=${error.message}`,
+    ]
+      .filter(Boolean)
+      .join(" ");
   }
 }
