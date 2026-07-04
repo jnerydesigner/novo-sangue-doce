@@ -23,6 +23,19 @@ test-results/
 !.env.*.example
 dev.env
 
+# Terraform local state/cache
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
 # Logs
 logs/
 *.log

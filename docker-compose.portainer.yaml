@@ -104,6 +104,11 @@ services:
       MINIO_REGION: ${MINIO_REGION:-us-east-1}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://minio:9000}
       MINIO_PUBLIC_PATH: ${MINIO_PUBLIC_PATH:-/sangue-doce/public}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_S3_REGION: ${AWS_S3_REGION:-us-east-1}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET:-sangue-doce}
     depends_on:
       postgres:
         condition: service_healthy
@@ -132,6 +137,7 @@ services:
       NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
       NEXT_PUBLIC_MINIO_PUBLIC_URL: ${NEXT_PUBLIC_MINIO_PUBLIC_URL:-http://minio:9000}
       NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${NEXT_PUBLIC_MINIO_PUBLIC_PATH:-/sangue-doce/public}
+      NEXT_PUBLIC_AWS_S3_PUBLIC_URL: ${NEXT_PUBLIC_AWS_S3_PUBLIC_URL:-https://sangue-doce.s3.us-east-1.amazonaws.com}
       NEXT_PUBLIC_BRAND_LOGO_PATH: ${NEXT_PUBLIC_BRAND_LOGO_PATH:-/sangue-doce-logo.png}
       NEXT_PUBLIC_GOOGLE_AUTH_ENABLED: ${NEXT_PUBLIC_GOOGLE_AUTH_ENABLED:-false}
       MINIO_INTERNAL_PUBLIC_URL: ${MINIO_INTERNAL_PUBLIC_URL:-http://minio:9000}

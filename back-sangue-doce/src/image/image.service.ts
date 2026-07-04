@@ -90,7 +90,6 @@ export class ImageService {
 
   async toWebp(buffer: Buffer, quality = 80): Promise<Buffer> {
     return sharp(buffer)
-      .rotate()
       .webp({
         quality,
         effort: 6,

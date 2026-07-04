@@ -1,3 +1,4 @@
+import { MailModule } from "@app/mail/mail.module";
 import { Global, Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
@@ -8,6 +9,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
 @Global()
 @Module({
   imports: [
+    MailModule,
     PassportModule.register({ session: false }),
     JwtModule.register({
       global: true,

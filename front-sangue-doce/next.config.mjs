@@ -5,6 +5,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const minioPublicUrl = process.env.NEXT_PUBLIC_MINIO_PUBLIC_URL ?? "http://localhost:9610";
 const minioPublicPath = process.env.NEXT_PUBLIC_MINIO_PUBLIC_PATH ?? "/sangue-doce/public";
 const minioUrl = new URL(minioPublicUrl);
+const s3PublicUrl =
+  process.env.NEXT_PUBLIC_AWS_S3_PUBLIC_URL ??
+  "https://sangue-doce.s3.us-east-1.amazonaws.com";
+const s3Url = new URL(s3PublicUrl);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -21,6 +25,11 @@ const nextConfig = {
         pathname: `${minioPublicPath.replace(/\/$/, "")}/**`,
         port: minioUrl.port,
         protocol: minioUrl.protocol.replace(":", ""),
+      },
+      {
+        hostname: s3Url.hostname,
+        pathname: "/public/**",
+        protocol: s3Url.protocol.replace(":", ""),
       },
     ],
   },

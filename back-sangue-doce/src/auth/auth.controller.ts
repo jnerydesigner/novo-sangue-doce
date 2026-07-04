@@ -14,8 +14,10 @@ import { AuthGuard as PassportAuthGuard } from "@nestjs/passport";
 import type { Request as ExpressRequest, Response } from "express";
 import { AuthService } from "./auth.service";
 import type { LoginDto } from "./dto/login.dto";
+import type { RequestEmailLoginCodeDto } from "./dto/request-email-login-code.dto";
 import type { SetPasswordDto } from "./dto/set-password.dto";
 import type { UpdateProfileDto } from "./dto/update-profile.dto";
+import type { VerifyEmailLoginCodeDto } from "./dto/verify-email-login-code.dto";
 import type { GoogleAuthUser } from "./types/google-auth-user.type";
 import type { JwtPayload } from "./types/jwt-payload.type";
 
@@ -30,6 +32,16 @@ export class AuthController {
   @Post("login")
   login(@Body() loginDto: LoginDto) {
     return this.authService.validateUser(loginDto.email, loginDto.password);
+  }
+
+  @Post("email-code/request")
+  requestEmailLoginCode(@Body() requestEmailLoginCodeDto: RequestEmailLoginCodeDto) {
+    return this.authService.requestEmailLoginCode(requestEmailLoginCodeDto);
+  }
+
+  @Post("email-code/verify")
+  verifyEmailLoginCode(@Body() verifyEmailLoginCodeDto: VerifyEmailLoginCodeDto) {
+    return this.authService.verifyEmailLoginCode(verifyEmailLoginCodeDto);
   }
 
   @Get("google")

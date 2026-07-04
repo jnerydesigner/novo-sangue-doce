@@ -2,8 +2,9 @@ import { randomUUID } from "node:crypto";
 import { AuthService } from "@app/auth/auth.service";
 import type { JwtPayload } from "@app/auth/types/jwt-payload.type";
 import { ImageService } from "@app/image/image.service";
-import { type PostImageRecord, PostRepository } from "@app/posts/repositories/post.repository";
+import { PostRepository } from "@app/posts/repositories/post.repository";
 import { UserRepository } from "@app/users/repositories/user.repository";
+import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import {
   BadRequestException,
   Injectable,
@@ -37,6 +38,7 @@ export class UploadsService {
     private readonly postRepository: PostRepository,
     private readonly authService: AuthService,
     private readonly imageService: ImageService,
+    private readonly awsS3Service: AwsS3Service,
   ) {
     this.bucket = configService.get<string>("MINIO_BUCKET") ?? DEFAULT_BUCKET;
     this.publicPrefix = configService.get<string>("MINIO_PUBLIC_PREFIX") ?? DEFAULT_PUBLIC_PREFIX;
@@ -62,17 +64,17 @@ export class UploadsService {
       userId: publicUser.id,
       userName: publicUser.name,
     });
-    const avatarUrl = this.createPublicObjectPath(objectName);
     const imageBuffer = await this.convertToWebp(file);
 
-    await this.ensureBucket();
-
-    await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
-      "Content-Type": "image/webp",
+    const uploadedObject = await this.awsS3Service.uploadObject({
+      buffer: imageBuffer,
+      contentType: "image/webp",
+      key: objectName,
     });
+    const avatarUrl = uploadedObject.url;
 
     if (publicUser.avatarUrl && publicUser.avatarUrl !== avatarUrl) {
-      await this.removePreviousPublicObject(publicUser.avatarUrl);
+      await this.removePreviousUploadedObject(publicUser.avatarUrl);
     }
 
     const updatedUser = await this.userRepository.updateAvatarUrl(publicUser.id, avatarUrl);
@@ -81,8 +83,8 @@ export class UploadsService {
     return {
       ...session,
       avatarUrl,
-      bucket: this.bucket,
-      objectName,
+      bucket: uploadedObject.bucket,
+      objectName: uploadedObject.key,
     };
   }
 
@@ -104,25 +106,24 @@ export class UploadsService {
       postId: publicPost.id,
       slug: publicPost.slug,
     });
-    const coverUrl = this.createPublicObjectPath(objectName);
-    const imageBuffer = await this.convertToPng(file);
-
-    await this.ensureBucket();
-
-    await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
-      "Content-Type": "image/png",
+    const imageBuffer = await this.convertToPostWebp(file);
+    const uploadedObject = await this.awsS3Service.uploadObject({
+      buffer: imageBuffer,
+      contentType: "image/webp",
+      key: objectName,
     });
+    const coverUrl = uploadedObject.url;
 
     if (publicPost.coverImageUrl && publicPost.coverImageUrl !== coverUrl) {
-      await this.removePreviousPublicObject(publicPost.coverImageUrl);
+      await this.removePreviousUploadedObject(publicPost.coverImageUrl);
     }
 
     await this.postRepository.updatePostCoverImage(postId, coverUrl);
 
     return {
       coverUrl,
-      bucket: this.bucket,
-      objectName,
+      bucket: uploadedObject.bucket,
+      objectName: uploadedObject.key,
     };
   }
 
@@ -144,26 +145,32 @@ export class UploadsService {
       postId: publicPost.id,
       slug: publicPost.slug,
     });
-    const imageUrl = this.createPublicObjectPath(objectName);
-    const imageBuffer = await this.convertToPng(file);
+    const imageBuffer = await this.convertToPostWebp(file);
     const previousImageUrl = await this.postRepository.findPostImageByPostId(postId);
-
-    await this.ensureBucket();
-
-    await this.getClient().putObject(this.bucket, objectName, imageBuffer, imageBuffer.length, {
-      "Content-Type": "image/png",
+    const uploadedObject = await this.awsS3Service.uploadObject({
+      buffer: imageBuffer,
+      contentType: "image/webp",
+      key: objectName,
     });
+    const imageUrl = uploadedObject.url;
 
-    const postImage = await this.upsertPostImageOrRemoveObject(postId, imageUrl);
+    let postImage;
+
+    try {
+      postImage = await this.postRepository.upsertPostImage(postId, imageUrl);
+    } catch (error) {
+      await this.removePreviousUploadedObject(imageUrl);
+      throw error;
+    }
 
     if (previousImageUrl && previousImageUrl.imageUrl !== postImage.imageUrl) {
-      await this.removePreviousPublicObject(previousImageUrl.imageUrl);
+      await this.removePreviousUploadedObject(previousImageUrl.imageUrl);
     }
 
     return {
       imageUrl: postImage.imageUrl,
-      bucket: this.bucket,
-      objectName,
+      bucket: uploadedObject.bucket,
+      objectName: uploadedObject.key,
     };
   }
 
@@ -197,17 +204,15 @@ export class UploadsService {
     }
   }
 
-  private async upsertPostImageOrRemoveObject(
-    postId: string,
-    imageUrl: string,
-  ): Promise<PostImageRecord> {
+  private async convertToPostWebp(file: UploadedImageFile): Promise<Buffer> {
     try {
-      const postImage = await this.postRepository.upsertPostImage(postId, imageUrl);
+      const resizedBuffer = await this.imageService.resize(file.buffer, 1600);
 
-      return postImage;
+      return await this.imageService.toWebp(resizedBuffer, 75);
     } catch (error) {
-      await this.removePreviousPublicObject(imageUrl);
-      throw error;
+      throw new BadRequestException("Nao foi possivel processar a imagem enviada.", {
+        cause: error,
+      });
     }
   }
 
@@ -242,11 +247,11 @@ export class UploadsService {
   }
 
   private createPostCoverName({ postId, slug }: { postId: string; slug: string }): string {
-    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.png`;
+    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.webp`;
   }
 
   private createPostImageName({ postId, slug }: { postId: string; slug: string }): string {
-    return `${this.publicPrefix}/posts/images/${this.slugify(slug)}/${randomUUID()}-${postId}.png`;
+    return `${this.publicPrefix}/posts/images/${this.slugify(slug)}/${randomUUID()}-${postId}.webp`;
   }
 
   private createPublicObjectPath(objectName: string): string {
@@ -268,6 +273,19 @@ export class UploadsService {
 
     try {
       await this.getClient().removeObject(this.bucket, objectName);
+    } catch {
+      return;
+    }
+  }
+
+  private async removePreviousUploadedObject(publicPathOrUrl: string): Promise<void> {
+    try {
+      if (/^https?:\/\//i.test(publicPathOrUrl)) {
+        await this.awsS3Service.deleteObjectByUrl(publicPathOrUrl);
+        return;
+      }
+
+      await this.removePreviousPublicObject(publicPathOrUrl);
     } catch {
       return;
     }

@@ -36,6 +36,15 @@ export type LoginResponse = {
   access_token: string;
 };
 
+export type RequestEmailLoginCodePayload = {
+  email: string;
+};
+
+export type VerifyEmailLoginCodePayload = {
+  email: string;
+  code: string;
+};
+
 export type UpdateProfilePayload = {
   name: string;
   birthDate?: string | null;
@@ -312,6 +321,16 @@ export const api = {
   auth: {
     login: (payload: LoginPayload) =>
       apiFetch<LoginResponse>("/auth/login", {
+        method: "POST",
+        body: payload,
+      }),
+    requestEmailCode: (payload: RequestEmailLoginCodePayload) =>
+      apiFetch<{ ok: true }>("/auth/email-code/request", {
+        method: "POST",
+        body: payload,
+      }),
+    verifyEmailCode: (payload: VerifyEmailLoginCodePayload) =>
+      apiFetch<LoginResponse>("/auth/email-code/verify", {
         method: "POST",
         body: payload,
       }),

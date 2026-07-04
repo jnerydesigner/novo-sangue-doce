@@ -19,9 +19,14 @@ export function resolvePublicImageUrl(value?: string | null): string {
   if (/^https?:/i.test(value)) {
     try {
       const url = new URL(value);
-      const publicUrlPath = toPublicImagePathFromValue(url.pathname, normalizedPublicPath);
 
-      if (publicUrlPath) {
+      if (url.origin === normalizedPublicUrl) {
+        const publicUrlPath = toPublicImagePathFromValue(url.pathname, normalizedPublicPath);
+
+        if (!publicUrlPath) {
+          return value;
+        }
+
         return toPublicImageProxyPath(publicUrlPath);
       }
     } catch {

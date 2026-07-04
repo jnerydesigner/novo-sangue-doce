@@ -1,0 +1,9 @@
+aws_region  = "us-east-1"
+bucket_name = "sangue-doce"
+environment = "prod"
+
+enable_cors = true
+cors_allowed_origins = [
+  "https://sanguedoce.com.br",
+  "https://www.sanguedoce.com.br",
+]

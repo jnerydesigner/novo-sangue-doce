@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
+    <title>{{title}}</title>
+    <style>
+      body {
+        margin: 0;
+        background: #ebf3fa;
+        color: #0d1e32;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      img {
+        border: 0;
+        display: block;
+      }
+
+      a {
+        color: #1a3868;
+      }
+
+      .wrapper {
+        width: 100%;
+        background: #ebf3fa;
+        padding: 40px 16px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 20px 40px -24px rgba(13, 30, 50, 0.35);
+      }
+
+      .header {
+        background-color: #16305c;
+        background-image: linear-gradient(135deg, #1a3868 0%, #16305c 60%, #12294f 100%);
+        color: #ffffff;
+        padding: 30px 32px 26px;
+      }
+
+      .logo-cell {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #ffffff;
+      }
+
+      .logo-cell img {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+      }
+
+      .brand {
+        margin: 0;
+        color: #ffffff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .brand span {
+        color: #f07418;
+      }
+
+      .brand-sub {
+        margin: 2px 0 0;
+        color: #9fc0e0;
+        font-size: 12px;
+        letter-spacing: 0.01em;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin: 24px 0 10px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: rgba(24, 192, 228, 0.16);
+        color: #5fe0f7;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .title {
+        margin: 0;
+        color: #ffffff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 28px;
+        font-weight: 400;
+        line-height: 1.22;
+      }
+
+      .content {
+        padding: 34px 32px 30px;
+      }
+
+      .greeting,
+      .text,
+      .footer-text {
+        margin: 0;
+        color: #2b4966;
+        font-size: 16px;
+      }
+
+      .greeting {
+        margin-bottom: 14px;
+        color: #0d1e32;
+        font-weight: 700;
+      }
+
+      .text {
+        margin-top: 14px;
+      }
+
+      .callout {
+        margin-top: 22px;
+        border-radius: 10px;
+        background: #f4f9fd;
+        border-left: 3px solid #18c0e4;
+      }
+
+      .callout-inner {
+        padding: 18px 20px;
+        color: #1a3868;
+        font-size: 15px;
+      }
+
+      .button-wrap {
+        padding-top: 28px;
+      }
+
+      .button {
+        display: inline-block;
+        border-radius: 8px;
+        background-color: #f07418;
+        background-image: linear-gradient(135deg, #f4883a 0%, #f07418 100%);
+        color: #ffffff !important;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1;
+        padding: 15px 26px;
+        text-decoration: none;
+      }
+
+      .fallback-text {
+        margin: 14px 0 0;
+        color: #8098b3;
+        font-size: 12.5px;
+        word-break: break-all;
+      }
+
+      .fallback-text a {
+        color: #2e80c2;
+      }
+
+      .divider {
+        height: 1px;
+        background: #dce9f5;
+        margin: 30px 0 20px;
+      }
+
+      .footer {
+        padding: 4px 32px 32px;
+      }
+
+      .footer-text {
+        color: #7c93aa;
+        font-size: 12.5px;
+      }
+
+      .footer-brand {
+        margin: 0 0 6px;
+        color: #5c7a96;
+        font-size: 12.5px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .footer-brand span {
+        color: #f07418;
+      }
+
+      .preview {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+      }
+
+      @media (max-width: 540px) {
+        .wrapper {
+          padding: 20px 10px;
+        }
+
+        .header {
+          padding: 24px 24px 22px;
+        }
+
+        .content,
+        .footer {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+
+        .title {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <span class="preview">{{previewText}}</span>
+    <table role="presentation" class="wrapper" width="100%">
+      <tr>
+        <td align="center">
+          <table role="presentation" class="container" width="100%">
+            <tr>
+              <td class="header">
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td width="52" class="logo-cell">
+                      <img src="{{logoUrl}}" width="52" height="52" alt="Sangue Doce" />
+                    </td>
+                    <td style="padding-left: 14px;">
+                      <p class="brand">Sangue<span> Doce</span></p>
+                      <p class="brand-sub">Cuidado inteligente com a sua glicemia</p>
+                    </td>
+                  </tr>
+                </table>
+                <span class="eyebrow">Mensagem do sistema</span>
+                <h1 class="title">{{title}}</h1>
+              </td>
+            </tr>
+            <tr>
+              <td class="content">
+                {{#if recipientName}}
+                  <p class="greeting">Ola, {{recipientName}}.</p>
+                {{/if}}
+                <p class="text">{{intro}}</p>
+
+                <div class="callout">
+                  <div class="callout-inner">{{body}}</div>
+                </div>
+
+                {{#if actionUrl}}
+                  <div class="button-wrap">
+                    <a class="button" href="{{actionUrl}}" target="_blank" rel="noopener">
+                      {{actionLabel}}
+                    </a>
+                  </div>
+                  <p class="fallback-text">
+                    Se o botao nao funcionar, copie e cole este link no navegador:
+                    <br />
+                    <a href="{{actionUrl}}" target="_blank" rel="noopener">{{actionUrl}}</a>
+                  </p>
+                {{/if}}
+              </td>
+            </tr>
+            <tr>
+              <td class="footer">
+                <div class="divider"></div>
+                <p class="footer-brand">Sangue<span> Doce</span></p>
+                <p class="footer-text">{{footerText}}</p>
+                <p class="footer-text">&copy; {{currentYear}} Sangue Doce. Todos os direitos reservados.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
