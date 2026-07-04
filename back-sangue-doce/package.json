@@ -88,7 +88,8 @@
   },
   "resolutions": {
     "js-yaml": "^4.2.0",
-    "nodemailer": "^9.0.3"
+    "nodemailer": "^9.0.3",
+    "uuid": "^14.0.1"
   },
   "jest": {
     "moduleFileExtensions": [
