@@ -90,9 +90,9 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
-      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-https://api.sanguedoce.seligadev.com.br/auth/google/callback}
-      FRONTEND_URL: ${FRONTEND_URL:-https://sanguedoce.seligadev.com.br}
-      URL_SITE: ${URL_SITE:-https://sanguedoce.seligadev.com.br}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-http://backend:3011/auth/google/callback}
+      FRONTEND_URL: ${FRONTEND_URL:-http://frontend:3010}
+      URL_SITE: ${URL_SITE:-http://frontend:3010}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_BUCKET: ${MINIO_BUCKET:-sangue-doce}
@@ -104,11 +104,7 @@ services:
       MINIO_REGION: ${MINIO_REGION:-us-east-1}
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://minio:9000}
       MINIO_PUBLIC_PATH: ${MINIO_PUBLIC_PATH:-/sangue-doce/public}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
-      AWS_REGION: ${AWS_REGION:-us-east-1}
-      AWS_S3_REGION: ${AWS_S3_REGION:-us-east-1}
-      AWS_S3_BUCKET: ${AWS_S3_BUCKET:-sangue-doce}
+      RESEND_API_KEY: ${RESEND_API_KEY}
     depends_on:
       postgres:
         condition: service_healthy
@@ -132,17 +128,13 @@ services:
       PORT: 3010
       HOSTNAME: 0.0.0.0
       INTERNAL_API_URL: ${FRONTEND_INTERNAL_API_URL:-http://backend:3011}
-      NEXT_PUBLIC_API_URL: ${FRONTEND_API_URL:-https://api.sanguedoce.seligadev.com.br}
-      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://sanguedoce.seligadev.com.br}
+      NEXT_PUBLIC_API_URL: ${FRONTEND_API_URL:-http://backend:3011}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://frontend:3010}
       NEXT_IMAGE_UNOPTIMIZED: ${NEXT_IMAGE_UNOPTIMIZED:-true}
       NEXT_PUBLIC_MINIO_PUBLIC_URL: ${NEXT_PUBLIC_MINIO_PUBLIC_URL:-http://minio:9000}
       NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${NEXT_PUBLIC_MINIO_PUBLIC_PATH:-/sangue-doce/public}
-      NEXT_PUBLIC_AWS_S3_PUBLIC_URL: ${NEXT_PUBLIC_AWS_S3_PUBLIC_URL:-https://sangue-doce.s3.us-east-1.amazonaws.com}
       NEXT_PUBLIC_BRAND_LOGO_PATH: ${NEXT_PUBLIC_BRAND_LOGO_PATH:-/sangue-doce-logo.png}
       NEXT_PUBLIC_GOOGLE_AUTH_ENABLED: ${NEXT_PUBLIC_GOOGLE_AUTH_ENABLED:-false}
-      MINIO_INTERNAL_PUBLIC_URL: ${MINIO_INTERNAL_PUBLIC_URL:-http://minio:9000}
-      MINIO_PUBLIC_PATH: ${MINIO_PUBLIC_PATH:-/sangue-doce/public}
-      AUTH_COOKIE_SECURE: ${AUTH_COOKIE_SECURE:-false}
     depends_on:
       backend:
         condition: service_started
