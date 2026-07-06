@@ -5,8 +5,8 @@ import {
   type PostImageRecord,
   type PostPaginationParams,
   PostRelationNotFoundError,
-  PostTaxonomyAlreadyExistsError,
   type PostRepository,
+  PostTaxonomyAlreadyExistsError,
   type UpdatePostImageMetadata,
 } from "@app/posts/repositories/post.repository";
 import type {
@@ -324,7 +324,7 @@ export class PrismaPostsRepository implements PostRepository {
 
   async findByAuthorId(authorId: string): Promise<PostEntity[]> {
     const posts = await this.prisma.post.findMany({
-      where: { authorId },
+      where: { authorId, status: "PUBLISHED" },
       include: postInclude,
       orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
     });

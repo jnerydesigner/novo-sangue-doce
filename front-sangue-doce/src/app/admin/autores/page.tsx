@@ -9,7 +9,10 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminAuthorsPage() {
   const { accessToken, profile } = await requireAdmin();
-  const [authors, users] = await Promise.all([api.authors.list(), api.users.list({ accessToken })]);
+  const [authors, users] = await Promise.all([
+    api.authors.list({ accessToken }),
+    api.users.list({ accessToken }),
+  ]);
   const authorUserIds = new Set(authors.map((author) => author.userId));
   const availableUsers = users.filter((user) => !authorUserIds.has(user.id));
 

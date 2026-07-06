@@ -4,6 +4,7 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import handlebars from "handlebars";
 import { type CreateEmailResponse, Resend } from "resend";
+import { AppLogger } from "src/@shared/logger/app-logger.provider";
 
 type SystemEmailParams = {
   to: string | string[];
@@ -21,8 +22,8 @@ type SystemEmailParams = {
 @Injectable()
 export class MailService {
   private readonly systemEmailTemplate: HandlebarsTemplateDelegate;
-  private readonly logoUrl: string =
-    `https://minio.sanguedoce.com.br/sangue-doce/public/sangue-doce-logo.png`;
+  private readonly logoUrl: string = `https://sangue-doce.s3.us-east-1.amazonaws.com/sangue-doce-logo-small.png`;
+  private readonly logger: AppLogger = new AppLogger();
 
   constructor(
     private readonly resend: Resend,
@@ -32,6 +33,7 @@ export class MailService {
     this.systemEmailTemplate = handlebars.compile(readFileSync(templatePath, "utf8"), {
       strict: true,
     });
+    this.logger.setContext(MailService.name);
   }
 
   async sendSystemEmail(params: SystemEmailParams): Promise<CreateEmailResponse["data"]> {
@@ -62,6 +64,8 @@ export class MailService {
       subject: params.subject,
       html,
     });
+
+    this.logger.log(JSON.stringify(data, null, 2), "MailService.sendSystemEmail");
 
     if (error) {
       throw new InternalServerErrorException(error.message);

@@ -1,7 +1,8 @@
 import type { Post } from "./api";
 import { resolvePublicImageUrl } from "./public-image-url";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sanguedoce.com.br";
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sanguedoce.com.br";
 export const SITE_NAME = "Sangue Doce";
 export const SITE_DESCRIPTION =
   "Jornalismo e cuidado sobre diabetes, prevenção, alimentação e saúde metabólica para o dia a dia.";
@@ -40,7 +41,7 @@ export function buildArticleJsonLd(post: Post) {
           name: SITE_NAME,
           logo: {
             "@type": "ImageObject",
-            url: `${SITE_URL}/sangue-doce-logo.png`,
+            url: `${SITE_URL}/sangue-doce-logo-small.png`,
           },
         },
         mainEntityOfPage: {
@@ -86,7 +87,7 @@ export function buildWebsiteJsonLd() {
         url: SITE_URL,
         logo: {
           "@type": "ImageObject",
-          url: `${SITE_URL}/sangue-doce-logo.png`,
+          url: `${SITE_URL}/sangue-doce-logo-small.png`,
         },
       },
     ],

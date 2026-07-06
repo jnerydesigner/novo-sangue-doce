@@ -3,7 +3,7 @@ import Link from "next/link";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 const brandLogoUrl = resolvePublicImageUrl(
-  process.env.NEXT_PUBLIC_BRAND_LOGO_PATH ?? "/sangue-doce-logo.png",
+  process.env.NEXT_PUBLIC_BRAND_LOGO_PATH ?? "/sangue-doce-logo-small.png",
 );
 
 export function Brand({ dark = false }: { dark?: boolean }) {

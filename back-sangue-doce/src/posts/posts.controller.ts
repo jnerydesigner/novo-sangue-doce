@@ -1,5 +1,6 @@
 import { AuthGuard } from "@app/@infra/guard/auth.guard";
 import { RolesGuard } from "@app/@infra/guard/roles.guard";
+import { Public } from "@app/auth/decorators/public.decorator";
 import { Roles } from "@app/auth/decorators/roles.decorator";
 import { Role } from "@app/auth/enums/role.enum";
 import {
@@ -46,6 +47,7 @@ export class PostsController {
   }
 
   @Get()
+  @Public()
   findAll(@Query("page") page?: string, @Query("limit") limit?: string) {
     return this.postsService.findAll({ page, limit });
   }
@@ -58,6 +60,7 @@ export class PostsController {
   }
 
   @Get("categories")
+  @Public()
   findCategories() {
     return this.postsService.findCategories();
   }
@@ -77,6 +80,7 @@ export class PostsController {
   }
 
   @Get("tags")
+  @Public()
   findTags() {
     return this.postsService.findTags();
   }
@@ -96,11 +100,13 @@ export class PostsController {
   }
 
   @Get("slug/:slug")
+  @Public()
   findSlug(@Param("slug") slug: string) {
     return this.postsService.findSlug(slug);
   }
 
   @Get("authors/:authorId")
+  @Public()
   findPostsByAuthor(@Param("authorId") authorId: string) {
     return this.postsService.findPostsByAuthor(authorId);
   }

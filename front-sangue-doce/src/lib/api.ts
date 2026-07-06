@@ -575,7 +575,12 @@ export const api = {
       }),
   },
   authors: {
-    list: () => apiFetch<PostAuthor[]>("/authors"),
+    list: (params: AuthenticatedApiParams) =>
+      apiFetch<PostAuthor[]>("/authors", {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
     create: (payload: CreateAuthorPayload, params: AuthenticatedApiParams) =>
       apiFetch<PostAuthor>("/authors", {
         headers: {
@@ -598,9 +603,18 @@ export const api = {
         method: "PATCH",
         body: payload,
       }),
-    get: (id: string) => apiFetch<PostAuthor>(`/authors/${id}`),
+    get: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<PostAuthor>(`/authors/${id}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
     getBySlug: (slug: string) => apiFetch<PostAuthor>(`/authors/slug/${slug}`),
-    searchByEmail: (email: string) =>
-      apiFetch<PostAuthor>(`/authors/search?email=${encodeURIComponent(email)}`),
+    searchByEmail: (email: string, params: AuthenticatedApiParams) =>
+      apiFetch<PostAuthor>(`/authors/search?email=${encodeURIComponent(email)}`, {
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+      }),
   },
 };

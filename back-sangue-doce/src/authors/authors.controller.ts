@@ -1,5 +1,6 @@
 import { type AuthenticatedRequest, AuthGuard } from "@app/@infra/guard/auth.guard";
 import { RolesGuard } from "@app/@infra/guard/roles.guard";
+import { Public } from "@app/auth/decorators/public.decorator";
 import { Roles } from "@app/auth/decorators/roles.decorator";
 import { Role } from "@app/auth/enums/role.enum";
 import {
@@ -30,6 +31,8 @@ export class AuthorsController {
   }
 
   @Get()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   findAll() {
     return this.authorsService.findAll();
   }
@@ -58,16 +61,21 @@ export class AuthorsController {
   }
 
   @Get("search")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   findEmail(@Query("email") email: string) {
     return this.authorsService.findEmail(email);
   }
 
   @Get("slug/:slug")
+  @Public()
   findSlug(@Param("slug") slug: string) {
     return this.authorsService.findSlug(slug);
   }
 
   @Get(":id")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   findOne(@Param("id") id: string) {
     return this.authorsService.findOne(id);
   }

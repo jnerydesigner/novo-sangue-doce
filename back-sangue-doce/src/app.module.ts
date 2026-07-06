@@ -1,7 +1,9 @@
 import { InfraModule } from "@infra/infra.module";
 import { Global, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { APP_GUARD } from "@nestjs/core";
 import { SharedModule } from "@shared/shared.module";
+import { AuthGuard } from "./@infra/guard/auth.guard";
 import { AuthModule } from "./auth/auth.module";
 import { AuthorsModule } from "./authors/authors.module";
 import { HealthModule } from "./health/health.module";
@@ -30,6 +32,11 @@ import { UsersModule } from "./users/users.module";
     UploadsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

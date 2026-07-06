@@ -13,6 +13,7 @@ import {
 import { AuthGuard as PassportAuthGuard } from "@nestjs/passport";
 import type { Request as ExpressRequest, Response } from "express";
 import { AuthService } from "./auth.service";
+import { Public } from "./decorators/public.decorator";
 import type { LoginDto } from "./dto/login.dto";
 import type { RequestEmailLoginCodeDto } from "./dto/request-email-login-code.dto";
 import type { SetPasswordDto } from "./dto/set-password.dto";
@@ -30,27 +31,32 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("login")
+  @Public()
   login(@Body() loginDto: LoginDto) {
     return this.authService.validateUser(loginDto.email, loginDto.password);
   }
 
   @Post("email-code/request")
+  @Public()
   requestEmailLoginCode(@Body() requestEmailLoginCodeDto: RequestEmailLoginCodeDto) {
     return this.authService.requestEmailLoginCode(requestEmailLoginCodeDto);
   }
 
   @Post("email-code/verify")
+  @Public()
   verifyEmailLoginCode(@Body() verifyEmailLoginCodeDto: VerifyEmailLoginCodeDto) {
     return this.authService.verifyEmailLoginCode(verifyEmailLoginCodeDto);
   }
 
   @Get("google")
+  @Public()
   @UseGuards(PassportAuthGuard("google"))
   googleLogin() {
     return;
   }
 
   @Get("google/callback")
+  @Public()
   @UseGuards(PassportAuthGuard("google"))
   googleCallback(@Request() req: GoogleAuthenticatedRequest, @Res() res: Response) {
     if (!req.user?.access_token) {

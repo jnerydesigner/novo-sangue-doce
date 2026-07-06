@@ -15,7 +15,7 @@ export default async function NewAdminPostPage({ searchParams }: NewAdminPostPag
   const { accessToken, profile } = await requireAdmin();
   const { id } = await searchParams;
   const [authors, categories, tags] = await Promise.all([
-    api.authors.list(),
+    api.authors.list({ accessToken }),
     api.posts.categories(),
     api.posts.tags(),
   ]);

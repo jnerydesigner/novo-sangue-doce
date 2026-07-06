@@ -149,7 +149,7 @@ export class MeasurementReportPdfService {
       "..",
       "front-sangue-doce",
       "public",
-      "sangue-doce-logo.png",
+      "sangue-doce-logo-small.png",
     );
     const logoSize = 42;
     const logoX = x + (width - logoSize) / 2;

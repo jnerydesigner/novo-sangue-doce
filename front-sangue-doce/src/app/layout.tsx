@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/sangue-doce-logo.png",
+        url: "/sangue-doce-logo-small.png",
         width: 512,
         height: 512,
         alt: SITE_NAME,
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
       {
         sizes: "1024x1024",
         type: "image/png",
-        url: "/sangue-doce-logo.png",
+        url: "/sangue-doce-logo-small.png",
       },
     ],
   },

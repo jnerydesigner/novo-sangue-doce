@@ -25,7 +25,7 @@ env:
   NEXT_PUBLIC_MINIO_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_URL || 'http://localhost:9610' }}
   NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_PATH || '/sangue-doce/public' }}
   NEXT_PUBLIC_AWS_S3_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_AWS_S3_PUBLIC_URL || 'https://sangue-doce.s3.us-east-1.amazonaws.com' }}
-  NEXT_PUBLIC_BRAND_LOGO_PATH: ${{ vars.NEXT_PUBLIC_BRAND_LOGO_PATH || '/sangue-doce-logo.png' }}
+  NEXT_PUBLIC_BRAND_LOGO_PATH: ${{ vars.NEXT_PUBLIC_BRAND_LOGO_PATH || '/sangue-doce-logo-small.png' }}
   NEXT_PUBLIC_GOOGLE_AUTH_ENABLED: ${{ vars.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED || 'false' }}
 
 jobs:

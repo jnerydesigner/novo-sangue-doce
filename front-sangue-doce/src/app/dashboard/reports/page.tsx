@@ -81,7 +81,10 @@ function getQueryNumber(value: string | undefined, fallback: number) {
   return Number.isInteger(parsed) ? parsed : fallback;
 }
 
-function getMeasurementForColumn(measurements: Measurement[], column: ReportColumn) {
+function getMeasurementForColumn(
+  measurements: Measurement[],
+  column: ReportColumn,
+) {
   return (
     measurements.find((measurement) =>
       column.noteTypes.includes(measurement.noteType as MeasurementNoteType),
@@ -141,7 +144,9 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   }
 
   const reportUrl = `/dashboard/reports?${reportUrlSearchParams.toString()}`;
-  const reportAvatarUrl = resolvePublicImageUrl(monthlyReport.userAvatarUrl ?? userData.avatarUrl);
+  const reportAvatarUrl = resolvePublicImageUrl(
+    monthlyReport.userAvatarUrl ?? userData.avatarUrl,
+  );
   const periodLabel =
     queryStartDate && queryEndDate
       ? `${formatDate(queryStartDate)} a ${formatDate(queryEndDate)}`
@@ -221,7 +226,11 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 aria-label={`Foto de ${monthlyReport.userName}`}
                 className="grid h-[120px] place-items-center overflow-hidden rounded-lg border border-line bg-paper2 bg-cover bg-center text-sm font-bold uppercase tracking-[0.12em] text-muted print:h-[90px] print:text-[11px]"
                 role="img"
-                style={reportAvatarUrl ? { backgroundImage: `url(${reportAvatarUrl})` } : undefined}
+                style={
+                  reportAvatarUrl
+                    ? { backgroundImage: `url(${reportAvatarUrl})` }
+                    : undefined
+                }
               >
                 {reportAvatarUrl ? (
                   <span className="sr-only">{monthlyReport.userName}</span>
@@ -233,26 +242,38 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               <div className="grid gap-2 text-[14px] print:text-[11px]">
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Nome:</span>
-                  <strong className="uppercase text-ink">{userData.name}</strong>
+                  <strong className="uppercase text-ink">
+                    {userData.name}
+                  </strong>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
-                  <span className="font-bold uppercase text-muted">Data nasc:</span>
+                  <span className="font-bold uppercase text-muted">
+                    Data nasc:
+                  </span>
                   <span>{userData.birthDate ?? "Nao informado"}</span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
-                  <span className="font-bold uppercase text-muted">Inicio amostragem:</span>
+                  <span className="font-bold uppercase text-muted">
+                    Inicio amostragem:
+                  </span>
                   <span>{formatDate(monthlyReport.period.startDate)}</span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
-                  <span className="font-bold uppercase text-muted">Fim amostragem:</span>
+                  <span className="font-bold uppercase text-muted">
+                    Fim amostragem:
+                  </span>
                   <span>{formatDate(monthlyReport.period.endDate)}</span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
-                  <span className="font-bold uppercase text-muted">Tipo diabetes:</span>
+                  <span className="font-bold uppercase text-muted">
+                    Tipo diabetes:
+                  </span>
                   <span>{diabetesType}</span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
-                  <span className="font-bold uppercase text-muted">Periodo:</span>
+                  <span className="font-bold uppercase text-muted">
+                    Periodo:
+                  </span>
                   <span className="capitalize">{periodLabel}</span>
                 </div>
               </div>
@@ -263,7 +284,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                     alt="Sangue Doce"
                     className="size-12 rounded-lg object-cover print:size-10"
                     height={48}
-                    src="/sangue-doce-logo.png"
+                    src="/sangue-doce-logo-small.png"
                     width={48}
                   />
                   <div className="min-w-0">
@@ -282,9 +303,14 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               <table className="w-full min-w-[880px] border-collapse text-center text-[13px] print:min-w-0 print:text-[8.6px]">
                 <thead>
                   <tr className="border-y border-line bg-paper2">
-                    <th className="px-2 py-2 text-left font-bold uppercase">Dia</th>
+                    <th className="px-2 py-2 text-left font-bold uppercase">
+                      Dia
+                    </th>
                     {reportColumns.map((column) => (
-                      <th className="px-2 py-2 font-bold uppercase" key={column.key}>
+                      <th
+                        className="px-2 py-2 font-bold uppercase"
+                        key={column.key}
+                      >
                         {column.label}
                       </th>
                     ))}
@@ -293,9 +319,14 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 <tbody>
                   {monthlyReport.days.map((day) => (
                     <tr className="border-b border-line/70" key={day.date}>
-                      <td className="px-2 py-2 text-left font-semibold">{formatDate(day.date)}</td>
+                      <td className="px-2 py-2 text-left font-semibold">
+                        {formatDate(day.date)}
+                      </td>
                       {reportColumns.map((column) => {
-                        const measurement = getMeasurementForColumn(day.measurements, column);
+                        const measurement = getMeasurementForColumn(
+                          day.measurements,
+                          column,
+                        );
 
                         return (
                           <td className="px-2 py-2" key={column.key}>
@@ -313,7 +344,9 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               <p className="text-[12px] font-bold uppercase tracking-[0.08em] print:text-[9px]">
                 Este relatorio foi gerado pelo site Sangue Doce
               </p>
-              <p className="mt-1 break-all text-[11px] print:text-[7.5px]">{reportUrl}</p>
+              <p className="mt-1 break-all text-[11px] print:text-[7.5px]">
+                {reportUrl}
+              </p>
             </footer>
           </article>
         </section>

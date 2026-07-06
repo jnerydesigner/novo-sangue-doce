@@ -1,5 +1,6 @@
 import { AuthGuard } from "@app/@infra/guard/auth.guard";
 import { RolesGuard } from "@app/@infra/guard/roles.guard";
+import { Public } from "@app/auth/decorators/public.decorator";
 import { Roles } from "@app/auth/decorators/roles.decorator";
 import { Role } from "@app/auth/enums/role.enum";
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
@@ -11,6 +12,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Public()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

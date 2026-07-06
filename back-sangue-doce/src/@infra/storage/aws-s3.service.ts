@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
+import { AppLogger } from "@shared/logger/app-logger.provider";
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 type UploadObjectInput = {
@@ -23,12 +24,15 @@ const DEFAULT_REGION = "us-east-1";
 
 @Injectable()
 export class AwsS3Service {
-  private readonly logger = new Logger(AwsS3Service.name);
   private readonly bucket: string;
   private readonly region: string;
   private client?: S3Client;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(AwsS3Service.name);
     this.bucket = configService.get<string>("AWS_S3_BUCKET") ?? DEFAULT_BUCKET;
     this.region =
       configService.get<string>("AWS_S3_REGION") ??
