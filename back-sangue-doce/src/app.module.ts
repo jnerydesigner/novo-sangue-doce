@@ -1,4 +1,5 @@
 import { InfraModule } from "@infra/infra.module";
+import { BullModule } from "@nestjs/bullmq";
 import { Global, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
@@ -6,6 +7,7 @@ import { SharedModule } from "@shared/shared.module";
 import { AuthGuard } from "./@infra/guard/auth.guard";
 import { AuthModule } from "./auth/auth.module";
 import { AuthorsModule } from "./authors/authors.module";
+import { CarbAnalysisModule } from "./carb-analysis/carb-analysis.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { MeasurementsModule } from "./measurements/measurements.module";
@@ -16,7 +18,14 @@ import { UsersModule } from "./users/users.module";
 @Global()
 @Module({
   imports: [
+    BullModule.forRoot({
+      connection: {
+        host: "localhost",
+        port: 6380,
+      },
+    }),
     ImageModule,
+    CarbAnalysisModule,
     AuthorsModule,
     AuthModule,
     ConfigModule.forRoot({

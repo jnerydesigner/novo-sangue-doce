@@ -77,10 +77,27 @@ model User {
   role         Role          @default(USER)
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
+  carbAnalyses CarbAnalysis[]
   measurements Measurement[]
   postAuthors  PostAuthor[]
 
   @@map("users")
+}
+
+model CarbAnalysis {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  imageUrl         String?  @map("image_url")
+  result           Json
+  estimatedGlucose Int?     @map("estimated_glucose")
+  totalCarbsGrams  Int?     @map("total_carbs_grams")
+  confidence       String?
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("carb_analyses")
 }
 
 model Measurement {

@@ -186,9 +186,29 @@ services:
     networks:
       - infisical
 
+  redis:
+    image: redis:8-alpine
+    container_name: sangue-doce-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    command: >
+      redis-server
+      --appendonly yes
+      --save 60 1000
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
   infisical:
     name: sangue-doce-infisical
 
 volumes:
   backend_node_modules:
+  redis_data:

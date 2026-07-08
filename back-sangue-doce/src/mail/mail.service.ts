@@ -16,13 +16,19 @@ type SystemEmailParams = {
   body: string;
   actionLabel?: string;
   actionUrl?: string;
+  attachments?: {
+    content: Buffer | string;
+    contentType?: string;
+    filename: string;
+  }[];
   footerText?: string;
 };
 
 @Injectable()
 export class MailService {
   private readonly systemEmailTemplate: HandlebarsTemplateDelegate;
-  private readonly logoUrl: string = `https://sangue-doce.s3.us-east-1.amazonaws.com/sangue-doce-logo-small.png`;
+  private readonly logoUrl: string =
+    `https://sangue-doce.s3.us-east-1.amazonaws.com/sangue-doce-logo-small.png`;
   private readonly logger: AppLogger = new AppLogger();
 
   constructor(
@@ -59,6 +65,11 @@ export class MailService {
     });
 
     const { data, error } = await this.resend.emails.send({
+      attachments: params.attachments?.map((attachment) => ({
+        content: attachment.content,
+        content_type: attachment.contentType,
+        filename: attachment.filename,
+      })),
       from,
       to: params.to,
       subject: params.subject,
