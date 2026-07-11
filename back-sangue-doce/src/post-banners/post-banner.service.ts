@@ -67,13 +67,19 @@ export class PostBannerService {
     const content = this.extractText(data.content);
     if (!content) throw new Error("Salve algum conteudo no rascunho antes de gerar o banner.");
 
-    await updateProgress(20);
-    const generated = await this.imageGateway.generateArticleBanner({
+    await updateProgress(15);
+    const visualDirection = await this.textGateway.generateArticleInfographicDirection({
       title: data.title,
       excerpt: data.excerpt,
       content,
     });
-    await updateProgress(65);
+    await updateProgress(35);
+    const generated = await this.imageGateway.generateArticleBanner({
+      title: data.title,
+      excerpt: data.excerpt,
+      visualDirection,
+    });
+    await updateProgress(70);
 
     const webp = await this.imageService.toWebp(generated.image, 88);
     const coverImageAlt = await this.textGateway.generateImageAltText({
@@ -81,7 +87,7 @@ export class PostBannerService {
       mimeType: "image/webp",
       title: data.title,
     });
-    await updateProgress(75);
+    await updateProgress(80);
 
     const key = `${this.uploadsPath}/posts/${postId}/banner-${randomUUID()}.webp`;
     const uploaded = await this.s3.uploadObject({ buffer: webp, contentType: "image/webp", key });

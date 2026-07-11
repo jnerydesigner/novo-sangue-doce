@@ -175,6 +175,53 @@ export class LlmTextGateway {
       .slice(0, 180);
   }
 
+  async generateArticleInfographicDirection(input: {
+    title: string;
+    excerpt: string;
+    content: string;
+  }): Promise<string> {
+    const prompt = [
+      "Atue como diretor de arte editorial especializado em infograficos de saude.",
+      "Analise integralmente a materia abaixo antes de propor qualquer imagem.",
+      "O tema visual deve nascer exclusivamente do conteudo: nao presuma alimentacao, medicamentos, glicemia ou qualquer outro assunto.",
+      "Identifique a ideia central, os elementos visuais realmente pertinentes e uma composicao que ajude o leitor a compreender a materia.",
+      "Transforme a analise em um briefing final, pronto para um modelo gerador de imagens.",
+      "O briefing deve:",
+      "- descrever um infografico editorial horizontal, acolhedor, confiavel e contemporaneo;",
+      "- definir assunto principal, metafora visual, composicao, hierarquia, paleta e estilo;",
+      "- reservar margens seguras para cortes responsivos;",
+      "- evitar estetica hospitalar fria, banco de imagens generico e alarmismo;",
+      "- selecionar no maximo 6 informacoes curtas e verificaveis da materia quando texto ajudar a compreensao;",
+      "- colocar entre aspas todo texto que deva aparecer literalmente na imagem;",
+      "- nao inventar estatisticas, recomendacoes, fontes ou creditos;",
+      "- pedir que nao sejam incluidos logotipos nem marcas-d'agua.",
+      "Responda somente com o briefing visual em portugues, sem explicar sua analise e sem usar JSON.",
+      "",
+      `Titulo: ${input.title}`,
+      `Resumo: ${input.excerpt}`,
+      "",
+      "Conteudo da materia:",
+      input.content.slice(0, 10_000),
+    ].join("\n");
+
+    this.logger.log(
+      `Generating article infographic direction model=${this.model} title="${input.title.substring(0, 50)}"`,
+    );
+
+    const message = await this.getClient().messages.create({
+      max_tokens: 1_500,
+      model: this.model,
+      messages: [{ role: "user", content: prompt }],
+    });
+    const textBlock = message.content.find((block) => block.type === "text");
+
+    if (!textBlock || textBlock.type !== "text" || !textBlock.text.trim()) {
+      throw new Error("Nao foi possivel planejar o infografico da materia.");
+    }
+
+    return textBlock.text.trim();
+  }
+
   private truncateMarkdown(markdown: string, maxChars: number): string {
     if (markdown.length <= maxChars) {
       return markdown;

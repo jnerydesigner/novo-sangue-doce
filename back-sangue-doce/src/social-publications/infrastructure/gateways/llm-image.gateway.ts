@@ -111,35 +111,32 @@ export class LlmImageGateway {
   async generateArticleBanner(input: {
     title: string;
     excerpt: string;
-    content: string;
+    visualDirection: string;
   }): Promise<GenerateSocialImageOutput> {
     this.logger.log(
       `Generating article banner via OpenAI model=${this.model} quality=${this.quality}`,
     );
 
     const prompt = [
-      "Crie uma imagem editorial profissional para o banner de uma materia sobre diabetes e saude.",
-      "A imagem deve:",
-      "- ter composicao horizontal 16:9, adequada para o topo de uma materia",
-      "- representar visualmente a ideia central do conteudo, sem ser literal ou alarmista",
-      "- transmitir acolhimento, confianca e clareza editorial",
-      "- evitar aparencia de banco de imagens generico e estetica hospitalar fria",
-      "- nao conter textos, letras, logotipos, marcas d'agua ou interfaces",
-      "- manter o assunto principal dentro de margens seguras para cortes responsivos",
-      "- retratar pessoas com naturalidade e diversidade quando pessoas forem pertinentes",
+      "Crie um infografico editorial profissional para o banner de uma materia de saude.",
+      "Siga a direcao de arte abaixo, que foi produzida depois da analise do conteudo completo.",
+      "Nao substitua o tema por imagens genericas de saude e nao acrescente informacoes que nao estejam no briefing.",
+      "Textos literais entre aspas devem ser reproduzidos em portugues com a grafia indicada.",
+      "Priorize legibilidade em telas pequenas, hierarquia clara e margens seguras para cortes responsivos.",
+      "Nao inclua logotipos nem marcas-d'agua.",
       "",
       `Titulo: ${input.title}`,
       `Resumo: ${input.excerpt}`,
       "",
-      "Contexto da materia:",
-      input.content.slice(0, 8_000),
+      "Direcao de arte:",
+      input.visualDirection,
     ].join("\n");
 
     const response = await this.getClient().images.generate({
       model: this.model,
       prompt,
       n: 1,
-      size: "1536x1024",
+      size: this.model.startsWith("gpt-image-") ? "2048x1152" : "1792x1024",
       ...(this.model.startsWith("gpt-image-")
         ? { quality: this.quality, output_format: "png" as const }
         : { quality: "hd" as const }),
