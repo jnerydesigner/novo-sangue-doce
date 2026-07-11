@@ -11,6 +11,7 @@ import { CarbAnalysisModule } from "./carb-analysis/carb-analysis.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { MeasurementsModule } from "./measurements/measurements.module";
+import { PostBannerModule } from "./post-banners/post-banner.module";
 import { PostsModule } from "./posts/posts.module";
 import { SocialPublicationsModule } from "./social-publications/social-publications.module";
 import { UploadsModule } from "./uploads/uploads.module";
@@ -41,6 +42,7 @@ import { UsersModule } from "./users/users.module";
     HealthModule,
     UsersModule,
     PostsModule,
+    PostBannerModule,
     MeasurementsModule,
     UploadsModule,
     SocialPublicationsModule,

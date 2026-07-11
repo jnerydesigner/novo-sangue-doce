@@ -685,6 +685,26 @@ export const api = {
         body: payload,
       }),
   },
+  postBanners: {
+    generate: (postId: string, params: AuthenticatedApiParams) =>
+      apiFetch<{ jobId: string; postId: string; status: "queued" }>(
+        `/post-banners/posts/${postId}/generate`,
+        {
+          headers: { Authorization: `Bearer ${params.accessToken}` },
+          method: "POST",
+        },
+      ),
+    status: (jobId: string, params: AuthenticatedApiParams) =>
+      apiFetch<{
+        jobId: string;
+        status: "queued" | "processing" | "completed" | "failed";
+        progress: number;
+        result?: { coverImageAlt: string; coverImageUrl: string; postId: string };
+        message?: string;
+      }>(`/post-banners/jobs/${jobId}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+      }),
+  },
   authors: {
     list: (params: AuthenticatedApiParams) =>
       apiFetch<PostAuthor[]>("/authors", {

@@ -35,6 +35,6 @@ import { SocialPublicationService } from "./infrastructure/social-publication.se
     LlmImageGateway,
     LinkedinService,
   ],
-  exports: [SocialPublicationService],
+  exports: [SocialPublicationService, LlmImageGateway, LlmTextGateway],
 })
 export class SocialPublicationsModule {}

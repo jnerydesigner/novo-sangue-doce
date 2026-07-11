@@ -48,10 +48,10 @@ export function SiteFooter() {
           <div className="flex gap-2.5">
             <Link
               href="/#news"
-              aria-label="Newsletter"
               className="grid h-[38px] w-[38px] place-items-center rounded-full border border-white/20 text-white/75 transition hover:-translate-y-0.5 hover:border-spark hover:bg-spark hover:text-[#0A1824]"
             >
-              <span className="h-2 w-2 rounded-full bg-current" />
+              <span className="sr-only">Newsletter</span>
+              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-current" />
             </Link>
           </div>
         </div>

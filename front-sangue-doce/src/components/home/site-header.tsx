@@ -15,16 +15,8 @@ type SiteHeaderProps = {
 };
 
 export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const dashboardHref = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -35,26 +27,21 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-[100] border-b transition duration-300 ${
-          scrolled
-            ? "border-line bg-bg/88 shadow-sm backdrop-blur-xl"
-            : "border-transparent bg-transparent"
-        }`}
-      >
+      <header className="fixed inset-x-0 top-0 z-[100] border-b border-line bg-bg shadow-sm">
         <div className="wrap flex h-[76px] items-center justify-between gap-6">
-          <div className={scrolled ? "text-navy" : "text-white"}>
+          <div className="text-navy">
             <Brand />
           </div>
 
-          <nav className="ml-auto hidden items-center gap-[30px] md:flex" aria-label="Principal">
+          <nav
+            className="ml-auto hidden items-center gap-[30px] md:flex"
+            aria-label="Principal"
+          >
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className={`relative py-1 text-[15px] font-medium transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-spark after:transition-all hover:after:w-full ${
-                  scrolled ? "text-inkSoft hover:text-navy" : "text-white/85 hover:text-white"
-                }`}
+                className="relative py-1 text-[15px] font-medium text-inkSoft transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-spark after:transition-all hover:text-navy hover:after:w-full"
               >
                 {item.label}
               </a>
@@ -75,16 +62,12 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
                 avatarUrl={profile.avatarUrl}
                 dashboardHref={dashboardHref}
                 name={profile.name}
-                tone={scrolled ? "solid" : "light"}
+                tone="solid"
               />
             </div>
           ) : (
             <Link
-              className={`hidden rounded-lg border px-5 py-3 text-[15px] font-semibold transition hover:-translate-y-px md:inline-flex ${
-                scrolled
-                  ? "border-lineStrong text-navy hover:bg-subtle"
-                  : "border-white/35 bg-white/10 text-white hover:bg-white/20"
-              }`}
+              className="hidden rounded-lg border border-lineStrong px-5 py-3 text-[15px] font-semibold text-navy transition hover:-translate-y-px hover:bg-subtle md:inline-flex"
               href={isAuthenticated ? dashboardHref : "/login"}
             >
               Entrar
@@ -92,7 +75,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
           )}
 
           <button
-            className={`grid h-11 w-11 place-items-center md:hidden ${scrolled ? "text-ink" : "text-white"}`}
+            className="grid h-11 w-11 place-items-center text-ink md:hidden"
             type="button"
             aria-label="Abrir menu"
             onClick={() => setMenuOpen(true)}
@@ -103,7 +86,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
       </header>
 
       <div
-        className={`fixed inset-0 z-[99] flex flex-col justify-center bg-bg/95 px-[clamp(20px,5vw,64px)] backdrop-blur-lg transition duration-300 md:hidden ${
+        className={`fixed inset-0 z-[99] flex flex-col justify-center bg-bg px-[clamp(20px,5vw,64px)] transition duration-300 md:hidden ${
           menuOpen ? "visible translate-y-0" : "invisible -translate-y-full"
         }`}
       >

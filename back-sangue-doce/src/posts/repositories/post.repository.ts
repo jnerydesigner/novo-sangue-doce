@@ -71,7 +71,11 @@ export abstract class PostRepository {
   abstract findBySlug(slug: string): Promise<PostEntity | null>;
   abstract findAnyBySlug(slug: string): Promise<PostEntity | null>;
   abstract findByAuthorId(authorId: string): Promise<PostEntity[]>;
-  abstract updatePostCoverImage(postId: string, imageUrl: string): Promise<PostEntity>;
+  abstract updatePostCoverImage(
+    postId: string,
+    imageUrl: string,
+    imageAlt?: string,
+  ): Promise<PostEntity>;
   abstract findPostImageByPostId(postId: string): Promise<PostImageRecord | null>;
   abstract upsertPostImage(postId: string, imageUrl: string): Promise<PostImageRecord>;
   abstract updatePostImageMetadata(

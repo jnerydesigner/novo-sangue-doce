@@ -72,7 +72,7 @@ const otherGuides = [
 export default function DepoisDoExercicioPage() {
   return (
     <>
-      <header className="sticky top-0 z-[100] border-b border-line bg-bg/80 shadow-sm backdrop-blur-xl">
+      <header className="sticky top-0 z-[100] border-b border-line bg-bg/98 shadow-sm backdrop-blur-xl">
         <div className="wrap flex h-[76px] items-center justify-between gap-6">
           <div className="text-navy">
             <Brand />

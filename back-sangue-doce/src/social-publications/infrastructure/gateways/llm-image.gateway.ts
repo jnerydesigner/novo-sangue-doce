@@ -108,6 +108,54 @@ export class LlmImageGateway {
     };
   }
 
+  async generateArticleBanner(input: {
+    title: string;
+    excerpt: string;
+    content: string;
+  }): Promise<GenerateSocialImageOutput> {
+    this.logger.log(
+      `Generating article banner via OpenAI model=${this.model} quality=${this.quality}`,
+    );
+
+    const prompt = [
+      "Crie uma imagem editorial profissional para o banner de uma materia sobre diabetes e saude.",
+      "A imagem deve:",
+      "- ter composicao horizontal 16:9, adequada para o topo de uma materia",
+      "- representar visualmente a ideia central do conteudo, sem ser literal ou alarmista",
+      "- transmitir acolhimento, confianca e clareza editorial",
+      "- evitar aparencia de banco de imagens generico e estetica hospitalar fria",
+      "- nao conter textos, letras, logotipos, marcas d'agua ou interfaces",
+      "- manter o assunto principal dentro de margens seguras para cortes responsivos",
+      "- retratar pessoas com naturalidade e diversidade quando pessoas forem pertinentes",
+      "",
+      `Titulo: ${input.title}`,
+      `Resumo: ${input.excerpt}`,
+      "",
+      "Contexto da materia:",
+      input.content.slice(0, 8_000),
+    ].join("\n");
+
+    const response = await this.getClient().images.generate({
+      model: this.model,
+      prompt,
+      n: 1,
+      size: "1536x1024",
+      ...(this.model.startsWith("gpt-image-")
+        ? { quality: this.quality, output_format: "png" as const }
+        : { quality: "hd" as const }),
+    });
+    const imageData = response.data?.[0];
+    const imageBuffer = await this.toImageBuffer(imageData);
+
+    return {
+      image: imageBuffer,
+      mimeType: "image/png",
+      model: this.model,
+      requestId: response.created?.toString(),
+      revisedPrompt: imageData?.revised_prompt ?? undefined,
+    };
+  }
+
   private async toImageBuffer(
     imageData: { b64_json?: string; url?: string } | undefined,
   ): Promise<Buffer> {

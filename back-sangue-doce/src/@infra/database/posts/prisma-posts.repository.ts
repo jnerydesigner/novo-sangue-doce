@@ -332,7 +332,11 @@ export class PrismaPostsRepository implements PostRepository {
     return posts.map((post) => this.toEntity(post));
   }
 
-  async updatePostCoverImage(postId: string, imageUrl: string): Promise<PostEntity> {
+  async updatePostCoverImage(
+    postId: string,
+    imageUrl: string,
+    imageAlt?: string,
+  ): Promise<PostEntity> {
     try {
       const post = await this.prisma.post.update({
         where: {
@@ -340,6 +344,7 @@ export class PrismaPostsRepository implements PostRepository {
         },
         data: {
           coverImageUrl: imageUrl,
+          ...(imageAlt !== undefined ? { coverImageAlt: imageAlt } : {}),
         },
         include: postInclude,
       });

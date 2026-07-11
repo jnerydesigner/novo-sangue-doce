@@ -135,6 +135,10 @@ function NewPostFormFields({
   } | null>(null);
   const [submittingAction, setSubmittingAction] = useState<PostStatus | null>(null);
   const [previewing, setPreviewing] = useState(false);
+  const [bannerGenerationStatus, setBannerGenerationStatus] = useState<
+    "idle" | "saving" | "queued" | "processing" | "error"
+  >("idle");
+  const [bannerGenerationMessage, setBannerGenerationMessage] = useState("");
   const initialAuthor = parseInitialRelation(initialDraft?.author, authors);
   const initialCategory = parseInitialRelation(initialDraft?.category, categories);
   const [selectedAuthorId, setSelectedAuthorId] = useState(initialAuthor?.id ?? "");
@@ -382,6 +386,70 @@ function NewPostFormFields({
     return upload.imageUrl;
   }
 
+  async function generateBanner() {
+    if (!formRef.current) return;
+
+    setBannerGenerationMessage("");
+    setBannerGenerationStatus("saving");
+
+    try {
+      const draft = buildDraft(formRef.current);
+      const post = await savePost(draft, "DRAFT");
+      savePreviewDraft(draft, post);
+
+      const response = await fetch("/api/admin/post-banners", {
+        body: JSON.stringify({ postId: post.id }),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      });
+      const queued = (await response.json().catch(() => null)) as {
+        jobId?: string;
+        message?: string;
+      } | null;
+
+      if (!response.ok || !queued?.jobId) {
+        throw new Error(queued?.message ?? "Nao foi possivel adicionar o banner a fila.");
+      }
+
+      setBannerGenerationStatus("queued");
+
+      for (;;) {
+        await new Promise((resolve) => window.setTimeout(resolve, 2_000));
+        const statusResponse = await fetch(`/api/admin/post-banners/${queued.jobId}`);
+        const job = (await statusResponse.json().catch(() => null)) as {
+          status?: "queued" | "processing" | "completed" | "failed";
+          result?: { coverImageAlt?: string; coverImageUrl?: string };
+          message?: string;
+        } | null;
+
+        if (!statusResponse.ok) {
+          throw new Error(job?.message ?? "Nao foi possivel acompanhar a geracao do banner.");
+        }
+
+        if (job?.status === "processing") setBannerGenerationStatus("processing");
+        if (job?.status === "failed") {
+          throw new Error(job.message ?? "Nao foi possivel gerar o banner.");
+        }
+
+        if (job?.status === "completed" && job.result?.coverImageUrl) {
+          setCoverImageUrl(job.result.coverImageUrl);
+          setCoverPreviewUrl(job.result.coverImageUrl);
+          if (job.result.coverImageAlt) setCoverImageAlt(job.result.coverImageAlt);
+          setCoverFileName("");
+          setSelectedCoverFile(null);
+          setBannerGenerationStatus("idle");
+          setBannerGenerationMessage("Banner gerado e salvo na materia.");
+          return;
+        }
+      }
+    } catch (error) {
+      setBannerGenerationStatus("error");
+      setBannerGenerationMessage(
+        error instanceof Error ? error.message : "Nao foi possivel gerar o banner.",
+      );
+    }
+  }
+
   async function persistPost(
     draft: DraftPostPreview,
     status: Extract<PostStatus, "DRAFT" | "PUBLISHED">,
@@ -573,6 +641,9 @@ function NewPostFormFields({
           onAltTextChange={setCoverImageAlt}
           onRemoveImage={removeCoverImage}
           onSelectImage={selectCoverImage}
+          onGenerateImage={() => void generateBanner()}
+          generationStatus={bannerGenerationStatus}
+          generationMessage={bannerGenerationMessage}
         />
       </div>
       <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">

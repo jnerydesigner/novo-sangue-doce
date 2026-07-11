@@ -4,7 +4,9 @@ import { type FormEvent, useState } from "react";
 
 export function NewsletterSection() {
   const [hint, setHint] = useState("Boletim semanal. Cancele quando quiser.");
-  const [hintState, setHintState] = useState<"default" | "ok" | "err">("default");
+  const [hintState, setHintState] = useState<"default" | "ok" | "err">(
+    "default",
+  );
 
   function submitNewsletter(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,17 +31,24 @@ export function NewsletterSection() {
       <div className="wrap" id="rotina">
         <div className="relative grid gap-[clamp(30px,5vw,60px)] overflow-hidden rounded-[12px] bg-navy p-[clamp(38px,6vw,72px)] text-white before:absolute before:right-[-80px] before:top-[-80px] before:h-[340px] before:w-[340px] before:rounded-full before:bg-[radial-gradient(circle_at_center,#18C0E4_0%,transparent_70%)] before:opacity-30 lg:grid-cols-[1.1fr_1fr]">
           <div className="relative z-10">
-            <span className="eyebrow text-white/75 before:bg-spark">Boletim semanal</span>
+            <span className="eyebrow text-white/75 before:bg-spark">
+              Boletim semanal
+            </span>
             <h2 className="mt-3 text-balance font-serif text-[clamp(1.9rem,3.4vw,2.9rem)] font-normal leading-[1.04] tracking-[-0.015em]">
-              Uma dose de <em className="italic text-energy">cuidado</em> na sua caixa de entrada
+              Uma dose de <em className="italic text-energy">cuidado</em> na sua
+              caixa de entrada
             </h2>
             <p className="mt-4 max-w-[44ch] text-[1.05rem] text-white/85">
-              Toda semana, uma selecao curta: uma materia que importa, um guia pratico e uma ideia
-              para a rotina. Sem alarmismo, sem ruido.
+              Toda semana, uma selecao curta: uma materia que importa, um guia
+              pratico e uma ideia para a rotina. Sem alarmismo, sem ruido.
             </p>
           </div>
 
-          <form className="relative z-10" onSubmit={submitNewsletter} noValidate>
+          <form
+            className="relative z-10"
+            onSubmit={submitNewsletter}
+            noValidate
+          >
             <label
               className="mb-2.5 block text-[13px] font-semibold tracking-wide text-white/80"
               htmlFor="email"

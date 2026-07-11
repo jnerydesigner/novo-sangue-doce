@@ -130,6 +130,51 @@ export class LlmTextGateway {
     }
   }
 
+  async generateImageAltText(input: {
+    image: Buffer;
+    mimeType: "image/jpeg" | "image/png" | "image/webp";
+    title: string;
+  }): Promise<string> {
+    const message = await this.getClient().messages.create({
+      max_tokens: 160,
+      model: this.model,
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "image",
+              source: {
+                type: "base64",
+                media_type: input.mimeType,
+                data: input.image.toString("base64"),
+              },
+            },
+            {
+              type: "text",
+              text: [
+                "Escreva um texto alternativo acessivel em portugues do Brasil para esta imagem.",
+                `Ela sera a capa da materia: ${input.title}`,
+                "Descreva somente o que e visualmente relevante, em uma frase objetiva de ate 180 caracteres.",
+                "Nao comece com 'imagem de', 'foto de' ou 'ilustracao de'. Responda apenas com o texto alternativo.",
+              ].join("\n"),
+            },
+          ],
+        },
+      ],
+    });
+
+    const textBlock = message.content.find((block) => block.type === "text");
+    if (!textBlock || textBlock.type !== "text") {
+      throw new Error("Nao foi possivel gerar o texto alternativo da imagem.");
+    }
+
+    return textBlock.text
+      .trim()
+      .replace(/^['\"]|['\"]$/g, "")
+      .slice(0, 180);
+  }
+
   private truncateMarkdown(markdown: string, maxChars: number): string {
     if (markdown.length <= maxChars) {
       return markdown;
