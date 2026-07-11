@@ -1,0 +1,226 @@
+{
+  "endpoints": {
+    "create": {
+      "method": "POST",
+      "path": "/social-publications/posts/social-transform",
+      "description": "Criar publicacao social a partir de um post",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer <token>"
+      },
+      "body": {
+        "postId": "8d293ad8-0000-0000-0000-000000000000",
+        "aspectRatio": "1:1",
+        "forceNewVersion": false
+      },
+      "bodySchema": {
+        "postId": {
+          "type": "string (uuid)",
+          "required": true,
+          "description": "ID do post original"
+        },
+        "aspectRatio": {
+          "type": "string",
+          "required": false,
+          "default": "1:1",
+          "enum": ["1:1", "4:5", "16:9"],
+          "description": "Proporcao da imagem gerada"
+        },
+        "forceNewVersion": {
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "description": "Forcar nova versao ignorando idempotencia"
+        }
+      },
+      "response": {
+        "statusCode": 202,
+        "body": {
+          "id": "690e812b-9264-4221-a7ff-4cbf84c07334",
+          "postId": "8d293ad8-0000-0000-0000-000000000000",
+          "status": "QUEUED",
+          "message": "A publicacao foi adicionada a fila de processamento."
+        }
+      }
+    },
+    "findOne": {
+      "method": "GET",
+      "path": "/social-publications/social-publications/:id",
+      "description": "Consultar publicacao social por ID",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "params": {
+        "id": "690e812b-9264-4221-a7ff-4cbf84c07334"
+      },
+      "response": {
+        "statusCode": 200,
+        "body": {
+          "id": "690e812b-9264-4221-a7ff-4cbf84c07334",
+          "postId": "8d293ad8-0000-0000-0000-000000000000",
+          "status": "COMPLETED",
+          "generatedContent": "Controlar a glicose envolve... Leia mais no link completo.",
+          "generatedHashtags": ["#Diabetes", "#Saude", "#QualidadeDeVida"],
+          "generatedShortTitle": "Controle da Glicose",
+          "generatedImageUrl": "https://sangue-doce.s3.amazonaws.com/social-publications/8d293ad8/690e812b/cover.webp",
+          "textModel": "claude-sonnet-4-6",
+          "imageModel": "dall-e-3",
+          "promptVersion": "social-text-v1/social-image-v1",
+          "attemptCount": 1,
+          "errorCode": null,
+          "errorMessage": null,
+          "createdAt": "2026-07-11T11:00:00.000Z",
+          "completedAt": "2026-07-11T11:01:18.000Z"
+        }
+      }
+    },
+    "findByPostId": {
+      "method": "GET",
+      "path": "/social-publications/posts/:postId/social-publications",
+      "description": "Listar publicacoes sociais de um post",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "params": {
+        "postId": "8d293ad8-0000-0000-0000-000000000000"
+      },
+      "query": {
+        "page": "1",
+        "limit": "20"
+      },
+      "response": {
+        "statusCode": 200,
+        "body": {
+          "data": [
+            {
+              "id": "690e812b-9264-4221-a7ff-4cbf84c07334",
+              "postId": "8d293ad8-0000-0000-0000-000000000000",
+              "status": "COMPLETED",
+              "generatedContent": "Controlar a glicose envolve...",
+              "generatedHashtags": ["#Diabetes", "#Saude"],
+              "generatedShortTitle": "Controle da Glicose",
+              "generatedImageUrl": "https://sangue-doce.s3.amazonaws.com/social-publications/8d293ad8/690e812b/cover.webp",
+              "textModel": "claude-sonnet-4-6",
+              "imageModel": "dall-e-3",
+              "promptVersion": "social-text-v1/social-image-v1",
+              "attemptCount": 1,
+              "errorCode": null,
+              "errorMessage": null,
+              "createdAt": "2026-07-11T11:00:00.000Z",
+              "completedAt": "2026-07-11T11:01:18.000Z"
+            }
+          ],
+          "meta": {
+            "page": 1,
+            "limit": 20,
+            "total": 1,
+            "totalPages": 1,
+            "hasNextPage": false,
+            "hasPreviousPage": false
+          }
+        }
+      }
+    },
+    "retry": {
+      "method": "POST",
+      "path": "/social-publications/social-publications/:id/retry",
+      "description": "Reintentar publicacao com falha",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "params": {
+        "id": "690e812b-9264-4221-a7ff-4cbf84c07334"
+      },
+      "response": {
+        "statusCode": 200,
+        "body": {
+          "id": "690e812b-9264-4221-a7ff-4cbf84c07334",
+          "postId": "8d293ad8-0000-0000-0000-000000000000",
+          "status": "QUEUED",
+          "message": "A publicacao foi reenfileirada para processamento."
+        }
+      }
+    }
+  },
+  "statuses": {
+    "PENDING": "Registro criado, aguardando enfileiramento",
+    "QUEUED": "Adicionado a fila BullMQ",
+    "PROCESSING": "Worker processando",
+    "GENERATING_TEXT": "Gerando texto via Claude",
+    "GENERATING_IMAGE": "Gerando imagem via OpenAI",
+    "CONVERTING_IMAGE": "Convertendo para WebP",
+    "UPLOADING_IMAGE": "Enviando para S3",
+    "COMPLETED": "Publicacao concluida com sucesso",
+    "FAILED": "Falha no processamento",
+    "CANCELLED": "Cancelado pelo usuario"
+  },
+  "examples": {
+    "createRequest": {
+      "postId": "8d293ad8-0000-0000-0000-000000000000",
+      "aspectRatio": "1:1",
+      "forceNewVersion": false
+    },
+    "createRequestMinimal": {
+      "postId": "8d293ad8-0000-0000-0000-000000000000"
+    },
+    "createRequestForceNew": {
+      "postId": "8d293ad8-0000-0000-0000-000000000000",
+      "forceNewVersion": true
+    },
+    "createRequestVertical": {
+      "postId": "8d293ad8-0000-0000-0000-000000000000",
+      "aspectRatio": "4:5"
+    },
+    "completedResponse": {
+      "id": "690e812b-9264-4221-a7ff-4cbf84c07334",
+      "postId": "8d293ad8-0000-0000-0000-000000000000",
+      "status": "COMPLETED",
+      "generatedContent": "Voce sabia que controlar a glicose vai alem de evitar doces? O segredo esta no equilibrio entre alimentacao, atividade fisica e acompanhamento medico. Descubra dicas praticas no nosso artigo completo.",
+      "generatedHashtags": ["#Diabetes", "#Saude", "#Glicose", "#QualidadeDeVida"],
+      "generatedShortTitle": "Dicas para Controlar a Glicose",
+      "generatedImageUrl": "https://sangue-doce.s3.amazonaws.com/social-publications/8d293ad8/690e812b/cover.webp",
+      "textModel": "claude-sonnet-4-6",
+      "imageModel": "dall-e-3",
+      "promptVersion": "social-text-v1/social-image-v1",
+      "attemptCount": 1,
+      "errorCode": null,
+      "errorMessage": null,
+      "createdAt": "2026-07-11T11:00:00.000Z",
+      "completedAt": "2026-07-11T11:01:18.000Z"
+    },
+    "failedResponse": {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "postId": "8d293ad8-0000-0000-0000-000000000000",
+      "status": "FAILED",
+      "generatedContent": null,
+      "generatedHashtags": null,
+      "generatedShortTitle": null,
+      "generatedImageUrl": null,
+      "textModel": null,
+      "imageModel": null,
+      "promptVersion": null,
+      "attemptCount": 3,
+      "errorCode": "TEXT_GENERATION_FAILED",
+      "errorMessage": "Falha na geracao de texto: Timeout ao gerar texto social (60000ms)",
+      "createdAt": "2026-07-11T11:00:00.000Z",
+      "completedAt": null
+    },
+    "processingResponse": {
+      "id": "690e812b-9264-4221-a7ff-4cbf84c07334",
+      "postId": "8d293ad8-0000-0000-0000-000000000000",
+      "status": "GENERATING_IMAGE",
+      "generatedContent": null,
+      "generatedHashtags": null,
+      "generatedShortTitle": null,
+      "generatedImageUrl": null,
+      "textModel": null,
+      "imageModel": null,
+      "promptVersion": null,
+      "attemptCount": 1,
+      "errorCode": null,
+      "errorMessage": null,
+      "createdAt": "2026-07-11T11:00:00.000Z",
+      "completedAt": null
+    }
+  }
+}

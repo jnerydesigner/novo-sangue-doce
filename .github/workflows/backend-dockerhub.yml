@@ -75,6 +75,66 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - name: Checkout deployment files
+        uses: actions/checkout@v5
+
+      - name: Sync stack and deployment environment
+        env:
+          VPS_APP_DIR: ${{ vars.VPS_APP_DIR || '/opt/sangue-doce' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_S3_REGION: ${{ vars.AWS_S3_REGION }}
+          AWS_S3_BUCKET: ${{ vars.AWS_S3_BUCKET }}
+          LLM_IMAGE_MODEL: ${{ vars.LLM_IMAGE_MODEL }}
+          LLM_IMAGE_QUALITY: ${{ vars.LLM_IMAGE_QUALITY }}
+          LLM_IMAGE_TIMEOUT_MS: ${{ vars.LLM_IMAGE_TIMEOUT_MS }}
+          LLM_TEXT_MODEL: ${{ vars.LLM_TEXT_MODEL }}
+          LLM_TEXT_TIMEOUT_MS: ${{ vars.LLM_TEXT_TIMEOUT_MS }}
+          LINKEDIN_API_VERSION: ${{ vars.LINKEDIN_API_VERSION }}
+          PATH_TO_UPLOADS: ${{ vars.PATH_TO_UPLOADS }}
+          PATH_TO_UPLOADS_MEDIA: ${{ vars.PATH_TO_UPLOADS_MEDIA }}
+          NEXT_PUBLIC_AWS_S3_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_AWS_S3_PUBLIC_URL }}
+        run: |
+          set -euo pipefail
+          install -m 644 docker-compose.portainer.yaml "$VPS_APP_DIR/docker-compose.portainer.yaml"
+          export DEPLOY_ENV_FILE="$VPS_APP_DIR/.env.stack.portainer"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          path = Path(os.environ["DEPLOY_ENV_FILE"])
+          lines = path.read_text().splitlines() if path.exists() else []
+          updates = {
+              key: value
+              for key, value in os.environ.items()
+              if key in {
+                  "ANTHROPIC_API_KEY", "OPENAI_API_KEY", "LINKEDIN_ACCESS_TOKEN",
+                  "LINKEDIN_AUTHOR_URN", "RESEND_API_KEY", "AWS_ACCESS_KEY_ID",
+                  "AWS_SECRET_ACCESS_KEY", "AWS_REGION", "AWS_S3_REGION", "AWS_S3_BUCKET",
+                  "LLM_IMAGE_MODEL", "LLM_IMAGE_QUALITY", "LLM_IMAGE_TIMEOUT_MS",
+                  "LLM_TEXT_MODEL", "LLM_TEXT_TIMEOUT_MS", "LINKEDIN_API_VERSION",
+                  "PATH_TO_UPLOADS", "PATH_TO_UPLOADS_MEDIA", "NEXT_PUBLIC_AWS_S3_PUBLIC_URL",
+              } and value
+          }
+          found = set()
+          output = []
+          for line in lines:
+              key = line.split("=", 1)[0] if "=" in line else ""
+              if key in updates:
+                  output.append(f"{key}={updates[key]}")
+                  found.add(key)
+              else:
+                  output.append(line)
+          output.extend(f"{key}={value}" for key, value in updates.items() if key not in found)
+          path.write_text("\n".join(output) + "\n")
+          PY
+
       - name: Pull and restart stack
         env:
           VPS_APP_DIR: ${{ vars.VPS_APP_DIR || '/opt/sangue-doce' }}
@@ -83,7 +143,7 @@ jobs:
           cd "$VPS_APP_DIR"
 
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml pull backend frontend
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d postgres minio
+          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d postgres minio redis
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml run --rm migrate
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d --force-recreate backend frontend
           docker image prune -f

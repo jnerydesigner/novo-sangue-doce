@@ -32,6 +32,7 @@
     "start:dev:infisical": "set -a; . ./.env; LOCAL_DATABASE_URL=\"${LOCAL_DATABASE_URL:-$DATABASE_URL}\"; LOCAL_MINIO_ENDPOINT=\"${LOCAL_MINIO_ENDPOINT:-$MINIO_ENDPOINT}\"; LOCAL_MINIO_API_PORT=\"${LOCAL_MINIO_API_PORT:-$MINIO_API_PORT}\"; INFISICAL_DOMAIN=\"${INFISICAL_DOMAIN:-http://localhost:8095}\"; set +a; infisical run --domain \"$INFISICAL_DOMAIN\" --token \"$INFISICAL_TOKEN\" --projectId \"$INFISICAL_PROJECT_ID\" --env \"${INFISICAL_ENV:-dev}\" -- sh -c 'DATABASE_URL=\"$LOCAL_DATABASE_URL\" MINIO_ENDPOINT=\"$LOCAL_MINIO_ENDPOINT\" MINIO_API_PORT=\"$LOCAL_MINIO_API_PORT\" yarn start:dev'"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@aws-sdk/client-s3": "^3.1079.0",
     "@nestjs-modules/mailer": "^2.3.7",
     "@nestjs/axios": "^4.0.1",
@@ -49,6 +50,7 @@
     "handlebars": "^4.7.9",
     "minio": "^8.0.7",
     "nodemailer": "^9.0.3",
+    "openai": "^6.46.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pdfkit": "^0.19.1",

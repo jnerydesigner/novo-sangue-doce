@@ -5,7 +5,7 @@ import { UserMenu } from "@/components/home/user-menu";
 import { adminSidebarItems, dashboardSidebarItems } from "../dashboard/dashboard.data";
 
 type AdminShellProps = {
-  active: "overview" | "posts" | "taxonomy" | "users" | "authors";
+  active: "overview" | "posts" | "social-publications" | "taxonomy" | "users" | "authors";
   children: React.ReactNode;
   subtitle?: string;
   title?: string;
@@ -17,6 +17,7 @@ type AdminShellProps = {
 const adminActiveByHref = {
   "/admin": "overview",
   "/admin/posts": "posts",
+  "/admin/publicacoes-sociais": "social-publications",
   "/admin/taxonomia": "taxonomy",
   "/admin/usuarios": "users",
   "/admin/autores": "authors",
@@ -32,6 +33,10 @@ const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: s
   posts: {
     title: "Materias",
     subtitle: "Publicacao, rascunhos e organizacao editorial.",
+  },
+  "social-publications": {
+    title: "Publicacoes sociais",
+    subtitle: "Acompanhe textos e imagens preparados para as redes.",
   },
   taxonomy: {
     title: "Tags e Categorias",

@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { InjectQueue } from "@nestjs/bullmq";
 import { Injectable } from "@nestjs/common";
 import type { Queue } from "bullmq";
@@ -15,6 +16,7 @@ export class CountCarbProducer {
         delay: 30_000,
         type: "exponential",
       },
+      jobId: randomUUID(),
       removeOnComplete: {
         age: 60 * 60 * 24 * 7,
         count: 500,
@@ -24,5 +26,9 @@ export class CountCarbProducer {
         count: 500,
       },
     });
+  }
+
+  async getJob(jobId: string) {
+    return this.countCarbQueue.getJob(jobId);
   }
 }

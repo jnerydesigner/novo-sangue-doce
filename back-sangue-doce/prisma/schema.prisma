@@ -67,16 +67,16 @@ enum PostAccentColor {
 }
 
 model User {
-  id           String        @id @default(uuid()) @db.Uuid
+  id           String         @id @default(uuid()) @db.Uuid
   name         String
-  email        String        @unique
-  passwordHash String        @map("password_hash")
-  avatarUrl    String?       @map("avatar_url")
-  birthDate    DateTime?     @map("birth_date")
-  diabetesType DiabetesType  @default(UNKNOWN) @map("diabetes_type")
-  role         Role          @default(USER)
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
+  email        String         @unique
+  passwordHash String         @map("password_hash")
+  avatarUrl    String?        @map("avatar_url")
+  birthDate    DateTime?      @map("birth_date")
+  diabetesType DiabetesType   @default(UNKNOWN) @map("diabetes_type")
+  role         Role           @default(USER)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
   carbAnalyses CarbAnalysis[]
   measurements Measurement[]
   postAuthors  PostAuthor[]
@@ -92,6 +92,7 @@ model CarbAnalysis {
   estimatedGlucose Int?     @map("estimated_glucose")
   totalCarbsGrams  Int?     @map("total_carbs_grams")
   confidence       String?
+  queueJobId       String?  @unique @map("queue_job_id")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -167,36 +168,110 @@ model PostTagRelation {
 }
 
 model Post {
-  id               String            @id @default(uuid()) @db.Uuid
-  slug             String            @unique
-  title            String
-  excerpt          String            @db.Text
-  standfirst       String?           @db.Text
-  content          Json              @default("[]")
-  status           PostStatus        @default(DRAFT)
-  featured         Boolean           @default(false)
-  readingMinutes   Int               @default(5) @map("reading_minutes")
-  coverImageUrl    String?           @map("cover_image_url")
-  coverImageAlt    String?           @map("cover_image_alt")
-  coverCaption     String?           @map("cover_caption") @db.Text
-  verticalImageUrl String?           @map("vertical_image_url")
-  metaTitle        String?           @map("meta_title")
-  metaDescription  String?           @map("meta_description") @db.Text
-  publishedAt      DateTime?         @map("published_at")
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @updatedAt @map("updated_at")
-  authorId         String            @map("author_id") @db.Uuid
-  categoryId       String            @map("category_id") @db.Uuid
-  author           PostAuthor        @relation(fields: [authorId], references: [id])
-  category         PostCategory      @relation(fields: [categoryId], references: [id])
-  tags             PostTagRelation[]
-  postImages       PostImages[]
+  id                 String              @id @default(uuid()) @db.Uuid
+  slug               String              @unique
+  title              String
+  excerpt            String              @db.Text
+  standfirst         String?             @db.Text
+  content            Json                @default("[]")
+  status             PostStatus          @default(DRAFT)
+  featured           Boolean             @default(false)
+  readingMinutes     Int                 @default(5) @map("reading_minutes")
+  coverImageUrl      String?             @map("cover_image_url")
+  coverImageAlt      String?             @map("cover_image_alt")
+  coverCaption       String?             @map("cover_caption") @db.Text
+  verticalImageUrl   String?             @map("vertical_image_url")
+  metaTitle          String?             @map("meta_title")
+  metaDescription    String?             @map("meta_description") @db.Text
+  publishedAt        DateTime?           @map("published_at")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  authorId           String              @map("author_id") @db.Uuid
+  categoryId         String              @map("category_id") @db.Uuid
+  author             PostAuthor          @relation(fields: [authorId], references: [id])
+  category           PostCategory        @relation(fields: [categoryId], references: [id])
+  tags               PostTagRelation[]
+  postImages         PostImages[]
+  socialPublications SocialPublication[]
 
   @@index([status, publishedAt(sort: Desc)])
   @@index([featured, publishedAt(sort: Desc)])
   @@index([categoryId, publishedAt(sort: Desc)])
   @@index([authorId])
   @@map("posts")
+}
+
+enum SocialPublicationStatus {
+  PENDING
+  QUEUED
+  PROCESSING
+  GENERATING_TEXT
+  GENERATING_IMAGE
+  CONVERTING_IMAGE
+  UPLOADING_IMAGE
+  COMPLETED
+  FAILED
+  CANCELLED
+  STANDBY
+}
+
+enum SocialPublicationGenerationMode {
+  NEW_PUBLICATION
+  REGENERATE_TEXT
+  REGENERATE_IMAGE
+}
+
+model SocialPublication {
+  id                   String                          @id @default(uuid()) @db.Uuid
+  postId               String                          @db.Uuid
+  status               SocialPublicationStatus         @default(PENDING)
+  generationMode       SocialPublicationGenerationMode @default(NEW_PUBLICATION) @map("generation_mode")
+  parentPublicationId  String?                         @map("parent_publication_id") @db.Uuid
+  imageEditInstruction String?                         @map("image_edit_instruction") @db.VarChar(500)
+  articleUrl           String?                         @map("article_url")
+
+  generatedContent    String? @map("generated_content") @db.Text
+  generatedHashtags   Json?   @map("generated_hashtags")
+  generatedShortTitle String? @map("generated_short_title")
+  generatedImageKey   String? @map("generated_image_key")
+  generatedImageUrl   String? @map("generated_image_url")
+  socialNetworks      Json    @default("[]") @map("social_networks")
+
+  sourceImageKey String? @map("source_image_key")
+  queueJobId     String? @unique @map("queue_job_id")
+  correlationId  String  @unique @map("correlation_id")
+  idempotencyKey String  @unique @map("idempotency_key")
+
+  textModel     String? @map("text_model")
+  imageModel    String? @map("image_model")
+  promptVersion String? @map("prompt_version")
+  attemptCount  Int     @default(0) @map("attempt_count")
+
+  errorCode    String? @map("error_code")
+  errorMessage String? @map("error_message") @db.Text
+  errorDetails Json?   @map("error_details")
+
+  processingMetadata Json? @map("processing_metadata")
+
+  requestedBy String? @map("requested_by") @db.Uuid
+
+  queuedAt    DateTime? @map("queued_at")
+  startedAt   DateTime? @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  failedAt    DateTime? @map("failed_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post                Post                @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentPublication   SocialPublication?  @relation("SocialPublicationVersions", fields: [parentPublicationId], references: [id], onDelete: SetNull)
+  derivedPublications SocialPublication[] @relation("SocialPublicationVersions")
+
+  @@index([postId])
+  @@index([parentPublicationId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("social_publications")
 }
 
 model PostImages {

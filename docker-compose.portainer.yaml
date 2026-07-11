@@ -63,6 +63,22 @@ services:
       mc anonymous set download local/"$${MINIO_BUCKET}"/"$${MINIO_PUBLIC_PREFIX}";
       '
 
+  redis:
+    image: redis:7-alpine
+    container_name: sangue-doce-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks:
+      - sangue_doce_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
   migrate:
     image: ${BACKEND_IMAGE:-jandernery/sangue-doce-backend:latest}
     container_name: sangue-doce-migrate
@@ -93,6 +109,21 @@ services:
       GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-http://backend:3011/auth/google/callback}
       FRONTEND_URL: ${FRONTEND_URL:-http://frontend:3010}
       URL_SITE: ${URL_SITE:-http://frontend:3010}
+      PATH_TO_UPLOADS: ${PATH_TO_UPLOADS:-}
+      PATH_TO_UPLOADS_MEDIA: ${PATH_TO_UPLOADS_MEDIA:-social-publications}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      LLM_TEXT_MODEL: ${LLM_TEXT_MODEL:-claude-sonnet-4-6}
+      LLM_TEXT_TIMEOUT_MS: ${LLM_TEXT_TIMEOUT_MS:-120000}
+      LLM_IMAGE_MODEL: ${LLM_IMAGE_MODEL:-gpt-image-2}
+      LLM_IMAGE_QUALITY: ${LLM_IMAGE_QUALITY:-low}
+      LLM_IMAGE_TIMEOUT_MS: ${LLM_IMAGE_TIMEOUT_MS:-180000}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      LINKEDIN_ACCESS_TOKEN: ${LINKEDIN_ACCESS_TOKEN:-}
+      LINKEDIN_AUTHOR_URN: ${LINKEDIN_AUTHOR_URN:-}
+      LINKEDIN_API_VERSION: ${LINKEDIN_API_VERSION:-202606}
+      LINKEDIN_TEST_POST_ID: ${LINKEDIN_TEST_POST_ID:-e728cbe5-0d2c-4433-84cf-e7d795a39aa1}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_BUCKET: ${MINIO_BUCKET:-sangue-doce}
@@ -119,6 +150,8 @@ services:
         condition: service_healthy
       minio-init:
         condition: service_completed_successfully
+      redis:
+        condition: service_healthy
     networks:
       - sangue_doce_internal
 
@@ -154,3 +187,4 @@ networks:
 volumes:
   postgres_data:
   minio_data:
+  redis_data:

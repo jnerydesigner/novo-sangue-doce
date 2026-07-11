@@ -1,8 +1,13 @@
 import { randomUUID } from "node:crypto";
-import { AppLogger } from "@shared/logger/app-logger.provider";
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { AppLogger } from "@shared/logger/app-logger.provider";
 
 type UploadObjectInput = {
   buffer: Buffer;
@@ -26,6 +31,7 @@ const DEFAULT_REGION = "us-east-1";
 export class AwsS3Service {
   private readonly bucket: string;
   private readonly region: string;
+  private readonly uploadsBasePath: string;
   private client?: S3Client;
 
   constructor(
@@ -38,6 +44,10 @@ export class AwsS3Service {
       configService.get<string>("AWS_S3_REGION") ??
       configService.get<string>("AWS_REGION") ??
       DEFAULT_REGION;
+    this.uploadsBasePath = (configService.get<string>("PATH_TO_UPLOADS") ?? "").replace(
+      /^\/+|\/+$/g,
+      "",
+    );
   }
 
   async uploadObject({
@@ -47,7 +57,7 @@ export class AwsS3Service {
     key,
     keyPrefix = DEFAULT_KEY_PREFIX,
   }: UploadObjectInput): Promise<UploadedObject> {
-    const objectKey = key ?? this.createObjectKey(keyPrefix, fileName);
+    const objectKey = this.withUploadsBasePath(key ?? this.createObjectKey(keyPrefix, fileName));
 
     try {
       this.logger.log(
@@ -81,7 +91,9 @@ export class AwsS3Service {
 
   async deleteObject(key: string): Promise<void> {
     try {
-      this.logger.log(`Deleting object from S3 bucket=${this.bucket} region=${this.region} key=${key}`);
+      this.logger.log(
+        `Deleting object from S3 bucket=${this.bucket} region=${this.region} key=${key}`,
+      );
 
       await this.getClient().send(
         new DeleteObjectCommand({
@@ -110,12 +122,73 @@ export class AwsS3Service {
     await this.deleteObject(key);
   }
 
+  async downloadObject(key: string): Promise<Buffer> {
+    try {
+      this.logger.log(
+        `Downloading object from S3 bucket=${this.bucket} region=${this.region} key=${key}`,
+      );
+
+      const response = await this.getClient().send(
+        new GetObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+        }),
+      );
+
+      const body = response.Body;
+
+      if (!body) {
+        throw new Error("Response body is empty");
+      }
+
+      const chunks: Uint8Array[] = [];
+      const reader = body.transformToWebStream().getReader();
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        chunks.push(value);
+      }
+
+      return Buffer.concat(chunks);
+    } catch (error) {
+      this.logger.error(
+        `Failed to download object from S3 bucket=${this.bucket} region=${this.region} key=${key}: ${this.formatAwsError(error)}`,
+      );
+
+      throw new InternalServerErrorException("Nao foi possivel baixar o arquivo do S3.", {
+        cause: error,
+      });
+    }
+  }
+
   private getClient(): S3Client {
     this.client ??= new S3Client({
       region: this.region,
     });
 
     return this.client;
+  }
+
+  private withUploadsBasePath(key: string): string {
+    const normalizedKey = key.replace(/^\/+/, "");
+
+    if (!this.uploadsBasePath) {
+      return normalizedKey;
+    }
+
+    if (
+      normalizedKey === this.uploadsBasePath ||
+      normalizedKey.startsWith(`${this.uploadsBasePath}/`)
+    ) {
+      return normalizedKey;
+    }
+
+    return `${this.uploadsBasePath}/${normalizedKey}`;
   }
 
   private createObjectKey(keyPrefix: string, fileName?: string): string {

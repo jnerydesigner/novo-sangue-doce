@@ -6,8 +6,7 @@ const minioPublicUrl = process.env.NEXT_PUBLIC_MINIO_PUBLIC_URL ?? "http://local
 const minioPublicPath = process.env.NEXT_PUBLIC_MINIO_PUBLIC_PATH ?? "/sangue-doce/public";
 const minioUrl = new URL(minioPublicUrl);
 const s3PublicUrl =
-  process.env.NEXT_PUBLIC_AWS_S3_PUBLIC_URL ??
-  "https://sangue-doce.s3.us-east-1.amazonaws.com";
+  process.env.NEXT_PUBLIC_AWS_S3_PUBLIC_URL ?? "https://sangue-doce.s3.us-east-1.amazonaws.com";
 const s3Url = new URL(s3PublicUrl);
 
 /** @type {import('next').NextConfig} */
@@ -29,6 +28,16 @@ const nextConfig = {
       {
         hostname: s3Url.hostname,
         pathname: "/public/**",
+        protocol: s3Url.protocol.replace(":", ""),
+      },
+      {
+        hostname: s3Url.hostname,
+        pathname: "/local/public/**",
+        protocol: s3Url.protocol.replace(":", ""),
+      },
+      {
+        hostname: s3Url.hostname,
+        pathname: "/local/social_medias/thumb/**",
         protocol: s3Url.protocol.replace(":", ""),
       },
     ],

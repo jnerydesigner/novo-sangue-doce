@@ -1,7 +1,7 @@
 import { InfraModule } from "@infra/infra.module";
 import { BullModule } from "@nestjs/bullmq";
 import { Global, Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { SharedModule } from "@shared/shared.module";
 import { AuthGuard } from "./@infra/guard/auth.guard";
@@ -12,26 +12,30 @@ import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { MeasurementsModule } from "./measurements/measurements.module";
 import { PostsModule } from "./posts/posts.module";
+import { SocialPublicationsModule } from "./social-publications/social-publications.module";
 import { UploadsModule } from "./uploads/uploads.module";
 import { UsersModule } from "./users/users.module";
 
 @Global()
 @Module({
   imports: [
-    BullModule.forRoot({
-      connection: {
-        host: "localhost",
-        port: 6380,
-      },
+    ConfigModule.forRoot({
+      envFilePath: ".env",
+      isGlobal: true,
+    }),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get<string>("REDIS_HOST") ?? "localhost",
+          port: Number(configService.get<string>("REDIS_PORT") ?? 6380),
+        },
+      }),
     }),
     ImageModule,
     CarbAnalysisModule,
     AuthorsModule,
     AuthModule,
-    ConfigModule.forRoot({
-      envFilePath: ".env",
-      isGlobal: true,
-    }),
     SharedModule,
     InfraModule,
     HealthModule,
@@ -39,6 +43,7 @@ import { UsersModule } from "./users/users.module";
     PostsModule,
     MeasurementsModule,
     UploadsModule,
+    SocialPublicationsModule,
   ],
   controllers: [],
   providers: [

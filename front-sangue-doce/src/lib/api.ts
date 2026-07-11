@@ -297,6 +297,48 @@ export type PaginatedResponse<T> = {
   };
 };
 
+export type SocialPublicationStatus =
+  | "PENDING"
+  | "QUEUED"
+  | "PROCESSING"
+  | "GENERATING_TEXT"
+  | "GENERATING_IMAGE"
+  | "CONVERTING_IMAGE"
+  | "UPLOADING_IMAGE"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+  | "STANDBY";
+
+export type SocialNetwork = "LINKEDIN" | "INSTAGRAM" | "FACEBOOK";
+export type SocialPublicationGenerationMode =
+  | "NEW_PUBLICATION"
+  | "REGENERATE_TEXT"
+  | "REGENERATE_IMAGE";
+
+export type SocialPublication = {
+  id: string;
+  postId: string;
+  status: SocialPublicationStatus;
+  generationMode: SocialPublicationGenerationMode;
+  parentPublicationId: string | null;
+  imageEditInstruction: string | null;
+  articleUrl: string | null;
+  generatedContent: string | null;
+  generatedHashtags: string[] | null;
+  generatedShortTitle: string | null;
+  generatedImageUrl: string | null;
+  socialNetworks: SocialNetwork[];
+  textModel: string | null;
+  imageModel: string | null;
+  promptVersion: string | null;
+  attemptCount: number;
+  errorCode: string | null;
+  errorMessage: string | null;
+  createdAt: string;
+  completedAt: string | null;
+};
+
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, {
     cache: "no-store",
@@ -570,6 +612,56 @@ export const api = {
         headers: {
           Authorization: `Bearer ${params.accessToken}`,
         },
+        method: "PATCH",
+        body: payload,
+      }),
+  },
+  socialPublications: {
+    list: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
+      const searchParams = new URLSearchParams();
+
+      if (params.page) searchParams.set("page", String(params.page));
+      if (params.limit) searchParams.set("limit", String(params.limit));
+
+      const query = searchParams.toString();
+
+      return apiFetch<PaginatedResponse<SocialPublication>>(
+        `/social-publications/publications${query ? `?${query}` : ""}`,
+        { headers: { Authorization: `Bearer ${params.accessToken}` } },
+      );
+    },
+    retry: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<{ id: string; postId: string; status: SocialPublicationStatus; message: string }>(
+        `/social-publications/social-publications/${id}/retry`,
+        {
+          headers: { Authorization: `Bearer ${params.accessToken}` },
+          method: "POST",
+        },
+      ),
+    generate: (
+      payload: {
+        postId: string;
+        generationMode: SocialPublicationGenerationMode;
+        parentPublicationId?: string;
+        imageEditInstruction?: string;
+      },
+      params: AuthenticatedApiParams,
+    ) =>
+      apiFetch<{ id: string; postId: string; status: SocialPublicationStatus; message: string }>(
+        "/social-publications/posts/social-transform",
+        {
+          headers: { Authorization: `Bearer ${params.accessToken}` },
+          method: "POST",
+          body: payload,
+        },
+      ),
+    update: (
+      id: string,
+      payload: { description: string; socialNetworks: SocialNetwork[] },
+      params: AuthenticatedApiParams,
+    ) =>
+      apiFetch<SocialPublication>(`/social-publications/social-publications/${id}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
         method: "PATCH",
         body: payload,
       }),

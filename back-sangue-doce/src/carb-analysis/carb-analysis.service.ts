@@ -1,23 +1,21 @@
 import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import { PrismaService } from "@infra/database/prisma.service";
 import { AwsS3Service } from "@infra/storage/aws-s3.service";
-import { HttpService } from "@nestjs/axios";
 import {
   BadGatewayException,
   BadRequestException,
-  GatewayTimeoutException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import type { CarbAnalysis } from "@prisma/client";
 import { Prisma } from "@prisma/client";
-import type { AxiosError } from "axios";
-import FormData from "form-data";
-import { lastValueFrom } from "rxjs";
 import { MailService } from "src/mail/mail.service";
+import { AnthropicCarbAnalysisService } from "./anthropic-carb-analysis.service";
 import { CarbAnalysisReportPdfService } from "./carb-analysis-report-pdf.service";
 import { CountCarbProducer } from "./count-carb.producer";
 import type {
+  CarbAnalysisJobStatus,
   CarbAnalysisResult,
   CountCarbJobData,
   PublicCarbAnalysis,
@@ -26,14 +24,11 @@ import type {
 } from "./types";
 
 const SUPPORTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
-const DEFAULT_COUNT_CARB_API_URL = "http://localhost:8020";
-const DEFAULT_TIMEOUT_MS = 90_000;
 
 @Injectable()
 export class CarbAnalysisService {
   constructor(
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
+    private readonly anthropicCarbAnalysisService: AnthropicCarbAnalysisService,
     private readonly prisma: PrismaService,
     private readonly awsS3Service: AwsS3Service,
     private readonly countCarbProducer: CountCarbProducer,
@@ -76,13 +71,16 @@ export class CarbAnalysisService {
 
     this.validateUploadedImage(file);
 
-    const result = await this.requestPythonAnalysis(file);
+    const result = await this.analyzeFoodImage(file);
     const imageUrl = await this.uploadAnalysisImage(req.user.sub, file);
 
     return this.saveAnalysis(req.user.sub, result, imageUrl);
   }
 
-  async processQueuedAnalysis(data: CountCarbJobData): Promise<PublicCarbAnalysis> {
+  async processQueuedAnalysis(
+    data: CountCarbJobData,
+    queueJobId: string,
+  ): Promise<PublicCarbAnalysis> {
     const [user, file] = await Promise.all([
       this.prisma.user.findUnique({
         select: {
@@ -100,52 +98,87 @@ export class CarbAnalysisService {
       throw new BadRequestException("Usuario da analise de carboidratos nao encontrado.");
     }
 
-    const result = await this.requestPythonAnalysis(file);
-    const analysis = await this.saveAnalysis(data.userId, result, data.imageUrl);
+    const result = await this.analyzeFoodImage(file);
+    const analysis = await this.saveAnalysis(data.userId, result, data.imageUrl, queueJobId);
 
-    await this.sendAnalysisReportEmail({
-      analysis,
-      userEmail: user.email,
-      userName: user.name,
-    });
+    // Envio do relatorio por e-mail desativado temporariamente a pedido do usuario.
+    // await this.sendAnalysisReportEmail({
+    //   analysis,
+    //   userEmail: user.email,
+    //   userName: user.name,
+    // });
 
     return analysis;
   }
 
-  private async requestPythonAnalysis(file: UploadedImageFile): Promise<CarbAnalysisResult> {
-    const form = new FormData();
-    form.append("image", file.buffer, {
-      contentType: file.mimetype,
-      filename: file.originalname || "food-image.jpg",
-      knownLength: file.size,
+  async getAnalysisStatus(
+    req: AuthenticatedRequest,
+    jobId: string,
+  ): Promise<CarbAnalysisJobStatus> {
+    if (!req.user) {
+      throw new UnauthorizedException();
+    }
+
+    const job = await this.countCarbProducer.getJob(jobId);
+
+    if (!job || (job.data as CountCarbJobData).userId !== req.user.sub) {
+      throw new NotFoundException("Job de analise de carboidratos nao encontrado.");
+    }
+
+    return {
+      jobId,
+      status: this.mapJobState(await job.getState()),
+    };
+  }
+
+  async getAnalysisResult(req: AuthenticatedRequest, jobId: string): Promise<PublicCarbAnalysis> {
+    if (!req.user) {
+      throw new UnauthorizedException();
+    }
+
+    const analysis = await this.prisma.carbAnalysis.findFirst({
+      where: {
+        queueJobId: jobId,
+        userId: req.user.sub,
+      },
     });
 
-    const countCarbApiUrl =
-      this.configService.get<string>("COUNT_CARB_API_URL") ?? DEFAULT_COUNT_CARB_API_URL;
-    const timeoutMs = Number(
-      this.configService.get<string>("COUNT_CARB_TIMEOUT_MS") ?? DEFAULT_TIMEOUT_MS,
-    );
+    if (!analysis) {
+      throw new NotFoundException("Resultado da analise de carboidratos ainda nao disponivel.");
+    }
 
+    return this.toPublicAnalysis(analysis);
+  }
+
+  private mapJobState(state: string): CarbAnalysisJobStatus["status"] {
+    switch (state) {
+      case "completed":
+        return "completed";
+      case "failed":
+        return "failed";
+      case "active":
+        return "processing";
+      case "waiting":
+      case "waiting-children":
+      case "delayed":
+      case "prioritized":
+        return "queued";
+      default:
+        return "unknown";
+    }
+  }
+
+  private async analyzeFoodImage(file: UploadedImageFile): Promise<CarbAnalysisResult> {
     try {
-      const response = await lastValueFrom(
-        this.httpService.post<CarbAnalysisResult>(`${countCarbApiUrl}/analyze`, form, {
-          headers: form.getHeaders(),
-          maxBodyLength: Number.POSITIVE_INFINITY,
-          timeout: timeoutMs,
-        }),
-      );
-
-      return response.data;
+      return await this.anthropicCarbAnalysisService.analyzeFoodImage(file);
     } catch (error) {
-      const axiosError = error as AxiosError;
-
-      if (axiosError.code === "ECONNABORTED") {
-        throw new GatewayTimeoutException("Analise de carboidratos excedeu o tempo limite.");
+      if (error instanceof BadRequestException) {
+        throw error;
       }
 
       throw new BadGatewayException({
-        message: "Nao foi possivel chamar a API Python de analise de carboidratos.",
-        detail: axiosError.response?.data ?? axiosError.message,
+        message: "Nao foi possivel concluir a analise de carboidratos.",
+        detail: error instanceof Error ? error.message : String(error),
       });
     }
   }
@@ -215,6 +248,7 @@ export class CarbAnalysisService {
     userId: string,
     result: CarbAnalysisResult,
     imageUrl: string,
+    queueJobId?: string,
   ): Promise<PublicCarbAnalysis> {
     const existingAnalysis = await this.prisma.carbAnalysis.findFirst({
       where: {
@@ -224,17 +258,7 @@ export class CarbAnalysisService {
     });
 
     if (existingAnalysis) {
-      return {
-        id: existingAnalysis.id,
-        userId: existingAnalysis.userId,
-        imageUrl: existingAnalysis.imageUrl,
-        result: existingAnalysis.result as CarbAnalysisResult,
-        estimatedGlucose: existingAnalysis.estimatedGlucose,
-        totalCarbsGrams: existingAnalysis.totalCarbsGrams,
-        confidence: existingAnalysis.confidence,
-        createdAt: existingAnalysis.createdAt,
-        updatedAt: existingAnalysis.updatedAt,
-      };
+      return this.toPublicAnalysis(existingAnalysis);
     }
 
     const analysis = await this.prisma.carbAnalysis.create({
@@ -242,12 +266,17 @@ export class CarbAnalysisService {
         confidence: result.confianca,
         estimatedGlucose: this.parseOptionalInteger(result.glicose_estimada),
         imageUrl,
+        queueJobId,
         result: result as Prisma.InputJsonValue,
         totalCarbsGrams: this.parseGrams(result.carboidratos),
         userId,
       },
     });
 
+    return this.toPublicAnalysis(analysis);
+  }
+
+  private toPublicAnalysis(analysis: CarbAnalysis): PublicCarbAnalysis {
     return {
       id: analysis.id,
       userId: analysis.userId,

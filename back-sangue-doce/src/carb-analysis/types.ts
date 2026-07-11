@@ -9,10 +9,10 @@ export type CarbAnalysisResult = {
   ingredientes?: string[];
   confianca?: "alta" | "media" | "baixa" | string;
   observacoes?: string;
-  carboidratos?: string | number;
-  proteinas?: string | number;
-  gorduras?: string | number;
-  glicose_estimada?: number;
+  carboidratos?: string | number | null;
+  proteinas?: string | number | null;
+  gorduras?: string | number | null;
+  glicose_estimada?: number | null;
   erro?: string;
   bruto?: string;
   [key: string]: unknown;
@@ -41,4 +41,9 @@ export type QueuedCarbAnalysis = {
   jobId: string;
   status: "queued";
   imageUrl: string;
+};
+
+export type CarbAnalysisJobStatus = {
+  jobId: string;
+  status: "queued" | "processing" | "completed" | "failed" | "unknown";
 };

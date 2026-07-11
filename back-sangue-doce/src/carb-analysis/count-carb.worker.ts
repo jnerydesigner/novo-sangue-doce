@@ -14,7 +14,7 @@ export class CountCarbWorker extends WorkerHost {
 
   async process(job: Job<CountCarbJobData>) {
     await job.updateProgress(10);
-    const analysis = await this.carbAnalysisService.processQueuedAnalysis(job.data);
+    const analysis = await this.carbAnalysisService.processQueuedAnalysis(job.data, String(job.id));
     await job.updateProgress(100);
 
     return { analysisId: analysis.id };

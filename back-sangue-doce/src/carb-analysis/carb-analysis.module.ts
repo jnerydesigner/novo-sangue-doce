@@ -1,8 +1,8 @@
 import { AwsS3Module } from "@infra/storage/aws-s3.module";
-import { HttpModule } from "@nestjs/axios";
 import { BullModule } from "@nestjs/bullmq";
 import { Module } from "@nestjs/common";
 import { MailModule } from "src/mail/mail.module";
+import { AnthropicCarbAnalysisService } from "./anthropic-carb-analysis.service";
 import { CarbAnalysisController } from "./carb-analysis.controller";
 import { CarbAnalysisService } from "./carb-analysis.service";
 import { CarbAnalysisReportPdfService } from "./carb-analysis-report-pdf.service";
@@ -15,12 +15,12 @@ import { CountCarbWorker } from "./count-carb.worker";
     BullModule.registerQueue({
       name: COUNT_CARB_QUEUE,
     }),
-    HttpModule,
     AwsS3Module,
     MailModule,
   ],
   controllers: [CarbAnalysisController],
   providers: [
+    AnthropicCarbAnalysisService,
     CarbAnalysisService,
     CarbAnalysisReportPdfService,
     CountCarbProducer,
