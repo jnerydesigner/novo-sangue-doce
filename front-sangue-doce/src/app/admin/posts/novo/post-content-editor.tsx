@@ -51,6 +51,14 @@ function getBlockLabel(block: EditableBlock) {
     return "UL";
   }
 
+  if (block.type === "ordered-list") {
+    return "OL";
+  }
+
+  if (block.type === "link") {
+    return "LINK";
+  }
+
   if (block.type === "image") {
     return "IMG";
   }
@@ -69,6 +77,14 @@ function createBlock(type: EditableBlock["type"]): PostContentBlock {
 
   if (type === "list") {
     return { type: "list", items: [""] };
+  }
+
+  if (type === "ordered-list") {
+    return { type: "ordered-list", items: [""] };
+  }
+
+  if (type === "link") {
+    return { type: "link", label: "Créditos:", text: "", href: "" };
   }
 
   if (type === "image") {
@@ -107,6 +123,16 @@ const blockOptions = [
     label: "UL",
     title: "Lista",
     block: { type: "list", items: [""] },
+  },
+  {
+    label: "OL",
+    title: "Lista numerada",
+    block: { type: "ordered-list", items: [""] },
+  },
+  {
+    label: "LINK",
+    title: "Link ou créditos",
+    block: { type: "link", label: "Créditos:", text: "", href: "" },
   },
   {
     label: "IMG",
@@ -376,7 +402,7 @@ function BlockFields({
     );
   }
 
-  if (block.type === "list") {
+  if (block.type === "list" || block.type === "ordered-list") {
     return (
       <textarea
         className={`${fieldClassName} min-h-28 resize-y`}
@@ -385,9 +411,42 @@ function BlockFields({
             items: event.target.value.split("\n"),
           })
         }
-        placeholder="Um item por linha"
+        placeholder={
+          block.type === "ordered-list"
+            ? "Um item por linha; a numeracao e adicionada automaticamente"
+            : "Um item por linha"
+        }
         value={block.items.join("\n")}
       />
+    );
+  }
+
+  if (block.type === "link") {
+    return (
+      <div className="grid gap-2 md:grid-cols-2">
+        <input
+          className={fieldClassName}
+          onChange={(event) => updateBlock(block.key, { label: event.target.value })}
+          placeholder="Rótulo opcional, por exemplo: Créditos:"
+          type="text"
+          value={block.label ?? ""}
+        />
+        <input
+          className={fieldClassName}
+          onChange={(event) => updateBlock(block.key, { text: event.target.value })}
+          placeholder="Texto do link, por exemplo: Sociedade Brasileira de Créditos"
+          type="text"
+          value={block.text}
+        />
+        <input
+          className={`${fieldClassName} md:col-span-2`}
+          inputMode="url"
+          onChange={(event) => updateBlock(block.key, { href: event.target.value })}
+          placeholder="https://exemplo.com.br/post-original"
+          type="url"
+          value={block.href}
+        />
+      </div>
     );
   }
 

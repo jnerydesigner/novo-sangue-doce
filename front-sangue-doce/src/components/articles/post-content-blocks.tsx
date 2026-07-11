@@ -6,6 +6,20 @@ type PostContentBlocksProps = {
   blocks: PostContentBlock[];
 };
 
+function getSafeExternalUrl(value: string) {
+  const normalizedValue = /^https?:\/\//i.test(value.trim())
+    ? value.trim()
+    : `https://${value.trim()}`;
+
+  try {
+    const url = new URL(normalizedValue);
+
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
 export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
   return (
     <>
@@ -57,6 +71,48 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
                   </li>
                 ))}
             </ul>
+          );
+        }
+
+        if (block.type === "ordered-list") {
+          return (
+            <ol
+              key={`${block.type}-${index}`}
+              className="mb-7 grid list-decimal gap-3 pl-8 marker:font-bold marker:text-energy"
+            >
+              {block.items
+                .filter((item) => item.trim().length > 0)
+                .map((item, itemIndex) => (
+                  <li className="pl-2" key={`${item}-${itemIndex}`}>
+                    {item}
+                  </li>
+                ))}
+            </ol>
+          );
+        }
+
+        if (block.type === "link") {
+          const href = getSafeExternalUrl(block.href);
+
+          if (!href || !block.text.trim()) {
+            return null;
+          }
+
+          return (
+            <div key={`${block.type}-${index}`} className="mb-7 text-pretty text-inkSoft">
+              {block.label?.trim() ? (
+                <span className="mr-2 font-semibold text-ink">{block.label.trim()}</span>
+              ) : null}
+              <a
+                className="font-semibold text-azure underline decoration-azure/40 underline-offset-4 transition hover:text-navy hover:decoration-navy focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-azure"
+                href={href}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {block.text}
+                <span className="sr-only"> (abre em uma nova aba)</span>
+              </a>
+            </div>
           );
         }
 

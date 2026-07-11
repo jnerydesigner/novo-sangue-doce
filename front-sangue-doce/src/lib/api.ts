@@ -224,6 +224,16 @@ export type PostContentBlock =
       items: string[];
     }
   | {
+      type: "ordered-list";
+      items: string[];
+    }
+  | {
+      type: "link";
+      label?: string;
+      text: string;
+      href: string;
+    }
+  | {
       type: "image";
       src: string;
       alt?: string;
