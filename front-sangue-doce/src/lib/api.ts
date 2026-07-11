@@ -311,6 +311,12 @@ export type SocialPublicationStatus =
   | "STANDBY";
 
 export type SocialNetwork = "LINKEDIN" | "INSTAGRAM" | "FACEBOOK";
+export type SocialPublicationResult = {
+  status: "PUBLISHED";
+  externalPostId: string | null;
+  mediaUrn: string | null;
+  publishedAt: string;
+};
 export type SocialPublicationGenerationMode =
   | "NEW_PUBLICATION"
   | "REGENERATE_TEXT"
@@ -329,6 +335,7 @@ export type SocialPublication = {
   generatedShortTitle: string | null;
   generatedImageUrl: string | null;
   socialNetworks: SocialNetwork[];
+  publicationResults: Partial<Record<SocialNetwork, SocialPublicationResult>>;
   textModel: string | null;
   imageModel: string | null;
   promptVersion: string | null;
@@ -617,6 +624,18 @@ export const api = {
       }),
   },
   socialPublications: {
+    publishLinkedin: (postId: string, params: AuthenticatedApiParams) =>
+      apiFetch<{
+        postId: string;
+        socialPublicationId: string;
+        linkedinPostId: string | null;
+        linkedinImageUrn: string;
+        status: "PUBLISHED";
+      }>("/publish/linkedin", {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
+        body: { postId },
+      }),
     list: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
       const searchParams = new URLSearchParams();
 

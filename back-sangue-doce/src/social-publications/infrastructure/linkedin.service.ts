@@ -4,8 +4,6 @@ import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import { BadGatewayException, Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-const TEST_POST_ID = "e728cbe5-0d2c-4433-84cf-e7d795a39aa1";
-
 export type LinkedinPublicationResponse = {
   postId: string;
   socialPublicationId: string;
@@ -23,8 +21,7 @@ export class LinkedinService {
     private readonly imageService: ImageService,
   ) {}
 
-  async publishLatestCompleted(): Promise<LinkedinPublicationResponse> {
-    const postId = this.configService.get<string>("LINKEDIN_TEST_POST_ID") ?? TEST_POST_ID;
+  async publishLatestCompleted(postId: string): Promise<LinkedinPublicationResponse> {
     const publication = await this.socialPublicationRepository.findLatestCompletedByPostId(postId);
 
     if (!publication) {
@@ -50,6 +47,12 @@ export class LinkedinService {
       linkedinImageUrn,
       publication.generatedShortTitle ?? "Imagem da publicacao",
     );
+    await this.socialPublicationRepository.markAsPublished(publication.id, "LINKEDIN", {
+      status: "PUBLISHED",
+      externalPostId: linkedinPostId,
+      mediaUrn: linkedinImageUrn,
+      publishedAt: new Date().toISOString(),
+    });
 
     return {
       postId,

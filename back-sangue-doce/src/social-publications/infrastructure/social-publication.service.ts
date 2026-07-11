@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createHash, randomBytes } from "node:crypto";
 import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import { PostRepository } from "@app/posts/repositories/post.repository";
@@ -263,6 +262,7 @@ export class SocialPublicationService {
       generatedShortTitle: record.generatedShortTitle,
       generatedImageUrl: record.generatedImageUrl,
       socialNetworks: record.socialNetworks,
+      publicationResults: record.publicationResults,
       textModel: record.textModel,
       imageModel: record.imageModel,
       promptVersion: record.promptVersion,

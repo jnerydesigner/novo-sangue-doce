@@ -3,10 +3,7 @@ import { PostRepository } from "@app/posts/repositories/post.repository";
 import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import {
-  type SocialPublicationRecord,
-  SocialPublicationRepository,
-} from "../domain/social-publication.repository";
+import { SocialPublicationRepository } from "../domain/social-publication.repository";
 import {
   isTerminalStatus,
   SocialPublicationStatus,
@@ -23,12 +20,6 @@ type ProcessInput = {
   correlationId: string;
   requestedBy: string;
   attempt: number;
-};
-
-type ErrorContext = {
-  errorCode: SocialPublicationErrorCode;
-  errorMessage: string;
-  errorDetails?: Record<string, unknown>;
 };
 
 @Injectable()
@@ -325,7 +316,7 @@ export class ProcessSocialPublicationUseCase {
           } else if (b.type === "list" && Array.isArray(b.items)) {
             parts.push(b.items.map((item: string) => `- ${item}`).join("\n"));
           } else if (b.type === "callout" && typeof b.content === "string") {
-            parts.push(b.title ? `**${b.title}**\n${b.content}` : b.content);
+            parts.push(typeof b.title === "string" ? `**${b.title}**\n${b.content}` : b.content);
           }
         }
       }

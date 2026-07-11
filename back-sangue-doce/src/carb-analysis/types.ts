@@ -7,7 +7,7 @@ export type UploadedImageFile = {
 
 export type CarbAnalysisResult = {
   ingredientes?: string[];
-  confianca?: "alta" | "media" | "baixa" | string;
+  confianca?: "alta" | "media" | "baixa";
   observacoes?: string;
   carboidratos?: string | number | null;
   proteinas?: string | number | null;

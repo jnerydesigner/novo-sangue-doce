@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { AuthService } from "@app/auth/auth.service";
 import type { JwtPayload } from "@app/auth/types/jwt-payload.type";
 import { ImageService } from "@app/image/image.service";
-import { PostRepository } from "@app/posts/repositories/post.repository";
+import { type PostImageRecord, PostRepository } from "@app/posts/repositories/post.repository";
 import { UserRepository } from "@app/users/repositories/user.repository";
 import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import {
@@ -154,7 +154,7 @@ export class UploadsService {
     });
     const imageUrl = uploadedObject.url;
 
-    let postImage;
+    let postImage: PostImageRecord;
 
     try {
       postImage = await this.postRepository.upsertPostImage(postId, imageUrl);

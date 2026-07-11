@@ -24,6 +24,7 @@ export class SocialPublicationEntity {
       generatedImageKey: null,
       generatedImageUrl: null,
       socialNetworks: [],
+      publicationResults: {},
       sourceImageKey: data.sourceImageKey ?? null,
       queueJobId: null,
       correlationId: data.correlationId,

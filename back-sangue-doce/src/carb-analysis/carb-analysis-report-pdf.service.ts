@@ -238,7 +238,11 @@ export class CarbAnalysisReportPdfService {
       return "Nao informado";
     }
 
-    return String(value);
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      return String(value);
+    }
+
+    return JSON.stringify(value);
   }
 
   private async fetchAnalysisImage(imageUrl?: string | null): Promise<Buffer | undefined> {

@@ -5,9 +5,11 @@ import {
   type PaginatedSocialPublications,
   type SocialPublicationPaginationParams,
   type SocialPublicationRecord,
+  type SocialPublicationResult,
+  type SocialPublicationResults,
   SocialPublicationRepository,
 } from "@app/social-publications/domain/social-publication.repository";
-import type { SocialPublicationStatus } from "@app/social-publications/domain/social-publication-status.enum";
+import { SocialPublicationStatus } from "@app/social-publications/domain/social-publication-status.enum";
 import type { SocialNetwork } from "@app/social-publications/dto/update-social-publication.dto";
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
@@ -154,7 +156,7 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
   async updateStatus(id: string, status: SocialPublicationStatus): Promise<void> {
     const data: Record<string, unknown> = { status };
 
-    if (status === "QUEUED") {
+    if (status === SocialPublicationStatus.QUEUED) {
       data.queuedAt = new Date();
     }
 
@@ -187,6 +189,25 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
     await this.prisma.socialPublication.update({
       where: { id },
       data: { generatedContent: description, socialNetworks },
+    });
+  }
+
+  async markAsPublished(
+    id: string,
+    network: SocialNetwork,
+    result: SocialPublicationResult,
+  ): Promise<void> {
+    const publication = await this.prisma.socialPublication.findUniqueOrThrow({ where: { id } });
+    const currentResults = publication.publicationResults as SocialPublicationResults;
+
+    await this.prisma.socialPublication.update({
+      where: { id },
+      data: {
+        publicationResults: {
+          ...currentResults,
+          [network]: result,
+        } as Prisma.InputJsonValue,
+      },
     });
   }
 
@@ -253,6 +274,7 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
       generatedImageKey: record.generatedImageKey,
       generatedImageUrl: record.generatedImageUrl,
       socialNetworks: record.socialNetworks as SocialNetwork[],
+      publicationResults: record.publicationResults as SocialPublicationResults,
       sourceImageKey: record.sourceImageKey,
       queueJobId: record.queueJobId,
       correlationId: record.correlationId,

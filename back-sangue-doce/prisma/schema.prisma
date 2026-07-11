@@ -236,6 +236,7 @@ model SocialPublication {
   generatedImageKey   String? @map("generated_image_key")
   generatedImageUrl   String? @map("generated_image_url")
   socialNetworks      Json    @default("[]") @map("social_networks")
+  publicationResults  Json    @default("{}") @map("publication_results")
 
   sourceImageKey String? @map("source_image_key")
   queueJobId     String? @unique @map("queue_job_id")

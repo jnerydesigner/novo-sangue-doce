@@ -141,20 +141,7 @@ export class AwsS3Service {
         throw new Error("Response body is empty");
       }
 
-      const chunks: Uint8Array[] = [];
-      const reader = body.transformToWebStream().getReader();
-
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) {
-          break;
-        }
-
-        chunks.push(value);
-      }
-
-      return Buffer.concat(chunks);
+      return Buffer.from(await body.transformToByteArray());
     } catch (error) {
       this.logger.error(
         `Failed to download object from S3 bucket=${this.bucket} region=${this.region} key=${key}: ${this.formatAwsError(error)}`,
@@ -238,10 +225,11 @@ export class AwsS3Service {
     }
 
     const metadata = "$metadata" in error ? error.$metadata : undefined;
-    const statusCode =
+    const rawStatusCode =
       metadata && typeof metadata === "object" && "httpStatusCode" in metadata
         ? metadata.httpStatusCode
         : undefined;
+    const statusCode = typeof rawStatusCode === "number" ? rawStatusCode : undefined;
 
     return [
       `name=${error.name}`,

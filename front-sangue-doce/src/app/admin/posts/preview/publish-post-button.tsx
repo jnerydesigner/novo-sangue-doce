@@ -75,7 +75,9 @@ export function PublishPostButton({ post }: PublishPostButtonProps) {
 
   return (
     <div className="flex flex-wrap items-center justify-end gap-2">
-      {errorMessage ? <span className="text-sm font-semibold text-tomato">{errorMessage}</span> : null}
+      {errorMessage ? (
+        <span className="text-sm font-semibold text-tomato">{errorMessage}</span>
+      ) : null}
       <button
         className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-60"
         disabled={submitting}

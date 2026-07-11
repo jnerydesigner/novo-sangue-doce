@@ -55,7 +55,8 @@ function buildPayload(post: Post, status: PostStatus): CreatePostPayload {
 export function PostsTable({ posts }: PostsTableProps) {
   const router = useRouter();
   const [busyPostId, setBusyPostId] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [generatingPostId, setGeneratingPostId] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ tone: "error" | "success"; text: string } | null>(null);
 
   async function updateStatus(post: Post, status: PostStatus) {
     setBusyPostId(post.id);
@@ -80,9 +81,47 @@ export function PostsTable({ posts }: PostsTableProps) {
 
       router.refresh();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Nao foi possivel atualizar a materia.");
+      setMessage({
+        tone: "error",
+        text: error instanceof Error ? error.message : "Nao foi possivel atualizar a materia.",
+      });
     } finally {
       setBusyPostId(null);
+    }
+  }
+
+  async function generateSocialPublication(post: Post) {
+    setGeneratingPostId(post.id);
+    setMessage(null);
+
+    try {
+      const response = await fetch("/api/admin/social-publications", {
+        body: JSON.stringify({ postId: post.id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const error = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+
+        throw new Error(error?.message ?? "Nao foi possivel gerar a publicacao social.");
+      }
+
+      setMessage({
+        tone: "success",
+        text: `Publicacao social de “${post.title}” enviada para geracao.`,
+      });
+    } catch (error) {
+      setMessage({
+        tone: "error",
+        text: error instanceof Error ? error.message : "Nao foi possivel gerar a publicacao social.",
+      });
+    } finally {
+      setGeneratingPostId(null);
     }
   }
 
@@ -102,8 +141,14 @@ export function PostsTable({ posts }: PostsTableProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-card">
       {message ? (
-        <div className="border-b border-line bg-[#f7e9e4] px-4 py-3 text-sm font-semibold text-tomato">
-          {message}
+        <div
+          aria-live="polite"
+          className={`border-b border-line px-4 py-3 text-sm font-semibold ${
+            message.tone === "success" ? "bg-green/10 text-greenDeep" : "bg-[#f7e9e4] text-tomato"
+          }`}
+          role="status"
+        >
+          {message.text}
         </div>
       ) : null}
 
@@ -122,6 +167,8 @@ export function PostsTable({ posts }: PostsTableProps) {
           <tbody className="divide-y divide-line">
             {posts.map((post) => {
               const busy = busyPostId === post.id;
+              const generating = generatingPostId === post.id;
+              const rowBusy = busy || generating;
 
               return (
                 <tr className="align-top" key={post.id}>
@@ -152,12 +199,22 @@ export function PostsTable({ posts }: PostsTableProps) {
                         Editar
                       </Link>
                       {post.status === "PUBLISHED" ? (
-                        <Link
-                          className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                          href={`/materias/${post.slug}`}
-                        >
-                          Ver site
-                        </Link>
+                        <>
+                          <Link
+                            className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                            href={`/materias/${post.slug}`}
+                          >
+                            Ver site
+                          </Link>
+                          <button
+                            className="rounded-lg border border-green px-3 py-2 text-sm font-bold text-greenDeep transition hover:bg-green/10 disabled:cursor-not-allowed disabled:opacity-50"
+                            disabled={rowBusy}
+                            onClick={() => generateSocialPublication(post)}
+                            type="button"
+                          >
+                            {generating ? "Gerando..." : "Gerar para redes"}
+                          </button>
+                        </>
                       ) : (
                         <Link
                           className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
@@ -168,7 +225,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                       )}
                       <button
                         className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:opacity-50"
-                        disabled={busy}
+                        disabled={rowBusy}
                         onClick={() =>
                           updateStatus(post, post.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED")
                         }
@@ -179,7 +236,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                       {post.status !== "ARCHIVED" ? (
                         <button
                           className="rounded-lg bg-tomato px-3 py-2 text-sm font-bold text-white transition hover:bg-[#a94735] disabled:opacity-50"
-                          disabled={busy}
+                          disabled={rowBusy}
                           onClick={() => updateStatus(post, "ARCHIVED")}
                           type="button"
                         >
@@ -188,7 +245,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                       ) : (
                         <button
                           className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:opacity-50"
-                          disabled={busy}
+                          disabled={rowBusy}
                           onClick={() => updateStatus(post, "DRAFT")}
                           type="button"
                         >

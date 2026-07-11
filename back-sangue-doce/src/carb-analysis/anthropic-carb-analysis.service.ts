@@ -112,7 +112,8 @@ function normalizeResult(payload: unknown): CarbAnalysisResult {
         : [];
 
   const confiancaRaw = toDisplayString(raw.confianca, "baixa").toLowerCase().trim();
-  const confianca = ["alta", "media", "baixa"].includes(confiancaRaw) ? confiancaRaw : "baixa";
+  const confianca: "alta" | "media" | "baixa" =
+    confiancaRaw === "alta" || confiancaRaw === "media" ? confiancaRaw : "baixa";
 
   const normalized = defaultResult({
     ingredientes: ingredientes.map((item) => toDisplayString(item)),

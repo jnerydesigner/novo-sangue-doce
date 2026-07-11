@@ -28,6 +28,7 @@ export type SocialPublicationRecord = {
   generatedImageKey: string | null;
   generatedImageUrl: string | null;
   socialNetworks: SocialNetwork[];
+  publicationResults: SocialPublicationResults;
   sourceImageKey: string | null;
   queueJobId: string | null;
   correlationId: string;
@@ -48,6 +49,15 @@ export type SocialPublicationRecord = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type SocialPublicationResult = {
+  status: "PUBLISHED";
+  externalPostId: string | null;
+  mediaUrn: string | null;
+  publishedAt: string;
+};
+
+export type SocialPublicationResults = Partial<Record<SocialNetwork, SocialPublicationResult>>;
 
 export type CompleteSocialPublicationData = {
   id: string;
@@ -105,6 +115,11 @@ export abstract class SocialPublicationRepository {
     id: string,
     description: string,
     socialNetworks: SocialNetwork[],
+  ): Promise<void>;
+  abstract markAsPublished(
+    id: string,
+    network: SocialNetwork,
+    result: SocialPublicationResult,
   ): Promise<void>;
   abstract complete(data: CompleteSocialPublicationData): Promise<void>;
   abstract fail(id: string, error: FailSocialPublicationData): Promise<void>;

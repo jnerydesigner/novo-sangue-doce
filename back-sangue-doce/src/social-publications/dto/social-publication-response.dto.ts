@@ -1,3 +1,4 @@
+import type { SocialPublicationResults } from "../domain/social-publication.repository";
 import type { SocialPublicationStatus } from "../domain/social-publication-status.enum";
 import type { SocialPublicationGenerationMode } from "./create-social-publication.dto";
 import type { SocialNetwork } from "./update-social-publication.dto";
@@ -15,6 +16,7 @@ export type SocialPublicationResponseDto = {
   generatedShortTitle: string | null;
   generatedImageUrl: string | null;
   socialNetworks: SocialNetwork[];
+  publicationResults: SocialPublicationResults;
   textModel: string | null;
   imageModel: string | null;
   promptVersion: string | null;

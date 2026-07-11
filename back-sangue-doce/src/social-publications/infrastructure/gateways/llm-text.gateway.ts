@@ -5,7 +5,7 @@ import type {
 } from "@app/social-publications/types";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { SOCIAL_TEXT_PROMPT, SOCIAL_TEXT_PROMPT_VERSION } from "../prompts/social-text.prompt";
+import { SOCIAL_TEXT_PROMPT } from "../prompts/social-text.prompt";
 
 const DEFAULT_MODEL = "claude-sonnet-4-6";
 const DEFAULT_MAX_TOKENS = 1500;
@@ -103,7 +103,7 @@ export class LlmTextGateway {
         .replace(/```/g, "")
         .trim();
 
-      const parsed = JSON.parse(cleaned);
+      const parsed: unknown = JSON.parse(cleaned);
       const normalized = normalizeTextResponse(parsed);
 
       this.logger.log(
