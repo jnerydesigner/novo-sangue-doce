@@ -5,6 +5,12 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sanguedoce.
 export const SITE_NAME = "Sangue Doce";
 export const SITE_DESCRIPTION =
   "Jornalismo e cuidado sobre diabetes, prevenção, alimentação e saúde metabólica para o dia a dia.";
+export const DEFAULT_SOCIAL_IMAGE = {
+  url: "/images/saudavel.png",
+  width: 1401,
+  height: 1121,
+  alt: "Alimentos saudáveis para o cuidado diário com diabetes",
+};
 
 // Max chars for the %s part of "%s | Sangue Doce" to stay within the 65-char limit
 const TITLE_CONTENT_MAX = 65 - SITE_NAME.length - 3; // 3 = " | "

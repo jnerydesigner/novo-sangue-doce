@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Brand } from "./brand";
 
 export function SiteFooter() {
@@ -14,12 +15,30 @@ export function SiteFooter() {
           </div>
           <FooterColumn
             title="Editorias"
-            links={["Cuidado diario", "Alimentacao", "Prevencao", "Exercicio"]}
+            links={[
+              { label: "Cuidado diario", href: "/materias" },
+              { label: "Alimentacao", href: "/materias" },
+              { label: "Prevencao", href: "/materias" },
+              { label: "Exercicio", href: "/materias" },
+            ]}
           />
-          <FooterColumn title="Secoes" links={["Materias", "Guias", "Rotina", "Boletim"]} />
+          <FooterColumn
+            title="Secoes"
+            links={[
+              { label: "Materias", href: "/materias" },
+              { label: "Guias", href: "/#guias" },
+              { label: "Rotina", href: "/#rotina" },
+              { label: "Boletim", href: "/#news" },
+            ]}
+          />
           <FooterColumn
             title="Sobre"
-            links={["Quem somos", "Conselho editorial", "Contato", "Privacidade"]}
+            links={[
+              { label: "Quem somos", href: "/sobre" },
+              { label: "Conselho editorial", href: "/sobre" },
+              { label: "Contato", href: "/contato" },
+              { label: "Privacidade", href: "/privacidade" },
+            ]}
           />
         </div>
         <div className="flex flex-wrap items-center justify-between gap-5 pt-6">
@@ -27,16 +46,13 @@ export function SiteFooter() {
             © 2026 Sangue Doce, uma criacao da Seligadev Tech. Todos os direitos reservados.
           </p>
           <div className="flex gap-2.5">
-            {["Instagram", "YouTube", "Newsletter"].map((item) => (
-              <a
-                key={item}
-                href="#news"
-                aria-label={item}
-                className="grid h-[38px] w-[38px] place-items-center rounded-full border border-white/20 text-white/75 transition hover:-translate-y-0.5 hover:border-spark hover:bg-spark hover:text-[#0A1824]"
-              >
-                <span className="h-2 w-2 rounded-full bg-current" />
-              </a>
-            ))}
+            <Link
+              href="/#news"
+              aria-label="Newsletter"
+              className="grid h-[38px] w-[38px] place-items-center rounded-full border border-white/20 text-white/75 transition hover:-translate-y-0.5 hover:border-spark hover:bg-spark hover:text-[#0A1824]"
+            >
+              <span className="h-2 w-2 rounded-full bg-current" />
+            </Link>
           </div>
         </div>
         <p className="mt-5 max-w-[78ch] text-[12.5px] leading-relaxed text-white/40">
@@ -49,7 +65,13 @@ export function SiteFooter() {
   );
 }
 
-function FooterColumn({ title, links }: { title: string; links: string[] }) {
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+}) {
   return (
     <div>
       <h4 className="mb-4 mt-1 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-white/55">
@@ -57,13 +79,13 @@ function FooterColumn({ title, links }: { title: string; links: string[] }) {
       </h4>
       <ul className="grid gap-2.5">
         {links.map((link) => (
-          <li key={link}>
-            <a
+          <li key={link.label}>
+            <Link
               className="text-[15px] text-white/80 transition hover:pl-1 hover:text-spark"
-              href="#materias"
+              href={link.href}
             >
-              {link}
-            </a>
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>

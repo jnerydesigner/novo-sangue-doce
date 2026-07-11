@@ -17,7 +17,15 @@ export function UserAvatar({ avatarUrl, name }: UserAvatarProps) {
     >
       {resolvedAvatarUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img alt="" className="h-full w-full object-cover" src={resolvedAvatarUrl} />
+        <img
+          alt=""
+          className="h-full w-full object-cover"
+          height={44}
+          loading="lazy"
+          src={resolvedAvatarUrl}
+          title={name}
+          width={44}
+        />
       ) : (
         getInitials(name)
       )}

@@ -3,7 +3,13 @@ import { cookies } from "next/headers";
 import { JsonLd } from "@/components/json-ld";
 import { api } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
-import { buildWebsiteJsonLd, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
+import {
+  buildWebsiteJsonLd,
+  DEFAULT_SOCIAL_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 import { HomePage } from "../components/home-page";
 
 export const metadata: Metadata = {
@@ -17,6 +23,13 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     type: "website",
+    images: [DEFAULT_SOCIAL_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} | Cuidado diário para viver melhor com diabetes`,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_SOCIAL_IMAGE.url],
   },
 };
 

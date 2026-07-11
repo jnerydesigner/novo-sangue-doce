@@ -167,7 +167,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-subtle md:aspect-[21/9]">
                 <Image
                   src={coverImageUrl}
-                  alt={post.coverImageAlt ?? ""}
+                  alt={post.coverImageAlt ?? post.title}
                   width={1112}
                   height={477}
                   className="h-full w-full object-cover"

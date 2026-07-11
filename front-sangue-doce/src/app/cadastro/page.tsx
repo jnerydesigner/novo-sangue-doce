@@ -1,8 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Brand } from "@/components/home/brand";
 import { SignupForm } from "./signup-form";
 
+export const metadata: Metadata = {
+  title: "Criar conta",
+  robots: { index: false, follow: false },
+};
+
+// Reative quando as regras de limite de novos cadastros estiverem prontas.
+const SIGNUP_ENABLED = false;
+
 export default function SignupPage() {
+  if (!SIGNUP_ENABLED) {
+    redirect("/login");
+  }
+
   return (
     <main className="min-h-screen bg-paper text-ink">
       <header className="border-b border-line bg-card">

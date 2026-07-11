@@ -19,8 +19,8 @@ on:
 
 env:
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-frontend
-  NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'https://api.sanguedoce.seligadev.com.br' }}
-  NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://sanguedoce.seligadev.com.br' }}
+  NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'https://api.sanguedoce.com.br' }}
+  NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://sanguedoce.com.br' }}
   NEXT_IMAGE_UNOPTIMIZED: ${{ vars.NEXT_IMAGE_UNOPTIMIZED || 'false' }}
   NEXT_PUBLIC_MINIO_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_URL || 'http://localhost:9610' }}
   NEXT_PUBLIC_MINIO_PUBLIC_PATH: ${{ vars.NEXT_PUBLIC_MINIO_PUBLIC_PATH || '/sangue-doce/public' }}

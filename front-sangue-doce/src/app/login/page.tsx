@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -5,6 +6,11 @@ import { Brand } from "@/components/home/brand";
 import { api } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
 import { LoginForm } from "./login-form";
+
+export const metadata: Metadata = {
+  title: "Entrar",
+  robots: { index: false, follow: false },
+};
 
 export default async function LoginPage() {
   const cookieStore = await cookies();
@@ -45,13 +51,6 @@ export default async function LoginPage() {
           </p>
 
           <LoginForm />
-
-          <p className="mt-5 text-center text-[14px] text-muted">
-            Ainda nao tem conta?{" "}
-            <Link className="font-semibold text-greenDeep" href="/cadastro">
-              Criar cadastro
-            </Link>
-          </p>
         </div>
       </section>
     </main>
