@@ -8,60 +8,35 @@ export function resolvePublicImageUrl(value?: string | null): string {
     return "";
   }
 
-  if (/^(blob:|data:)/i.test(value)) {
-    return value;
+  const normalizedValue = value.trim();
+
+  if (/^(https?:|blob:|data:)/i.test(normalizedValue)) {
+    return normalizedValue;
   }
 
-  const normalizedPublicUrl = MINIO_PUBLIC_URL.replace(/\/$/, "");
-  const normalizedPublicPath = normalizePath(MINIO_PUBLIC_PATH);
-  const publicImagePath = toPublicImagePathFromValue(value, normalizedPublicPath);
-
-  if (/^https?:/i.test(value)) {
-    try {
-      const url = new URL(value);
-
-      if (url.origin === normalizedPublicUrl) {
-        const publicUrlPath = toPublicImagePathFromValue(url.pathname, normalizedPublicPath);
-
-        if (!publicUrlPath) {
-          return value;
-        }
-
-        return toPublicImageProxyPath(publicUrlPath);
-      }
-    } catch {
-      return value;
-    }
-
-    return value;
-  }
-
-  if (publicImagePath) {
-    return toPublicImageProxyPath(publicImagePath);
-  }
-
-  if (normalizedPublicUrl && normalizedPublicPath && !value.startsWith("/")) {
-    return toPublicImageProxyPath(`${normalizedPublicPath}/${value.replace(/^\/+/, "")}`);
-  }
-
-  return value;
-}
-
-export function toPublicImagePath(value?: string | null): string {
-  if (!value) {
+  if (!normalizedValue) {
     return "";
   }
 
   const normalizedPublicUrl = MINIO_PUBLIC_URL.replace(/\/$/, "");
   const normalizedPublicPath = normalizePath(MINIO_PUBLIC_PATH);
+  const publicImagePath = toPublicImagePathFromValue(normalizedValue, normalizedPublicPath);
 
-  if (normalizedPublicUrl && normalizedPublicPath && value.startsWith(normalizedPublicUrl)) {
-    const path = value.slice(normalizedPublicUrl.length);
-
-    return path.startsWith(normalizedPublicPath) ? path : value;
+  if (publicImagePath) {
+    return toPublicImageProxyPath(publicImagePath);
   }
 
-  return value;
+  if (normalizedPublicUrl && normalizedPublicPath && !normalizedValue.startsWith("/")) {
+    return toPublicImageProxyPath(
+      `${normalizedPublicPath}/${normalizedValue.replace(/^\/+/, "")}`,
+    );
+  }
+
+  return normalizedValue;
+}
+
+export function toPublicImagePath(value?: string | null): string {
+  return value?.trim() ?? "";
 }
 
 function normalizePath(value: string): string {
