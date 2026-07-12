@@ -11,15 +11,20 @@ on:
       - "v*"
     paths:
       - "back-sangue-doce/**"
+      - "recipe-importer/**"
+      - "docker-compose.portainer.yaml"
       - ".github/workflows/backend-dockerhub.yml"
   pull_request:
     paths:
       - "back-sangue-doce/**"
+      - "recipe-importer/**"
+      - "docker-compose.portainer.yaml"
       - ".github/workflows/backend-dockerhub.yml"
   workflow_dispatch:
 
 env:
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-backend
+  RECIPE_IMPORTER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-recipe-importer
 
 jobs:
   build:
@@ -47,6 +52,17 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
 
+      - name: Recipe importer Docker metadata
+        id: recipe-importer-meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.RECIPE_IMPORTER_IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix=sha-
+            type=ref,event=branch
+            type=ref,event=tag
+
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
@@ -64,6 +80,17 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Build and push recipe importer
+        uses: docker/build-push-action@v7
+        with:
+          context: ./recipe-importer
+          file: ./recipe-importer/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.recipe-importer-meta.outputs.tags }}
+          labels: ${{ steps.recipe-importer-meta.outputs.labels }}
+          cache-from: type=gha,scope=recipe-importer
+          cache-to: type=gha,mode=max,scope=recipe-importer
 
   deploy:
     name: Deploy backend image to VPS
@@ -142,8 +169,9 @@ jobs:
           set -euo pipefail
           cd "$VPS_APP_DIR"
 
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml pull backend frontend
+          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml pull backend frontend recipe-importer
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d postgres minio redis
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml run --rm migrate
+          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d --force-recreate --wait recipe-importer
           docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d --force-recreate backend frontend
           docker image prune -f

@@ -118,7 +118,8 @@ export function PostsTable({ posts }: PostsTableProps) {
     } catch (error) {
       setMessage({
         tone: "error",
-        text: error instanceof Error ? error.message : "Nao foi possivel gerar a publicacao social.",
+        text:
+          error instanceof Error ? error.message : "Nao foi possivel gerar a publicacao social.",
       });
     } finally {
       setGeneratingPostId(null);

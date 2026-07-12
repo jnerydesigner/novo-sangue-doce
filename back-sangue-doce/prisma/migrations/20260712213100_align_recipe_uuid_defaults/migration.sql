@@ -1,0 +1,3 @@
+ALTER TABLE "recipe_authors" ALTER COLUMN "id" DROP DEFAULT;
+ALTER TABLE "recipe_categories" ALTER COLUMN "id" DROP DEFAULT;
+ALTER TABLE "recipe_tags" ALTER COLUMN "id" DROP DEFAULT;

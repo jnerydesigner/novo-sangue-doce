@@ -10,7 +10,7 @@ type CoverImageFieldProps = {
   onAltTextChange: (altText: string) => void;
   onRemoveImage: () => void;
   onSelectImage: (file: File) => void;
-  onGenerateImage: () => void;
+  onGenerateImage?: () => void;
   generationStatus: "idle" | "saving" | "queued" | "processing" | "error";
   generationMessage?: string;
 };
@@ -72,7 +72,7 @@ export function CoverImageField({
                 >
                   Escolher imagem
                   <input
-                    accept="image/png"
+                    accept="image/jpeg,image/png,image/webp"
                     className="sr-only"
                     id={inputId}
                     onChange={selectImage}
@@ -92,23 +92,25 @@ export function CoverImageField({
               </div>
             </div>
 
-            <button
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-green px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep disabled:cursor-wait disabled:opacity-65 disabled:hover:translate-y-0 lg:w-auto lg:min-w-[220px]"
-              disabled={generationStatus !== "idle" && generationStatus !== "error"}
-              onClick={onGenerateImage}
-              type="button"
-            >
-              <span aria-hidden="true">✦</span>
-              {generationStatus === "saving"
-                ? "Salvando rascunho..."
-                : generationStatus === "queued"
-                  ? "Banner na fila..."
-                  : generationStatus === "processing"
-                    ? "Gerando banner..."
-                    : imageUrl
-                      ? "Gerar novo banner com IA"
-                      : "Gerar banner com IA"}
-            </button>
+            {onGenerateImage ? (
+              <button
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-green px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep disabled:cursor-wait disabled:opacity-65 disabled:hover:translate-y-0 lg:w-auto lg:min-w-[220px]"
+                disabled={generationStatus !== "idle" && generationStatus !== "error"}
+                onClick={onGenerateImage}
+                type="button"
+              >
+                <span aria-hidden="true">✦</span>
+                {generationStatus === "saving"
+                  ? "Salvando rascunho..."
+                  : generationStatus === "queued"
+                    ? "Banner na fila..."
+                    : generationStatus === "processing"
+                      ? "Gerando banner..."
+                      : imageUrl
+                        ? "Gerar novo banner com IA"
+                        : "Gerar banner com IA"}
+              </button>
+            ) : null}
           </div>
 
           {generationStatus === "queued" || generationStatus === "processing" ? (

@@ -10,24 +10,23 @@ function getPublicHref(href: string) {
   return href.startsWith("#") ? `/${href}` : href;
 }
 
-export async function PublicSiteHeader() {
+export async function PublicSiteHeader({ opaque = false }: { opaque?: boolean } = {}) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
-  const profile = accessToken
-    ? await api.auth.profile(accessToken).catch(() => null)
-    : null;
+  const profile = accessToken ? await api.auth.profile(accessToken).catch(() => null) : null;
   const dashboardHref = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
 
   return (
-    <header className="sticky top-0 z-[100] border-b border-line bg-bg/98 shadow-sm backdrop-blur-xl">
+    <header
+      className={`sticky top-0 z-[100] border-b border-line shadow-sm ${
+        opaque ? "bg-bg" : "bg-bg/98 backdrop-blur-xl"
+      }`}
+    >
       <div className="wrap flex h-[76px] items-center justify-between gap-6">
         <div className="text-navy">
           <Brand />
         </div>
-        <nav
-          className="ml-auto hidden items-center gap-[30px] md:flex"
-          aria-label="Principal"
-        >
+        <nav className="ml-auto hidden items-center gap-[30px] md:flex" aria-label="Principal">
           {navItems.map((link) => (
             <Link
               className="relative py-1 text-[15px] font-medium text-inkSoft transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-spark after:transition-all hover:text-navy hover:after:w-full"

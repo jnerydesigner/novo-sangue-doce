@@ -15,6 +15,7 @@ import { ConfigService } from "@nestjs/config";
 import { Client } from "minio";
 import type { UploadAvatarResponse } from "./types/upload-avatar-response.type";
 import type { UploadCoverResponse } from "./types/upload-cover-response.type";
+import { PrismaService } from "@infra/database/prisma.service";
 import type { UploadPostImagesResponse } from "./types/upload-post-images-response.type";
 import type { UploadedImageFile } from "./types/uploaded-image-file.type";
 
@@ -39,6 +40,7 @@ export class UploadsService {
     private readonly authService: AuthService,
     private readonly imageService: ImageService,
     private readonly awsS3Service: AwsS3Service,
+    private readonly prisma: PrismaService,
   ) {
     this.bucket = configService.get<string>("MINIO_BUCKET") ?? DEFAULT_BUCKET;
     this.publicPrefix = configService.get<string>("MINIO_PUBLIC_PREFIX") ?? DEFAULT_PUBLIC_PREFIX;
@@ -174,6 +176,36 @@ export class UploadsService {
     };
   }
 
+  async uploadRecipeCover(recipeId: string, file?: UploadedImageFile): Promise<UploadCoverResponse> {
+    this.validateImage(file);
+    const recipe = await this.prisma.recipe.findUnique({ where: { id: recipeId } });
+    if (!recipe) throw new NotFoundException("Recipe not found.");
+    const imageBuffer = await this.convertToPostWebp(file);
+    const uploaded = await this.awsS3Service.uploadObject({
+      buffer: imageBuffer,
+      contentType: "image/webp",
+      key: this.createRecipeCoverName({ recipeId, slug: recipe.slug }),
+    });
+    if (recipe.coverImageUrl && recipe.coverImageUrl !== uploaded.url) {
+      await this.removePreviousUploadedObject(recipe.coverImageUrl);
+    }
+    await this.prisma.recipe.update({ where: { id: recipeId }, data: { coverImageUrl: uploaded.url } });
+    return { coverUrl: uploaded.url, bucket: uploaded.bucket, objectName: uploaded.key };
+  }
+
+  async uploadRecipeImage(recipeId: string, file?: UploadedImageFile): Promise<UploadPostImagesResponse> {
+    this.validateImage(file);
+    const recipe = await this.prisma.recipe.findUnique({ where: { id: recipeId } });
+    if (!recipe) throw new NotFoundException("Recipe not found.");
+    const imageBuffer = await this.convertToPostWebp(file);
+    const uploaded = await this.awsS3Service.uploadObject({
+      buffer: imageBuffer,
+      contentType: "image/webp",
+      key: this.createRecipeImageName({ recipeId, slug: recipe.slug }),
+    });
+    return { imageUrl: uploaded.url, bucket: uploaded.bucket, objectName: uploaded.key };
+  }
+
   private validateImage(file?: UploadedImageFile): asserts file is UploadedImageFile {
     if (!file) {
       throw new BadRequestException('Envie a imagem no campo "image" usando multipart/form-data.');
@@ -242,6 +274,14 @@ export class UploadsService {
 
   private createPostImageName({ postId, slug }: { postId: string; slug: string }): string {
     return `${this.publicPrefix}/posts/images/${this.slugify(slug)}/${randomUUID()}-${postId}.webp`;
+  }
+
+  private createRecipeCoverName({ recipeId, slug }: { recipeId: string; slug: string }) {
+    return `${this.publicPrefix}/recipes/${this.slugify(slug)}/cover-${recipeId}.webp`;
+  }
+
+  private createRecipeImageName({ recipeId, slug }: { recipeId: string; slug: string }) {
+    return `${this.publicPrefix}/recipes/images/${this.slugify(slug)}/${randomUUID()}-${recipeId}.webp`;
   }
 
   private createPublicObjectPath(objectName: string): string {

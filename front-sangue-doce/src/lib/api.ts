@@ -291,6 +291,100 @@ export type CreatePostPayload = {
   tagIds?: string[];
 };
 
+export type RecipeDifficulty = "EASY" | "MEDIUM" | "HARD";
+
+export type RecipeIngredient = {
+  quantity: number | null;
+  unit: string | null;
+  name: string;
+  note?: string | null;
+};
+
+export type RecipeInstruction = {
+  title?: string | null;
+  description: string;
+};
+
+export type CreateRecipePayload = CreatePostPayload & {
+  prepMinutes: number;
+  cookMinutes: number;
+  servings: number;
+  servingSize?: string;
+  difficulty: RecipeDifficulty;
+  ingredients: RecipeIngredient[];
+  instructions: RecipeInstruction[];
+  caloriesKcal?: number;
+  carbohydratesGrams?: number;
+  fiberGrams?: number;
+  proteinGrams?: number;
+  fatGrams?: number;
+  sodiumMg?: number;
+};
+
+export type Recipe = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: PostContentBlock[];
+  status: PostStatus;
+  featured: boolean;
+  readingMinutes: number;
+  coverImageUrl: string;
+  coverImageAlt?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  publishedAt?: string | null;
+  authorId: string;
+  categoryId: string;
+  author: PostAuthor;
+  category: PostCategory;
+  tags: PostTag[];
+  prepMinutes: number;
+  cookMinutes: number;
+  servings: number;
+  servingSize?: string | null;
+  difficulty: RecipeDifficulty;
+  ingredients: RecipeIngredient[];
+  instructions: RecipeInstruction[];
+  caloriesKcal?: number | null;
+  carbohydratesGrams?: number | null;
+  fiberGrams?: number | null;
+  proteinGrams?: number | null;
+  fatGrams?: number | null;
+  sodiumMg?: number | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RecipeImportPreview = {
+  recipe: {
+    sourceUrl: string;
+    sourceCanonicalUrl?: string | null;
+    title: string;
+    excerpt: string;
+    coverImageSourceUrl?: string | null;
+    prepMinutes: number;
+    cookMinutes: number;
+    servings: number;
+    servingSize?: string | null;
+    ingredients: Array<RecipeIngredient & { originalText: string }>;
+    instructions: RecipeInstruction[];
+    nutrition?: {
+      caloriesKcal?: number | null;
+      carbohydratesGrams?: number | null;
+      fiberGrams?: number | null;
+      proteinGrams?: number | null;
+      fatGrams?: number | null;
+      sodiumMg?: number | null;
+    } | null;
+  };
+  confidence: "HIGH" | "MEDIUM" | "LOW";
+  warnings: string[];
+  fingerprint: string;
+  extractor: string;
+};
+
 export type DeleteResponse = {
   ok: boolean;
 };
@@ -632,6 +726,55 @@ export const api = {
         method: "PATCH",
         body: payload,
       }),
+  },
+  recipes: {
+    list: (params: { page?: number; limit?: number } = {}) => {
+      const searchParams = new URLSearchParams();
+      if (params.page) searchParams.set("page", String(params.page));
+      if (params.limit) searchParams.set("limit", String(params.limit));
+      const query = searchParams.toString();
+      return apiFetch<PaginatedResponse<Recipe>>(`/recipes${query ? `?${query}` : ""}`);
+    },
+    adminList: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
+      const searchParams = new URLSearchParams();
+      if (params.page) searchParams.set("page", String(params.page));
+      if (params.limit) searchParams.set("limit", String(params.limit));
+      const query = searchParams.toString();
+      return apiFetch<PaginatedResponse<Recipe>>(`/recipes/admin${query ? `?${query}` : ""}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+      });
+    },
+    create: (payload: CreateRecipePayload, params: AuthenticatedApiParams) =>
+      apiFetch<Recipe>("/recipes", {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
+        body: payload,
+      }),
+    update: (id: string, payload: CreateRecipePayload, params: AuthenticatedApiParams) =>
+      apiFetch<Recipe>(`/recipes/${id}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "PATCH",
+        body: payload,
+      }),
+    delete: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<DeleteResponse>(`/recipes/${id}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "DELETE",
+      }),
+    get: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<Recipe>(`/recipes/${id}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+      }),
+    getBySlug: (slug: string) => apiFetch<Recipe>(`/recipes/slug/${slug}`),
+    importFromUrl: (url: string, params: AuthenticatedApiParams) =>
+      apiFetch<RecipeImportPreview>("/recipes/import", {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
+        body: { url },
+      }),
+    authors: () => apiFetch<PostAuthor[]>("/recipes/authors"),
+    categories: () => apiFetch<PostCategory[]>("/recipes/categories"),
+    tags: () => apiFetch<PostTag[]>("/recipes/tags"),
   },
   socialPublications: {
     publishLinkedin: (postId: string, params: AuthenticatedApiParams) =>

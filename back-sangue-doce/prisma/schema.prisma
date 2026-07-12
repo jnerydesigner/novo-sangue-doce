@@ -66,20 +66,33 @@ enum PostAccentColor {
   BLUE
 }
 
+enum RecipeDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum RecipeStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 model User {
-  id           String         @id @default(uuid()) @db.Uuid
-  name         String
-  email        String         @unique
-  passwordHash String         @map("password_hash")
-  avatarUrl    String?        @map("avatar_url")
-  birthDate    DateTime?      @map("birth_date")
-  diabetesType DiabetesType   @default(UNKNOWN) @map("diabetes_type")
-  role         Role           @default(USER)
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
-  carbAnalyses CarbAnalysis[]
-  measurements Measurement[]
-  postAuthors  PostAuthor[]
+  id            String         @id @default(uuid()) @db.Uuid
+  name          String
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  avatarUrl     String?        @map("avatar_url")
+  birthDate     DateTime?      @map("birth_date")
+  diabetesType  DiabetesType   @default(UNKNOWN) @map("diabetes_type")
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  carbAnalyses  CarbAnalysis[]
+  measurements  Measurement[]
+  postAuthors   PostAuthor[]
+  recipeAuthors RecipeAuthor[]
 
   @@map("users")
 }
@@ -199,6 +212,98 @@ model Post {
   @@index([categoryId, publishedAt(sort: Desc)])
   @@index([authorId])
   @@map("posts")
+}
+
+model Recipe {
+  id                 String              @id @default(uuid()) @db.Uuid
+  slug               String              @unique
+  title              String
+  excerpt            String              @db.Text
+  content            Json                @default("[]")
+  status             RecipeStatus        @default(DRAFT)
+  featured           Boolean             @default(false)
+  readingMinutes     Int                 @default(5) @map("reading_minutes")
+  coverImageUrl      String?             @map("cover_image_url")
+  coverImageAlt      String?             @map("cover_image_alt")
+  metaTitle          String?             @map("meta_title")
+  metaDescription    String?             @map("meta_description") @db.Text
+  publishedAt        DateTime?           @map("published_at")
+  prepMinutes        Int                 @map("prep_minutes")
+  cookMinutes        Int                 @default(0) @map("cook_minutes")
+  servings           Int
+  servingSize        String?             @map("serving_size")
+  difficulty         RecipeDifficulty    @default(EASY)
+  ingredients        Json
+  instructions       Json
+  caloriesKcal       Decimal?            @map("calories_kcal") @db.Decimal(8, 2)
+  carbohydratesGrams Decimal?            @map("carbohydrates_grams") @db.Decimal(8, 2)
+  fiberGrams         Decimal?            @map("fiber_grams") @db.Decimal(8, 2)
+  proteinGrams       Decimal?            @map("protein_grams") @db.Decimal(8, 2)
+  fatGrams           Decimal?            @map("fat_grams") @db.Decimal(8, 2)
+  sodiumMg           Decimal?            @map("sodium_mg") @db.Decimal(8, 2)
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  authorId           String              @map("author_id") @db.Uuid
+  categoryId         String              @map("category_id") @db.Uuid
+  author             RecipeAuthor        @relation(fields: [authorId], references: [id])
+  category           RecipeCategory      @relation(fields: [categoryId], references: [id])
+  tags               RecipeTagRelation[]
+
+  @@index([difficulty])
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([categoryId, publishedAt(sort: Desc)])
+  @@index([authorId])
+  @@map("recipes")
+}
+
+model RecipeAuthor {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  role      String
+  bio       String?  @db.Text
+  email     String?  @unique
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipes   Recipe[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("recipe_authors")
+}
+
+model RecipeCategory {
+  id        String          @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String          @unique
+  color     PostAccentColor @default(GREEN)
+  recipes   Recipe[]
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@map("recipe_categories")
+}
+
+model RecipeTag {
+  id        String              @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String              @unique
+  recipes   RecipeTagRelation[]
+  createdAt DateTime            @default(now()) @map("created_at")
+  updatedAt DateTime            @updatedAt @map("updated_at")
+
+  @@map("recipe_tags")
+}
+
+model RecipeTagRelation {
+  recipeId String    @map("recipe_id") @db.Uuid
+  tagId    String    @map("tag_id") @db.Uuid
+  recipe   Recipe    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  tag      RecipeTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([recipeId, tagId])
+  @@index([tagId])
+  @@map("recipe_tag_relations")
 }
 
 enum SocialPublicationStatus {

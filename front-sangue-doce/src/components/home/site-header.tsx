@@ -33,10 +33,7 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
             <Brand />
           </div>
 
-          <nav
-            className="ml-auto hidden items-center gap-[30px] md:flex"
-            aria-label="Principal"
-          >
+          <nav className="ml-auto hidden items-center gap-[30px] md:flex" aria-label="Principal">
             {navItems.map((item) => (
               <a
                 key={item.href}

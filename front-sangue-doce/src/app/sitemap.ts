@@ -12,6 +12,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${SITE_URL}/receitas`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${SITE_URL}/guias/antes-da-consulta`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -61,5 +67,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...postRoutes];
+  const recipes = await api.recipes
+    .list({ limit: 100 })
+    .then((page) => page.data)
+    .catch(() => []);
+
+  const recipeRoutes: MetadataRoute.Sitemap = recipes.map((recipe) => ({
+    url: `${SITE_URL}/receitas/${recipe.slug}`,
+    lastModified: new Date(recipe.updatedAt),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...postRoutes, ...recipeRoutes];
 }

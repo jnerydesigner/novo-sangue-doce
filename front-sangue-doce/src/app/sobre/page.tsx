@@ -39,23 +39,23 @@ export default function SobrePage() {
           <div className="wrap grid gap-10 lg:grid-cols-[minmax(0,720px)_1fr]">
             <div className="max-w-[68ch] text-[1.08rem] leading-[1.7] text-inkSoft">
               <p>
-                O Sangue Doce é um site de jornalismo e conteúdo educativo dedicado a quem vive
-                com diabetes ou cuida de alguém com a condição. Publicamos matérias, guias
-                práticos e ferramentas de acompanhamento sobre glicemia, alimentação, sono e
-                exercício, com foco em decisões simples que ajudam na rotina.
+                O Sangue Doce é um site de jornalismo e conteúdo educativo dedicado a quem vive com
+                diabetes ou cuida de alguém com a condição. Publicamos matérias, guias práticos e
+                ferramentas de acompanhamento sobre glicemia, alimentação, sono e exercício, com
+                foco em decisões simples que ajudam na rotina.
               </p>
               <p className="mt-5">
-                O projeto é uma criação da Seligadev Tech e reúne conteúdo assinado por
-                jornalistas e colaboradores da área da saúde. Cada matéria publicada traz o nome
-                e a função de quem escreveu, disponíveis no rodapé do próprio texto.
+                O projeto é uma criação da Seligadev Tech e reúne conteúdo assinado por jornalistas
+                e colaboradores da área da saúde. Cada matéria publicada traz o nome e a função de
+                quem escreveu, disponíveis no rodapé do próprio texto.
               </p>
 
               <h2 className="mt-10 font-serif text-2xl font-medium tracking-normal text-ink">
                 Nosso compromisso editorial
               </h2>
               <p className="mt-4">
-                Buscamos precisão e clareza acima de sensacionalismo. Sempre que possível,
-                indicamos fontes e evitamos promessas de cura ou tratamento milagroso.
+                Buscamos precisão e clareza acima de sensacionalismo. Sempre que possível, indicamos
+                fontes e evitamos promessas de cura ou tratamento milagroso.
               </p>
               <p className="mt-4 text-[15px] text-muted">
                 As informações publicadas têm caráter jornalístico e educativo e não substituem

@@ -4,7 +4,8 @@ import { SiteFooter } from "@/components/home/site-footer";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const CONTACT_EMAIL = "contato@sanguedoce.com.br";
-const DESCRIPTION = "Fale com a equipe do Sangue Doce para dúvidas, sugestões de pauta ou parcerias.";
+const DESCRIPTION =
+  "Fale com a equipe do Sangue Doce para dúvidas, sugestões de pauta ou parcerias.";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -38,8 +39,8 @@ export default function ContatoPage() {
         <section className="bg-bg py-[clamp(56px,8vw,96px)]">
           <div className="wrap max-w-[68ch] text-[1.08rem] leading-[1.7] text-inkSoft">
             <p>
-              Dúvidas sobre uma matéria, sugestões de pauta, parcerias editoriais ou qualquer
-              outro assunto: escreva para o e-mail abaixo.
+              Dúvidas sobre uma matéria, sugestões de pauta, parcerias editoriais ou qualquer outro
+              assunto: escreva para o e-mail abaixo.
             </p>
             <a
               className="mt-6 inline-block rounded-lg border border-lineStrong px-5 py-3 text-[15px] font-semibold text-navy transition hover:-translate-y-px hover:bg-subtle"
