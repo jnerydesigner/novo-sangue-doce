@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type SubmitEvent, useState } from "react";
 
 export function NewsletterSection() {
   const [hint, setHint] = useState("Boletim semanal. Cancele quando quiser.");
@@ -8,7 +8,7 @@ export function NewsletterSection() {
     "default",
   );
 
-  function submitNewsletter(event: FormEvent<HTMLFormElement>) {
+  function submitNewsletter(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);

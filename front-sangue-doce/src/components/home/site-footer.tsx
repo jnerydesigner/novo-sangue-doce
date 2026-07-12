@@ -9,8 +9,8 @@ export function SiteFooter() {
           <div className="md:col-span-2 lg:col-span-1">
             <Brand dark />
             <p className="mt-4 max-w-[34ch] text-[15px] leading-relaxed text-white/60">
-              Jornalismo e cuidado sobre diabetes, prevencao e saude metabolica, feito para o dia a
-              dia de quem vive com a condicao.
+              Jornalismo e cuidado sobre diabetes, prevencao e saude metabolica,
+              feito para o dia a dia de quem vive com a condicao.
             </p>
           </div>
           <FooterColumn
@@ -35,7 +35,7 @@ export function SiteFooter() {
             title="Sobre"
             links={[
               { label: "Quem somos", href: "/sobre" },
-              { label: "Conselho editorial", href: "/sobre" },
+              // { label: "Conselho editorial", href: "/sobre" },
               { label: "Contato", href: "/contato" },
               { label: "Privacidade", href: "/privacidade" },
             ]}
@@ -43,7 +43,8 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-5 pt-6">
           <p className="m-0 text-[13.5px] text-white/50">
-            © 2026 Sangue Doce, uma criacao da Seligadev Tech. Todos os direitos reservados.
+            © 2026 Sangue Doce, uma criacao da Seligadev Tech. Todos os direitos
+            reservados.
           </p>
           <div className="flex gap-2.5">
             <Link
@@ -51,14 +52,18 @@ export function SiteFooter() {
               className="grid h-[38px] w-[38px] place-items-center rounded-full border border-white/20 text-white/75 transition hover:-translate-y-0.5 hover:border-spark hover:bg-spark hover:text-[#0A1824]"
             >
               <span className="sr-only">Newsletter</span>
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-current" />
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 rounded-full bg-current"
+              />
             </Link>
           </div>
         </div>
         <p className="mt-5 max-w-[78ch] text-[12.5px] leading-relaxed text-white/40">
-          As informacoes publicadas tem carater jornalistico e educativo e nao substituem avaliacao,
-          diagnostico ou tratamento por profissional de saude. Em caso de duvidas sobre sua
-          condicao, consulte sempre seu medico.
+          As informacoes publicadas tem carater jornalistico e educativo e nao
+          substituem avaliacao, diagnostico ou tratamento por profissional de
+          saude. Em caso de duvidas sobre sua condicao, consulte sempre seu
+          medico.
         </p>
       </div>
     </footer>

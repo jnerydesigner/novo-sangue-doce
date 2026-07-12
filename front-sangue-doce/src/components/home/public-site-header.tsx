@@ -41,7 +41,7 @@ export async function PublicSiteHeader() {
 
         <div className="flex items-center gap-4">
           <Link
-            className="hidden rounded-lg bg-navy px-5 py-3 text-[15px] font-bold text-black transition hover:-translate-y-px hover:bg-azure sm:inline-flex"
+            className="hidden rounded-lg bg-navy px-5 py-3 text-[15px] font-bold text-white transition hover:-translate-y-px hover:bg-azure sm:inline-flex"
             href="/#news"
           >
             Receber boletim
