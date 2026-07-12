@@ -45,6 +45,10 @@ export default async function Page() {
           .then((measurements) => measurements.slice(0, 4))
           .catch(() => [])
       : [];
+  const recipes = await api.recipes
+    .list({ limit: 6 })
+    .then((page) => page.data)
+    .catch(() => []);
 
   return (
     <>
@@ -53,6 +57,7 @@ export default async function Page() {
         isAuthenticated={Boolean(profile)}
         profile={profile}
         recentReadings={recentReadings}
+        recipes={recipes}
       />
     </>
   );

@@ -35,15 +35,8 @@ const config: Config = {
         blue: "#2E80C2",
       },
       fontFamily: {
-        serif: ["Georgia", "Times New Roman", "serif"],
-        sans: [
-          "var(--font-sans)",
-          "system-ui",
-          "-apple-system",
-          "Segoe UI",
-          "Helvetica Neue",
-          "sans-serif",
-        ],
+        sans: ["var(--font-sans)", "Arial", "sans-serif"],
+        serif: ["var(--font-sans)", "Arial", "sans-serif"],
       },
       boxShadow: {
         editorial: "0 14px 28px -24px rgba(13, 30, 50, 0.55)",
