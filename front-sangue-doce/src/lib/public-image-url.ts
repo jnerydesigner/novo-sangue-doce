@@ -27,9 +27,7 @@ export function resolvePublicImageUrl(value?: string | null): string {
   }
 
   if (normalizedPublicUrl && normalizedPublicPath && !normalizedValue.startsWith("/")) {
-    return toPublicImageProxyPath(
-      `${normalizedPublicPath}/${normalizedValue.replace(/^\/+/, "")}`,
-    );
+    return toPublicImageProxyPath(`${normalizedPublicPath}/${normalizedValue.replace(/^\/+/, "")}`);
   }
 
   return normalizedValue;

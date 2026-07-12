@@ -1,4 +1,12 @@
 services:
+  recipe-importer:
+    build:
+      context: ./recipe-importer
+    container_name: sangue-doce-recipe-importer
+    restart: unless-stopped
+    ports:
+      - "${RECIPE_IMPORTER_PORT:-8030}:8030"
+
   # backend:
   #   build:
   #     context: ./back-sangue-doce

@@ -41,9 +41,9 @@ export default function PrivacidadePage() {
           <div className="wrap max-w-[68ch] text-[1.05rem] leading-[1.7] text-inkSoft">
             <p>
               Esta política explica como o {SITE_NAME}, plataforma mantida pela Seligadev Tech
-              (&quot;controladora&quot;), coleta, usa e protege dados pessoais de quem acessa o
-              site e usa o painel de acompanhamento, em conformidade com a Lei Geral de Proteção
-              de Dados (Lei nº 13.709/2018).
+              (&quot;controladora&quot;), coleta, usa e protege dados pessoais de quem acessa o site
+              e usa o painel de acompanhamento, em conformidade com a Lei Geral de Proteção de Dados
+              (Lei nº 13.709/2018).
             </p>
 
             <h2 className="mt-10 font-serif text-2xl font-medium tracking-normal text-ink">
@@ -56,12 +56,12 @@ export default function PrivacidadePage() {
               </li>
               <li>
                 <b className="text-ink">Dados de saúde inseridos por você:</b> registros de
-                glicemia, refeições e sono lançados voluntariamente no painel, usados para gerar
-                seu acompanhamento e histórico pessoal.
+                glicemia, refeições e sono lançados voluntariamente no painel, usados para gerar seu
+                acompanhamento e histórico pessoal.
               </li>
               <li>
-                <b className="text-ink">Dados de navegação essenciais:</b> um cookie de sessão
-                usado exclusivamente para manter você autenticado.
+                <b className="text-ink">Dados de navegação essenciais:</b> um cookie de sessão usado
+                exclusivamente para manter você autenticado.
               </li>
             </ul>
             <p className="mt-4 text-[15px] text-muted">
@@ -82,9 +82,9 @@ export default function PrivacidadePage() {
               3. Seus direitos
             </h2>
             <p className="mt-4">
-              Você pode solicitar a qualquer momento a confirmação, correção, exclusão ou
-              exportação dos seus dados pessoais, além de revogar consentimentos dados
-              anteriormente. Para exercer esses direitos, envie um e-mail para{" "}
+              Você pode solicitar a qualquer momento a confirmação, correção, exclusão ou exportação
+              dos seus dados pessoais, além de revogar consentimentos dados anteriormente. Para
+              exercer esses direitos, envie um e-mail para{" "}
               <a className="underline hover:text-navy" href={`mailto:${CONTACT_EMAIL}`}>
                 {CONTACT_EMAIL}
               </a>
@@ -95,9 +95,9 @@ export default function PrivacidadePage() {
               4. Retenção e segurança
             </h2>
             <p className="mt-4">
-              Seus dados são mantidos enquanto sua conta estiver ativa ou pelo tempo necessário
-              para cumprir obrigações legais. Adotamos medidas técnicas razoáveis para proteger
-              essas informações contra acesso não autorizado.
+              Seus dados são mantidos enquanto sua conta estiver ativa ou pelo tempo necessário para
+              cumprir obrigações legais. Adotamos medidas técnicas razoáveis para proteger essas
+              informações contra acesso não autorizado.
             </p>
 
             <h2 className="mt-10 font-serif text-2xl font-medium tracking-normal text-ink">

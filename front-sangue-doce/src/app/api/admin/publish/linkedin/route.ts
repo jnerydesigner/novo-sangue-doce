@@ -23,8 +23,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json(
       {
-        message:
-          error instanceof Error ? error.message : "Nao foi possivel publicar no LinkedIn.",
+        message: error instanceof Error ? error.message : "Nao foi possivel publicar no LinkedIn.",
       },
       { status: 400 },
     );

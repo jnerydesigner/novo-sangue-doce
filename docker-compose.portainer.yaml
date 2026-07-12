@@ -1,4 +1,19 @@
 services:
+  recipe-importer:
+    image: ${RECIPE_IMPORTER_IMAGE:-jandernery/sangue-doce-recipe-importer:latest}
+    container_name: sangue-doce-recipe-importer
+    restart: unless-stopped
+    networks:
+      - sangue_doce_internal
+    expose:
+      - "8030"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8030/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   postgres:
     image: postgres:16-alpine
     container_name: sangue-doce-postgres
@@ -141,6 +156,7 @@ services:
       AWS_REGION: ${AWS_REGION:-us-east-1}
       AWS_S3_REGION: ${AWS_S3_REGION:-us-east-1}
       AWS_S3_BUCKET: ${AWS_S3_BUCKET:-sangue-doce}
+      RECIPE_IMPORTER_URL: ${RECIPE_IMPORTER_URL:-http://recipe-importer:8030}
     depends_on:
       postgres:
         condition: service_healthy
@@ -151,6 +167,8 @@ services:
       minio-init:
         condition: service_completed_successfully
       redis:
+        condition: service_healthy
+      recipe-importer:
         condition: service_healthy
     networks:
       - sangue_doce_internal

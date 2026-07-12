@@ -89,4 +89,32 @@ export class UploadsController {
 
     return this.uploadsService.uploadPostImages(postId, file);
   }
+
+  @Post("recipe/cover")
+  @UseInterceptors(FileInterceptor("image", { limits: { fileSize: 5 * 1024 * 1024 } }))
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  uploadRecipeCover(
+    @Request() req: AuthenticatedRequest,
+    @Body("recipeId") recipeId: string,
+    @UploadedFile() file?: UploadedImageFile,
+  ) {
+    if (!req.user) throw new UnauthorizedException();
+    if (!recipeId) throw new BadRequestException("Envie o recipeId no body usando multipart/form-data.");
+    return this.uploadsService.uploadRecipeCover(recipeId, file);
+  }
+
+  @Post("recipe/images")
+  @UseInterceptors(FileInterceptor("image", { limits: { fileSize: 5 * 1024 * 1024 } }))
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  uploadRecipeImage(
+    @Request() req: AuthenticatedRequest,
+    @Body("recipeId") recipeId: string,
+    @UploadedFile() file?: UploadedImageFile,
+  ) {
+    if (!req.user) throw new UnauthorizedException();
+    if (!recipeId) throw new BadRequestException("Envie o recipeId no body usando multipart/form-data.");
+    return this.uploadsService.uploadRecipeImage(recipeId, file);
+  }
 }
