@@ -117,4 +117,16 @@ export class UploadsController {
     if (!recipeId) throw new BadRequestException("Envie o recipeId no body usando multipart/form-data.");
     return this.uploadsService.uploadRecipeImage(recipeId, file);
   }
+
+  @Post("institutional-publications/image")
+  @UseInterceptors(FileInterceptor("image", { limits: { fileSize: 5 * 1024 * 1024 } }))
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  uploadInstitutionalPublicationImage(
+    @Request() req: AuthenticatedRequest,
+    @UploadedFile() file?: UploadedImageFile,
+  ) {
+    if (!req.user) throw new UnauthorizedException();
+    return this.uploadsService.uploadInstitutionalPublicationImage(file);
+  }
 }

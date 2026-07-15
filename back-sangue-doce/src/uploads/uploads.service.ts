@@ -206,6 +206,21 @@ export class UploadsService {
     return { imageUrl: uploaded.url, bucket: uploaded.bucket, objectName: uploaded.key };
   }
 
+  async uploadInstitutionalPublicationImage(
+    file?: UploadedImageFile,
+  ): Promise<UploadPostImagesResponse> {
+    this.validateImage(file);
+
+    const imageBuffer = await this.convertToPostWebp(file);
+    const uploaded = await this.awsS3Service.uploadObject({
+      buffer: imageBuffer,
+      contentType: "image/webp",
+      key: this.createInstitutionalPublicationImageName(),
+    });
+
+    return { imageUrl: uploaded.url, bucket: uploaded.bucket, objectName: uploaded.key };
+  }
+
   private validateImage(file?: UploadedImageFile): asserts file is UploadedImageFile {
     if (!file) {
       throw new BadRequestException('Envie a imagem no campo "image" usando multipart/form-data.');
@@ -282,6 +297,10 @@ export class UploadsService {
 
   private createRecipeImageName({ recipeId, slug }: { recipeId: string; slug: string }) {
     return `${this.publicPrefix}/recipes/images/${this.slugify(slug)}/${randomUUID()}-${recipeId}.webp`;
+  }
+
+  private createInstitutionalPublicationImageName() {
+    return `${this.publicPrefix}/institutional-publications/${randomUUID()}.webp`;
   }
 
   private createPublicObjectPath(objectName: string): string {
