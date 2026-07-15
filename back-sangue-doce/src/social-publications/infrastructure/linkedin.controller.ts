@@ -5,9 +5,14 @@ import { BadRequestException, Body, Controller, Post, UseGuards } from "@nestjs/
 import { z } from "zod";
 import { LinkedinService } from "./linkedin.service";
 
-const linkedinPublicationSchema = z.object({
-  postId: z.uuid(),
-});
+const linkedinPublicationSchema = z
+  .object({
+    postId: z.uuid().optional(),
+    socialPublicationId: z.uuid().optional(),
+  })
+  .refine((value) => value.postId || value.socialPublicationId, {
+    message: "Informe a materia ou a publicacao social.",
+  });
 
 @Controller("publish")
 @UseGuards(RolesGuard)
@@ -23,6 +28,10 @@ export class LinkedinController {
       throw new BadRequestException(result.error.issues.map((issue) => issue.message).join(", "));
     }
 
-    return this.linkedinService.publishLatestCompleted(result.data.postId);
+    if (result.data.socialPublicationId) {
+      return this.linkedinService.publishCompleted(result.data.socialPublicationId);
+    }
+
+    return this.linkedinService.publishLatestCompleted(result.data.postId as string);
   }
 }

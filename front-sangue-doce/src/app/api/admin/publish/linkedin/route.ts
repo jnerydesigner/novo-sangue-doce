@@ -11,15 +11,16 @@ export async function POST(request: Request) {
   }
 
   try {
-    const body = (await request.json()) as { postId?: string };
+    const body = (await request.json()) as { postId?: string; socialPublicationId?: string };
 
-    if (!body.postId) {
-      return NextResponse.json({ message: "A materia e obrigatoria." }, { status: 400 });
+    if (!body.postId && !body.socialPublicationId) {
+      return NextResponse.json(
+        { message: "A materia ou publicacao social e obrigatoria." },
+        { status: 400 },
+      );
     }
 
-    return NextResponse.json(
-      await api.socialPublications.publishLinkedin(body.postId, { accessToken }),
-    );
+    return NextResponse.json(await api.socialPublications.publishLinkedin(body, { accessToken }));
   } catch (error) {
     return NextResponse.json(
       {

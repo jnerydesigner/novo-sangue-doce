@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import type {
   PaginatedResponse,
   SocialNetwork,
@@ -187,9 +187,14 @@ export function SocialPublicationCards({ initialData }: Props) {
   }
 
   function startEditing(publication: SocialPublication) {
+    const publishedNetworks = Object.keys(publication.publicationResults ?? {}) as SocialNetwork[];
+    const selectedNetworks = publication.socialNetworks?.length
+      ? publication.socialNetworks
+      : publishedNetworks;
+
     setEditingId(publication.id);
     setDescription(publication.generatedContent ?? "");
-    setSocialNetworks(publication.socialNetworks ?? []);
+    setSocialNetworks(selectedNetworks);
     setFeedback(null);
   }
 
@@ -234,7 +239,10 @@ export function SocialPublicationCards({ initialData }: Props) {
         const linkedinResponse = await fetch("/api/admin/publish/linkedin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ postId: publication.postId }),
+          body: JSON.stringify({
+            postId: publication.postId,
+            socialPublicationId: publication.id,
+          }),
         });
         const linkedinBody = (await linkedinResponse.json().catch(() => null)) as
           | {
@@ -257,7 +265,11 @@ export function SocialPublicationCards({ initialData }: Props) {
           return;
         }
 
-        setFeedback("Revisão salva e publicada no LinkedIn.");
+        setFeedback(
+          publication.publicationResults?.LINKEDIN
+            ? "Revisão salva e reenviada ao LinkedIn."
+            : "Revisão salva e publicada no LinkedIn.",
+        );
         setData((current) => ({
           ...current,
           data: current.data.map((item) =>
@@ -344,54 +356,131 @@ export function SocialPublicationCards({ initialData }: Props) {
                 </thead>
                 <tbody className="divide-y divide-line">
                   {publishedPublications.map((publication) => (
-                    <tr className="align-middle" key={publication.id}>
-                      <td className="px-4 py-3">
-                        <div className="flex min-w-[230px] items-center gap-3">
-                          <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-paper2">
-                            {publication.generatedImageUrl ? (
-                              <Image
-                                alt=""
-                                className="object-cover"
-                                fill
-                                sizes="56px"
-                                src={publication.generatedImageUrl}
-                                unoptimized
-                              />
-                            ) : null}
+                    <Fragment key={publication.id}>
+                      <tr className="align-middle">
+                        <td className="px-4 py-3">
+                          <div className="flex min-w-[230px] items-center gap-3">
+                            <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-paper2">
+                              {publication.generatedImageUrl ? (
+                                <Image
+                                  alt=""
+                                  className="object-cover"
+                                  fill
+                                  sizes="56px"
+                                  src={publication.generatedImageUrl}
+                                  unoptimized
+                                />
+                              ) : null}
+                            </div>
+                            <div>
+                              <p className="line-clamp-2 font-semibold leading-snug text-ink">
+                                {publication.generatedShortTitle ?? "Publicação social"}
+                              </p>
+                              <p className="mt-1 text-xs text-muted">
+                                {formatDate(publication.completedAt)}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="line-clamp-2 font-semibold leading-snug text-ink">
-                              {publication.generatedShortTitle ?? "Publicação social"}
-                            </p>
-                            <p className="mt-1 text-xs text-muted">
-                              {formatDate(publication.completedAt)}
-                            </p>
+                        </td>
+                        <td className="max-w-[360px] px-4 py-3">
+                          <p className="line-clamp-2 text-sm leading-relaxed text-inkSoft">
+                            {publication.generatedContent ?? "Sem descrição"}
+                          </p>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex flex-wrap gap-2">
+                            {socialNetworkOptions
+                              .filter((network) => publication.publicationResults?.[network.value])
+                              .map((network) => (
+                                <SocialNetworkIcon key={network.value} network={network.value} />
+                              ))}
                           </div>
-                        </div>
-                      </td>
-                      <td className="max-w-[360px] px-4 py-3">
-                        <p className="line-clamp-2 text-sm leading-relaxed text-inkSoft">
-                          {publication.generatedContent ?? "Sem descrição"}
-                        </p>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex flex-wrap gap-2">
-                          {socialNetworkOptions
-                            .filter((network) => publication.publicationResults?.[network.value])
-                            .map((network) => (
-                              <SocialNetworkIcon key={network.value} network={network.value} />
-                            ))}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <Link
-                          className="inline-flex rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                          href={`/admin/posts/novo?id=${publication.postId}`}
-                        >
-                          Ver matéria
-                        </Link>
-                      </td>
-                    </tr>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex justify-end gap-2">
+                            <button
+                              className="inline-flex rounded-lg bg-green px-3 py-2 text-sm font-bold text-white transition hover:bg-greenDeep"
+                              onClick={() => startEditing(publication)}
+                              type="button"
+                            >
+                              Editar e reenviar
+                            </button>
+                            <Link
+                              className="inline-flex rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                              href={`/admin/posts/novo?id=${publication.postId}`}
+                            >
+                              Ver matéria
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                      {editingId === publication.id ? (
+                        <tr>
+                          <td className="bg-paper2 px-4 py-4" colSpan={4}>
+                            <div className="grid gap-4">
+                              <label
+                                className="grid gap-2 text-sm font-bold text-ink"
+                                htmlFor={`published-description-${publication.id}`}
+                              >
+                                Descrição da publicação
+                                <textarea
+                                  className="min-h-40 w-full resize-y rounded-lg border border-lineStrong bg-card px-3 py-2.5 text-[15px] font-normal leading-relaxed text-ink outline-none transition focus:border-green focus:ring-2 focus:ring-green/20"
+                                  id={`published-description-${publication.id}`}
+                                  maxLength={5000}
+                                  onChange={(event) => setDescription(event.target.value)}
+                                  value={description}
+                                />
+                              </label>
+                              <fieldset>
+                                <legend className="text-sm font-bold text-ink">
+                                  Publicar em{" "}
+                                  <span className="font-normal text-muted">(opcional)</span>
+                                </legend>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  {socialNetworkOptions.map((network) => (
+                                    <label
+                                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-lineStrong bg-card px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 has-[:checked]:border-green has-[:checked]:bg-green/10 has-[:checked]:text-greenDeep"
+                                      key={network.value}
+                                    >
+                                      <input
+                                        checked={socialNetworks.includes(network.value)}
+                                        className="size-4 accent-green"
+                                        onChange={() => toggleNetwork(network.value)}
+                                        type="checkbox"
+                                      />
+                                      {network.label}
+                                    </label>
+                                  ))}
+                                </div>
+                              </fieldset>
+                              <div className="flex flex-wrap gap-2">
+                                <button
+                                  className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                                  disabled={busyId === publication.id}
+                                  onClick={() => saveReview(publication)}
+                                  type="button"
+                                >
+                                  {busyId === publication.id
+                                    ? socialNetworks.includes("LINKEDIN")
+                                      ? "Salvando e reenviando..."
+                                      : "Salvando..."
+                                    : socialNetworks.includes("LINKEDIN")
+                                      ? "Salvar e reenviar"
+                                      : "Salvar revisão"}
+                                </button>
+                                <button
+                                  className="rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                                  onClick={() => setEditingId(null)}
+                                  type="button"
+                                >
+                                  Cancelar
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : null}
+                    </Fragment>
                   ))}
                 </tbody>
               </table>

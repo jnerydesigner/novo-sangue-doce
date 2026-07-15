@@ -1,4 +1,7 @@
-export const SOCIAL_TEXT_PROMPT_VERSION = "social-text-v1";
+export const SOCIAL_TEXT_MAX_CONTENT_CHARACTERS = 900;
+export const SOCIAL_TEXT_MAX_SHORT_TITLE_CHARACTERS = 80;
+export const SOCIAL_TEXT_MAX_HASHTAGS = 5;
+export const SOCIAL_TEXT_PROMPT_VERSION = "social-text-v2";
 
 export const SOCIAL_TEXT_PROMPT = [
   "Você é um editor de conteúdo responsável por adaptar artigos para publicações em redes sociais.\n\n",
@@ -12,6 +15,8 @@ export const SOCIAL_TEXT_PROMPT = [
   "- não inclua formatação Markdown complexa;\n",
   "- não faça recomendações médicas além do conteúdo fornecido;\n",
   "- não transforme hipóteses em fatos;\n",
+  `- o campo "content" deve ter no máximo ${SOCIAL_TEXT_MAX_CONTENT_CHARACTERS} caracteres;\n`,
+  `- o campo "shortTitle" deve ter no máximo ${SOCIAL_TEXT_MAX_SHORT_TITLE_CHARACTERS} caracteres;\n`,
   "- termine com uma chamada curta para leitura do conteúdo completo;\n",
   "- gere de 3 a 5 hashtags relacionadas;\n",
   "- gere um título curto e chamativo;\n",

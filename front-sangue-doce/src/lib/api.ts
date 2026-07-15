@@ -777,7 +777,10 @@ export const api = {
     tags: () => apiFetch<PostTag[]>("/recipes/tags"),
   },
   socialPublications: {
-    publishLinkedin: (postId: string, params: AuthenticatedApiParams) =>
+    publishLinkedin: (
+      payload: { postId?: string; socialPublicationId?: string },
+      params: AuthenticatedApiParams,
+    ) =>
       apiFetch<{
         postId: string;
         socialPublicationId: string;
@@ -787,7 +790,7 @@ export const api = {
       }>("/publish/linkedin", {
         headers: { Authorization: `Bearer ${params.accessToken}` },
         method: "POST",
-        body: { postId },
+        body: payload,
       }),
     list: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
       const searchParams = new URLSearchParams();
