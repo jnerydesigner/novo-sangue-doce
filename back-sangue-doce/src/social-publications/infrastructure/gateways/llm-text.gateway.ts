@@ -5,7 +5,12 @@ import type {
 } from "@app/social-publications/types";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { SOCIAL_TEXT_PROMPT } from "../prompts/social-text.prompt";
+import {
+  SOCIAL_TEXT_MAX_CONTENT_CHARACTERS,
+  SOCIAL_TEXT_MAX_HASHTAGS,
+  SOCIAL_TEXT_MAX_SHORT_TITLE_CHARACTERS,
+  SOCIAL_TEXT_PROMPT,
+} from "../prompts/social-text.prompt";
 
 const DEFAULT_MODEL = "claude-sonnet-4-6";
 const DEFAULT_MAX_TOKENS = 1500;
@@ -16,22 +21,52 @@ type LlmTextResponse = {
   shortTitle: string;
 };
 
-function normalizeTextResponse(payload: unknown): LlmTextResponse {
+function limitText(text: string, maxLength: number): string {
+  const normalized = text.trim();
+
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  const excerpt = normalized.slice(0, maxLength).trimEnd();
+  const lastSentenceEnd = Math.max(
+    excerpt.lastIndexOf("."),
+    excerpt.lastIndexOf("!"),
+    excerpt.lastIndexOf("?"),
+  );
+
+  if (lastSentenceEnd >= Math.floor(maxLength * 0.6)) {
+    return excerpt.slice(0, lastSentenceEnd + 1).trim();
+  }
+
+  const lastSpace = excerpt.lastIndexOf(" ");
+
+  return `${excerpt.slice(0, lastSpace > 0 ? lastSpace : maxLength).trim()}...`;
+}
+
+export function normalizeTextResponse(payload: unknown): LlmTextResponse {
   if (typeof payload !== "object" || payload === null) {
     throw new Error("Resposta da LLM nao veio como objeto JSON");
   }
 
   const raw = payload as Record<string, unknown>;
 
-  const content = typeof raw.content === "string" ? raw.content.trim() : "";
-  const shortTitle = typeof raw.shortTitle === "string" ? raw.shortTitle.trim() : "";
+  const content =
+    typeof raw.content === "string"
+      ? limitText(raw.content, SOCIAL_TEXT_MAX_CONTENT_CHARACTERS)
+      : "";
+  const shortTitle =
+    typeof raw.shortTitle === "string"
+      ? limitText(raw.shortTitle, SOCIAL_TEXT_MAX_SHORT_TITLE_CHARACTERS)
+      : "";
 
   let hashtags: string[] = [];
   if (Array.isArray(raw.hashtags)) {
     hashtags = raw.hashtags
       .map((h) => String(h).trim())
       .filter((h) => h.length > 0)
-      .map((h) => (h.startsWith("#") ? h : `#${h}`));
+      .map((h) => (h.startsWith("#") ? h : `#${h}`))
+      .slice(0, SOCIAL_TEXT_MAX_HASHTAGS);
   }
 
   if (!content) {

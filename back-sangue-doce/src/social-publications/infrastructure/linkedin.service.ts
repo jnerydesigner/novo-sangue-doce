@@ -1,7 +1,15 @@
 import { ImageService } from "@app/image/image.service";
-import { SocialPublicationRepository } from "@app/social-publications/domain/social-publication.repository";
+import {
+  type SocialPublicationRecord,
+  SocialPublicationRepository,
+} from "@app/social-publications/domain/social-publication.repository";
 import { AwsS3Service } from "@infra/storage/aws-s3.service";
-import { BadGatewayException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 export type LinkedinPublicationResponse = {
@@ -30,6 +38,26 @@ export class LinkedinService {
       );
     }
 
+    return this.publishPublication(publication);
+  }
+
+  async publishCompleted(socialPublicationId: string): Promise<LinkedinPublicationResponse> {
+    const publication = await this.socialPublicationRepository.findById(socialPublicationId);
+
+    if (!publication) {
+      throw new NotFoundException("Publicacao social nao encontrada.");
+    }
+
+    return this.publishPublication(publication);
+  }
+
+  private async publishPublication(
+    publication: SocialPublicationRecord,
+  ): Promise<LinkedinPublicationResponse> {
+    if (publication.status !== "COMPLETED") {
+      throw new BadRequestException("Apenas publicacoes concluidas podem ser publicadas.");
+    }
+
     if (!publication.generatedContent) {
       throw new NotFoundException("A publicacao social concluida nao possui texto.");
     }
@@ -55,7 +83,7 @@ export class LinkedinService {
     });
 
     return {
-      postId,
+      postId: publication.postId,
       socialPublicationId: publication.id,
       linkedinPostId,
       linkedinImageUrn,
