@@ -450,6 +450,27 @@ export type SocialPublication = {
   completedAt: string | null;
 };
 
+export type InstitutionalPublication = {
+  id: string;
+  title: string;
+  content: string;
+  hashtags: string[];
+  imageKey: string;
+  imageUrl: string;
+  publicationResults: Partial<Record<SocialNetwork, SocialPublicationResult>>;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type InstitutionalPublicationPayload = {
+  title: string;
+  content: string;
+  hashtags: string[];
+  imageKey: string;
+  imageUrl: string;
+};
+
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, {
     cache: "no-store",
@@ -839,6 +860,40 @@ export const api = {
         headers: { Authorization: `Bearer ${params.accessToken}` },
         method: "PATCH",
         body: payload,
+      }),
+  },
+  institutionalPublications: {
+    list: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
+      const searchParams = new URLSearchParams();
+      if (params.page) searchParams.set("page", String(params.page));
+      if (params.limit) searchParams.set("limit", String(params.limit));
+      const query = searchParams.toString();
+
+      return apiFetch<PaginatedResponse<InstitutionalPublication>>(
+        `/institutional-publications${query ? `?${query}` : ""}`,
+        { headers: { Authorization: `Bearer ${params.accessToken}` } },
+      );
+    },
+    create: (payload: InstitutionalPublicationPayload, params: AuthenticatedApiParams) =>
+      apiFetch<InstitutionalPublication>("/institutional-publications", {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
+        body: payload,
+      }),
+    update: (
+      id: string,
+      payload: InstitutionalPublicationPayload,
+      params: AuthenticatedApiParams,
+    ) =>
+      apiFetch<InstitutionalPublication>(`/institutional-publications/${id}`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "PATCH",
+        body: payload,
+      }),
+    publishLinkedin: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<InstitutionalPublication>(`/institutional-publications/${id}/publish/linkedin`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
       }),
   },
   postBanners: {

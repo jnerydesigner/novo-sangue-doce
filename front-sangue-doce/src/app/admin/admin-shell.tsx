@@ -10,6 +10,7 @@ type AdminShellProps = {
     | "posts"
     | "recipes"
     | "social-publications"
+    | "institutional-publications"
     | "taxonomy"
     | "users"
     | "authors";
@@ -26,6 +27,7 @@ const adminActiveByHref = {
   "/admin/posts": "posts",
   "/admin/receitas": "recipes",
   "/admin/publicacoes-sociais": "social-publications",
+  "/admin/publicacoes-institucionais": "institutional-publications",
   "/admin/taxonomia": "taxonomy",
   "/admin/usuarios": "users",
   "/admin/autores": "authors",
@@ -49,6 +51,10 @@ const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: s
   "social-publications": {
     title: "Publicacoes sociais",
     subtitle: "Acompanhe textos e imagens preparados para as redes.",
+  },
+  "institutional-publications": {
+    title: "Publicacoes institucionais",
+    subtitle: "Crie posts manuais com imagem propria para publicar no LinkedIn.",
   },
   taxonomy: {
     title: "Tags e Categorias",

@@ -380,6 +380,23 @@ model SocialPublication {
   @@map("social_publications")
 }
 
+model InstitutionalPublication {
+  id                 String    @id @default(uuid()) @db.Uuid
+  title              String    @db.VarChar(180)
+  content            String    @db.Text
+  hashtags           Json      @default("[]")
+  imageKey           String    @map("image_key")
+  imageUrl           String    @map("image_url")
+  publicationResults Json      @default("{}") @map("publication_results")
+  requestedBy        String?   @map("requested_by") @db.Uuid
+  publishedAt        DateTime? @map("published_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@index([createdAt])
+  @@map("institutional_publications")
+}
+
 model PostImages {
   id          String   @id @default(uuid()) @db.Uuid
   postId      String   @unique @map("post_id") @db.Uuid
