@@ -58,6 +58,7 @@ export type SetPasswordPayload = {
 export type UpdateAuthorProfilePayload = {
   bio?: string | null;
   role: string;
+  socialMedia?: AuthorSocialMedia[];
 };
 
 export type CreateAuthorPayload = {
@@ -66,6 +67,7 @@ export type CreateAuthorPayload = {
   role: string;
   bio?: string | null;
   email?: string;
+  socialMedia?: AuthorSocialMedia[];
   userId: string;
 };
 
@@ -181,6 +183,13 @@ export type MonthlyMeasurementReport = {
 export type PostAccentColor = "GREEN" | "TOMATO" | "BLUE";
 export type PostStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
+export type AuthorSocialMedia = {
+  name: string;
+  slug: string;
+  url: string;
+  position?: number;
+};
+
 export type PostAuthor = {
   id: string;
   name: string;
@@ -189,6 +198,7 @@ export type PostAuthor = {
   bio?: string;
   avatarUrl?: string;
   email?: string;
+  socialMedia: AuthorSocialMedia[];
   userId: string;
 };
 

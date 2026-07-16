@@ -5,6 +5,14 @@ export type CreateAuthorEntityProps = {
   userId: string;
   bio?: string | null;
   email?: string | null;
+  socialMedia?: AuthorSocialMedia[];
+};
+
+export type AuthorSocialMedia = {
+  name: string;
+  slug: string;
+  url: string;
+  position?: number;
 };
 
 export type AuthorPersistence = {
@@ -18,6 +26,7 @@ export type AuthorPersistence = {
 
 export type AuthorEntityProps = AuthorPersistence & {
   avatarUrl?: string | null;
+  socialMedia?: AuthorSocialMedia[];
   id?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -25,6 +34,7 @@ export type AuthorEntityProps = AuthorPersistence & {
 
 export type PersistedAuthorEntityProps = AuthorPersistence & {
   avatarUrl?: string | null;
+  socialMedia?: AuthorSocialMedia[];
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -38,6 +48,7 @@ export type PublicAuthor = {
   bio?: string;
   avatarUrl?: string;
   email?: string;
+  socialMedia: AuthorSocialMedia[];
   userId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -53,6 +64,7 @@ export class AuthorEntity {
       role: props.role.trim(),
       bio: props.bio?.trim() || null,
       email: props.email?.trim().toLowerCase() || null,
+      socialMedia: props.socialMedia ?? [],
       userId: props.userId,
     });
   }
@@ -72,6 +84,10 @@ export class AuthorEntity {
     };
   }
 
+  getSocialMedia(): AuthorSocialMedia[] {
+    return this.props.socialMedia ?? [];
+  }
+
   toPublic(): PublicAuthor {
     return {
       id: this.props.id as string,
@@ -81,6 +97,7 @@ export class AuthorEntity {
       bio: this.props.bio ?? undefined,
       avatarUrl: this.props.avatarUrl ?? undefined,
       email: this.props.email ?? undefined,
+      socialMedia: this.props.socialMedia ?? [],
       userId: this.props.userId,
       createdAt: this.props.createdAt as Date,
       updatedAt: this.props.updatedAt as Date,

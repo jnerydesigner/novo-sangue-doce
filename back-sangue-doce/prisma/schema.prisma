@@ -131,19 +131,36 @@ model Measurement {
 }
 
 model PostAuthor {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String
-  slug      String   @unique
-  role      String
-  bio       String?  @db.Text
-  email     String?  @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  posts     Post[]
-  userId    String   @map("user_id") @db.Uuid
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String                  @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String                  @unique
+  role        String
+  bio         String?                 @db.Text
+  email       String?                 @unique
+  createdAt   DateTime                @default(now()) @map("created_at")
+  updatedAt   DateTime                @updatedAt @map("updated_at")
+  posts       Post[]
+  socialMedia PostAuthorSocialMedia[]
+  userId      String                  @map("user_id") @db.Uuid
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("post_authors")
+}
+
+model PostAuthorSocialMedia {
+  id        String     @id @default(uuid()) @db.Uuid
+  authorId  String     @map("author_id") @db.Uuid
+  name      String     @map("nome_rede_social")
+  slug      String     @map("slug_rede_social")
+  url       String
+  position  Int        @default(0)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  author    PostAuthor @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@unique([authorId, slug])
+  @@index([authorId, position])
+  @@map("post_author_social_media")
 }
 
 model PostCategory {

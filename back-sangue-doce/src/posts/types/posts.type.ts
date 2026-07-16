@@ -9,6 +9,12 @@ export type PublicPostAuthor = {
   bio?: string;
   avatarUrl?: string;
   email?: string;
+  socialMedia: {
+    name: string;
+    slug: string;
+    url: string;
+    position?: number;
+  }[];
 };
 
 export type PublicPostCategory = {

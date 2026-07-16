@@ -9,6 +9,9 @@ import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma.service";
 
 const authorInclude = {
+  socialMedia: {
+    orderBy: [{ position: "asc" as const }, { name: "asc" as const }],
+  },
   user: {
     select: {
       avatarUrl: true,
@@ -26,8 +29,19 @@ export class PrismaAuthorsRepository implements AuthorRepository {
 
   async create(author: AuthorEntity): Promise<AuthorEntity> {
     try {
+      const socialMedia = author.getSocialMedia();
       const createdAuthor = await this.prisma.postAuthor.create({
-        data: author.toPersistence(),
+        data: {
+          ...author.toPersistence(),
+          socialMedia: {
+            create: socialMedia.map((item, index) => ({
+              name: item.name,
+              slug: item.slug,
+              url: item.url,
+              position: item.position ?? index,
+            })),
+          },
+        },
         include: authorInclude,
       });
 
@@ -93,7 +107,11 @@ export class PrismaAuthorsRepository implements AuthorRepository {
 
   async updateProfileByUserId(
     userId: string,
-    data: { bio: string | null; role: string },
+    data: {
+      bio: string | null;
+      role: string;
+      socialMedia: { name: string; slug: string; url: string; position?: number }[];
+    },
   ): Promise<AuthorEntity | null> {
     const author = await this.prisma.postAuthor.findFirst({
       where: { userId },
@@ -106,7 +124,19 @@ export class PrismaAuthorsRepository implements AuthorRepository {
     }
 
     const updatedAuthor = await this.prisma.postAuthor.update({
-      data,
+      data: {
+        bio: data.bio,
+        role: data.role,
+        socialMedia: {
+          deleteMany: {},
+          create: data.socialMedia.map((item, index) => ({
+            name: item.name,
+            slug: item.slug,
+            url: item.url,
+            position: item.position ?? index,
+          })),
+        },
+      },
       include: authorInclude,
       where: { id: author.id },
     });
@@ -118,6 +148,12 @@ export class PrismaAuthorsRepository implements AuthorRepository {
     return AuthorEntity.fromPersistence({
       ...author,
       avatarUrl: author.user.avatarUrl,
+      socialMedia: author.socialMedia.map((item) => ({
+        name: item.name,
+        slug: item.slug,
+        url: item.url,
+        position: item.position,
+      })),
     });
   }
 

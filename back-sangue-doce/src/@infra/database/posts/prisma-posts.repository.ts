@@ -21,6 +21,9 @@ import { PrismaService } from "../prisma.service";
 const postInclude = {
   author: {
     include: {
+      socialMedia: {
+        orderBy: [{ position: "asc" as const }, { name: "asc" as const }],
+      },
       user: {
         select: {
           avatarUrl: true,
@@ -431,6 +434,12 @@ export class PrismaPostsRepository implements PostRepository {
         bio: post.author.bio ?? undefined,
         avatarUrl: post.author.user.avatarUrl ?? undefined,
         email: post.author.email ?? undefined,
+        socialMedia: post.author.socialMedia.map((item) => ({
+          name: item.name,
+          slug: item.slug,
+          url: item.url,
+          position: item.position,
+        })),
       },
       category: post.category,
       tags: post.tags.map(({ tag }) => ({

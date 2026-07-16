@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import type { User } from "@/lib/api";
+import type { AuthorSocialMedia, User } from "@/lib/api";
 
 type AuthorCreateFormProps = {
   users: User[];
@@ -13,8 +13,15 @@ type FormState = {
   name: string;
   role: string;
   slug: string;
+  socialMedia: AuthorSocialMedia[];
   userId: string;
 };
+
+const emptySocialMedia = (): AuthorSocialMedia => ({
+  name: "",
+  slug: "",
+  url: "",
+});
 
 function slugify(value: string) {
   return value
@@ -54,6 +61,7 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
     name: firstUser?.name ?? "",
     role: "Colunista",
     slug: firstUser ? slugify(firstUser.name) : "",
+    socialMedia: [emptySocialMedia()],
     userId: firstUser?.id ?? "",
   });
   const [errorMessage, setErrorMessage] = useState("");
@@ -67,6 +75,47 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
 
   const updateField = <Field extends keyof FormState>(field: Field, value: FormState[Field]) => {
     setFormState((current) => ({ ...current, [field]: value }));
+  };
+
+  const updateSocialMedia = (
+    index: number,
+    field: keyof AuthorSocialMedia,
+    value: string,
+  ) => {
+    setFormState((current) => ({
+      ...current,
+      socialMedia: current.socialMedia.map((item, itemIndex) => {
+        if (itemIndex !== index) {
+          return item;
+        }
+
+        const next = { ...item, [field]: value };
+
+        if (field === "name") {
+          next.slug = slugify(value);
+        }
+
+        if (field === "slug") {
+          next.slug = slugify(value);
+        }
+
+        return next;
+      }),
+    }));
+  };
+
+  const addSocialMedia = () => {
+    setFormState((current) => ({
+      ...current,
+      socialMedia: [...current.socialMedia, emptySocialMedia()],
+    }));
+  };
+
+  const removeSocialMedia = (index: number) => {
+    setFormState((current) => ({
+      ...current,
+      socialMedia: current.socialMedia.filter((_, itemIndex) => itemIndex !== index),
+    }));
   };
 
   const selectUser = (userId: string) => {
@@ -94,6 +143,14 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
           name: formState.name.trim(),
           role: formState.role.trim(),
           slug: formState.slug.trim(),
+          socialMedia: formState.socialMedia
+            .map((item, index) => ({
+              name: item.name.trim(),
+              slug: slugify(item.slug),
+              url: item.url.trim(),
+              position: index,
+            }))
+            .filter((item) => item.name && item.slug && item.url),
           userId: formState.userId,
         }),
         headers: {
@@ -112,6 +169,7 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
         name: "",
         role: "Colunista",
         slug: "",
+        socialMedia: [emptySocialMedia()],
         userId: "",
       });
       router.refresh();
@@ -224,6 +282,52 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
           value={formState.bio}
         />
       </label>
+
+      <fieldset className="mt-4 grid gap-3 rounded-lg border border-lineStrong bg-paper p-4">
+        <legend className="px-1 text-[13px] font-semibold text-muted">Redes sociais</legend>
+        {formState.socialMedia.map((item, index) => (
+          <div key={index} className="grid gap-3 md:grid-cols-[1fr_1fr_1.5fr_auto]">
+            <input
+              aria-label="Nome da rede social"
+              className="block w-full rounded-lg border border-lineStrong bg-card px-4 py-3 text-base text-ink outline-none transition placeholder:text-muted/60 focus:border-green"
+              onChange={(event) => updateSocialMedia(index, "name", event.target.value)}
+              placeholder="Linkedin"
+              type="text"
+              value={item.name}
+            />
+            <input
+              aria-label="Slug da rede social"
+              className="block w-full rounded-lg border border-lineStrong bg-card px-4 py-3 text-base text-ink outline-none transition placeholder:text-muted/60 focus:border-green"
+              onChange={(event) => updateSocialMedia(index, "slug", event.target.value)}
+              placeholder="linkedin"
+              type="text"
+              value={item.slug}
+            />
+            <input
+              aria-label="URL da rede social"
+              className="block w-full rounded-lg border border-lineStrong bg-card px-4 py-3 text-base text-ink outline-none transition placeholder:text-muted/60 focus:border-green"
+              onChange={(event) => updateSocialMedia(index, "url", event.target.value)}
+              placeholder="https://linkedin.com/in/..."
+              type="url"
+              value={item.url}
+            />
+            <button
+              className="rounded-lg border border-lineStrong px-4 py-3 text-sm font-semibold text-inkSoft transition hover:border-muted hover:bg-subtle"
+              onClick={() => removeSocialMedia(index)}
+              type="button"
+            >
+              Remover
+            </button>
+          </div>
+        ))}
+        <button
+          className="w-fit rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-navy transition hover:border-muted hover:bg-subtle"
+          onClick={addSocialMedia}
+          type="button"
+        >
+          Adicionar rede
+        </button>
+      </fieldset>
 
       {errorMessage ? (
         <p className="mt-4 rounded-lg border border-tomato/30 bg-tomato/10 px-4 py-3 text-[14px] font-semibold text-tomato">

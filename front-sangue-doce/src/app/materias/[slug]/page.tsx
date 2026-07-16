@@ -11,7 +11,12 @@ import { JsonLd } from "@/components/json-ld";
 import { api } from "@/lib/api";
 import { formatPostDate, mapPostToArticle } from "@/lib/posts";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
-import { buildArticleJsonLd, SITE_NAME, SITE_URL, truncateMetaTitle } from "@/lib/seo";
+import {
+  buildArticleJsonLd,
+  SITE_NAME,
+  SITE_URL,
+  truncateMetaTitle,
+} from "@/lib/seo";
 import { ArticleActions, ReadingProgress } from "./article-actions";
 
 type ArticlePageProps = {
@@ -20,7 +25,9 @@ type ArticlePageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await api.posts.getBySlug(slug).catch(() => null);
 
@@ -96,6 +103,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const publishedDate = formatPostDate(post.publishedAt ?? undefined);
   const authorAvatarUrl = resolvePublicImageUrl(post.author.avatarUrl);
   const coverImageUrl = resolvePublicImageUrl(post.coverImageUrl);
+  const authorHref = `/autores/${post.author.slug}`;
 
   return (
     <>
@@ -134,24 +142,57 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {article.excerpt}
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                {authorAvatarUrl ? (
-                  <Image
-                    width={50}
-                    height={50}
-                    src={authorAvatarUrl}
-                    alt={post.author.name}
-                    className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle object-cover"
-                    loading="eager"
-                    title={post.author.name}
-                  />
-                ) : (
-                  <div className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle" />
-                )}
-                <div className="text-left">
-                  <div className="text-[15.5px] font-semibold text-ink">{post.author.name}</div>
-                  <div className="text-[13.5px] text-muted">{post.author.role}</div>
-                </div>
+              <div className="mx-auto mt-8 flex w-fit flex-wrap items-center justify-center gap-4 text-left">
+                <Link
+                  href={authorHref}
+                  className="flex items-center gap-4 rounded-xl px-3 py-2 transition hover:bg-surface focus:outline-none focus:ring-2 focus:ring-azure/40"
+                >
+                  {authorAvatarUrl ? (
+                    <Image
+                      width={50}
+                      height={50}
+                      src={authorAvatarUrl}
+                      alt={post.author.name}
+                      className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle object-cover"
+                      loading="eager"
+                      title={post.author.name}
+                    />
+                  ) : (
+                    <div className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle" />
+                  )}
+                  <div>
+                    <div className="text-[15.5px] font-semibold text-ink">
+                      {post.author.name}
+                    </div>
+                    <div className="text-[13.5px] text-muted">
+                      {post.author.role}
+                    </div>
+                  </div>
+                </Link>
+
+                {post.author.socialMedia.length ? (
+                  <div className="flex items-center gap-1.5">
+                    {post.author.socialMedia.map((social) => (
+                      <Link
+                        key={social.slug}
+                        aria-label={social.name}
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-lineStrong bg-surface transition hover:border-muted hover:bg-white focus:outline-none focus:ring-2 focus:ring-azure/40"
+                        href={social.url}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        <Image
+                          alt={social.name}
+                          className="h-5 w-5 object-contain"
+                          height={20}
+                          src={`/${social.slug}.png`}
+                          width={20}
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+
                 <span className="hidden h-8 w-px bg-lineStrong sm:block" />
                 <div className="flex items-center gap-2 text-[13.5px] text-muted">
                   <span>{publishedDate}</span>
@@ -211,27 +252,60 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           <div className="wrap">
-            <aside className="mx-auto mt-2 grid max-w-[720px] gap-6 rounded-xl border border-line bg-surface p-8 sm:grid-cols-[84px_1fr]">
-              {authorAvatarUrl ? (
-                <Image
-                  width={84}
-                  height={84}
-                  src={authorAvatarUrl}
-                  alt={post.author.name}
-                  className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-subtle object-cover"
-                  loading="lazy"
-                  title={post.author.name}
-                />
-              ) : (
-                <div className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-subtle" />
-              )}
-              <div>
-                <span className="eyebrow mb-2">Sobre a autor (a)</span>
+            <aside className="relative mx-auto mt-2 grid max-w-[720px] gap-6 rounded-xl border border-line bg-surface p-8 transition hover:border-lineStrong hover:bg-white sm:grid-cols-[84px_1fr]">
+              <Link
+                aria-label={`Ver perfil de ${post.author.name}`}
+                className="absolute inset-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-azure/40"
+                href={authorHref}
+              />
+              <div className="relative">
+                {authorAvatarUrl ? (
+                  <Image
+                    width={84}
+                    height={84}
+                    src={authorAvatarUrl}
+                    alt={post.author.name}
+                    className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-subtle object-cover"
+                    loading="lazy"
+                    title={post.author.name}
+                  />
+                ) : (
+                  <div className="h-[84px] w-[84px] rounded-full border border-lineStrong bg-subtle" />
+                )}
+              </div>
+              <div className="relative">
+                <span className="eyebrow mb-2">Sobre o autor</span>
                 <h2 className="m-0 font-serif text-2xl font-medium tracking-normal text-ink">
                   {post.author.name}
                 </h2>
-                <p className="mb-3 mt-1 text-sm text-muted">{post.author.role}</p>
-                <p className="m-0 text-[15.5px] leading-relaxed text-inkSoft">{post.author.bio}</p>
+                <p className="mb-3 mt-1 text-sm text-muted">
+                  {post.author.role}
+                </p>
+                <p className="m-0 text-[15.5px] leading-relaxed text-inkSoft">
+                  {post.author.bio}
+                </p>
+                {post.author.socialMedia.length ? (
+                  <div className="relative z-10 mt-5 flex flex-wrap gap-2">
+                    {post.author.socialMedia.map((social) => (
+                      <a
+                        key={social.slug}
+                        aria-label={social.name}
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-lineStrong bg-card transition hover:border-muted hover:bg-subtle"
+                        href={social.url}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        <Image
+                          alt=""
+                          className="h-5 w-5 object-contain"
+                          height={20}
+                          src={`/${social.slug}.png`}
+                          width={20}
+                        />
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </aside>
           </div>

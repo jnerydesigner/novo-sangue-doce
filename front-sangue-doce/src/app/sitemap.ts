@@ -67,6 +67,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  const authorsBySlug = new Map(posts.map((post) => [post.author.slug, post.author]));
+  const authorRoutes: MetadataRoute.Sitemap = Array.from(authorsBySlug.values()).map((author) => ({
+    url: `${SITE_URL}/autores/${author.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
+
   const recipes = await api.recipes
     .list({ limit: 100 })
     .then((page) => page.data)
@@ -79,5 +87,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...postRoutes, ...recipeRoutes];
+  return [...staticRoutes, ...postRoutes, ...authorRoutes, ...recipeRoutes];
 }

@@ -1,4 +1,5 @@
 import type { AuthorEntity } from "../entities/author.entity";
+import type { AuthorSocialMedia } from "../entities/author.entity";
 
 export class AuthorAlreadyExistsError extends Error {
   constructor() {
@@ -23,6 +24,6 @@ export abstract class AuthorRepository {
   abstract findByEmail(email: string): Promise<AuthorEntity | null>;
   abstract updateProfileByUserId(
     userId: string,
-    data: { bio: string | null; role: string },
+    data: { bio: string | null; role: string; socialMedia: AuthorSocialMedia[] },
   ): Promise<AuthorEntity | null>;
 }

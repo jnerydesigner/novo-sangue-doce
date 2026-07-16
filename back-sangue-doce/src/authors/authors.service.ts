@@ -81,6 +81,7 @@ export class AuthorsService {
     const author = await this.authorRepository.updateProfileByUserId(userId, {
       bio: payload.bio ?? null,
       role: payload.role,
+      socialMedia: payload.socialMedia,
     });
 
     if (!author) {
