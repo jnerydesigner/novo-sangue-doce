@@ -32,6 +32,11 @@ const nextConfig = {
       },
       {
         hostname: s3Url.hostname,
+        pathname: "/cloud/public/**",
+        protocol: s3Url.protocol.replace(":", ""),
+      },
+      {
+        hostname: s3Url.hostname,
         pathname: "/local/public/**",
         protocol: s3Url.protocol.replace(":", ""),
       },
