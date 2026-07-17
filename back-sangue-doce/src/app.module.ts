@@ -12,6 +12,7 @@ import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { InstitutionalPublicationsModule } from "./institutional-publications/institutional-publications.module";
 import { MeasurementsModule } from "./measurements/measurements.module";
+import { NewsletterModule } from "./newsletter/newsletter.module";
 import { PostBannerModule } from "./post-banners/post-banner.module";
 import { PostsModule } from "./posts/posts.module";
 import { RecipesModule } from "./recipes/recipes.module";
@@ -48,6 +49,7 @@ import { UsersModule } from "./users/users.module";
     RecipesModule,
     PostBannerModule,
     MeasurementsModule,
+    NewsletterModule,
     UploadsModule,
     SocialPublicationsModule,
   ],
