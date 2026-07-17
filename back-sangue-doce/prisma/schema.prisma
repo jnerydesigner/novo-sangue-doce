@@ -78,6 +78,14 @@ enum RecipeStatus {
   ARCHIVED
 }
 
+enum NewsletterSubscriberStatus {
+  PENDING
+  CONFIRMED
+  UNSUBSCRIBED
+  BOUNCED
+  BLOCKED
+}
+
 model User {
   id            String         @id @default(uuid()) @db.Uuid
   name          String
@@ -438,4 +446,26 @@ model EmailLoginCode {
 
   @@index([email, createdAt(sort: Desc)])
   @@map("email_login_codes")
+}
+
+model NewsletterSubscriber {
+  id                 String                     @id @default(uuid()) @db.Uuid
+  email              String                     @unique
+  normalizedEmail    String                     @unique
+  name               String?
+  status             NewsletterSubscriberStatus @default(PENDING)
+  confirmationHash   String?
+  confirmationExpiry DateTime?
+  unsubscribeHash    String?
+  source             String?
+  confirmedAt        DateTime?
+  unsubscribedAt     DateTime?
+  bouncedAt          DateTime?
+  blockedAt          DateTime?
+  createdAt          DateTime                   @default(now())
+  updatedAt          DateTime                   @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("newsletter_subscribers")
 }

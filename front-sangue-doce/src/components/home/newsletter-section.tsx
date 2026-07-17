@@ -6,7 +6,7 @@ export function NewsletterSection() {
   const [hint, setHint] = useState("Boletim semanal. Cancele quando quiser.");
   const [hintState, setHintState] = useState<"default" | "ok" | "err">("default");
 
-  function submitNewsletter(event: SubmitEvent<HTMLFormElement>) {
+  async function submitNewsletter(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -19,9 +19,20 @@ export function NewsletterSection() {
       return;
     }
 
-    setHint("Pronto! Voce vai receber o proximo boletim.");
-    setHintState("ok");
-    form.reset();
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "homepage" }),
+      });
+      if (!response.ok) throw new Error();
+      setHint("Confira seu e-mail para confirmar a assinatura.");
+      setHintState("ok");
+      form.reset();
+    } catch {
+      setHint("Não foi possível concluir agora. Tente novamente.");
+      setHintState("err");
+    }
   }
 
   return (
