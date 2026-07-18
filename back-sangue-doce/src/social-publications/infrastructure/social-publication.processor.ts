@@ -6,6 +6,7 @@ import { Processor, WorkerHost } from "@nestjs/bullmq";
 import { Injectable, Logger } from "@nestjs/common";
 import type { Job } from "bullmq";
 import { SocialPublicationRepository } from "../domain/social-publication.repository";
+import { InstagramService } from "./instagram.service";
 import { LinkedinService } from "./linkedin.service";
 import { ProcessSocialPublicationUseCase } from "./process-social-publication.use-case";
 import {
@@ -22,6 +23,7 @@ export class SocialPublicationProcessor extends WorkerHost {
   constructor(
     private readonly processSocialPublicationUseCase: ProcessSocialPublicationUseCase,
     private readonly linkedinService: LinkedinService,
+    private readonly instagramService: InstagramService,
     private readonly socialPublicationRepository: SocialPublicationRepository,
   ) {
     super();
@@ -70,7 +72,25 @@ export class SocialPublicationProcessor extends WorkerHost {
 
     await job.updateProgress(10);
 
-    await this.linkedinService.publishCompleted(job.data.socialPublicationId);
+    const publication = await this.socialPublicationRepository.findById(
+      job.data.socialPublicationId,
+    );
+
+    if (!publication) {
+      this.logger.warn(
+        `Scheduled social publication not found socialPublicationId=${job.data.socialPublicationId}`,
+      );
+      return;
+    }
+
+    if (publication.scheduledSocialNetworks.includes("LINKEDIN")) {
+      await this.linkedinService.publishCompleted(job.data.socialPublicationId);
+    }
+
+    if (publication.scheduledSocialNetworks.includes("INSTAGRAM")) {
+      await this.instagramService.publishCompleted(job.data.socialPublicationId);
+    }
+
     await this.socialPublicationRepository.markScheduleDispatched(job.data.socialPublicationId);
 
     await job.updateProgress(100);

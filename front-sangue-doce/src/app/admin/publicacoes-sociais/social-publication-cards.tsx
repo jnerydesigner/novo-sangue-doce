@@ -19,6 +19,7 @@ const socialNetworkOptions: { value: SocialNetwork; label: string }[] = [
   { value: "INSTAGRAM", label: "Instagram" },
   { value: "FACEBOOK", label: "Facebook" },
 ];
+const automaticPublishNetworks: SocialNetwork[] = ["LINKEDIN", "INSTAGRAM"];
 const statusLabels: Record<SocialPublicationStatus, string> = {
   PENDING: "Preparando",
   QUEUED: "Na fila",
@@ -153,6 +154,75 @@ export function SocialPublicationCards({ initialData }: Props) {
     setFeedback("Texto copiado para a area de transferencia.");
   }
 
+  async function publishToNetwork(publication: SocialPublication, network: SocialNetwork) {
+    if (!automaticPublishNetworks.includes(network)) {
+      setFeedback("Publicação automática disponível apenas para LinkedIn e Instagram.");
+      return;
+    }
+
+    setBusyId(`${publication.id}:${network}`);
+    setFeedback(null);
+
+    const response = await fetch(`/api/admin/publish/${network.toLowerCase()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postId: publication.postId,
+        socialPublicationId: publication.id,
+      }),
+    });
+    const body = (await response.json().catch(() => null)) as
+      | {
+          socialPublicationId: string;
+          linkedinPostId?: string | null;
+          linkedinImageUrn?: string;
+          instagramMediaId?: string | null;
+          instagramContainerId?: string;
+          status: "PUBLISHED";
+        }
+      | { message?: string }
+      | null;
+    const label = socialNetworkOptions.find((option) => option.value === network)?.label ?? network;
+
+    if (!response.ok || !body || !("status" in body)) {
+      setFeedback(
+        body && "message" in body && body.message
+          ? body.message
+          : `Não foi possível reenviar para ${label}.`,
+      );
+      setBusyId(null);
+      return;
+    }
+
+    setData((current) => ({
+      ...current,
+      data: current.data.map((item) =>
+        item.id === publication.id
+          ? {
+              ...item,
+              publicationResults: {
+                ...item.publicationResults,
+                [network]: {
+                  status: "PUBLISHED",
+                  externalPostId:
+                    network === "LINKEDIN"
+                      ? (body.linkedinPostId ?? null)
+                      : (body.instagramMediaId ?? null),
+                  mediaUrn:
+                    network === "LINKEDIN"
+                      ? (body.linkedinImageUrn ?? null)
+                      : (body.instagramContainerId ?? null),
+                  publishedAt: new Date().toISOString(),
+                },
+              },
+            }
+          : item,
+      ),
+    }));
+    setFeedback(`Publicação reenviada para ${label}.`);
+    setBusyId(null);
+  }
+
   function startGeneration(id: string, mode: SocialPublicationGenerationMode) {
     setGenerationId(id);
     setGenerationMode(mode);
@@ -240,13 +310,23 @@ export function SocialPublicationCards({ initialData }: Props) {
       }));
 
       if (action === "schedule") {
+        const networksToSchedule = socialNetworks.filter((network) =>
+          automaticPublishNetworks.includes(network),
+        );
+
+        if (networksToSchedule.length === 0) {
+          setFeedback("Selecione LinkedIn ou Instagram para colocar na fila diária.");
+          setBusyId(null);
+          return;
+        }
+
         const scheduleResponse = await fetch(
           `/api/admin/social-publications/${publication.id}/schedule`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              socialNetworks: ["LINKEDIN"],
+              socialNetworks: networksToSchedule,
             }),
           },
         );
@@ -275,54 +355,83 @@ export function SocialPublicationCards({ initialData }: Props) {
           )}.`,
         );
       } else if (action === "publish") {
-        const linkedinResponse = await fetch("/api/admin/publish/linkedin", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            postId: publication.postId,
-            socialPublicationId: publication.id,
-          }),
-        });
-        const linkedinBody = (await linkedinResponse.json().catch(() => null)) as
-          | {
-              postId: string;
-              socialPublicationId: string;
-              linkedinPostId: string | null;
-              linkedinImageUrn: string;
-              status: "PUBLISHED";
-            }
-          | { message?: string }
-          | null;
+        const networksToPublish = socialNetworks.filter((network) =>
+          automaticPublishNetworks.includes(network),
+        );
+        const publishedResults: Partial<
+          Record<SocialNetwork, SocialPublication["publicationResults"][SocialNetwork]>
+        > = {};
 
-        if (!linkedinResponse.ok || !linkedinBody || !("status" in linkedinBody)) {
-          setFeedback(
-            linkedinBody && "message" in linkedinBody && linkedinBody.message
-              ? linkedinBody.message
-              : "A revisão foi salva, mas não foi possível publicar no LinkedIn.",
-          );
+        if (networksToPublish.length === 0) {
+          setFeedback("Selecione LinkedIn ou Instagram para publicar automaticamente.");
           setBusyId(null);
           return;
         }
 
+        for (const network of networksToPublish) {
+          const response = await fetch(`/api/admin/publish/${network.toLowerCase()}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              postId: publication.postId,
+              socialPublicationId: publication.id,
+            }),
+          });
+          const body = (await response.json().catch(() => null)) as
+            | {
+                socialPublicationId: string;
+                linkedinPostId?: string | null;
+                linkedinImageUrn?: string;
+                instagramMediaId?: string | null;
+                instagramContainerId?: string;
+                status: "PUBLISHED";
+              }
+            | { message?: string }
+            | null;
+
+          if (!response.ok || !body || !("status" in body)) {
+            const label =
+              socialNetworkOptions.find((option) => option.value === network)?.label ?? network;
+            setFeedback(
+              body && "message" in body && body.message
+                ? body.message
+                : `A revisão foi salva, mas não foi possível publicar no ${label}.`,
+            );
+            setBusyId(null);
+            return;
+          }
+
+          publishedResults[network] = {
+            status: "PUBLISHED",
+            externalPostId:
+              network === "LINKEDIN"
+                ? (body.linkedinPostId ?? null)
+                : (body.instagramMediaId ?? null),
+            mediaUrn:
+              network === "LINKEDIN"
+                ? (body.linkedinImageUrn ?? null)
+                : (body.instagramContainerId ?? null),
+            publishedAt: new Date().toISOString(),
+          };
+        }
+
         setFeedback(
-          publication.publicationResults?.LINKEDIN
-            ? "Revisão salva e reenviada ao LinkedIn."
-            : "Revisão salva e publicada no LinkedIn.",
+          networksToPublish.length === 1
+            ? `Revisão salva e publicada no ${
+                socialNetworkOptions.find((option) => option.value === networksToPublish[0])
+                  ?.label ?? networksToPublish[0]
+              }.`
+            : "Revisão salva e publicada nas redes selecionadas.",
         );
         setData((current) => ({
           ...current,
           data: current.data.map((item) =>
-            item.id === linkedinBody.socialPublicationId
+            item.id === publication.id
               ? {
                   ...item,
                   publicationResults: {
                     ...item.publicationResults,
-                    LINKEDIN: {
-                      status: "PUBLISHED",
-                      externalPostId: linkedinBody.linkedinPostId,
-                      mediaUrn: linkedinBody.linkedinImageUrn,
-                      publishedAt: new Date().toISOString(),
-                    },
+                    ...publishedResults,
                   },
                 }
               : item,
@@ -430,9 +539,36 @@ export function SocialPublicationCards({ initialData }: Props) {
                           <div className="flex flex-wrap gap-2">
                             {socialNetworkOptions
                               .filter((network) => publication.publicationResults?.[network.value])
-                              .map((network) => (
-                                <SocialNetworkIcon key={network.value} network={network.value} />
-                              ))}
+                              .map((network) => {
+                                const isSupported = automaticPublishNetworks.includes(
+                                  network.value,
+                                );
+                                const isBusy = busyId === `${publication.id}:${network.value}`;
+
+                                return (
+                                  <button
+                                    aria-label={`Reenviar para ${network.label}`}
+                                    className="rounded-lg transition hover:-translate-y-0.5 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-green/30 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                                    disabled={!isSupported || isBusy}
+                                    key={network.value}
+                                    onClick={() => publishToNetwork(publication, network.value)}
+                                    title={
+                                      isSupported
+                                        ? `Reenviar para ${network.label}`
+                                        : `${network.label} ainda não tem publicação automática`
+                                    }
+                                    type="button"
+                                  >
+                                    {isBusy ? (
+                                      <span className="grid size-9 place-items-center rounded-lg bg-ink text-xs font-bold text-white">
+                                        ...
+                                      </span>
+                                    ) : (
+                                      <SocialNetworkIcon network={network.value} />
+                                    )}
+                                  </button>
+                                );
+                              })}
                           </div>
                         </td>
                         <td className="px-4 py-3">
@@ -501,7 +637,9 @@ export function SocialPublicationCards({ initialData }: Props) {
                                 >
                                   {busyId === publication.id ? "Salvando..." : "Salvar revisão"}
                                 </button>
-                                {socialNetworks.includes("LINKEDIN") ? (
+                                {socialNetworks.some((network) =>
+                                  automaticPublishNetworks.includes(network),
+                                ) ? (
                                   <button
                                     className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
                                     disabled={busyId === publication.id}
@@ -629,7 +767,9 @@ export function SocialPublicationCards({ initialData }: Props) {
                         >
                           {busyId === publication.id ? "Salvando..." : "Salvar revisão"}
                         </button>
-                        {socialNetworks.includes("LINKEDIN") ? (
+                        {socialNetworks.some((network) =>
+                          automaticPublishNetworks.includes(network),
+                        ) ? (
                           <button
                             className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
                             disabled={busyId === publication.id}

@@ -10,12 +10,12 @@ import {
 } from "../domain/social-publication.repository";
 import { canRetry, SocialPublicationStatus } from "../domain/social-publication-status.enum";
 import type { CreateSocialPublicationDto } from "../dto/create-social-publication.dto";
+import type { ScheduleSocialPublicationDto } from "../dto/schedule-social-publication.dto";
 import type {
   EnqueueSocialPublicationResponseDto,
   SocialPublicationListResponseDto,
   SocialPublicationResponseDto,
 } from "../dto/social-publication-response.dto";
-import type { ScheduleSocialPublicationDto } from "../dto/schedule-social-publication.dto";
 import type { UpdateSocialPublicationDto } from "../dto/update-social-publication.dto";
 import { SOCIAL_IMAGE_PROMPT_VERSION } from "./prompts/social-image.prompt";
 import { SOCIAL_TEXT_PROMPT_VERSION } from "./prompts/social-text.prompt";
@@ -269,11 +269,15 @@ export class SocialPublicationService {
     }
 
     if (!publication.generatedContent || !publication.generatedImageKey) {
-      throw new BadRequestException("A publicacao precisa ter texto e imagem antes do agendamento.");
+      throw new BadRequestException(
+        "A publicacao precisa ter texto e imagem antes do agendamento.",
+      );
     }
 
-    if (dto.socialNetworks.some((network) => network !== "LINKEDIN")) {
-      throw new BadRequestException("No momento, o agendamento automatico suporta apenas LinkedIn.");
+    if (dto.socialNetworks.some((network) => !["LINKEDIN", "INSTAGRAM"].includes(network))) {
+      throw new BadRequestException(
+        "No momento, o agendamento automatico suporta apenas LinkedIn e Instagram.",
+      );
     }
 
     const scheduledPublishAt = dto.scheduledPublishAt

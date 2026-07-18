@@ -5,6 +5,8 @@ import { BullModule } from "@nestjs/bullmq";
 import { Module } from "@nestjs/common";
 import { LlmImageGateway } from "./infrastructure/gateways/llm-image.gateway";
 import { LlmTextGateway } from "./infrastructure/gateways/llm-text.gateway";
+import { InstagramController } from "./infrastructure/instagram.controller";
+import { InstagramService } from "./infrastructure/instagram.service";
 import { LinkedinController } from "./infrastructure/linkedin.controller";
 import { LinkedinService } from "./infrastructure/linkedin.service";
 import { ProcessSocialPublicationUseCase } from "./infrastructure/process-social-publication.use-case";
@@ -25,7 +27,7 @@ import { SocialPublicationService } from "./infrastructure/social-publication.se
     ImageModule,
     PostsModule,
   ],
-  controllers: [SocialPublicationController, LinkedinController],
+  controllers: [SocialPublicationController, LinkedinController, InstagramController],
   providers: [
     SocialPublicationProducer,
     SocialPublicationProcessor,
@@ -34,6 +36,7 @@ import { SocialPublicationService } from "./infrastructure/social-publication.se
     LlmTextGateway,
     LlmImageGateway,
     LinkedinService,
+    InstagramService,
   ],
   exports: [SocialPublicationService, LlmImageGateway, LlmTextGateway],
 })

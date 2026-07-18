@@ -5,9 +5,9 @@ import {
   type PaginatedSocialPublications,
   type SocialPublicationPaginationParams,
   type SocialPublicationRecord,
+  SocialPublicationRepository,
   type SocialPublicationResult,
   type SocialPublicationResults,
-  SocialPublicationRepository,
 } from "@app/social-publications/domain/social-publication.repository";
 import { SocialPublicationStatus } from "@app/social-publications/domain/social-publication-status.enum";
 import type { SocialNetwork } from "@app/social-publications/dto/update-social-publication.dto";
@@ -239,7 +239,10 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
     result: SocialPublicationResult,
   ): Promise<void> {
     const publication = await this.prisma.socialPublication.findUniqueOrThrow({ where: { id } });
-    const currentResults = publication.publicationResults as SocialPublicationResults;
+    const currentResults =
+      publication.publicationResults && typeof publication.publicationResults === "object"
+        ? (publication.publicationResults as SocialPublicationResults)
+        : {};
 
     await this.prisma.socialPublication.update({
       where: { id },
@@ -301,6 +304,17 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
   private toRecord(
     record: Prisma.SocialPublicationGetPayload<Record<string, never>>,
   ): SocialPublicationRecord {
+    const socialNetworks = Array.isArray(record.socialNetworks)
+      ? (record.socialNetworks as SocialNetwork[])
+      : [];
+    const scheduledSocialNetworks = Array.isArray(record.scheduledSocialNetworks)
+      ? (record.scheduledSocialNetworks as SocialNetwork[])
+      : [];
+    const publicationResults =
+      record.publicationResults && typeof record.publicationResults === "object"
+        ? (record.publicationResults as SocialPublicationResults)
+        : {};
+
     return {
       id: record.id,
       postId: record.postId,
@@ -314,10 +328,10 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
       generatedShortTitle: record.generatedShortTitle,
       generatedImageKey: record.generatedImageKey,
       generatedImageUrl: record.generatedImageUrl,
-      socialNetworks: record.socialNetworks as SocialNetwork[],
-      publicationResults: record.publicationResults as SocialPublicationResults,
+      socialNetworks,
+      publicationResults,
       scheduledPublishAt: record.scheduledPublishAt,
-      scheduledSocialNetworks: record.scheduledSocialNetworks as SocialNetwork[],
+      scheduledSocialNetworks,
       scheduledPublishJobId: record.scheduledPublishJobId,
       scheduledBy: record.scheduledBy,
       sourceImageKey: record.sourceImageKey,

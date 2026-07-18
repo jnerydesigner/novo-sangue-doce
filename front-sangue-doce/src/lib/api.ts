@@ -826,6 +826,21 @@ export const api = {
         method: "POST",
         body: payload,
       }),
+    publishInstagram: (
+      payload: { postId?: string; socialPublicationId?: string },
+      params: AuthenticatedApiParams,
+    ) =>
+      apiFetch<{
+        postId: string;
+        socialPublicationId: string;
+        instagramMediaId: string | null;
+        instagramContainerId: string;
+        status: "PUBLISHED";
+      }>("/publish/instagram", {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
+        body: payload,
+      }),
     list: (params: AuthenticatedApiParams & { page?: number; limit?: number }) => {
       const searchParams = new URLSearchParams();
 
