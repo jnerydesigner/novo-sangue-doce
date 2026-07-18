@@ -1,7 +1,7 @@
-export const SOCIAL_TEXT_MAX_CONTENT_CHARACTERS = 900;
+export const SOCIAL_TEXT_MAX_CONTENT_CHARACTERS = 2_800;
 export const SOCIAL_TEXT_MAX_SHORT_TITLE_CHARACTERS = 80;
 export const SOCIAL_TEXT_MAX_HASHTAGS = 5;
-export const SOCIAL_TEXT_PROMPT_VERSION = "social-text-v2";
+export const SOCIAL_TEXT_PROMPT_VERSION = "social-text-v3";
 
 export const SOCIAL_TEXT_PROMPT = [
   "Você é um editor de conteúdo responsável por adaptar artigos para publicações em redes sociais.\n\n",

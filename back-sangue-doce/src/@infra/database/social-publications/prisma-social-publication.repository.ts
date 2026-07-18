@@ -153,6 +153,19 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
     return record ? this.toRecord(record) : null;
   }
 
+  async findLatestScheduledPublishAt(from: Date): Promise<Date | null> {
+    const record = await this.prisma.socialPublication.findFirst({
+      where: {
+        scheduledPublishAt: { gte: from },
+        scheduledPublishJobId: { not: null },
+      },
+      orderBy: { scheduledPublishAt: "desc" },
+      select: { scheduledPublishAt: true },
+    });
+
+    return record?.scheduledPublishAt ?? null;
+  }
+
   async updateStatus(id: string, status: SocialPublicationStatus): Promise<void> {
     const data: Record<string, unknown> = { status };
 
@@ -189,6 +202,34 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
     await this.prisma.socialPublication.update({
       where: { id },
       data: { generatedContent: description, socialNetworks },
+    });
+  }
+
+  async schedulePublication(
+    id: string,
+    data: {
+      scheduledPublishAt: Date;
+      scheduledSocialNetworks: SocialNetwork[];
+      scheduledPublishJobId: string;
+      scheduledBy?: string;
+    },
+  ): Promise<void> {
+    await this.prisma.socialPublication.update({
+      where: { id },
+      data: {
+        scheduledPublishAt: data.scheduledPublishAt,
+        scheduledSocialNetworks: data.scheduledSocialNetworks,
+        scheduledPublishJobId: data.scheduledPublishJobId,
+        scheduledBy: data.scheduledBy,
+        socialNetworks: data.scheduledSocialNetworks,
+      },
+    });
+  }
+
+  async markScheduleDispatched(id: string): Promise<void> {
+    await this.prisma.socialPublication.update({
+      where: { id },
+      data: { scheduledPublishJobId: null },
     });
   }
 
@@ -275,6 +316,10 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
       generatedImageUrl: record.generatedImageUrl,
       socialNetworks: record.socialNetworks as SocialNetwork[],
       publicationResults: record.publicationResults as SocialPublicationResults,
+      scheduledPublishAt: record.scheduledPublishAt,
+      scheduledSocialNetworks: record.scheduledSocialNetworks as SocialNetwork[],
+      scheduledPublishJobId: record.scheduledPublishJobId,
+      scheduledBy: record.scheduledBy,
       sourceImageKey: record.sourceImageKey,
       queueJobId: record.queueJobId,
       correlationId: record.correlationId,

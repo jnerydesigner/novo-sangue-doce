@@ -29,6 +29,10 @@ export type SocialPublicationRecord = {
   generatedImageUrl: string | null;
   socialNetworks: SocialNetwork[];
   publicationResults: SocialPublicationResults;
+  scheduledPublishAt: Date | null;
+  scheduledSocialNetworks: SocialNetwork[];
+  scheduledPublishJobId: string | null;
+  scheduledBy: string | null;
   sourceImageKey: string | null;
   queueJobId: string | null;
   correlationId: string;
@@ -108,6 +112,7 @@ export abstract class SocialPublicationRepository {
   ): Promise<PaginatedSocialPublications>;
   abstract findActiveByPostId(postId: string): Promise<SocialPublicationRecord | null>;
   abstract findByIdempotencyKey(key: string): Promise<SocialPublicationRecord | null>;
+  abstract findLatestScheduledPublishAt(from: Date): Promise<Date | null>;
   abstract updateStatus(id: string, status: SocialPublicationStatus): Promise<void>;
   abstract markAsProcessing(id: string, attempt: number): Promise<void>;
   abstract setQueueJobId(id: string, jobId: string): Promise<void>;
@@ -116,6 +121,16 @@ export abstract class SocialPublicationRepository {
     description: string,
     socialNetworks: SocialNetwork[],
   ): Promise<void>;
+  abstract schedulePublication(
+    id: string,
+    data: {
+      scheduledPublishAt: Date;
+      scheduledSocialNetworks: SocialNetwork[];
+      scheduledPublishJobId: string;
+      scheduledBy?: string;
+    },
+  ): Promise<void>;
+  abstract markScheduleDispatched(id: string): Promise<void>;
   abstract markAsPublished(
     id: string,
     network: SocialNetwork,

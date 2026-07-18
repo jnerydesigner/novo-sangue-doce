@@ -367,6 +367,10 @@ model SocialPublication {
   generatedImageUrl   String? @map("generated_image_url")
   socialNetworks      Json    @default("[]") @map("social_networks")
   publicationResults  Json    @default("{}") @map("publication_results")
+  scheduledPublishAt  DateTime? @map("scheduled_publish_at")
+  scheduledSocialNetworks Json @default("[]") @map("scheduled_social_networks")
+  scheduledPublishJobId String? @unique @map("scheduled_publish_job_id")
+  scheduledBy String? @map("scheduled_by") @db.Uuid
 
   sourceImageKey String? @map("source_image_key")
   queueJobId     String? @unique @map("queue_job_id")
@@ -401,6 +405,7 @@ model SocialPublication {
   @@index([postId])
   @@index([parentPublicationId])
   @@index([status])
+  @@index([scheduledPublishAt])
   @@index([createdAt])
   @@map("social_publications")
 }

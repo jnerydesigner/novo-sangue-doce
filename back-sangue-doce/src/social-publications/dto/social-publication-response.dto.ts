@@ -17,6 +17,9 @@ export type SocialPublicationResponseDto = {
   generatedImageUrl: string | null;
   socialNetworks: SocialNetwork[];
   publicationResults: SocialPublicationResults;
+  scheduledPublishAt: string | null;
+  scheduledSocialNetworks: SocialNetwork[];
+  scheduledPublishJobId: string | null;
   textModel: string | null;
   imageModel: string | null;
   promptVersion: string | null;

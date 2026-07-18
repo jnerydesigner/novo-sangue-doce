@@ -19,6 +19,7 @@ import {
   type CreateSocialPublicationDto,
   createSocialPublicationSchema,
 } from "../dto/create-social-publication.dto";
+import { scheduleSocialPublicationSchema } from "../dto/schedule-social-publication.dto";
 import type { SocialPublicationListResponseDto } from "../dto/social-publication-response.dto";
 import { updateSocialPublicationSchema } from "../dto/update-social-publication.dto";
 import { SocialPublicationService } from "./social-publication.service";
@@ -78,6 +79,21 @@ export class SocialPublicationController {
     }
 
     return this.socialPublicationService.updateReview(id, result.data);
+  }
+
+  @Post("social-publications/:id/schedule")
+  schedule(
+    @Param("id") id: string,
+    @Body() body: unknown,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    const result = scheduleSocialPublicationSchema.safeParse(body);
+
+    if (!result.success) {
+      throw new BadRequestException(result.error.issues.map((issue) => issue.message).join(", "));
+    }
+
+    return this.socialPublicationService.schedule(id, result.data, req);
   }
 
   private parseCreateDto(body: Record<string, unknown>): CreateSocialPublicationDto {

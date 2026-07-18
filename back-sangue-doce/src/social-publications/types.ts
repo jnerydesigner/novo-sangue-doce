@@ -5,6 +5,11 @@ export type SocialPublicationJobData = {
   requestedBy: string;
 };
 
+export type ScheduledSocialPublicationJobData = {
+  socialPublicationId: string;
+  requestedBy: string;
+};
+
 export type GenerateSocialContentInput = {
   title: string;
   markdown: string;

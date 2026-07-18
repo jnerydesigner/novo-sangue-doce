@@ -1,10 +1,14 @@
-import type { SocialPublicationJobData } from "@app/social-publications/types";
+import type {
+  ScheduledSocialPublicationJobData,
+  SocialPublicationJobData,
+} from "@app/social-publications/types";
 import { InjectQueue } from "@nestjs/bullmq";
 import { Injectable } from "@nestjs/common";
 import type { Queue } from "bullmq";
 
 export const SOCIAL_PUBLICATION_QUEUE = "social-publication";
 export const GENERATE_SOCIAL_PUBLICATION_JOB = "generate-social-publication";
+export const PUBLISH_SCHEDULED_SOCIAL_PUBLICATION_JOB = "publish-scheduled-social-publication";
 
 @Injectable()
 export class SocialPublicationProducer {
@@ -29,5 +33,33 @@ export class SocialPublicationProducer {
         age: 60 * 60 * 24 * 30,
       },
     });
+  }
+
+  async enqueueScheduledPublish(
+    data: ScheduledSocialPublicationJobData,
+    jobId: string,
+    delay: number,
+  ) {
+    return this.socialPublicationQueue.add(PUBLISH_SCHEDULED_SOCIAL_PUBLICATION_JOB, data, {
+      jobId,
+      delay,
+      attempts: 3,
+      backoff: {
+        type: "exponential",
+        delay: 5_000,
+      },
+      removeOnComplete: {
+        age: 60 * 60 * 24 * 7,
+        count: 1_000,
+      },
+      removeOnFail: {
+        age: 60 * 60 * 24 * 30,
+      },
+    });
+  }
+
+  async removeJob(jobId: string): Promise<void> {
+    const job = await this.socialPublicationQueue.getJob(jobId);
+    await job?.remove();
   }
 }

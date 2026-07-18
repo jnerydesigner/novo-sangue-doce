@@ -15,10 +15,15 @@ import type {
   SocialPublicationListResponseDto,
   SocialPublicationResponseDto,
 } from "../dto/social-publication-response.dto";
+import type { ScheduleSocialPublicationDto } from "../dto/schedule-social-publication.dto";
 import type { UpdateSocialPublicationDto } from "../dto/update-social-publication.dto";
 import { SOCIAL_IMAGE_PROMPT_VERSION } from "./prompts/social-image.prompt";
 import { SOCIAL_TEXT_PROMPT_VERSION } from "./prompts/social-text.prompt";
 import { SocialPublicationProducer } from "./social-publication.queue";
+
+const DAILY_SCHEDULE_HOUR = 7;
+const DAILY_SCHEDULE_UTC_OFFSET_HOURS = -4;
+const DAILY_SCHEDULE_TIME_ZONE = "America/Manaus";
 
 @Injectable()
 export class SocialPublicationService {
@@ -248,6 +253,61 @@ export class SocialPublicationService {
     return this.findById(id);
   }
 
+  async schedule(
+    id: string,
+    dto: ScheduleSocialPublicationDto,
+    req: AuthenticatedRequest,
+  ): Promise<SocialPublicationResponseDto> {
+    const publication = await this.publicationRepository.findById(id);
+
+    if (!publication) {
+      throw new NotFoundException("Publicacao social nao encontrada.");
+    }
+
+    if (publication.status !== SocialPublicationStatus.COMPLETED) {
+      throw new BadRequestException("Apenas publicacoes concluidas podem ser agendadas.");
+    }
+
+    if (!publication.generatedContent || !publication.generatedImageKey) {
+      throw new BadRequestException("A publicacao precisa ter texto e imagem antes do agendamento.");
+    }
+
+    if (dto.socialNetworks.some((network) => network !== "LINKEDIN")) {
+      throw new BadRequestException("No momento, o agendamento automatico suporta apenas LinkedIn.");
+    }
+
+    const scheduledPublishAt = dto.scheduledPublishAt
+      ? new Date(dto.scheduledPublishAt)
+      : await this.getNextDailyQueueSlot();
+    const delay = scheduledPublishAt.getTime() - Date.now();
+
+    if (!Number.isFinite(scheduledPublishAt.getTime()) || delay <= 0) {
+      throw new BadRequestException("Informe uma data futura para o agendamento.");
+    }
+
+    if (publication.scheduledPublishJobId) {
+      await this.socialPublicationProducer.removeJob(publication.scheduledPublishJobId);
+    }
+
+    const jobId = `publish-social-publication:${id}:${scheduledPublishAt.getTime()}`;
+    await this.socialPublicationProducer.enqueueScheduledPublish(
+      {
+        socialPublicationId: id,
+        requestedBy: req.user?.sub ?? "",
+      },
+      jobId,
+      delay,
+    );
+    await this.publicationRepository.schedulePublication(id, {
+      scheduledPublishAt,
+      scheduledSocialNetworks: dto.socialNetworks,
+      scheduledPublishJobId: jobId,
+      scheduledBy: req.user?.sub,
+    });
+
+    return this.findById(id);
+  }
+
   private toResponseDto(record: SocialPublicationRecord): SocialPublicationResponseDto {
     return {
       id: record.id,
@@ -263,6 +323,9 @@ export class SocialPublicationService {
       generatedImageUrl: record.generatedImageUrl,
       socialNetworks: record.socialNetworks,
       publicationResults: record.publicationResults,
+      scheduledPublishAt: record.scheduledPublishAt?.toISOString() ?? null,
+      scheduledSocialNetworks: record.scheduledSocialNetworks,
+      scheduledPublishJobId: record.scheduledPublishJobId,
       textModel: record.textModel,
       imageModel: record.imageModel,
       promptVersion: record.promptVersion,
@@ -331,5 +394,65 @@ export class SocialPublicationService {
     }
 
     return `${normalizedContent}\n\nLeia a matéria completa: ${articleUrl}`;
+  }
+
+  private async getNextDailyQueueSlot(): Promise<Date> {
+    const firstSlot = this.getTomorrowDailySlot();
+    const latestScheduledAt =
+      await this.publicationRepository.findLatestScheduledPublishAt(firstSlot);
+
+    if (!latestScheduledAt) {
+      return firstSlot;
+    }
+
+    return this.addManausDays(latestScheduledAt, 1);
+  }
+
+  private getTomorrowDailySlot(): Date {
+    const today = this.getManausDateParts(new Date());
+
+    return this.manausLocalDateToUtc(today.year, today.month, today.day + 1, DAILY_SCHEDULE_HOUR);
+  }
+
+  private addManausDays(date: Date, days: number): Date {
+    const parts = this.getManausDateParts(date);
+
+    return this.manausLocalDateToUtc(
+      parts.year,
+      parts.month,
+      parts.day + days,
+      DAILY_SCHEDULE_HOUR,
+    );
+  }
+
+  private getManausDateParts(date: Date): { year: number; month: number; day: number } {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: DAILY_SCHEDULE_TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(date);
+
+    const value = (type: string) => {
+      const part = parts.find((item) => item.type === type)?.value;
+
+      if (!part) {
+        throw new Error(`Nao foi possivel calcular a data de agendamento: ${type}.`);
+      }
+
+      return Number(part);
+    };
+
+    return {
+      year: value("year"),
+      month: value("month"),
+      day: value("day"),
+    };
+  }
+
+  private manausLocalDateToUtc(year: number, month: number, day: number, hour: number): Date {
+    return new Date(
+      Date.UTC(year, month - 1, day, hour - DAILY_SCHEDULE_UTC_OFFSET_HOURS, 0, 0, 0),
+    );
   }
 }

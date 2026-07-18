@@ -65,8 +65,10 @@ export class LinkedinService {
       throw new NotFoundException("A publicacao social concluida nao possui imagem.");
     }
 
-    const hashtags = publication.generatedHashtags?.join(" ") ?? "";
-    const text = [publication.generatedContent, hashtags].filter(Boolean).join("\n\n");
+    const text = this.formatCommentary(
+      publication.generatedContent,
+      publication.generatedHashtags ?? [],
+    );
     const sourceImage = await this.awsS3Service.downloadObject(publication.generatedImageKey);
     const pngImage = await this.imageService.png(sourceImage);
     const linkedinImageUrn = await this.uploadImage(pngImage);
@@ -97,6 +99,16 @@ export class LinkedinService {
     const apiVersion = this.configService.get<string>("LINKEDIN_API_VERSION") ?? "202606";
 
     return { accessToken, authorUrn, apiVersion };
+  }
+
+  private formatCommentary(content: string, hashtags: string[]): string {
+    const normalizedContent = content.trim();
+    const hashtagsToAppend = hashtags
+      .map((hashtag) => hashtag.trim())
+      .filter((hashtag) => hashtag.length > 0)
+      .filter((hashtag) => !normalizedContent.includes(hashtag));
+
+    return [normalizedContent, hashtagsToAppend.join(" ")].filter(Boolean).join("\n\n");
   }
 
   private async uploadImage(image: Buffer): Promise<string> {

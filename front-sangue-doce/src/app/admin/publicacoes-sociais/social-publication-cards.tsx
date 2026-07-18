@@ -206,11 +206,15 @@ export function SocialPublicationCards({ initialData }: Props) {
     );
   }
 
-  async function saveReview(publication: SocialPublication) {
+  async function saveReview(
+    publication: SocialPublication,
+    action: "save" | "publish" | "schedule" = "save",
+  ) {
     if (!description.trim()) {
       setFeedback("A descrição não pode ficar vazia.");
       return;
     }
+
     setBusyId(publication.id);
     setFeedback(null);
     const response = await fetch(`/api/admin/social-publications/${publication.id}`, {
@@ -235,7 +239,42 @@ export function SocialPublicationCards({ initialData }: Props) {
         data: current.data.map((item) => (item.id === publication.id ? body : item)),
       }));
 
-      if (socialNetworks.includes("LINKEDIN")) {
+      if (action === "schedule") {
+        const scheduleResponse = await fetch(
+          `/api/admin/social-publications/${publication.id}/schedule`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              socialNetworks: ["LINKEDIN"],
+            }),
+          },
+        );
+        const scheduleBody = (await scheduleResponse.json().catch(() => null)) as
+          | SocialPublication
+          | { message?: string }
+          | null;
+
+        if (!scheduleResponse.ok || !scheduleBody || !("id" in scheduleBody)) {
+          setFeedback(
+            scheduleBody && "message" in scheduleBody && scheduleBody.message
+              ? scheduleBody.message
+              : "A revisão foi salva, mas não foi possível agendar.",
+          );
+          setBusyId(null);
+          return;
+        }
+
+        setData((current) => ({
+          ...current,
+          data: current.data.map((item) => (item.id === scheduleBody.id ? scheduleBody : item)),
+        }));
+        setFeedback(
+          `Revisão salva e adicionada à fila diária para ${formatDate(
+            scheduleBody.scheduledPublishAt,
+          )}.`,
+        );
+      } else if (action === "publish") {
         const linkedinResponse = await fetch("/api/admin/publish/linkedin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -455,18 +494,34 @@ export function SocialPublicationCards({ initialData }: Props) {
                               </fieldset>
                               <div className="flex flex-wrap gap-2">
                                 <button
-                                  className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                                  className="rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50"
                                   disabled={busyId === publication.id}
-                                  onClick={() => saveReview(publication)}
+                                  onClick={() => saveReview(publication, "save")}
+                                  type="button"
+                                >
+                                  {busyId === publication.id ? "Salvando..." : "Salvar revisão"}
+                                </button>
+                                {socialNetworks.includes("LINKEDIN") ? (
+                                  <button
+                                    className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                                    disabled={busyId === publication.id}
+                                    onClick={() => saveReview(publication, "publish")}
+                                    type="button"
+                                  >
+                                    {busyId === publication.id
+                                      ? "Salvando e reenviando..."
+                                      : "Salvar e reenviar"}
+                                  </button>
+                                ) : null}
+                                <button
+                                  className="rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50"
+                                  disabled={busyId === publication.id}
+                                  onClick={() => saveReview(publication, "schedule")}
                                   type="button"
                                 >
                                   {busyId === publication.id
-                                    ? socialNetworks.includes("LINKEDIN")
-                                      ? "Salvando e reenviando..."
-                                      : "Salvando..."
-                                    : socialNetworks.includes("LINKEDIN")
-                                      ? "Salvar e reenviar"
-                                      : "Salvar revisão"}
+                                    ? "Salvando e enfileirando..."
+                                    : "Salvar e colocar na fila diária"}
                                 </button>
                                 <button
                                   className="rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
@@ -567,18 +622,34 @@ export function SocialPublicationCards({ initialData }: Props) {
                       </fieldset>
                       <div className="flex flex-wrap gap-2">
                         <button
-                          className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                          className="rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50"
                           disabled={busyId === publication.id}
-                          onClick={() => saveReview(publication)}
+                          onClick={() => saveReview(publication, "save")}
+                          type="button"
+                        >
+                          {busyId === publication.id ? "Salvando..." : "Salvar revisão"}
+                        </button>
+                        {socialNetworks.includes("LINKEDIN") ? (
+                          <button
+                            className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                            disabled={busyId === publication.id}
+                            onClick={() => saveReview(publication, "publish")}
+                            type="button"
+                          >
+                            {busyId === publication.id
+                              ? "Salvando e publicando..."
+                              : "Salvar e publicar"}
+                          </button>
+                        ) : null}
+                        <button
+                          className="rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50"
+                          disabled={busyId === publication.id}
+                          onClick={() => saveReview(publication, "schedule")}
                           type="button"
                         >
                           {busyId === publication.id
-                            ? socialNetworks.includes("LINKEDIN")
-                              ? "Salvando e publicando..."
-                              : "Salvando..."
-                            : socialNetworks.includes("LINKEDIN")
-                              ? "Salvar e publicar"
-                              : "Salvar revisão"}
+                            ? "Salvando e enfileirando..."
+                            : "Salvar e colocar na fila diária"}
                         </button>
                         <button
                           className="rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
@@ -610,6 +681,11 @@ export function SocialPublicationCards({ initialData }: Props) {
                             )
                             .filter(Boolean)
                             .join(" · ")}
+                        </p>
+                      ) : null}
+                      {publication.scheduledPublishAt && publication.scheduledPublishJobId ? (
+                        <p className="mt-3 rounded-lg border border-line bg-paper2 px-3 py-2 text-xs font-bold text-inkSoft">
+                          Fila diária do LinkedIn: {formatDate(publication.scheduledPublishAt)}
                         </p>
                       ) : null}
                       {Object.keys(publication.publicationResults ?? {}).length ? (

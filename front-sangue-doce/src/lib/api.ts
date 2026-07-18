@@ -450,6 +450,9 @@ export type SocialPublication = {
   generatedImageUrl: string | null;
   socialNetworks: SocialNetwork[];
   publicationResults: Partial<Record<SocialNetwork, SocialPublicationResult>>;
+  scheduledPublishAt: string | null;
+  scheduledSocialNetworks: SocialNetwork[];
+  scheduledPublishJobId: string | null;
   textModel: string | null;
   imageModel: string | null;
   promptVersion: string | null;
@@ -869,6 +872,16 @@ export const api = {
       apiFetch<SocialPublication>(`/social-publications/social-publications/${id}`, {
         headers: { Authorization: `Bearer ${params.accessToken}` },
         method: "PATCH",
+        body: payload,
+      }),
+    schedule: (
+      id: string,
+      payload: { scheduledPublishAt?: string; socialNetworks: SocialNetwork[] },
+      params: AuthenticatedApiParams,
+    ) =>
+      apiFetch<SocialPublication>(`/social-publications/social-publications/${id}/schedule`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
         body: payload,
       }),
   },
