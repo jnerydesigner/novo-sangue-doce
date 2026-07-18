@@ -39,6 +39,8 @@ export function SiteFooter() {
               // { label: "Conselho editorial", href: "/sobre" },
               { label: "Contato", href: "/contato" },
               { label: "Privacidade", href: "/privacidade" },
+              { label: "Termos de serviço", href: "/termos-de-servico" },
+              { label: "Exclusão de dados", href: "/exclusao-de-dados" },
             ]}
           />
         </div>
