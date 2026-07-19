@@ -474,3 +474,30 @@ model NewsletterSubscriber {
   @@index([createdAt])
   @@map("newsletter_subscribers")
 }
+
+model PageVisitDaily {
+  id             String   @id @default(uuid()) @db.Uuid
+  pagePath       String   @map("page_path")
+  visitedOn      DateTime @map("visited_on") @db.Date
+  totalVisits    Int      @default(0) @map("total_visits")
+  uniqueVisitors Int      @default(0) @map("unique_visitors")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@unique([pagePath, visitedOn])
+  @@index([visitedOn])
+  @@map("page_visit_daily")
+}
+
+model PageVisitorDaily {
+  id            String   @id @default(uuid()) @db.Uuid
+  pagePath      String   @map("page_path")
+  visitedOn     DateTime @map("visited_on") @db.Date
+  ipHash        String   @map("ip_hash")
+  userAgentHash String?  @map("user_agent_hash")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([pagePath, visitedOn, ipHash])
+  @@index([visitedOn])
+  @@map("page_visitor_daily")
+}

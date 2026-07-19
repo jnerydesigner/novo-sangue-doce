@@ -21,3 +21,10 @@ export const httpRequestDuration = new Histogram({
   buckets: [0.05, 0.1, 0.25, 0.5, 1, 2, 5],
   registers: [registry],
 });
+
+export const pageVisitsTotal = new Counter({
+  name: "sangue_doce_page_visits_total",
+  help: "Quantidade total de visitas registradas por grupo de página",
+  labelNames: ["page_group"],
+  registers: [registry],
+});

@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { SharedModule } from "@shared/shared.module";
 import { AuthGuard } from "./@infra/guard/auth.guard";
+import { AnalyticsModule } from "./analytics/analytics.module";
 import { AuthModule } from "./auth/auth.module";
 import { AuthorsModule } from "./authors/authors.module";
 import { CarbAnalysisModule } from "./carb-analysis/carb-analysis.module";
@@ -40,6 +41,7 @@ import { RequestIdMiddleware } from "./@infra/middleware/request-id.middleware";
     ImageModule,
     InstitutionalPublicationsModule,
     CarbAnalysisModule,
+    AnalyticsModule,
     AuthorsModule,
     AuthModule,
     SharedModule,
