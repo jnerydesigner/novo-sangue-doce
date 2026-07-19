@@ -1,0 +1,130 @@
+discovery.docker "containers" {
+  host             = "unix:///var/run/docker.sock"
+  refresh_interval = "10s"
+}
+
+discovery.relabel "container_logs" {
+  targets = discovery.docker.containers.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/sangue-doce-.*"
+    action        = "keep"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label  = "compose_service"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
+    target_label  = "compose_project"
+  }
+}
+
+loki.source.docker "container_logs" {
+  host             = "unix:///var/run/docker.sock"
+  targets          = discovery.docker.containers.targets
+  relabel_rules    = discovery.relabel.container_logs.rules
+  refresh_interval = "10s"
+  forward_to       = [loki.process.container_logs.receiver]
+}
+
+local.file_match "local_backend_logs" {
+  path_targets = [
+    {
+      "__path__"    = "/var/log/sangue-doce/backend.log",
+      "source"      = "local-file",
+      "service"     = "sangue-doce-api",
+      "environment" = "local",
+      "stack"       = "sangue-doce",
+    },
+  ]
+  sync_period = "5s"
+}
+
+loki.source.file "local_backend_logs" {
+  targets       = local.file_match.local_backend_logs.targets
+  tail_from_end = true
+  forward_to    = [loki.process.local_backend_logs.receiver]
+}
+
+loki.process "container_logs" {
+  stage.docker {}
+
+  stage.json {
+    expressions = {
+      level        = "level",
+      service      = "service",
+      environment  = "environment",
+      request_id   = "requestId",
+      event        = "event",
+      job_id       = "jobId",
+      queue        = "queue",
+      status_code  = "res.statusCode",
+      responseTime = "responseTime",
+    }
+  }
+
+  stage.labels {
+    values = {
+      level       = "",
+      service     = "",
+      environment = "",
+      event       = "",
+      queue       = "",
+    }
+  }
+
+  stage.static_labels {
+    values = {
+      stack = "sangue-doce",
+    }
+  }
+
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.process "local_backend_logs" {
+  stage.json {
+    expressions = {
+      level        = "level",
+      service      = "service",
+      environment  = "environment",
+      request_id   = "req.requestId",
+      method       = "req.method",
+      url          = "req.url",
+      event        = "event",
+      status_code  = "res.statusCode",
+      responseTime = "responseTime",
+    }
+  }
+
+  stage.labels {
+    values = {
+      level       = "",
+      service     = "",
+      environment = "",
+      method      = "",
+    }
+  }
+
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+livedebugging {
+  enabled = true
+}

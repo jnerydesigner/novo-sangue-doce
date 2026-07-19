@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: sangue-doce-api
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - sangue-doce-backend:3011
+        labels:
+          service: sangue-doce-api
+          environment: production
+
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - localhost:9090
+
+  - job_name: alloy
+    static_configs:
+      - targets:
+          - alloy:12345

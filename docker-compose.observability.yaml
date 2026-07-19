@@ -1,0 +1,87 @@
+services:
+  grafana:
+    image: grafana/grafana:11.6.0
+    container_name: sangue-doce-grafana
+    restart: unless-stopped
+    ports:
+      - "${GRAFANA_PORT:-3200}:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ${OBSERVABILITY_CONFIG_DIR:-./infra/observability}/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ${OBSERVABILITY_CONFIG_DIR:-./infra/observability}/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - loki
+      - prometheus
+    networks:
+      - observability
+      - sangue_doce_internal
+
+  loki:
+    image: grafana/loki:3.5.1
+    container_name: sangue-doce-loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/loki.yaml
+    ports:
+      - "${LOKI_BIND_ADDRESS:-127.0.0.1}:${LOKI_PORT:-3201}:3100"
+    volumes:
+      - ${OBSERVABILITY_CONFIG_DIR:-./infra/observability}/loki/loki.yaml:/etc/loki/loki.yaml:ro
+      - loki_data:/loki
+    networks:
+      - observability
+      - sangue_doce_internal
+
+  alloy:
+    image: grafana/alloy:v1.9.2
+    container_name: sangue-doce-alloy
+    restart: unless-stopped
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+    ports:
+      - "${ALLOY_BIND_ADDRESS:-127.0.0.1}:${ALLOY_PORT:-3202}:12345"
+    volumes:
+      - ${OBSERVABILITY_CONFIG_DIR:-./infra/observability}/alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - ${OBSERVABILITY_LOG_DIR:-./logs/observability}:/var/log/sangue-doce:ro
+      - alloy_data:/var/lib/alloy/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - loki
+    networks:
+      - observability
+      - sangue_doce_internal
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: sangue-doce-prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-15d}
+    ports:
+      - "${PROMETHEUS_BIND_ADDRESS:-127.0.0.1}:${PROMETHEUS_PORT:-3203}:9090"
+    volumes:
+      - ${OBSERVABILITY_CONFIG_DIR:-./infra/observability}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - observability
+      - sangue_doce_internal
+
+networks:
+  observability:
+    name: sangue-doce-observability
+  sangue_doce_internal:
+    external: true
+    name: sangue-doce-portainer-internal
+
+volumes:
+  alloy_data:
+  grafana_data:
+  loki_data:
+  prometheus_data:

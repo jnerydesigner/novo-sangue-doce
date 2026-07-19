@@ -25,8 +25,9 @@ export function NewsletterSection() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, source: "homepage" }),
       });
+      const data = (await response.json().catch(() => null)) as { message?: string } | null;
       if (!response.ok) throw new Error();
-      setHint("Confira seu e-mail para confirmar a assinatura.");
+      setHint(data?.message ?? "Confira seu e-mail para confirmar a assinatura.");
       setHintState("ok");
       form.reset();
     } catch {

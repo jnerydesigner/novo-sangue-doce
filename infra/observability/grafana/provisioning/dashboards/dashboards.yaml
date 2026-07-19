@@ -1,0 +1,13 @@
+apiVersion: 1
+
+providers:
+  - name: Sangue Doce
+    orgId: 1
+    folder: Sangue Doce
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true

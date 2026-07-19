@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PublicSiteHeader } from "@/components/home/public-site-header";
 import { SiteFooter } from "@/components/home/site-footer";
@@ -14,6 +15,8 @@ export const metadata: Metadata = {
 };
 
 const PER_PAGE = 9;
+const RECIPES_HERO_IMAGE_URL =
+  "https://sangue-doce.s3.us-east-1.amazonaws.com/public/capa/comida-saudavel-capa.jpg";
 
 export default async function RecipesPage({
   searchParams,
@@ -27,7 +30,19 @@ export default async function RecipesPage({
     <>
       <PublicSiteHeader opaque />
       <main>
-        <section className="border-b border-line bg-navy py-[clamp(64px,9vw,112px)] text-white">
+        <section className="relative isolate overflow-hidden border-b border-line bg-navy py-[clamp(72px,10vw,128px)] text-white">
+          <Image
+            alt="Prato equilibrado com vegetais, proteina e carboidratos integrais"
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+            fetchPriority="high"
+            height={1280}
+            loading="eager"
+            sizes="100vw"
+            src={RECIPES_HERO_IMAGE_URL}
+            title="Comida saudavel para rotina com diabetes"
+            width={1920}
+          />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(10,24,36,.94)_0%,rgba(10,24,36,.78)_40%,rgba(26,56,104,.48)_70%,rgba(26,56,104,.28)_100%),linear-gradient(to_top,rgba(10,24,36,.86)_0%,rgba(10,24,36,.36)_58%,rgba(10,24,36,.20)_100%)]" />
           <div className="wrap grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
             <div>
               <p className="text-sm font-semibold text-spark">Cozinha Sangue Doce</p>
