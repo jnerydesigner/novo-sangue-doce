@@ -7,6 +7,7 @@ import {
   SITE_NAME,
   SITE_URL,
 } from "@/lib/seo";
+import { PageVisitTracker } from "@/components/analytics/page-visit-tracker";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -72,7 +73,10 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={roboto.variable}
     >
-      <body className={roboto.variable}>{children}</body>
+      <body className={roboto.variable}>
+        {children}
+        <PageVisitTracker />
+      </body>
     </html>
   );
 }
