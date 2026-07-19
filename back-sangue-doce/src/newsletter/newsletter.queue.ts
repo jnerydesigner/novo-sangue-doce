@@ -13,7 +13,7 @@ export class NewsletterQueue {
 
   enqueueConfirmation(data: NewsletterConfirmationJob) {
     return this.queue.add(SEND_CONFIRMATION_JOB, data, {
-      jobId: `newsletter-confirmation:${data.subscriberId}`,
+      jobId: `newsletter-confirmation-${data.subscriberId}`,
       attempts: 5,
       backoff: { type: "exponential", delay: 5_000 },
       removeOnComplete: { age: 86_400, count: 500 },

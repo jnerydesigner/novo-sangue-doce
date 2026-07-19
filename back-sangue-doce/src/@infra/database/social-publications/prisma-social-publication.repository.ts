@@ -250,7 +250,7 @@ export class PrismaSocialPublicationRepository implements SocialPublicationRepos
         publicationResults: {
           ...currentResults,
           [network]: result,
-        } as Prisma.InputJsonValue,
+        },
       },
     });
   }

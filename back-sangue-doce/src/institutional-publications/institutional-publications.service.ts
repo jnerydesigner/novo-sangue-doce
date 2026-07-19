@@ -101,7 +101,7 @@ export class InstitutionalPublicationsService {
         publicationResults: {
           ...((publication.publicationResults as Record<string, unknown>) ?? {}),
           LINKEDIN: result,
-        } as Prisma.InputJsonValue,
+        },
         publishedAt: new Date(),
       },
     });

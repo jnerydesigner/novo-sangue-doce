@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { NewsletterSubscriberStatus } from "@prisma/client";
 import { PrismaService } from "src/@infra/database/prisma.service";
 import { NewsletterQueue } from "./newsletter.queue";
@@ -8,6 +8,8 @@ const TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class NewsletterService {
+  private readonly logger = new Logger(NewsletterService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly queue: NewsletterQueue,
@@ -41,7 +43,19 @@ export class NewsletterService {
     });
 
     if (subscriber.status !== NewsletterSubscriberStatus.CONFIRMED) {
-      await this.queue.enqueueConfirmation({ subscriberId: subscriber.id, token });
+      try {
+        await this.queue.enqueueConfirmation({ subscriberId: subscriber.id, token });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        this.logger.error(
+          `Could not enqueue newsletter confirmation for subscriber=${subscriber.id}: ${message}`,
+          error instanceof Error ? error.stack : undefined,
+        );
+        return {
+          message:
+            "Recebemos sua inscrição, mas não foi possível enviar a confirmação agora. Tente novamente mais tarde.",
+        };
+      }
     }
 
     return { message: "Se o endereço for válido, enviaremos as instruções por e-mail." };

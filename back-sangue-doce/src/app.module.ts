@@ -1,6 +1,6 @@
 import { InfraModule } from "@infra/infra.module";
 import { BullModule } from "@nestjs/bullmq";
-import { Global, Module } from "@nestjs/common";
+import { Global, MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { SharedModule } from "@shared/shared.module";
@@ -19,6 +19,7 @@ import { RecipesModule } from "./recipes/recipes.module";
 import { SocialPublicationsModule } from "./social-publications/social-publications.module";
 import { UploadsModule } from "./uploads/uploads.module";
 import { UsersModule } from "./users/users.module";
+import { RequestIdMiddleware } from "./@infra/middleware/request-id.middleware";
 
 @Global()
 @Module({
@@ -61,4 +62,8 @@ import { UsersModule } from "./users/users.module";
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes("*");
+  }
+}
