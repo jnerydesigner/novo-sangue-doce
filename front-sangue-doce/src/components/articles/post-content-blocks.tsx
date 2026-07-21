@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import type { PostContentBlock } from "@/lib/api";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
@@ -20,6 +21,38 @@ function getSafeExternalUrl(value: string) {
   }
 }
 
+function renderInlineMarkdown(value: string): ReactNode {
+  const parts = value.split(/(\[[^\]]+\]\(https?:\/\/[^)\s]+\)|\*\*[^*]+\*\*)/g);
+
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      return <strong key={`${part}-${index}`}>{part.slice(2, -2)}</strong>;
+    }
+
+    const linkMatch = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+
+    if (linkMatch) {
+      const href = getSafeExternalUrl(linkMatch[2]);
+
+      if (href) {
+        return (
+          <a
+            key={`${part}-${index}`}
+            className="font-semibold text-azure underline decoration-azure/40 underline-offset-4 transition hover:text-navy hover:decoration-navy"
+            href={href}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {linkMatch[1]}
+          </a>
+        );
+      }
+    }
+
+    return part;
+  });
+}
+
 export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
   return (
     <>
@@ -30,7 +63,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
               key={`${block.type}-${index}`}
               className="mb-4 mt-12 font-serif text-[clamp(1.6rem,2.6vw,2.05rem)] font-medium leading-[1.15] tracking-normal text-ink"
             >
-              {block.content}
+              {renderInlineMarkdown(block.content)}
             </h2>
           );
         }
@@ -41,7 +74,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
               key={`${block.type}-${index}`}
               className="mb-3 mt-9 font-serif text-[1.32rem] font-semibold text-ink"
             >
-              {block.content}
+              {renderInlineMarkdown(block.content)}
             </h3>
           );
         }
@@ -52,7 +85,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
               key={`${block.type}-${index}`}
               className="my-11 border-l-[3px] border-energy py-1 pl-7 font-serif text-[clamp(1.5rem,2.8vw,2rem)] font-medium italic leading-[1.3] text-ink"
             >
-              &quot;{block.content}&quot;
+              &quot;{renderInlineMarkdown(block.content)}&quot;
             </blockquote>
           );
         }
@@ -67,7 +100,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
                     key={`${item}-${itemIndex}`}
                     className="relative pl-8 before:absolute before:left-1 before:top-[0.72em] before:h-2 before:w-2 before:rounded-full before:bg-azure"
                   >
-                    {item}
+                    {renderInlineMarkdown(item)}
                   </li>
                 ))}
             </ul>
@@ -84,7 +117,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
                 .filter((item) => item.trim().length > 0)
                 .map((item, itemIndex) => (
                   <li className="pl-2" key={`${item}-${itemIndex}`}>
-                    {item}
+                    {renderInlineMarkdown(item)}
                   </li>
                 ))}
             </ol>
@@ -109,7 +142,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                {block.text}
+                {renderInlineMarkdown(block.text)}
                 <span className="sr-only"> (abre em uma nova aba)</span>
               </a>
             </div>
@@ -151,9 +184,9 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
               className="my-10 rounded-[10px] border border-azure/25 bg-[#E4F8FC] px-7 py-6 text-[1.02rem]"
             >
               <div className="mb-3 text-[13px] font-bold uppercase tracking-[0.06em] text-navy">
-                {block.title}
+                {renderInlineMarkdown(block.title)}
               </div>
-              <p className="m-0 text-inkSoft">{block.content}</p>
+              <p className="m-0 text-inkSoft">{renderInlineMarkdown(block.content)}</p>
             </div>
           );
         }
@@ -167,7 +200,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
             key={`${block.type}-${index}`}
             className={`mb-7 text-pretty ${index === 0 ? "first-letter:float-left first-letter:pr-3 first-letter:pt-2 first-letter:font-serif first-letter:text-[4.6rem] first-letter:font-medium first-letter:leading-[0.82] first-letter:text-energy" : ""}`}
           >
-            {block.content}
+            {renderInlineMarkdown(block.content)}
           </p>
         );
       })}
