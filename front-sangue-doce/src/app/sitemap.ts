@@ -2,6 +2,26 @@ import type { MetadataRoute } from "next";
 import { api } from "@/lib/api";
 import { SITE_URL } from "@/lib/seo";
 
+export const revalidate = 3600;
+
+async function fetchAllPages<T>(
+  fetchPage: (page: number) => Promise<{ data: T[]; meta: { hasNextPage: boolean } }>,
+  limit: number,
+): Promise<T[]> {
+  const items: T[] = [];
+  let page = 1;
+
+  do {
+    const result = await fetchPage(page);
+    items.push(...result.data);
+    page += 1;
+
+    if (!result.meta.hasNextPage) return items;
+  } while (page <= Math.ceil(10000 / limit));
+
+  return items;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
@@ -67,9 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const posts = await api.posts
-    .list({ limit: 1000 })
-    .then((page) => page.data)
+  const posts = await fetchAllPages((page) => api.posts.list({ page, limit: 50 }), 50)
     .catch(() => []);
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
@@ -87,9 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  const recipes = await api.recipes
-    .list({ limit: 100 })
-    .then((page) => page.data)
+  const recipes = await fetchAllPages((page) => api.recipes.list({ page, limit: 100 }), 100)
     .catch(() => []);
 
   const recipeRoutes: MetadataRoute.Sitemap = recipes.map((recipe) => ({
