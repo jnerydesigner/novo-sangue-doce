@@ -77,6 +77,46 @@ export class MeasurementReportPdfService {
     });
   }
 
+  async generateMonthlyReportImage(params: {
+    birthDate?: string;
+    diabetesType?: string;
+    report: MonthlyMeasurementReport;
+    reportUrl?: string;
+  }): Promise<Buffer> {
+    const avatarImage = await this.fetchAvatarImage(params.report.userAvatarUrl);
+    const avatarData = avatarImage?.toString("base64");
+    const rows = params.report.days
+      .map((day, index) => {
+        const values = REPORT_COLUMNS.map((column) =>
+          this.getMeasurementForColumn(day.measurements, column)?.glucoseValueMgDl ?? "",
+        );
+        const y = 420 + index * 34;
+        return `<text x="48" y="${y}" class="date">${this.formatDate(day.date)}</text>${values.map((value, i) => `<text x="${190 + i * 163}" y="${y}" class="value">${value}</text>`).join("")}<line x1="40" y1="${y + 12}" x2="1200" y2="${y + 12}" class="line"/>`;
+      })
+      .join("");
+    const height = Math.max(860, 450 + params.report.days.length * 34);
+    const avatar = avatarData ? `<image href="data:image/png;base64,${avatarData}" x="48" y="90" width="120" height="120" preserveAspectRatio="xMidYMid slice"/>` : `<text x="108" y="155" text-anchor="middle" class="muted">FOTO</text>`;
+    const labels = REPORT_COLUMNS.map((column, i) => `<text x="${190 + i * 163}" y="397" text-anchor="middle" class="header">${column.label}</text>`).join("");
+    const url = this.buildReportUrl(params.reportUrl) ?? "";
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="${height}" viewBox="0 0 1240 ${height}">
+      <style>.bg{fill:#eef6fc}.card{fill:#fff;stroke:#b7d1e8}.ink{fill:#12263d;font-family:Arial,sans-serif}.muted{fill:#60758a;font-family:Arial,sans-serif;font-size:16px}.label{fill:#60758a;font:bold 16px Arial}.text{fill:#12263d;font:16px Arial}.title{fill:#12263d;font:bold 32px Arial}.brand{fill:#145484;font:bold 24px Arial}.header{fill:#12263d;font:bold 13px Arial}.date{fill:#12263d;font:bold 14px Arial}.value{fill:#12263d;font:14px Arial;text-anchor:middle}.line{stroke:#cbddea}.small{fill:#60758a;font:12px Arial}</style>
+      <rect width="1240" height="${height}" class="bg"/><rect x="32" y="32" width="1176" height="${height - 64}" rx="10" class="card"/>
+      <text x="48" y="70" class="title">Relatório de glicemia</text>${avatar}
+      <text x="190" y="112" class="label">NOME:</text><text x="340" y="112" class="text">${this.escapeXml(params.report.userName).toUpperCase()}</text>
+      <text x="190" y="142" class="label">DATA NASC:</text><text x="340" y="142" class="text">${this.escapeXml(params.birthDate ?? "NAO INFORMADO")}</text>
+      <text x="190" y="172" class="label">INICIO AMOSTRAGEM:</text><text x="340" y="172" class="text">${this.formatDate(params.report.period.startDate)}</text>
+      <text x="190" y="202" class="label">FIM AMOSTRAGEM:</text><text x="340" y="202" class="text">${this.formatDate(params.report.period.endDate)}</text>
+      <text x="190" y="232" class="label">TIPO DIABETES:</text><text x="340" y="232" class="text">${this.escapeXml(this.formatDiabetesType(params.diabetesType))}</text>
+      <text x="48" y="370" class="brand">Sangue Doce</text><text x="48" y="390" class="small">RELATÓRIO DE GLICEMIA</text><line x1="40" y1="405" x2="1200" y2="405" class="line"/>
+      <text x="48" y="397" class="header">DIA</text>${labels}${rows}<text x="620" y="${height - 40}" text-anchor="middle" class="small">ESTE RELATÓRIO FOI GERADO PELO SITE SANGUE DOCE ${this.escapeXml(url)}</text>
+    </svg>`;
+    return sharp(Buffer.from(svg)).png().toBuffer();
+  }
+
+  private escapeXml(value: string) {
+    return value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[character] ?? character);
+  }
+
   private drawHeader(
     doc: PDFKit.PDFDocument,
     params: {

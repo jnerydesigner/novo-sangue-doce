@@ -6,6 +6,7 @@ type ExportReportButtonProps = {
   reportUrl: string;
   startDate?: string;
   year: number;
+  format?: "pdf" | "png";
 };
 
 export function ExportReportButton({
@@ -16,6 +17,7 @@ export function ExportReportButton({
   reportUrl,
   startDate,
   year,
+  format = "pdf",
 }: ExportReportButtonProps) {
   const searchParams = new URLSearchParams({
     reportUrl,
@@ -40,9 +42,9 @@ export function ExportReportButton({
   return (
     <a
       className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep print:hidden"
-      href={`/api/measurements/reports/monthly-pdf?${searchParams}`}
+      href={`/api/measurements/reports/monthly-${format === "png" ? "image" : "pdf"}?${searchParams}`}
     >
-      Exportar PDF
+      {format === "png" ? "Exportar imagem" : "Exportar PDF"}
     </a>
   );
 }

@@ -99,6 +99,27 @@ export class MeasurementsController {
     return res.send(pdf);
   }
 
+  @Get("reports/monthly.png")
+  @UseGuards(AuthGuard)
+  async getMonthlyFormalReportImage(
+    @Request() req: AuthenticatedRequest,
+    @Res() res: Response,
+    @Query("year") year?: string,
+    @Query("month") month?: string,
+    @Query("startDate") startDate?: string,
+    @Query("endDate") endDate?: string,
+    @Query("birthDate") birthDate?: string,
+    @Query("diabetesType") diabetesType?: string,
+    @Query("reportUrl") reportUrl?: string,
+  ) {
+    const report = await this.measurementsService.getMonthlyFormalReport(req, year, month, startDate, endDate);
+    const image = await this.measurementReportPdfService.generateMonthlyReportImage({ birthDate, diabetesType, report, reportUrl });
+    res.setHeader("Content-Type", "image/png");
+    res.setHeader("Content-Disposition", 'attachment; filename="relatorio-glicemia.png"');
+    res.setHeader("Content-Length", image.length);
+    return res.send(image);
+  }
+
   @Get(":id")
   @UseGuards(AuthGuard)
   findOne(

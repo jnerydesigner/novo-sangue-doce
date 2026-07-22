@@ -204,15 +204,10 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 </button>
               </form>
             </div>
-            <ExportReportButton
-              birthDate={userData.birthDate}
-              diabetesType={userData.diabetesType}
-              endDate={queryEndDate}
-              month={monthlyReport.month}
-              reportUrl={reportUrl}
-              startDate={queryStartDate}
-              year={monthlyReport.year}
-            />
+            <div className="flex gap-2">
+              <ExportReportButton birthDate={userData.birthDate} diabetesType={userData.diabetesType} endDate={queryEndDate} month={monthlyReport.month} reportUrl={reportUrl} startDate={queryStartDate} year={monthlyReport.year} />
+              <ExportReportButton format="png" birthDate={userData.birthDate} diabetesType={userData.diabetesType} endDate={queryEndDate} month={monthlyReport.month} reportUrl={reportUrl} startDate={queryStartDate} year={monthlyReport.year} />
+            </div>
           </div>
 
           <article className="mt-6 overflow-hidden rounded-lg border border-line bg-card p-5 shadow-editorial print:m-0 print:min-h-screen print:rounded-none print:border-0 print:p-8 print:shadow-none">
