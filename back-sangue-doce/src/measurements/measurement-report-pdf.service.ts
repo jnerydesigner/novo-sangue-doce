@@ -56,6 +56,7 @@ export class MeasurementReportPdfService {
     reportUrl?: string;
   }): Promise<Buffer> {
     const avatarImage = await this.fetchAvatarImage(params.report.userAvatarUrl);
+    const logoImage = await this.fetchLogoImage();
 
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument({
@@ -69,7 +70,7 @@ export class MeasurementReportPdfService {
       doc.on("error", reject);
       const urlFullReport = this.buildReportUrl(params.reportUrl);
 
-      this.drawHeader(doc, { ...params, avatarImage });
+      this.drawHeader(doc, { ...params, avatarImage, logoImage });
       this.drawTable(doc, params.report);
       this.drawFooter(doc, urlFullReport);
 
@@ -84,7 +85,9 @@ export class MeasurementReportPdfService {
     reportUrl?: string;
   }): Promise<Buffer> {
     const avatarImage = await this.fetchAvatarImage(params.report.userAvatarUrl);
+    const logoImage = await this.fetchLogoImage();
     const avatarData = avatarImage?.toString("base64");
+    const logoData = logoImage?.toString("base64");
     const fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf";
     const fontData = existsSync(fontPath) ? readFileSync(fontPath).toString("base64") : "";
     const rows = params.report.days
@@ -98,18 +101,19 @@ export class MeasurementReportPdfService {
       .join("");
     const height = Math.max(860, 450 + params.report.days.length * 34);
     const avatar = avatarData ? `<image href="data:image/png;base64,${avatarData}" x="48" y="90" width="120" height="120" preserveAspectRatio="xMidYMid slice"/>` : `<text x="108" y="155" text-anchor="middle" class="muted">FOTO</text>`;
+    const logo = logoData ? `<image href="data:image/png;base64,${logoData}" x="1050" y="88" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>` : "";
     const labels = REPORT_COLUMNS.map((column, i) => `<text x="${190 + i * 163}" y="397" text-anchor="middle" class="header">${column.label}</text>`).join("");
     const url = this.buildReportUrl(params.reportUrl) ?? "";
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="${height}" viewBox="0 0 1240 ${height}">
       <style>@font-face{font-family:ReportFont;src:url(data:font/ttf;base64,${fontData})}.bg{fill:#eef6fc}.card{fill:#fff;stroke:#b7d1e8}.ink{fill:#12263d;font-family:ReportFont,sans-serif}.muted{fill:#60758a;font-family:ReportFont,sans-serif;font-size:16px}.label{fill:#60758a;font:bold 16px ReportFont}.text{fill:#12263d;font:16px ReportFont}.title{fill:#12263d;font:bold 32px ReportFont}.brand{fill:#145484;font:bold 24px ReportFont}.header{fill:#12263d;font:bold 13px ReportFont}.date{fill:#12263d;font:bold 14px ReportFont}.value{fill:#12263d;font:14px ReportFont;text-anchor:middle}.line{stroke:#cbddea}.small{fill:#60758a;font:12px ReportFont}</style>
       <rect width="1240" height="${height}" class="bg"/><rect x="32" y="32" width="1176" height="${height - 64}" rx="10" class="card"/>
       <text x="48" y="70" class="title">Relatório de glicemia</text>${avatar}
-      <text x="190" y="112" class="label">NOME:</text><text x="340" y="112" class="text">${this.escapeXml(params.report.userName).toUpperCase()}</text>
-      <text x="190" y="142" class="label">DATA NASC:</text><text x="340" y="142" class="text">${this.escapeXml(params.birthDate ?? "NAO INFORMADO")}</text>
-      <text x="190" y="172" class="label">INICIO AMOSTRAGEM:</text><text x="340" y="172" class="text">${this.formatDate(params.report.period.startDate)}</text>
-      <text x="190" y="202" class="label">FIM AMOSTRAGEM:</text><text x="340" y="202" class="text">${this.formatDate(params.report.period.endDate)}</text>
-      <text x="190" y="232" class="label">TIPO DIABETES:</text><text x="340" y="232" class="text">${this.escapeXml(this.formatDiabetesType(params.diabetesType))}</text>
-      <text x="48" y="370" class="brand">Sangue Doce</text><text x="48" y="390" class="small">RELATÓRIO DE GLICEMIA</text><line x1="40" y1="405" x2="1200" y2="405" class="line"/>
+      ${logo}<text x="190" y="112" class="label">NOME:</text><text x="390" y="112" class="text">${this.escapeXml(params.report.userName).toUpperCase()}</text>
+      <text x="190" y="142" class="label">DATA NASC:</text><text x="390" y="142" class="text">${this.escapeXml(params.birthDate ?? "NAO INFORMADO")}</text>
+      <text x="190" y="172" class="label">INICIO AMOSTRAGEM:</text><text x="390" y="172" class="text">${this.formatDate(params.report.period.startDate)}</text>
+      <text x="190" y="202" class="label">FIM AMOSTRAGEM:</text><text x="390" y="202" class="text">${this.formatDate(params.report.period.endDate)}</text>
+      <text x="190" y="232" class="label">TIPO DIABETES:</text><text x="390" y="232" class="text">${this.escapeXml(this.formatDiabetesType(params.diabetesType))}</text>
+      <text x="48" y="340" class="brand">Sangue Doce</text><text x="48" y="360" class="small">RELATÓRIO DE GLICEMIA</text><line x1="40" y1="375" x2="1200" y2="375" class="line"/>
       <text x="48" y="397" class="header">DIA</text>${labels}${rows}<text x="620" y="${height - 40}" text-anchor="middle" class="small">ESTE RELATÓRIO FOI GERADO PELO SITE SANGUE DOCE ${this.escapeXml(url)}</text>
     </svg>`;
     return sharp(Buffer.from(svg)).png().toBuffer();
@@ -125,6 +129,7 @@ export class MeasurementReportPdfService {
       birthDate?: string;
       diabetesType?: string;
       avatarImage?: Buffer;
+      logoImage?: Buffer;
       report: MonthlyMeasurementReport;
       reportUrl?: string;
     },
@@ -182,22 +187,15 @@ export class MeasurementReportPdfService {
         .text(value, valueX, y, { width: valueWidth });
     });
 
-    this.drawBrand(doc, brandX, top + 12, brandWidth);
+    this.drawBrand(doc, brandX, top + 12, brandWidth, params.logoImage);
   }
 
-  private drawBrand(doc: PDFKit.PDFDocument, x: number, y: number, width: number) {
-    const logoPath = join(
-      process.cwd(),
-      "..",
-      "front-sangue-doce",
-      "public",
-      "sangue-doce-logo-small.png",
-    );
+  private drawBrand(doc: PDFKit.PDFDocument, x: number, y: number, width: number, logoImage?: Buffer) {
     const logoSize = 42;
     const logoX = x + (width - logoSize) / 2;
 
-    if (existsSync(logoPath)) {
-      doc.image(logoPath, logoX, y, {
+    if (logoImage) {
+      doc.image(logoImage, logoX, y, {
         fit: [logoSize, logoSize],
         align: "center",
         valign: "center",
@@ -409,6 +407,29 @@ export class MeasurementReportPdfService {
       }
 
       return this.normalizeImageForPdf(Buffer.from(await response.arrayBuffer()));
+    } catch {
+      return undefined;
+    }
+  }
+
+  private async fetchLogoImage(): Promise<Buffer | undefined> {
+    const localPaths = [
+      join(process.cwd(), "public", "sangue-doce-logo-small.png"),
+      join(process.cwd(), "..", "front-sangue-doce", "public", "sangue-doce-logo-small.png"),
+      join(__dirname, "../../../../front-sangue-doce/public/sangue-doce-logo-small.png"),
+    ];
+    const localPath = localPaths.find((path) => existsSync(path));
+
+    if (localPath) {
+      return readFileSync(localPath);
+    }
+
+    const siteUrl = this.configService.get<string>("URL_SITE") ?? this.configService.get<string>("FRONTEND_URL");
+    if (!siteUrl) return undefined;
+
+    try {
+      const response = await fetch(`${siteUrl.replace(/\/$/, "")}/sangue-doce-logo-small.png`);
+      return response.ok ? Buffer.from(await response.arrayBuffer()) : undefined;
     } catch {
       return undefined;
     }
