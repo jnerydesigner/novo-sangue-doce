@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -85,6 +85,8 @@ export class MeasurementReportPdfService {
   }): Promise<Buffer> {
     const avatarImage = await this.fetchAvatarImage(params.report.userAvatarUrl);
     const avatarData = avatarImage?.toString("base64");
+    const fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf";
+    const fontData = existsSync(fontPath) ? readFileSync(fontPath).toString("base64") : "";
     const rows = params.report.days
       .map((day, index) => {
         const values = REPORT_COLUMNS.map((column) =>
@@ -99,7 +101,7 @@ export class MeasurementReportPdfService {
     const labels = REPORT_COLUMNS.map((column, i) => `<text x="${190 + i * 163}" y="397" text-anchor="middle" class="header">${column.label}</text>`).join("");
     const url = this.buildReportUrl(params.reportUrl) ?? "";
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="${height}" viewBox="0 0 1240 ${height}">
-      <style>.bg{fill:#eef6fc}.card{fill:#fff;stroke:#b7d1e8}.ink{fill:#12263d;font-family:'DejaVu Sans',sans-serif}.muted{fill:#60758a;font-family:'DejaVu Sans',sans-serif;font-size:16px}.label{fill:#60758a;font:bold 16px 'DejaVu Sans'}.text{fill:#12263d;font:16px 'DejaVu Sans'}.title{fill:#12263d;font:bold 32px 'DejaVu Sans'}.brand{fill:#145484;font:bold 24px 'DejaVu Sans'}.header{fill:#12263d;font:bold 13px 'DejaVu Sans'}.date{fill:#12263d;font:bold 14px 'DejaVu Sans'}.value{fill:#12263d;font:14px 'DejaVu Sans';text-anchor:middle}.line{stroke:#cbddea}.small{fill:#60758a;font:12px 'DejaVu Sans'}</style>
+      <style>@font-face{font-family:ReportFont;src:url(data:font/ttf;base64,${fontData})}.bg{fill:#eef6fc}.card{fill:#fff;stroke:#b7d1e8}.ink{fill:#12263d;font-family:ReportFont,sans-serif}.muted{fill:#60758a;font-family:ReportFont,sans-serif;font-size:16px}.label{fill:#60758a;font:bold 16px ReportFont}.text{fill:#12263d;font:16px ReportFont}.title{fill:#12263d;font:bold 32px ReportFont}.brand{fill:#145484;font:bold 24px ReportFont}.header{fill:#12263d;font:bold 13px ReportFont}.date{fill:#12263d;font:bold 14px ReportFont}.value{fill:#12263d;font:14px ReportFont;text-anchor:middle}.line{stroke:#cbddea}.small{fill:#60758a;font:12px ReportFont}</style>
       <rect width="1240" height="${height}" class="bg"/><rect x="32" y="32" width="1176" height="${height - 64}" rx="10" class="card"/>
       <text x="48" y="70" class="title">Relatório de glicemia</text>${avatar}
       <text x="190" y="112" class="label">NOME:</text><text x="340" y="112" class="text">${this.escapeXml(params.report.userName).toUpperCase()}</text>

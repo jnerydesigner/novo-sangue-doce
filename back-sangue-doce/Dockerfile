@@ -38,7 +38,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV SERVER_PORT=3011
 
-RUN apk add --no-cache openssl
+RUN apk add --no-cache \
+  openssl \
+  fontconfig \
+  ttf-dejavu
 
 COPY --from=production-deps --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/node_modules/.prisma ./node_modules/.prisma
