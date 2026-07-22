@@ -19,12 +19,27 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "baseUrl": ".",
     "paths": {
-      "*": ["./*"],
-      "@app/*": ["./src/*"],
-      "@infra/*": ["./src/@infra/*"],
-      "@helper/*": ["./src/@helper/*"],
-      "@shared/*": ["./src/@shared/*"]
-    }
+      "@app/*": [
+        "./src/*"
+      ],
+      "@infra/*": [
+        "./src/@infra/*"
+      ],
+      "@helper/*": [
+        "./src/@helper/*"
+      ],
+      "@shared/*": [
+        "./src/@shared/*"
+      ],
+      "src/*": [
+        "./src/*"
+      ]
+    },
+    "types": [
+      "node",
+      "vitest/globals"
+    ]
   }
 }

@@ -14,15 +14,9 @@ import {
   PostTaxonomyAlreadyExistsError,
 } from "./repositories/post.repository";
 import type { PublicPost, PublicPostCategory, PublicPostTag } from "./types/posts.type";
+import { PostImageContentBlock } from "./types/post-image-content-block.type";
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-type PostImageContentBlock = {
-  type: "image";
-  src: string;
-  alt?: string;
-  caption?: string;
-};
 
 @Injectable()
 export class PostsService {
@@ -144,7 +138,7 @@ export class PostsService {
   }
 
   async findCategories(): Promise<PublicPostCategory[]> {
-    return this.postRepository.findCategories();
+    return await this.postRepository.findCategories();
   }
 
   async createCategory(createCategoryDto: CreatePostCategoryDto): Promise<PublicPostCategory> {
@@ -197,7 +191,7 @@ export class PostsService {
   }
 
   async findTags(): Promise<PublicPostTag[]> {
-    return this.postRepository.findTags();
+    return await this.postRepository.findTags();
   }
 
   async createTag(createTagDto: CreatePostTagDto): Promise<PublicPostTag> {

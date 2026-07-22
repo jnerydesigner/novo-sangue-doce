@@ -5,30 +5,12 @@ import { ConfigService } from "@nestjs/config";
 import handlebars from "handlebars";
 import { type CreateEmailResponse, Resend } from "resend";
 import { AppLogger } from "src/@shared/logger/app-logger.provider";
-
-type SystemEmailParams = {
-  to: string | string[];
-  subject: string;
-  title: string;
-  previewText?: string;
-  recipientName?: string;
-  intro: string;
-  body: string;
-  actionLabel?: string;
-  actionUrl?: string;
-  attachments?: {
-    content: Buffer | string;
-    contentType?: string;
-    filename: string;
-  }[];
-  footerText?: string;
-};
+import { SystemEmailParams } from "./types/system-email-params.type";
 
 @Injectable()
 export class MailService {
   private readonly systemEmailTemplate: HandlebarsTemplateDelegate;
-  private readonly logoUrl: string =
-    `https://sangue-doce.s3.us-east-1.amazonaws.com/sangue-doce-logo-small.png`;
+  private readonly logoUrl: string = `https://sangue-doce.s3.us-east-1.amazonaws.com/sangue-doce-logo-small.png`;
   private readonly logger: AppLogger = new AppLogger();
 
   constructor(

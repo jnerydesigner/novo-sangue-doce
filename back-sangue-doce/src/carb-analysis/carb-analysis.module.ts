@@ -1,11 +1,11 @@
 import { AwsS3Module } from "@infra/storage/aws-s3.module";
 import { BullModule } from "@nestjs/bullmq";
 import { Module } from "@nestjs/common";
-import { MailModule } from "src/mail/mail.module";
-import { AnthropicCarbAnalysisService } from "./anthropic-carb-analysis.service";
+import { MailModule } from "@app/mail/mail.module";
 import { CarbAnalysisController } from "./carb-analysis.controller";
 import { CarbAnalysisService } from "./carb-analysis.service";
 import { CarbAnalysisReportPdfService } from "./carb-analysis-report-pdf.service";
+import { AnthropicCarbAnalysisService } from "./anthropic-carb-analysis.service";
 import { COUNT_CARB_QUEUE } from "./count-carb.constants";
 import { CountCarbProducer } from "./count-carb.producer";
 import { CountCarbWorker } from "./count-carb.worker";

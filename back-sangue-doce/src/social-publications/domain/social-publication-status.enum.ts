@@ -10,6 +10,7 @@ export enum SocialPublicationStatus {
   FAILED = "FAILED",
   CANCELLED = "CANCELLED",
   STANDBY = "STANDBY",
+  PUBLISHED = "PUBLISHED",
 }
 
 const TERMINAL_STATUSES: SocialPublicationStatus[] = [

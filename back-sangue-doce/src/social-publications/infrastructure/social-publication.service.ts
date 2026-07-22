@@ -1,7 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import { PostRepository } from "@app/posts/repositories/post.repository";
-import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
@@ -30,7 +29,6 @@ export class SocialPublicationService {
   constructor(
     private readonly publicationRepository: SocialPublicationRepository,
     private readonly postRepository: PostRepository,
-    private readonly awsS3Service: AwsS3Service,
     private readonly socialPublicationProducer: SocialPublicationProducer,
     private readonly configService: ConfigService,
   ) {}
@@ -55,7 +53,7 @@ export class SocialPublicationService {
     }
 
     if (postPublic.status !== "PUBLISHED") {
-      throw new BadRequestException("Apenas posts publicados podem gerar publicacoes sociais.");
+      throw new BadRequestException("Apenas publicacoes concluidas podem ser publicadas.");
     }
 
     const activePublication = await this.publicationRepository.findActiveByPostId(postId);

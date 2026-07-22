@@ -32,6 +32,10 @@ export class LinkedinController {
       return this.linkedinService.publishCompleted(result.data.socialPublicationId);
     }
 
-    return this.linkedinService.publishLatestCompleted(result.data.postId as string);
+    if (!result.data.postId) {
+      throw new BadRequestException("Informe a materia ou a publicacao social.");
+    }
+
+    return this.linkedinService.publishLatestCompleted(result.data.postId);
   }
 }

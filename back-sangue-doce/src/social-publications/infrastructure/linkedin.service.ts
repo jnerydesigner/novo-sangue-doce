@@ -11,6 +11,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { SocialPublicationStatus } from "@app/social-publications/domain/social-publication-status.enum";
 
 export type LinkedinPublicationResponse = {
   postId: string;
@@ -54,7 +55,7 @@ export class LinkedinService {
   private async publishPublication(
     publication: SocialPublicationRecord,
   ): Promise<LinkedinPublicationResponse> {
-    if (publication.status !== "COMPLETED") {
+    if (publication.status !== SocialPublicationStatus.COMPLETED) {
       throw new BadRequestException("Apenas publicacoes concluidas podem ser publicadas.");
     }
 
