@@ -90,37 +90,96 @@ export class MeasurementReportPdfService {
     const logoData = logoImage?.toString("base64");
     const fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf";
     const fontData = existsSync(fontPath) ? readFileSync(fontPath).toString("base64") : "";
+    const scale = 2;
+    const pageWidth = 595.28 * scale;
+    const pageHeight = 841.89 * scale;
+    const left = 28 * scale;
+    const top = 28 * scale;
+    const photoSize = 70 * scale;
+    const labelX = left + photoSize + 24 * scale;
+    const brandWidth = 150 * scale;
+    const brandX = pageWidth - left - brandWidth;
+    const labelWidth = 126 * scale;
+    const valueX = labelX + labelWidth + 12 * scale;
+    const rowHeight = 19 * scale;
+    const dateWidth = 70 * scale;
+    const tableHeaderY = 142 * scale;
+    const tableWidth =
+      dateWidth + REPORT_COLUMNS.reduce((total, column) => total + column.width * scale, 0);
+    const headerRows = [
+      ["NOME:", params.report.userName.toUpperCase()],
+      ["DATA NASC:", params.birthDate ?? "NAO INFORMADO"],
+      ["INICIO AMOSTRAGEM:", this.formatDate(params.report.period.startDate)],
+      ["FIM AMOSTRAGEM:", this.formatDate(params.report.period.endDate)],
+      ["TIPO DIABETES:", this.formatDiabetesType(params.diabetesType)],
+    ];
+    const headerInfo = headerRows
+      .map(
+        ([label, value], index) =>
+          `<text x="${labelX}" y="${top + index * 18 * scale}" class="label">${this.escapeXml(label)}</text><text x="${valueX}" y="${top + index * 18 * scale}" class="valueStrong">${this.escapeXml(value)}</text>`,
+      )
+      .join("");
+    const tableLabels = REPORT_COLUMNS.reduce(
+      (markup, column, index) => {
+        const x =
+          left +
+          dateWidth +
+          REPORT_COLUMNS.slice(0, index).reduce((total, item) => total + item.width * scale, 0);
+
+        return `${markup}<text x="${x + (column.width * scale) / 2}" y="${tableHeaderY}" text-anchor="middle" class="tableHeader">${column.label}</text>`;
+      },
+      `<text x="${left + dateWidth / 2}" y="${tableHeaderY}" text-anchor="middle" class="tableHeader">DIA</text>`,
+    );
     const rows = params.report.days
       .map((day, index) => {
-        const values = REPORT_COLUMNS.map((column) =>
-          this.getMeasurementForColumn(day.measurements, column)?.glucoseValueMgDl ?? "",
-        );
-        const y = 420 + index * 34;
-        return `<text x="48" y="${y}" class="date">${this.formatDate(day.date)}</text>${values.map((value, i) => `<text x="${190 + i * 163}" y="${y}" class="value">${value}</text>`).join("")}<line x1="40" y1="${y + 12}" x2="1200" y2="${y + 12}" class="line"/>`;
+        const y = tableHeaderY + 22 * scale + index * rowHeight;
+        let columnX = left + dateWidth;
+        const values = REPORT_COLUMNS.map((column) => {
+          const x = columnX;
+          const measurement = this.getMeasurementForColumn(day.measurements, column);
+          columnX += column.width * scale;
+
+          return `<text x="${x + (column.width * scale) / 2}" y="${y}" text-anchor="middle" class="tableValue">${measurement ? measurement.glucoseValueMgDl : ""}</text>`;
+        }).join("");
+
+        return `<text x="${left + dateWidth / 2}" y="${y}" text-anchor="middle" class="tableDate">${this.formatDate(day.date)}</text>${values}`;
       })
       .join("");
-    const height = Math.max(860, 450 + params.report.days.length * 34);
-    const avatar = avatarData ? `<image href="data:image/png;base64,${avatarData}" x="48" y="90" width="120" height="120" preserveAspectRatio="xMidYMid slice"/>` : `<text x="108" y="155" text-anchor="middle" class="muted">FOTO</text>`;
-    const logo = logoData ? `<image href="data:image/png;base64,${logoData}" x="1050" y="88" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>` : "";
-    const labels = REPORT_COLUMNS.map((column, i) => `<text x="${190 + i * 163}" y="397" text-anchor="middle" class="header">${column.label}</text>`).join("");
+    const avatar = avatarData
+      ? `<image href="data:image/png;base64,${avatarData}" x="${left}" y="${top + 12 * scale}" width="${photoSize}" height="${photoSize}" preserveAspectRatio="xMidYMid slice"/>`
+      : `<text x="${left + photoSize / 2}" y="${top + 42 * scale}" text-anchor="middle" class="muted">FOTO</text>`;
+    const logoSize = 42 * scale;
+    const logoX = brandX + (brandWidth - logoSize) / 2;
+    const logo = logoData
+      ? `<image href="data:image/png;base64,${logoData}" x="${logoX}" y="${top + 12 * scale}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid meet"/>`
+      : "";
     const url = this.buildReportUrl(params.reportUrl) ?? "";
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="${height}" viewBox="0 0 1240 ${height}">
-      <style>@font-face{font-family:ReportFont;src:url(data:font/ttf;base64,${fontData})}.bg{fill:#eef6fc}.card{fill:#fff;stroke:#b7d1e8}.ink{fill:#12263d;font-family:ReportFont,sans-serif}.muted{fill:#60758a;font-family:ReportFont,sans-serif;font-size:16px}.label{fill:#60758a;font:bold 16px ReportFont}.text{fill:#12263d;font:16px ReportFont}.title{fill:#12263d;font:bold 32px ReportFont}.brand{fill:#145484;font:bold 24px ReportFont}.header{fill:#12263d;font:bold 13px ReportFont}.date{fill:#12263d;font:bold 14px ReportFont}.value{fill:#12263d;font:14px ReportFont;text-anchor:middle}.line{stroke:#cbddea}.small{fill:#60758a;font:12px ReportFont}</style>
-      <rect width="1240" height="${height}" class="bg"/><rect x="32" y="32" width="1176" height="${height - 64}" rx="10" class="card"/>
-      <text x="48" y="70" class="title">Relatório de glicemia</text>${avatar}
-      ${logo}<text x="190" y="112" class="label">NOME:</text><text x="390" y="112" class="text">${this.escapeXml(params.report.userName).toUpperCase()}</text>
-      <text x="190" y="142" class="label">DATA NASC:</text><text x="390" y="142" class="text">${this.escapeXml(params.birthDate ?? "NAO INFORMADO")}</text>
-      <text x="190" y="172" class="label">INICIO AMOSTRAGEM:</text><text x="390" y="172" class="text">${this.formatDate(params.report.period.startDate)}</text>
-      <text x="190" y="202" class="label">FIM AMOSTRAGEM:</text><text x="390" y="202" class="text">${this.formatDate(params.report.period.endDate)}</text>
-      <text x="190" y="232" class="label">TIPO DIABETES:</text><text x="390" y="232" class="text">${this.escapeXml(this.formatDiabetesType(params.diabetesType))}</text>
-      <text x="48" y="340" class="brand">Sangue Doce</text><text x="48" y="360" class="small">RELATÓRIO DE GLICEMIA</text><line x1="40" y1="375" x2="1200" y2="375" class="line"/>
-      <text x="48" y="397" class="header">DIA</text>${labels}${rows}<text x="620" y="${height - 40}" text-anchor="middle" class="small">ESTE RELATÓRIO FOI GERADO PELO SITE SANGUE DOCE ${this.escapeXml(url)}</text>
+    const reportUrlMarkup = url
+      ? `<text x="${pageWidth / 2}" y="${805 * scale}" text-anchor="middle" class="footerUrl">${this.escapeXml(url)}</text>`
+      : "";
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pageWidth}" height="${pageHeight}" viewBox="0 0 ${pageWidth} ${pageHeight}">
+      <style>@font-face{font-family:ReportFont;src:url(data:font/ttf;base64,${fontData})}.page{fill:#fff}.photoBorder{fill:none;stroke:#d8cdbb;stroke-width:2}.line{stroke:#d8cdbb;stroke-width:2}.muted{fill:#6f6558;font:bold 18px ReportFont,Arial,sans-serif}.label{fill:#6f6558;font:bold 17px ReportFont,Arial,sans-serif}.valueStrong{fill:#211d18;font:bold 17px ReportFont,Arial,sans-serif}.brand{fill:#0f4f2d;font:bold 22px ReportFont,Arial,sans-serif}.brandSubtitle{fill:#6f6558;font:bold 12px ReportFont,Arial,sans-serif}.tableHeader{fill:#211d18;font:bold 15px ReportFont,Arial,sans-serif}.tableDate{fill:#211d18;font:17px ReportFont,Arial,sans-serif}.tableValue{fill:#211d18;font:17px ReportFont,Arial,sans-serif}.footer{fill:#6f6558;font:bold 16px ReportFont,Arial,sans-serif}.footerUrl{fill:#6f6558;font:13px ReportFont,Arial,sans-serif}</style>
+      <rect width="${pageWidth}" height="${pageHeight}" class="page"/>
+      <rect x="${left}" y="${top + 12 * scale}" width="${photoSize}" height="${photoSize}" class="photoBorder"/>${avatar}
+      ${headerInfo}
+      ${logo}<text x="${brandX + brandWidth / 2}" y="${top + 47 * scale}" text-anchor="middle" class="brand">Sangue Doce</text><text x="${brandX + brandWidth / 2}" y="${top + 62 * scale}" text-anchor="middle" class="brandSubtitle">RELATORIO DE GLICEMIA</text>
+      <line x1="${left}" y1="${tableHeaderY - 9 * scale}" x2="${left + tableWidth}" y2="${tableHeaderY - 9 * scale}" class="line"/>
+      ${tableLabels}
+      <line x1="${left}" y1="${tableHeaderY + 14 * scale}" x2="${left + tableWidth}" y2="${tableHeaderY + 14 * scale}" class="line"/>
+      ${rows}
+      <text x="${pageWidth / 2}" y="${(url ? 790 : 800) * scale}" text-anchor="middle" class="footer">ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE</text>
+      ${reportUrlMarkup}
     </svg>`;
     return sharp(Buffer.from(svg)).png().toBuffer();
   }
 
   private escapeXml(value: string) {
-    return value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[character] ?? character);
+    return value.replace(
+      /[&<>"']/g,
+      (character) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[character] ??
+        character,
+    );
   }
 
   private drawHeader(
@@ -190,7 +249,13 @@ export class MeasurementReportPdfService {
     this.drawBrand(doc, brandX, top + 12, brandWidth, params.logoImage);
   }
 
-  private drawBrand(doc: PDFKit.PDFDocument, x: number, y: number, width: number, logoImage?: Buffer) {
+  private drawBrand(
+    doc: PDFKit.PDFDocument,
+    x: number,
+    y: number,
+    width: number,
+    logoImage?: Buffer,
+  ) {
     const logoSize = 42;
     const logoX = x + (width - logoSize) / 2;
 
@@ -424,7 +489,8 @@ export class MeasurementReportPdfService {
       return readFileSync(localPath);
     }
 
-    const siteUrl = this.configService.get<string>("URL_SITE") ?? this.configService.get<string>("FRONTEND_URL");
+    const siteUrl =
+      this.configService.get<string>("URL_SITE") ?? this.configService.get<string>("FRONTEND_URL");
     if (!siteUrl) return undefined;
 
     try {
