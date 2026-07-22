@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-frontend
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME || 'local/sangue-doce-frontend' }}
   NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'https://api.sanguedoce.com.br' }}
   NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://sanguedoce.com.br' }}
   NEXT_IMAGE_UNOPTIMIZED: ${{ vars.NEXT_IMAGE_UNOPTIMIZED || 'false' }}

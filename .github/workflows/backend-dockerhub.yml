@@ -23,8 +23,8 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-backend
-  RECIPE_IMPORTER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-recipe-importer
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME || 'local/sangue-doce-backend' }}
+  RECIPE_IMPORTER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME || 'local/sangue-doce-recipe-importer' }}
 
 jobs:
   build:
