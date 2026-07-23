@@ -5,11 +5,22 @@ import { ConfigService } from "@nestjs/config";
 import PDFDocument from "pdfkit";
 import sharp from "sharp";
 import type { MonthlyMeasurementReport, PublicMeasurement } from "./measurements.service";
+import { AppLogger } from "@app/@shared/logger/app-logger.provider";
 
 type ReportColumn = {
   label: string;
   noteTypes: string[];
   width: number;
+};
+
+type GlucoseStage = {
+  label: string;
+  description: string;
+  range: string;
+  color: string;
+  isNormal?: boolean;
+  min?: number;
+  max?: number;
 };
 
 const REPORT_COLUMNS: ReportColumn[] = [
@@ -45,9 +56,66 @@ const REPORT_COLUMNS: ReportColumn[] = [
   },
 ];
 
+const ADA_REFERENCE_TEXT = "De acordo com a American Diabetes Association (ADA)";
+
+const GLUCOSE_STAGES: GlucoseStage[] = [
+  {
+    label: "Abaixo de 79",
+    description: "Nivel preocupante",
+    range: "(< 79 mg/dL)",
+    color: "#ef1d12",
+    max: 79,
+  },
+  {
+    label: "Entre 80 e 120",
+    description: "Nivel normal",
+    range: "(80 - 120 mg/dL)",
+    color: "#159455",
+    isNormal: true,
+    min: 80,
+    max: 120,
+  },
+  {
+    label: "Entre 121 e 180",
+    description: "Acima da meta",
+    range: "(121 - 180 mg/dL)",
+    color: "#ff7a00",
+    min: 121,
+    max: 180,
+  },
+  {
+    label: "Entre 181 e 250",
+    description: "Elevada",
+    range: "(181 - 250 mg/dL)",
+    color: "#f04012",
+    min: 181,
+    max: 250,
+  },
+  {
+    label: "Entre 251 e 300",
+    description: "Muito elevada",
+    range: "(251 - 300 mg/dL)",
+    color: "#d60000",
+    min: 251,
+    max: 300,
+  },
+  {
+    label: "Acima de 300",
+    description: "Criticamente elevada",
+    range: "(> 300 mg/dL)",
+    color: "#98080c",
+    min: 301,
+  },
+];
+
 @Injectable()
 export class MeasurementReportPdfService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly appLogger: AppLogger,
+  ) {
+    this.appLogger.setContext(MeasurementReportPdfService.name);
+  }
 
   async generateMonthlyReportPdf(params: {
     birthDate?: string;
@@ -60,7 +128,7 @@ export class MeasurementReportPdfService {
 
     return new Promise((resolve, reject) => {
       const doc = new PDFDocument({
-        margin: 28,
+        margins: { bottom: 10, left: 22, right: 22, top: 16 },
         size: "A4",
       });
       const chunks: Buffer[] = [];
@@ -93,8 +161,8 @@ export class MeasurementReportPdfService {
     const scale = 2;
     const pageWidth = 595.28 * scale;
     const pageHeight = 841.89 * scale;
-    const left = 28 * scale;
-    const top = 28 * scale;
+    const left = 22 * scale;
+    const top = 16 * scale;
     const photoSize = 70 * scale;
     const labelX = left + photoSize + 24 * scale;
     const brandWidth = 150 * scale;
@@ -103,7 +171,7 @@ export class MeasurementReportPdfService {
     const valueX = labelX + labelWidth + 12 * scale;
     const rowHeight = 19 * scale;
     const dateWidth = 70 * scale;
-    const tableHeaderY = 142 * scale;
+    const tableHeaderY = 124 * scale;
     const tableWidth =
       dateWidth + REPORT_COLUMNS.reduce((total, column) => total + column.width * scale, 0);
     const headerRows = [
@@ -139,10 +207,19 @@ export class MeasurementReportPdfService {
           const measurement = this.getMeasurementForColumn(day.measurements, column);
           columnX += column.width * scale;
 
-          return `<text x="${x + (column.width * scale) / 2}" y="${y}" text-anchor="middle" class="tableValue">${measurement ? measurement.glucoseValueMgDl : ""}</text>`;
+          if (!measurement) {
+            return "";
+          }
+
+          const stage = this.getGlucoseStage(measurement.glucoseValueMgDl);
+          const centerX = x + (column.width * scale) / 2;
+
+          return `<rect x="${centerX - 15 * scale}" y="${y - 8 * scale}" width="${7 * scale}" height="${7 * scale}" fill="${stage.color}" rx="${1.5 * scale}"/><text x="${centerX}" y="${y}" text-anchor="middle" class="tableValue">${measurement.glucoseValueMgDl}</text>`;
         }).join("");
 
-        return `<text x="${left + dateWidth / 2}" y="${y}" text-anchor="middle" class="tableDate">${this.formatDate(day.date)}</text>${values}`;
+        const lineY = y + 10 * scale;
+
+        return `<text x="${left + dateWidth / 2}" y="${y}" text-anchor="middle" class="tableDate">${this.formatDate(day.date)}</text>${values}<line x1="${left}" y1="${lineY}" x2="${left + tableWidth}" y2="${lineY}" class="rowLine"/>`;
       })
       .join("");
     const avatar = avatarData
@@ -154,11 +231,12 @@ export class MeasurementReportPdfService {
       ? `<image href="data:image/png;base64,${logoData}" x="${logoX}" y="${top + 12 * scale}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid meet"/>`
       : "";
     const url = this.buildReportUrl(params.reportUrl) ?? "";
+    const legendRows = this.buildSvgLegendRows(pageWidth, scale);
     const reportUrlMarkup = url
-      ? `<text x="${pageWidth / 2}" y="${805 * scale}" text-anchor="middle" class="footerUrl">${this.escapeXml(url)}</text>`
+      ? `<text x="${pageWidth / 2}" y="${817 * scale}" text-anchor="middle" class="footerUrl">${this.escapeXml(url)}</text>`
       : "";
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${pageWidth}" height="${pageHeight}" viewBox="0 0 ${pageWidth} ${pageHeight}">
-      <style>@font-face{font-family:ReportFont;src:url(data:font/ttf;base64,${fontData})}.page{fill:#fff}.photoBorder{fill:none;stroke:#d8cdbb;stroke-width:2}.line{stroke:#d8cdbb;stroke-width:2}.muted{fill:#6f6558;font:bold 18px ReportFont,Arial,sans-serif}.label{fill:#6f6558;font:bold 17px ReportFont,Arial,sans-serif}.valueStrong{fill:#211d18;font:bold 17px ReportFont,Arial,sans-serif}.brand{fill:#0f4f2d;font:bold 22px ReportFont,Arial,sans-serif}.brandSubtitle{fill:#6f6558;font:bold 12px ReportFont,Arial,sans-serif}.tableHeader{fill:#211d18;font:bold 15px ReportFont,Arial,sans-serif}.tableDate{fill:#211d18;font:17px ReportFont,Arial,sans-serif}.tableValue{fill:#211d18;font:17px ReportFont,Arial,sans-serif}.footer{fill:#6f6558;font:bold 16px ReportFont,Arial,sans-serif}.footerUrl{fill:#6f6558;font:13px ReportFont,Arial,sans-serif}</style>
+      <style>@font-face{font-family:ReportFont;src:url(data:font/ttf;base64,${fontData})}.page{fill:#fff}.photoBorder{fill:none;stroke:#d8cdbb;stroke-width:2}.line{stroke:#d8cdbb;stroke-width:2}.muted{fill:#6f6558;font:bold 18px ReportFont,Arial,sans-serif}.label{fill:#6f6558;font:bold 17px ReportFont,Arial,sans-serif}.valueStrong{fill:#211d18;font:bold 17px ReportFont,Arial,sans-serif}.brand{fill:#0f4f2d;font:bold 22px ReportFont,Arial,sans-serif}.brandSubtitle{fill:#6f6558;font:bold 12px ReportFont,Arial,sans-serif}.tableHeader{fill:#211d18;font:bold 15px ReportFont,Arial,sans-serif}.tableDate{fill:#211d18;font:17px ReportFont,Arial,sans-serif}.tableValue{fill:#211d18;font:bold 17px ReportFont,Arial,sans-serif}.rowLine{stroke:#d8cdbb;stroke-width:1.5}.legendTitle{fill:#211d18;font:bold 10px ReportFont,Arial,sans-serif}.legendDescription{fill:#211d18;font:9px ReportFont,Arial,sans-serif}.legendRange{fill:#211d18;font:8.5px ReportFont,Arial,sans-serif}.adaReference{fill:#6f6558;font:bold 10px ReportFont,Arial,sans-serif}.footer{fill:#6f6558;font:bold 16px ReportFont,Arial,sans-serif}.footerUrl{fill:#6f6558;font:13px ReportFont,Arial,sans-serif}</style>
       <rect width="${pageWidth}" height="${pageHeight}" class="page"/>
       <rect x="${left}" y="${top + 12 * scale}" width="${photoSize}" height="${photoSize}" class="photoBorder"/>${avatar}
       ${headerInfo}
@@ -167,7 +245,9 @@ export class MeasurementReportPdfService {
       ${tableLabels}
       <line x1="${left}" y1="${tableHeaderY + 14 * scale}" x2="${left + tableWidth}" y2="${tableHeaderY + 14 * scale}" class="line"/>
       ${rows}
-      <text x="${pageWidth / 2}" y="${(url ? 790 : 800) * scale}" text-anchor="middle" class="footer">ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE</text>
+      ${legendRows}
+      <text x="${pageWidth / 2}" y="${786 * scale}" text-anchor="middle" class="adaReference">${this.escapeXml(ADA_REFERENCE_TEXT)}</text>
+      <text x="${pageWidth / 2}" y="${(url ? 802 : 814) * scale}" text-anchor="middle" class="footer">ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE</text>
       ${reportUrlMarkup}
     </svg>`;
     return sharp(Buffer.from(svg)).png().toBuffer();
@@ -196,6 +276,7 @@ export class MeasurementReportPdfService {
     const { report } = params;
     const left = doc.page.margins.left;
     const top = doc.page.margins.top;
+    this.appLogger.log("Top " + top);
     const photoSize = 70;
     const labelX = left + photoSize + 24;
     const brandWidth = 150;
@@ -287,19 +368,23 @@ export class MeasurementReportPdfService {
 
   private drawTable(doc: PDFKit.PDFDocument, report: MonthlyMeasurementReport) {
     const left = doc.page.margins.left;
-    const startY = 142;
-    const rowHeight = 19;
+    const startY = 124;
     const dateWidth = 70;
     const tableWidth =
       dateWidth + REPORT_COLUMNS.reduce((total, column) => total + column.width, 0);
-    let currentY = this.drawTableHeader(doc, startY, dateWidth, tableWidth);
+    const firstRowY = this.drawTableHeader(doc, startY, dateWidth, tableWidth);
+    const tableBottomY = 748;
+    const rowHeight = Math.min(
+      19,
+      Math.max(8.6, (tableBottomY - firstRowY) / Math.max(report.days.length, 1)),
+    );
+    const rowFontSize = rowHeight < 11 ? 5.8 : rowHeight < 14 ? 6.7 : rowHeight < 17 ? 7.5 : 8.4;
+    const badgeSize = rowHeight < 11 ? 3.8 : rowHeight < 14 ? 4.4 : 5.5;
+    let currentY = firstRowY;
+
+    doc.font("Helvetica").fontSize(rowFontSize).fillColor("#211d18");
 
     report.days.forEach((day) => {
-      if (currentY > 760) {
-        doc.addPage();
-        currentY = this.drawTableHeader(doc, 40, dateWidth, tableWidth);
-      }
-
       const y = currentY;
 
       doc.text(this.formatDate(day.date), left, y, {
@@ -311,14 +396,38 @@ export class MeasurementReportPdfService {
 
       REPORT_COLUMNS.forEach((column) => {
         const measurement = this.getMeasurementForColumn(day.measurements, column);
+        const stage = measurement ? this.getGlucoseStage(measurement.glucoseValueMgDl) : null;
 
-        doc.text(measurement ? String(measurement.glucoseValueMgDl) : "", columnX, y, {
-          align: "center",
-          width: column.width,
-        });
+        if (measurement && stage) {
+          const value = String(measurement.glucoseValueMgDl);
+          const textWidth = doc.font("Helvetica-Bold").fontSize(rowFontSize).widthOfString(value);
+          const centerX = columnX + column.width / 2;
+
+          doc
+            .roundedRect(
+              centerX - textWidth / 2 - badgeSize - 3,
+              y + Math.max(1.5, rowFontSize * 0.22),
+              badgeSize,
+              badgeSize,
+              1,
+            )
+            .fillColor(stage.color)
+            .fill();
+          doc.fillColor("#211d18").text(value, columnX, y, {
+            align: "center",
+            width: column.width,
+          });
+        }
         columnX += column.width;
       });
 
+      doc
+        .moveTo(left, y + rowHeight - 4)
+        .lineTo(left + tableWidth, y + rowHeight - 4)
+        .strokeColor("#d8cdbb")
+        .lineWidth(0.5)
+        .stroke();
+      doc.font("Helvetica").fontSize(rowFontSize).fillColor("#211d18");
       currentY += rowHeight;
     });
   }
@@ -364,6 +473,17 @@ export class MeasurementReportPdfService {
   private drawFooter(doc: PDFKit.PDFDocument, reportUrl?: string) {
     const footerWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
 
+    this.drawLegend(doc, 754);
+
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(5.8)
+      .fillColor("#6f6558")
+      .text(ADA_REFERENCE_TEXT, doc.page.margins.left, 784, {
+        align: "center",
+        width: footerWidth,
+      });
+
     doc
       .font("Helvetica-Bold")
       .fontSize(8)
@@ -371,7 +491,7 @@ export class MeasurementReportPdfService {
       .text(
         "ESTE RELATORIO FOI GERADO PELO SITE SANGUE DOCE",
         doc.page.margins.left,
-        reportUrl ? 790 : 800,
+        reportUrl ? 800 : 812,
         {
           align: "center",
           width: footerWidth,
@@ -381,9 +501,9 @@ export class MeasurementReportPdfService {
     if (reportUrl) {
       doc
         .font("Helvetica")
-        .fontSize(6.4)
+        .fontSize(6.2)
         .fillColor("#6f6558")
-        .text(reportUrl, doc.page.margins.left, 805, {
+        .text(reportUrl, doc.page.margins.left, 815, {
           align: "center",
           width: footerWidth,
         });
@@ -399,6 +519,66 @@ export class MeasurementReportPdfService {
         (measurement) => measurement.noteType && column.noteTypes.includes(measurement.noteType),
       ) ?? null
     );
+  }
+
+  private getGlucoseStage(value: number): GlucoseStage {
+    return (
+      GLUCOSE_STAGES.find((stage) => {
+        const aboveMin = stage.min === undefined || value >= stage.min;
+        const belowMax = stage.max === undefined || value <= stage.max;
+        return aboveMin && belowMax;
+      }) ?? GLUCOSE_STAGES[GLUCOSE_STAGES.length - 1]
+    );
+  }
+
+  private buildSvgLegendRows(pageWidth: number, scale: number) {
+    const itemWidth = 86 * scale;
+    const startX = (pageWidth - itemWidth * GLUCOSE_STAGES.length) / 2;
+
+    return GLUCOSE_STAGES.map((stage, index) => {
+      const x = startX + index * itemWidth;
+      const y = 756 * scale;
+
+      return `<rect x="${x}" y="${y - 11 * scale}" width="${7 * scale}" height="${7 * scale}" fill="${stage.color}" rx="${1.5 * scale}"/><text x="${x + 8 * scale}" y="${y - 4 * scale}" class="legendTitle">${this.escapeXml(stage.label)}</text><text x="${x + 8 * scale}" y="${y + 9 * scale}" class="legendDescription">${this.escapeXml(stage.description)}</text><text x="${x + 8 * scale}" y="${y + 21 * scale}" class="legendRange">${this.escapeXml(stage.range)}</text>`;
+    }).join("");
+  }
+
+  private drawLegend(doc: PDFKit.PDFDocument, y: number) {
+    const itemWidth = 86;
+    const startX = (doc.page.width - itemWidth * GLUCOSE_STAGES.length) / 2;
+
+    GLUCOSE_STAGES.forEach((stage, index) => {
+      const itemX = startX + index * itemWidth;
+
+      doc
+        .roundedRect(itemX, y - 6.5, 5.5, 5.5, 1)
+        .fillColor(stage.color)
+        .fill();
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(5.8)
+        .fillColor("#211d18")
+        .text(stage.label, itemX + 8, y - 7, {
+          lineBreak: false,
+          width: itemWidth - 8,
+        });
+      doc
+        .font("Helvetica")
+        .fontSize(5.6)
+        .fillColor("#211d18")
+        .text(stage.description, itemX + 8, y + 4, {
+          lineBreak: false,
+          width: itemWidth - 8,
+        });
+      doc
+        .font("Helvetica")
+        .fontSize(5.3)
+        .fillColor("#211d18")
+        .text(stage.range, itemX + 8, y + 15, {
+          lineBreak: false,
+          width: itemWidth - 8,
+        });
+    });
   }
 
   private formatDate(value: Date | string) {
