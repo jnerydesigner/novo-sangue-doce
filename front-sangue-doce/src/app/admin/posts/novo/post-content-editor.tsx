@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { PostContentBlock } from "@/lib/api";
+import { calculateReadingMinutes } from "@/lib/post/new-post-form";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 type EditableBlock = PostContentBlock & {
@@ -152,17 +153,28 @@ const blockOptions = [
 
 type PostContentEditorProps = {
   initialContent?: PostContentBlock[];
+  onReadingMinutesChange?: (readingMinutes: number) => void;
   onUploadImage?: (file: File) => Promise<string>;
 };
 
-export function PostContentEditor({ initialContent, onUploadImage }: PostContentEditorProps) {
+export function PostContentEditor({
+  initialContent,
+  onReadingMinutesChange,
+  onUploadImage,
+}: PostContentEditorProps) {
   const [blocks, setBlocks] = useState<EditableBlock[]>(
     Array.isArray(initialContent) && initialContent.length
       ? initialContent.map(toEditableBlock)
       : initialBlocks,
   );
 
-  const serializedContent = useMemo(() => JSON.stringify(blocks.map(toPostBlock)), [blocks]);
+  const postBlocks = useMemo(() => blocks.map(toPostBlock), [blocks]);
+  const serializedContent = useMemo(() => JSON.stringify(postBlocks), [postBlocks]);
+  const readingMinutes = useMemo(() => calculateReadingMinutes(postBlocks), [postBlocks]);
+
+  useEffect(() => {
+    onReadingMinutesChange?.(readingMinutes);
+  }, [onReadingMinutesChange, readingMinutes]);
 
   function addBlock(block: PostContentBlock) {
     setBlocks((current) => [...current, { ...block, key: makeKey() }]);
