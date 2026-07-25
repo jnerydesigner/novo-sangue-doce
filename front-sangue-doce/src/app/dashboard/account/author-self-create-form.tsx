@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { AuthProfile } from "@/lib/api";
 
 type AuthorSelfCreateFormProps = {
@@ -88,9 +89,12 @@ export function AuthorSelfCreateForm({ profile }: AuthorSelfCreateFormProps) {
       }
 
       setSuccessMessage("Perfil de autor criado.");
+      toast.success("Perfil de autor criado.");
       router.refresh();
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      const message = getErrorMessage(error);
+      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }

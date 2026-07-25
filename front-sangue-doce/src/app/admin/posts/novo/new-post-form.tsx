@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { type FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import type {
   CreatePostPayload,
   Post,
@@ -439,14 +440,15 @@ function NewPostFormFields({
           setSelectedCoverFile(null);
           setBannerGenerationStatus("idle");
           setBannerGenerationMessage("Banner gerado e salvo na materia.");
+          toast.success("Banner gerado e salvo na materia.");
           return;
         }
       }
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Nao foi possivel gerar o banner.";
       setBannerGenerationStatus("error");
-      setBannerGenerationMessage(
-        error instanceof Error ? error.message : "Nao foi possivel gerar o banner.",
-      );
+      setBannerGenerationMessage(message);
+      toast.error(message);
     }
   }
 
@@ -469,6 +471,7 @@ function NewPostFormFields({
           text: "Materia publicada com sucesso.",
           tone: "success",
         });
+        toast.success("Materia publicada com sucesso.");
         return;
       }
 
@@ -476,11 +479,14 @@ function NewPostFormFields({
         text: "Rascunho salvo no banco.",
         tone: "success",
       });
+      toast.success("Rascunho salvo no banco.");
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Nao foi possivel salvar a materia.";
       setSubmitMessage({
-        text: error instanceof Error ? error.message : "Nao foi possivel salvar a materia.",
+        text: message,
         tone: "error",
       });
+      toast.error(message);
     } finally {
       setSubmittingAction(null);
     }
@@ -502,10 +508,12 @@ function NewPostFormFields({
           ? `/materias/${savedPost.slug}`
           : `/admin/posts/preview?id=${savedPost.id}`;
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Nao foi possivel salvar a materia.";
       setSubmitMessage({
-        text: error instanceof Error ? error.message : "Nao foi possivel salvar a materia.",
+        text: message,
         tone: "error",
       });
+      toast.error(message);
       setPreviewing(false);
     }
   }
