@@ -3,88 +3,26 @@
 import Link from "next/link";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import type {
-  CreatePostPayload,
-  Post,
-  PostAuthor,
-  PostCategory,
-  PostContentBlock,
-  PostStatus,
-  PostTag,
-} from "@/lib/api";
+import type { Post, PostAuthor, PostCategory, PostStatus, PostTag } from "@/lib/api";
 import { DRAFT_POST_STORAGE_KEY, type DraftPostPreview } from "@/lib/draft-post";
-import { resolvePublicImageUrl, toPublicImagePath } from "@/lib/public-image-url";
+import {
+  buildDraftPostPreview,
+  createPreviewDraft,
+  createSlug,
+  EMPTY_COVER_IMAGE_URL,
+  getAdminPostBannerJob,
+  mapPostToDraft,
+  parseInitialRelation,
+  queueAdminPostBanner,
+  saveAdminPost,
+  uploadAdminPostContentImage,
+  uploadAdminPostCoverImage,
+} from "@/lib/post/new-post-form";
+import type { NewPostFormProps } from "@/types/new-post-form-props";
 import { CoverImageField } from "./cover-image-field";
+import { PostAuthorField } from "./post-author-field";
 import { PostContentEditor } from "./post-content-editor";
-
-const EMPTY_COVER_IMAGE_URL = "/images/sensor.png";
-
-function getValue(formData: FormData, name: string) {
-  const value = formData.get(name);
-
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function parseContent(value: string): PostContentBlock[] {
-  try {
-    const content = JSON.parse(value);
-
-    return Array.isArray(content) ? content : [];
-  } catch {
-    return [];
-  }
-}
-
-function createSlug(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function normalizeContentImagePaths(content: PostContentBlock[]): PostContentBlock[] {
-  return content.map((block) =>
-    block.type === "image" ? { ...block, src: toPublicImagePath(block.src) } : block,
-  );
-}
-
-type NewPostFormProps = {
-  authors: PostAuthor[];
-  categories: PostCategory[];
-  initialPost?: Post | null;
-  tags: PostTag[];
-};
-
-function parseInitialRelation<T extends { id: string }>(value: unknown, items: T[]): T | null {
-  if (!value || typeof value !== "object" || !("id" in value)) return null;
-
-  const id = String(value.id);
-
-  return items.find((item) => item.id === id) ?? null;
-}
-
-function mapPostToDraft(post: Post): DraftPostPreview {
-  return {
-    author: post.author,
-    category: post.category,
-    content: post.content,
-    coverImageAlt: post.coverImageAlt ?? "",
-    coverImageUrl: post.coverImageUrl,
-    excerpt: post.excerpt,
-    id: post.id,
-    readingMinutes: post.readingMinutes,
-    savedAt: post.updatedAt,
-    slug: post.slug,
-    status: post.status,
-    tags: post.tags,
-    title: post.title,
-  };
-}
+import { PostTagsField } from "./post-tags-field";
 
 export function NewPostForm({ authors, categories, initialPost, tags }: NewPostFormProps) {
   const initialDraft = initialPost ? mapPostToDraft(initialPost) : null;
@@ -129,6 +67,7 @@ function NewPostFormFields({
   const [draftId, setDraftId] = useState(initialDraft?.id ?? "");
   const formRef = useRef<HTMLFormElement | null>(null);
   const [currentStatus, setCurrentStatus] = useState<PostStatus>(initialDraft?.status ?? "DRAFT");
+  const [readingMinutes, setReadingMinutes] = useState(initialDraft?.readingMinutes ?? 0);
   const [savedAt, setSavedAt] = useState<string | null>(initialDraft?.savedAt ?? null);
   const [submitMessage, setSubmitMessage] = useState<{
     tone: "error" | "success";
@@ -192,53 +131,27 @@ function NewPostFormFields({
     return categories.find((category) => category.id === selectedCategoryId) ?? null;
   }
 
-  function getSelectedTags(tagIds: string[]) {
-    return tags.filter((tag) => tagIds.includes(tag.id));
-  }
-
   function buildDraft(form: HTMLFormElement): DraftPostPreview {
-    const formData = new FormData(form);
-    const readingMinutes = Number(getValue(formData, "tempo-de-leitura"));
-    const titleValue = getValue(formData, "titulo") || title.trim() || "Materia em rascunho";
-    const slugValue = createSlug(titleValue) || "rascunho";
-    const tagIds = formData
-      .getAll("tagIds")
-      .filter((value): value is string => typeof value === "string");
-    const now = new Date().toISOString();
-    const draft: DraftPostPreview = {
-      id: draftId || undefined,
-      author: getSelectedAuthor(),
-      category: getSelectedCategory(),
-      content: parseContent(getValue(formData, "conteudo")),
-      coverImageAlt: coverImageAlt.trim() || undefined,
-      coverImageUrl: coverImageUrl || EMPTY_COVER_IMAGE_URL,
-      excerpt:
-        getValue(formData, "resumo") ||
-        "Resumo da materia em rascunho para validar chamada e leitura.",
-      readingMinutes: Number.isFinite(readingMinutes) && readingMinutes > 0 ? readingMinutes : 5,
-      savedAt: now,
-      slug: slugValue,
-      status: currentStatus,
-      tags: getSelectedTags(tagIds),
-      title: titleValue,
-    };
+    const { draft, slug: nextSlug } = buildDraftPostPreview({
+      coverImageAlt,
+      coverImageUrl,
+      currentStatus,
+      draftId,
+      form,
+      selectedAuthor: getSelectedAuthor(),
+      selectedCategory: getSelectedCategory(),
+      tags,
+      title,
+    });
 
-    setSlug(slugValue);
+    setSlug(nextSlug);
 
     return draft;
   }
 
   function savePreviewDraft(draft: DraftPostPreview, post?: Post) {
     const savedAtValue = new Date().toISOString();
-    const previewDraft: DraftPostPreview = {
-      ...draft,
-      author: post?.author ?? draft.author,
-      category: post?.category ?? draft.category,
-      id: post?.id ?? draft.id,
-      savedAt: savedAtValue,
-      status: post?.status ?? draft.status,
-      tags: post?.tags ?? draft.tags,
-    };
+    const previewDraft = createPreviewDraft(draft, post, savedAtValue);
 
     if (post?.id) {
       setDraftId(post.id);
@@ -264,84 +177,12 @@ function NewPostFormFields({
     }
   }
 
-  function buildPostPayload(
-    draft: DraftPostPreview,
-    status: Extract<PostStatus, "DRAFT" | "PUBLISHED">,
-  ): CreatePostPayload {
-    if (!draft.author?.id) {
-      throw new Error("Selecione um autor antes de salvar.");
-    }
-
-    if (!draft.category?.id) {
-      throw new Error("Selecione uma categoria antes de salvar.");
-    }
-
-    return {
-      authorId: draft.author.id,
-      categoryId: draft.category.id,
-      content: normalizeContentImagePaths(draft.content),
-      coverImageAlt: draft.coverImageAlt,
-      coverImageUrl: toPublicImagePath(draft.coverImageUrl),
-      excerpt: draft.excerpt,
-      publishedAt: status === "PUBLISHED" ? new Date().toISOString() : undefined,
-      readingMinutes: draft.readingMinutes,
-      slug: draft.slug,
-      status,
-      tagIds: draft.tags.map((tag) => tag.id),
-      title: draft.title,
-    };
-  }
-
-  async function savePost(
-    draft: DraftPostPreview,
-    status: Extract<PostStatus, "DRAFT" | "PUBLISHED">,
-  ): Promise<Post> {
-    const url = draft.id ? `/api/admin/posts/${draft.id}` : "/api/admin/posts";
-    const method = draft.id ? "PATCH" : "POST";
-    const response = await fetch(url, {
-      body: JSON.stringify(buildPostPayload(draft, status)),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method,
-    });
-
-    if (!response.ok) {
-      const error = (await response.json().catch(() => null)) as {
-        message?: string;
-      } | null;
-
-      throw new Error(error?.message ?? "Nao foi possivel salvar a materia.");
-    }
-
-    return (await response.json()) as Post;
-  }
-
   async function uploadCoverImage(postId: string): Promise<string | null> {
     if (!selectedCoverFile) {
       return null;
     }
 
-    const formData = new FormData();
-    formData.append("postId", postId);
-    formData.append("image", selectedCoverFile);
-
-    const response = await fetch("/api/uploads/post/cover", {
-      body: formData,
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      const error = (await response.json().catch(() => null)) as {
-        message?: string;
-      } | null;
-
-      throw new Error(error?.message ?? "Nao foi possivel enviar a imagem de capa.");
-    }
-
-    const upload = (await response.json()) as { coverUrl: string };
-
-    return upload.coverUrl;
+    return uploadAdminPostCoverImage(postId, selectedCoverFile);
   }
 
   async function ensurePostIdForContentImage(): Promise<string> {
@@ -354,7 +195,7 @@ function NewPostFormFields({
     }
 
     const draft = buildDraft(formRef.current);
-    const post = await savePost(draft, "DRAFT");
+    const post = await saveAdminPost(draft, "DRAFT");
     const uploadedCoverUrl = await uploadCoverImage(post.id);
     const savedPost = uploadedCoverUrl ? { ...post, coverImageUrl: uploadedCoverUrl } : post;
 
@@ -365,26 +206,8 @@ function NewPostFormFields({
 
   async function uploadPostContentImage(file: File): Promise<string> {
     const postId = await ensurePostIdForContentImage();
-    const formData = new FormData();
-    formData.append("postId", postId);
-    formData.append("image", file);
 
-    const response = await fetch("/api/uploads/post/images", {
-      body: formData,
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      const error = (await response.json().catch(() => null)) as {
-        message?: string;
-      } | null;
-
-      throw new Error(error?.message ?? "Nao foi possivel enviar a imagem da materia.");
-    }
-
-    const upload = (await response.json()) as { imageUrl: string };
-
-    return upload.imageUrl;
+    return uploadAdminPostContentImage(postId, file);
   }
 
   async function generateBanner() {
@@ -395,37 +218,16 @@ function NewPostFormFields({
 
     try {
       const draft = buildDraft(formRef.current);
-      const post = await savePost(draft, "DRAFT");
+      const post = await saveAdminPost(draft, "DRAFT");
       savePreviewDraft(draft, post);
 
-      const response = await fetch("/api/admin/post-banners", {
-        body: JSON.stringify({ postId: post.id }),
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-      });
-      const queued = (await response.json().catch(() => null)) as {
-        jobId?: string;
-        message?: string;
-      } | null;
-
-      if (!response.ok || !queued?.jobId) {
-        throw new Error(queued?.message ?? "Nao foi possivel adicionar o banner a fila.");
-      }
+      const jobId = await queueAdminPostBanner(post.id);
 
       setBannerGenerationStatus("queued");
 
       for (;;) {
         await new Promise((resolve) => window.setTimeout(resolve, 2_000));
-        const statusResponse = await fetch(`/api/admin/post-banners/${queued.jobId}`);
-        const job = (await statusResponse.json().catch(() => null)) as {
-          status?: "queued" | "processing" | "completed" | "failed";
-          result?: { coverImageAlt?: string; coverImageUrl?: string };
-          message?: string;
-        } | null;
-
-        if (!statusResponse.ok) {
-          throw new Error(job?.message ?? "Nao foi possivel acompanhar a geracao do banner.");
-        }
+        const job = await getAdminPostBannerJob(jobId);
 
         if (job?.status === "processing") setBannerGenerationStatus("processing");
         if (job?.status === "failed") {
@@ -460,7 +262,7 @@ function NewPostFormFields({
     setSubmittingAction(status);
 
     try {
-      const post = await savePost(draft, status);
+      const post = await saveAdminPost(draft, status);
       const uploadedCoverUrl = await uploadCoverImage(post.id);
       const savedPost = uploadedCoverUrl ? { ...post, coverImageUrl: uploadedCoverUrl } : post;
 
@@ -498,7 +300,7 @@ function NewPostFormFields({
 
     try {
       const status = currentStatus === "PUBLISHED" ? "PUBLISHED" : "DRAFT";
-      const post = await savePost(draft, status);
+      const post = await saveAdminPost(draft, status);
       const uploadedCoverUrl = await uploadCoverImage(post.id);
       const savedPost = uploadedCoverUrl ? { ...post, coverImageUrl: uploadedCoverUrl } : post;
 
@@ -583,62 +385,19 @@ function NewPostFormFields({
           ))}
         </select>
       </label>
-      <div className="grid content-start gap-2 text-sm font-bold text-inkSoft">
-        Autor
-        <select
-          className="h-12 rounded-lg border border-line bg-paper px-4 text-base font-medium text-ink outline-none transition focus:border-green"
-          name="autor"
-          onChange={(event) => setSelectedAuthorId(event.target.value)}
-          value={selectedAuthorId}
-        >
-          <option value="">Selecione um autor</option>
-          {authors.map((author) => (
-            <option key={author.id} value={author.id}>
-              {author.name}
-            </option>
-          ))}
-        </select>
-        {getSelectedAuthor() && (
-          <div className="flex items-center gap-3 rounded-lg border border-line bg-paper2 px-3 py-2.5">
-            {resolvePublicImageUrl(getSelectedAuthor()?.avatarUrl) ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                alt={getSelectedAuthor()?.name ?? ""}
-                className="h-9 w-9 flex-shrink-0 rounded-full object-cover"
-                height={36}
-                loading="lazy"
-                src={resolvePublicImageUrl(getSelectedAuthor()?.avatarUrl)}
-                title={getSelectedAuthor()?.name ?? ""}
-                width={36}
-              />
-            ) : (
-              <div className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full border border-lineStrong bg-paper text-xs font-bold text-greenDeep">
-                {(getSelectedAuthor()?.name ?? "")
-                  .split(" ")
-                  .slice(0, 2)
-                  .map((p) => p[0])
-                  .join("")
-                  .toUpperCase()}
-              </div>
-            )}
-            <div className="min-w-0">
-              <div className="truncate text-sm font-semibold text-ink">
-                {getSelectedAuthor()?.name}
-              </div>
-              <div className="truncate text-xs font-normal text-muted">
-                {getSelectedAuthor()?.role}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <PostAuthorField
+        authors={authors}
+        onAuthorChange={setSelectedAuthorId}
+        selectedAuthorId={selectedAuthorId}
+      />
       <label className="grid content-start gap-2 text-sm font-bold text-inkSoft">
         Tempo de leitura
         <input
-          className="h-12 rounded-lg border border-line bg-paper px-4 text-base font-medium text-ink outline-none transition focus:border-green"
-          defaultValue={initialDraft?.readingMinutes}
+          className="h-12 cursor-not-allowed rounded-lg border border-line bg-paper2 px-4 text-base font-medium text-inkSoft outline-none"
           name="tempo-de-leitura"
+          readOnly
           type="text"
+          value={readingMinutes || 1}
         />
       </label>
       <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
@@ -654,45 +413,16 @@ function NewPostFormFields({
           generationMessage={bannerGenerationMessage}
         />
       </div>
-      <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
-        Tags
-        <div className="flex flex-wrap gap-2 rounded-lg border border-line bg-paper p-3">
-          {tags.map((tag) => {
-            const checked = selectedTagIds.includes(tag.id);
-
-            return (
-              <label
-                className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
-                  checked
-                    ? "border-green/30 bg-green/10 text-greenDeep"
-                    : "border-lineStrong text-inkSoft"
-                }`}
-                key={tag.id}
-              >
-                <input
-                  checked={checked}
-                  className="sr-only"
-                  name="tagIds"
-                  onChange={(event) => {
-                    setSelectedTagIds((current) =>
-                      event.target.checked
-                        ? Array.from(new Set([...current, tag.id]))
-                        : current.filter((id) => id !== tag.id),
-                    );
-                  }}
-                  type="checkbox"
-                  value={tag.id}
-                />
-                {tag.name}
-              </label>
-            );
-          })}
-        </div>
-      </div>
+      <PostTagsField
+        onSelectedTagIdsChange={setSelectedTagIds}
+        selectedTagIds={selectedTagIds}
+        tags={tags}
+      />
       <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
         <span>Conteudo</span>
         <PostContentEditor
           initialContent={initialDraft?.content}
+          onReadingMinutesChange={setReadingMinutes}
           onUploadImage={uploadPostContentImage}
         />
       </div>
