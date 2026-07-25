@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import type { AuthorSocialMedia, User } from "@/lib/api";
 
 type AuthorCreateFormProps = {
@@ -77,11 +78,7 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
     setFormState((current) => ({ ...current, [field]: value }));
   };
 
-  const updateSocialMedia = (
-    index: number,
-    field: keyof AuthorSocialMedia,
-    value: string,
-  ) => {
+  const updateSocialMedia = (index: number, field: keyof AuthorSocialMedia, value: string) => {
     setFormState((current) => ({
       ...current,
       socialMedia: current.socialMedia.map((item, itemIndex) => {
@@ -164,6 +161,7 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
       }
 
       setSuccessMessage("Autor criado.");
+      toast.success("Autor criado.");
       setFormState({
         bio: "",
         name: "",
@@ -174,7 +172,9 @@ export function AuthorCreateForm({ users }: AuthorCreateFormProps) {
       });
       router.refresh();
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      const message = getErrorMessage(error);
+      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { PostAccentColor, PostCategory, PostTag } from "@/lib/api";
 
 type TaxonomyItem =
@@ -135,14 +136,18 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
         throw new Error(await response.text());
       }
 
-      setSuccessMessage(isCategory ? "Categoria salva." : "Tag salva.");
+      const message = isCategory ? "Categoria salva." : "Tag salva.";
+      setSuccessMessage(message);
+      toast.success(message);
       router.refresh();
       setTimeout(() => {
         setModalState(null);
         setSuccessMessage("");
       }, 450);
     } catch (error) {
-      setErrorMessage(getErrorMessage(error));
+      const message = getErrorMessage(error);
+      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }

@@ -1,13 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import {
-  DEFAULT_SOCIAL_IMAGE,
-  SITE_DESCRIPTION,
-  SITE_NAME,
-  SITE_URL,
-} from "@/lib/seo";
 import { PageVisitTracker } from "@/components/analytics/page-visit-tracker";
+import { Toaster } from "@/components/ui/sonner";
+import { DEFAULT_SOCIAL_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -68,14 +64,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="pt-BR"
-      data-scroll-behavior="smooth"
-      className={roboto.variable}
-    >
+    <html lang="pt-BR" data-scroll-behavior="smooth" className={roboto.variable}>
       <body className={roboto.variable}>
         {children}
         <PageVisitTracker />
+        <Toaster />
       </body>
     </html>
   );

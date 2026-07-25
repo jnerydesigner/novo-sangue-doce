@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
+import { toast } from "sonner";
 import type {
   PaginatedResponse,
   SocialNetwork,
@@ -119,6 +120,27 @@ export function SocialPublicationCards({ initialData }: Props) {
     (publication) => Object.keys(publication.publicationResults ?? {}).length === 0,
   );
 
+  function showFeedback(message: string, tone: "error" | "info" | "success" | "warning" = "info") {
+    setFeedback(message);
+
+    if (tone === "success") {
+      toast.success(message);
+      return;
+    }
+
+    if (tone === "error") {
+      toast.error(message);
+      return;
+    }
+
+    if (tone === "warning") {
+      toast.warning(message);
+      return;
+    }
+
+    toast(message);
+  }
+
   useEffect(() => {
     if (!hasActive) return;
 
@@ -137,9 +159,9 @@ export function SocialPublicationCards({ initialData }: Props) {
     const body = (await response.json().catch(() => null)) as { message?: string } | null;
 
     if (!response.ok) {
-      setFeedback(body?.message ?? "Nao foi possivel tentar novamente.");
+      showFeedback(body?.message ?? "Nao foi possivel tentar novamente.", "error");
     } else {
-      setFeedback(body?.message ?? "Publicacao reenfileirada.");
+      showFeedback(body?.message ?? "Publicacao reenfileirada.", "success");
       const refreshed = await fetch("/api/admin/social-publications?limit=24");
       if (refreshed.ok) setData((await refreshed.json()) as PaginatedResponse<SocialPublication>);
     }
@@ -151,12 +173,12 @@ export function SocialPublicationCards({ initialData }: Props) {
       .filter(Boolean)
       .join("\n\n");
     await navigator.clipboard.writeText(text);
-    setFeedback("Texto copiado para a area de transferencia.");
+    showFeedback("Texto copiado para a area de transferencia.", "success");
   }
 
   async function publishToNetwork(publication: SocialPublication, network: SocialNetwork) {
     if (!automaticPublishNetworks.includes(network)) {
-      setFeedback("Publicação automática disponível apenas para LinkedIn e Instagram.");
+      showFeedback("Publicação automática disponível apenas para LinkedIn e Instagram.", "warning");
       return;
     }
 
@@ -185,10 +207,11 @@ export function SocialPublicationCards({ initialData }: Props) {
     const label = socialNetworkOptions.find((option) => option.value === network)?.label ?? network;
 
     if (!response.ok || !body || !("status" in body)) {
-      setFeedback(
+      showFeedback(
         body && "message" in body && body.message
           ? body.message
           : `Não foi possível reenviar para ${label}.`,
+        "error",
       );
       setBusyId(null);
       return;
@@ -219,7 +242,7 @@ export function SocialPublicationCards({ initialData }: Props) {
           : item,
       ),
     }));
-    setFeedback(`Publicação reenviada para ${label}.`);
+    showFeedback(`Publicação reenviada para ${label}.`, "success");
     setBusyId(null);
   }
 
@@ -244,9 +267,10 @@ export function SocialPublicationCards({ initialData }: Props) {
       }),
     });
     const body = (await response.json().catch(() => null)) as { message?: string } | null;
-    setFeedback(
+    showFeedback(
       body?.message ??
         (response.ok ? "Nova versão adicionada à fila." : "Não foi possível gerar a versão."),
+      response.ok ? "success" : "error",
     );
     if (response.ok) {
       setGenerationId(null);
@@ -281,7 +305,7 @@ export function SocialPublicationCards({ initialData }: Props) {
     action: "save" | "publish" | "schedule" = "save",
   ) {
     if (!description.trim()) {
-      setFeedback("A descrição não pode ficar vazia.");
+      showFeedback("A descrição não pode ficar vazia.", "warning");
       return;
     }
 
@@ -298,10 +322,11 @@ export function SocialPublicationCards({ initialData }: Props) {
       | null;
 
     if (!response.ok || !body || !("id" in body)) {
-      setFeedback(
+      showFeedback(
         body && "message" in body && body.message
           ? body.message
           : "Não foi possível salvar a revisão.",
+        "error",
       );
     } else {
       setData((current) => ({
@@ -315,7 +340,7 @@ export function SocialPublicationCards({ initialData }: Props) {
         );
 
         if (networksToSchedule.length === 0) {
-          setFeedback("Selecione LinkedIn ou Instagram para colocar na fila diária.");
+          showFeedback("Selecione LinkedIn ou Instagram para colocar na fila diária.", "warning");
           setBusyId(null);
           return;
         }
@@ -336,10 +361,11 @@ export function SocialPublicationCards({ initialData }: Props) {
           | null;
 
         if (!scheduleResponse.ok || !scheduleBody || !("id" in scheduleBody)) {
-          setFeedback(
+          showFeedback(
             scheduleBody && "message" in scheduleBody && scheduleBody.message
               ? scheduleBody.message
               : "A revisão foi salva, mas não foi possível agendar.",
+            "error",
           );
           setBusyId(null);
           return;
@@ -349,10 +375,11 @@ export function SocialPublicationCards({ initialData }: Props) {
           ...current,
           data: current.data.map((item) => (item.id === scheduleBody.id ? scheduleBody : item)),
         }));
-        setFeedback(
+        showFeedback(
           `Revisão salva e adicionada à fila diária para ${formatDate(
             scheduleBody.scheduledPublishAt,
           )}.`,
+          "success",
         );
       } else if (action === "publish") {
         const networksToPublish = socialNetworks.filter((network) =>
@@ -363,7 +390,7 @@ export function SocialPublicationCards({ initialData }: Props) {
         > = {};
 
         if (networksToPublish.length === 0) {
-          setFeedback("Selecione LinkedIn ou Instagram para publicar automaticamente.");
+          showFeedback("Selecione LinkedIn ou Instagram para publicar automaticamente.", "warning");
           setBusyId(null);
           return;
         }
@@ -392,10 +419,11 @@ export function SocialPublicationCards({ initialData }: Props) {
           if (!response.ok || !body || !("status" in body)) {
             const label =
               socialNetworkOptions.find((option) => option.value === network)?.label ?? network;
-            setFeedback(
+            showFeedback(
               body && "message" in body && body.message
                 ? body.message
                 : `A revisão foi salva, mas não foi possível publicar no ${label}.`,
+              "error",
             );
             setBusyId(null);
             return;
@@ -415,13 +443,14 @@ export function SocialPublicationCards({ initialData }: Props) {
           };
         }
 
-        setFeedback(
+        showFeedback(
           networksToPublish.length === 1
             ? `Revisão salva e publicada no ${
                 socialNetworkOptions.find((option) => option.value === networksToPublish[0])
                   ?.label ?? networksToPublish[0]
               }.`
             : "Revisão salva e publicada nas redes selecionadas.",
+          "success",
         );
         setData((current) => ({
           ...current,
@@ -438,7 +467,7 @@ export function SocialPublicationCards({ initialData }: Props) {
           ),
         }));
       } else {
-        setFeedback("Revisão salva.");
+        showFeedback("Revisão salva.", "success");
       }
 
       setEditingId(null);
