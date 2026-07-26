@@ -6,14 +6,14 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import type { ZodType } from "zod";
 import {
-  type CreateMeasurementDto,
-  type CreateMeasurementInput,
-  createMeasurementInputSchema,
+    type CreateMeasurementDto,
+    type CreateMeasurementInput,
+    createMeasurementInputSchema,
 } from "./dto/create-measurement.dto";
 import {
-  classifyMeasurementMoment,
-  MEASUREMENT_NOTE_LABELS,
-  type MeasurementNoteType,
+    classifyMeasurementMoment,
+    MEASUREMENT_NOTE_LABELS,
+    type MeasurementNoteType,
 } from "./measurement.constants";
 
 const MEASUREMENT_TIME_ZONE = "America/Sao_Paulo";
@@ -231,6 +231,16 @@ export class MeasurementsService {
           lte: dayEnd,
         },
         userId: userAuthenticated.sub,
+        noteType: {
+          in: [
+            "BEFORE_BREAKFAST",
+            "AFTER_BREAKFAST",
+            "BEFORE_LUNCH",
+            "AFTER_LUNCH",
+            "BEFORE_DINNER",
+            "AFTER_DINNER",
+          ],
+        },
       },
       orderBy: { measuredAt: "desc" },
     });
