@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SangueDoceApp</string>
+    <string name="login_required_fields">Preencha e-mail e senha.</string>
+    <string name="login_invalid_credentials">E-mail ou senha inválidos.</string>
+</resources>
