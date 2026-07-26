@@ -3,7 +3,7 @@ import { AuthService } from "@app/auth/auth.service";
 import { UsersService } from "@app/users/users.service";
 import { PrismaService } from "@infra/database/prisma.service";
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { $Enums, Prisma } from "@prisma/client";
 import type { ZodType } from "zod";
 import {
     type CreateMeasurementDto,
@@ -203,6 +203,7 @@ export class MeasurementsService {
 
     const userTimeZone = this.getSupportedTimeZone(timeZone);
     const today = this.getDatePartsInTimeZone(new Date(), userTimeZone);
+
     const dayStart = this.createDateInTimeZone(
       today.year,
       today.month,
@@ -213,6 +214,7 @@ export class MeasurementsService {
       0,
       userTimeZone,
     );
+
     const dayEnd = this.createDateInTimeZone(
       today.year,
       today.month,
@@ -224,6 +226,15 @@ export class MeasurementsService {
       userTimeZone,
     );
 
+    const noteTypeOrder: $Enums.MeasurementNoteType[] = [
+      "BEFORE_BREAKFAST",
+      "AFTER_BREAKFAST",
+      "BEFORE_LUNCH",
+      "AFTER_LUNCH",
+      "BEFORE_DINNER",
+      "AFTER_DINNER",
+    ];
+
     const measurements = await this.prisma.measurement.findMany({
       where: {
         measuredAt: {
@@ -232,17 +243,19 @@ export class MeasurementsService {
         },
         userId: userAuthenticated.sub,
         noteType: {
-          in: [
-            "BEFORE_BREAKFAST",
-            "AFTER_BREAKFAST",
-            "BEFORE_LUNCH",
-            "AFTER_LUNCH",
-            "BEFORE_DINNER",
-            "AFTER_DINNER",
-          ],
+          in: noteTypeOrder,
         },
       },
-      orderBy: { measuredAt: "desc" },
+      orderBy: {
+        measuredAt: "asc",
+      },
+    });
+
+    measurements.sort((a, b) => {
+      const orderA = noteTypeOrder.indexOf(a.noteType as $Enums.MeasurementNoteType);
+      const orderB = noteTypeOrder.indexOf(b.noteType as $Enums.MeasurementNoteType);
+
+      return orderA - orderB;
     });
 
     return measurements.map((measurement) => this.toPublicMeasurement(measurement));
