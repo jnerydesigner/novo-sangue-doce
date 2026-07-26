@@ -49,11 +49,15 @@ export class PostBannerService {
             ? "processing"
             : "queued";
 
+    type ProcessResult = { coverImageAlt: string; coverImageUrl: string; postId: string };
+    const result: ProcessResult | undefined =
+      state === "completed" ? (job.returnvalue as ProcessResult) : undefined;
+
     return {
       jobId,
       status,
       progress: typeof job.progress === "number" ? job.progress : 0,
-      result: state === "completed" ? job.returnvalue : undefined,
+      result,
       message:
         state === "failed" ? (job.failedReason ?? "Nao foi possivel gerar o banner.") : undefined,
     };

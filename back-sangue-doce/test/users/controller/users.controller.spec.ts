@@ -3,8 +3,9 @@ import { RolesGuard } from "@app/@infra/guard/roles.guard";
 import { UsersController } from "@app/users/users.controller";
 import { UsersService } from "@app/users/users.service";
 import { Test, type TestingModule } from "@nestjs/testing";
+import { vi, type Mocked } from "vitest";
 
-type MockUsersService = jest.Mocked<
+type MockUsersService = Mocked<
   Pick<UsersService, "create" | "findAll" | "findEmail" | "findOne">
 >;
 
@@ -24,10 +25,10 @@ describe("UsersController", () => {
 
   beforeEach(async () => {
     service = {
-      create: jest.fn().mockResolvedValue(publicUser),
-      findAll: jest.fn().mockResolvedValue([publicUser]),
-      findEmail: jest.fn().mockResolvedValue(publicUser),
-      findOne: jest.fn().mockResolvedValue(publicUser),
+      create: vi.fn().mockResolvedValue(publicUser),
+      findAll: vi.fn().mockResolvedValue([publicUser]),
+      findEmail: vi.fn().mockResolvedValue(publicUser),
+      findOne: vi.fn().mockResolvedValue(publicUser),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -35,9 +36,9 @@ describe("UsersController", () => {
       providers: [{ provide: UsersService, useValue: service }],
     })
       .overrideGuard(AuthGuard)
-      .useValue({ canActivate: jest.fn(() => true) })
+      .useValue({ canActivate: vi.fn(() => true) })
       .overrideGuard(RolesGuard)
-      .useValue({ canActivate: jest.fn(() => true) })
+      .useValue({ canActivate: vi.fn(() => true) })
       .compile();
 
     controller = module.get(UsersController);

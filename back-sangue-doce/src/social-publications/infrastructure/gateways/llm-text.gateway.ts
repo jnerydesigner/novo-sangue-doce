@@ -206,7 +206,7 @@ export class LlmTextGateway {
 
     return textBlock.text
       .trim()
-      .replace(/^['\"]|['\"]$/g, "")
+      .replace(/^['"]|['"]$/g, "")
       .slice(0, 180);
   }
 

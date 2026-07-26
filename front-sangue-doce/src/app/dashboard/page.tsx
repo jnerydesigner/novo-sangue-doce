@@ -12,6 +12,7 @@ import { TimelineCard } from "./components/timeline-card";
 import { type SummaryTile, summaryTiles } from "./dashboard.data";
 import { mapDashboardData } from "./dashboard.mapper";
 import { formatMeasurementTime } from "./dashboard.utils";
+import { getGlucoseStage } from "./glucose-stage";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,7 @@ export default async function DashboardPage() {
 
   const dashboardData = mapDashboardData({ monthlyReport });
   const lastMedition = dashboardData.lastMedition;
+  const lastGlucoseStage = lastMedition ? getGlucoseStage(lastMedition.glucoseValueMgDl) : null;
   const dashboardSummaryTiles: SummaryTile[] = summaryTiles.map((tile) => {
     if (tile.label !== "Glicemia") {
       return tile;
@@ -53,9 +55,9 @@ export default async function DashboardPage() {
     return {
       ...tile,
       detail: lastMedition
-        ? `Ultima leitura em ${formatMeasurementTime(lastMedition.measuredAt)}`
+        ? `${lastGlucoseStage?.label ?? "Leitura"} em ${formatMeasurementTime(lastMedition.measuredAt)}`
         : "Sem leituras registradas",
-      tone: lastMedition && lastMedition.glucoseValueMgDl > 140 ? "tomato" : "green",
+      tone: lastGlucoseStage?.isNormal ? "green" : "tomato",
       value: lastMedition ? String(lastMedition.glucoseValueMgDl) : "--",
     };
   });

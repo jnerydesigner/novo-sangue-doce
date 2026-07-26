@@ -24,12 +24,12 @@
     "start:prod": "node dist/src/main",
     "start:dev:local": "set -a; . ./.env; set +a; yarn start:dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:unit": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:debug": "vitest --inspect-brk --no-file-parallelism",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "start:dev:infisical": "set -a; . ./.env; LOCAL_DATABASE_URL=\"${LOCAL_DATABASE_URL:-$DATABASE_URL}\"; LOCAL_MINIO_ENDPOINT=\"${LOCAL_MINIO_ENDPOINT:-$MINIO_ENDPOINT}\"; LOCAL_MINIO_API_PORT=\"${LOCAL_MINIO_API_PORT:-$MINIO_API_PORT}\"; INFISICAL_DOMAIN=\"${INFISICAL_DOMAIN:-http://localhost:8095}\"; set +a; infisical run --domain \"$INFISICAL_DOMAIN\" --token \"$INFISICAL_TOKEN\" --projectId \"$INFISICAL_PROJECT_ID\" --env \"${INFISICAL_ENV:-dev}\" -- sh -c 'DATABASE_URL=\"$LOCAL_DATABASE_URL\" MINIO_ENDPOINT=\"$LOCAL_MINIO_ENDPOINT\" MINIO_API_PORT=\"$LOCAL_MINIO_API_PORT\" yarn start:dev'"
   },
   "dependencies": {
@@ -74,7 +74,6 @@
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
     "@types/express": "^5.0.0",
-    "@types/jest": "^30.0.0",
     "@types/multer": "^2.1.0",
     "@types/node": "^22.10.7",
     "@types/nodemailer": "^8.0.1",
@@ -82,55 +81,25 @@
     "@types/passport-google-oauth20": "^2.0.17",
     "@types/pdfkit": "^0.17.6",
     "@types/supertest": "^6.0.2",
+    "@vitest/coverage-v8": "4.1.10",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
-    "jest": "^30.0.0",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
-    "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "vitest": "^4.1.10"
   },
   "resolutions": {
     "js-yaml": "^4.2.0",
     "nodemailer": "^9.0.3",
     "uuid": "^14.0.1",
     "linkify-it": "^5.0.2"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": ".",
-    "roots": [
-      "<rootDir>/src",
-      "<rootDir>/test"
-    ],
-    "testRegex": ".*\\.spec\\.ts$",
-    "testPathIgnorePatterns": [
-      "\\.e2e-spec\\.ts$"
-    ],
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "^@app/(.*)$": "<rootDir>/src/$1",
-      "^@infra/(.*)$": "<rootDir>/src/@infra/$1",
-      "^@helper/(.*)$": "<rootDir>/src/@helper/$1",
-      "^@shared/(.*)$": "<rootDir>/src/@shared/$1"
-    },
-    "collectCoverageFrom": [
-      "src/**/*.(t|j)s"
-    ],
-    "coverageDirectory": "coverage",
-    "testEnvironment": "node"
   }
 }

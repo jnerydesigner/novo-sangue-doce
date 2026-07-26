@@ -2,7 +2,12 @@ import Link from "next/link";
 import type React from "react";
 import { Brand } from "@/components/home/brand";
 import { UserMenu } from "@/components/home/user-menu";
-import { adminSidebarItems, dashboardSidebarItems } from "../dashboard/dashboard.data";
+import { SidebarNav } from "../dashboard/components/dashboard-sidebar";
+import {
+  adminSidebarGroups,
+  adminSidebarItems,
+  dashboardSidebarGroups,
+} from "../dashboard/dashboard.data";
 
 type AdminShellProps = {
   active:
@@ -32,8 +37,6 @@ const adminActiveByHref = {
   "/admin/usuarios": "users",
   "/admin/autores": "authors",
 } as const;
-
-const navItems = [...adminSidebarItems, ...dashboardSidebarItems];
 
 const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: string }> = {
   overview: {
@@ -83,6 +86,10 @@ export function AdminShell({
     subtitle: subtitle ?? pageTitles[active].subtitle,
     title: title ?? pageTitles[active].title,
   };
+  const activeHref =
+    Object.entries(adminActiveByHref).find(([, itemActive]) => itemActive === active)?.[0] ??
+    "/admin";
+  const sidebarGroups = [...adminSidebarGroups, ...dashboardSidebarGroups];
 
   return (
     <main className="min-h-screen bg-paper text-ink">
@@ -92,37 +99,11 @@ export function AdminShell({
             <Brand />
           </div>
 
-          <nav aria-label="Menu administrativo">
-            <ul className="grid gap-1">
-              {navItems.map((item) => {
-                const isActive =
-                  item.href in adminActiveByHref &&
-                  active === adminActiveByHref[item.href as keyof typeof adminActiveByHref];
-                const mark =
-                  "mark" in item && typeof item.mark === "string"
-                    ? item.mark
-                    : item.label.slice(0, 1);
-
-                return (
-                  <li key={item.label}>
-                    <Link
-                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-[15px] font-semibold transition ${
-                        isActive
-                          ? "bg-green/10 text-greenDeep"
-                          : "text-inkSoft hover:bg-paper2 hover:text-ink"
-                      }`}
-                      href={item.href}
-                    >
-                      <span className="grid h-8 w-8 place-items-center rounded-lg bg-paper text-sm">
-                        {mark}
-                      </span>
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+          <SidebarNav
+            activeHref={activeHref}
+            ariaLabel="Menu administrativo"
+            groups={sidebarGroups}
+          />
 
           <div className="mt-auto rounded-lg border border-line bg-paper p-4">
             <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">

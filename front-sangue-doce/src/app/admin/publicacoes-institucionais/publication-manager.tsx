@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 import type {
   InstitutionalPublication,
   InstitutionalPublicationPayload,
@@ -85,19 +86,23 @@ export function InstitutionalPublicationManager({ initialData }: Props) {
       | null;
 
     if (!response.ok || !body || !("imageUrl" in body)) {
-      setFeedback(
-        body && "message" in body ? (body.message ?? "Falha no upload.") : "Falha no upload.",
-      );
+      const message =
+        body && "message" in body ? (body.message ?? "Falha no upload.") : "Falha no upload.";
+      setFeedback(message);
+      toast.error(message);
     } else {
       setPayload((current) => ({ ...current, imageKey: body.objectName, imageUrl: body.imageUrl }));
       setFeedback("Imagem enviada.");
+      toast.success("Imagem enviada.");
     }
     setBusy(false);
   }
 
   async function save() {
     if (!payload.title.trim() || !payload.content.trim() || !payload.imageKey) {
-      setFeedback("Informe titulo, texto e imagem antes de salvar.");
+      const message = "Informe titulo, texto e imagem antes de salvar.";
+      setFeedback(message);
+      toast.warning(message);
       return null;
     }
 
@@ -120,11 +125,12 @@ export function InstitutionalPublicationManager({ initialData }: Props) {
       | null;
 
     if (!response.ok || !body || !("id" in body)) {
-      setFeedback(
+      const message =
         body && "message" in body
           ? (body.message ?? "Nao foi possivel salvar.")
-          : "Nao foi possivel salvar.",
-      );
+          : "Nao foi possivel salvar.";
+      setFeedback(message);
+      toast.error(message);
       setBusy(false);
       return null;
     }
@@ -138,6 +144,7 @@ export function InstitutionalPublicationManager({ initialData }: Props) {
     setEditingId(body.id);
     setPayload(bodyToSave);
     setFeedback("Publicacao salva. Revise e publique quando estiver pronto.");
+    toast.success("Publicacao salva. Revise e publique quando estiver pronto.");
     setBusy(false);
     return body;
   }
@@ -158,17 +165,19 @@ export function InstitutionalPublicationManager({ initialData }: Props) {
       | null;
 
     if (!response.ok || !body || !("id" in body)) {
-      setFeedback(
+      const message =
         body && "message" in body
           ? (body.message ?? "Nao foi possivel publicar.")
-          : "Nao foi possivel publicar.",
-      );
+          : "Nao foi possivel publicar.";
+      setFeedback(message);
+      toast.error(message);
     } else {
       setData((current) => ({
         ...current,
         data: current.data.map((item) => (item.id === body.id ? body : item)),
       }));
       setFeedback("Publicado no LinkedIn.");
+      toast.success("Publicado no LinkedIn.");
     }
     setBusy(false);
   }

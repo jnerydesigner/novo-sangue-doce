@@ -2,16 +2,9 @@ import { ImageService } from "@app/image/image.service";
 import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import { BadGatewayException, Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Prisma } from "@prisma/client";
 import { PrismaService } from "../@infra/database/prisma.service";
 import type { InstitutionalPublicationDto } from "./dto";
-
-type PublicationResult = {
-  status: "PUBLISHED";
-  externalPostId: string | null;
-  mediaUrn: string | null;
-  publishedAt: string;
-};
+import { PublicationResult } from "./types/publication-result.type";
 
 @Injectable()
 export class InstitutionalPublicationsService {

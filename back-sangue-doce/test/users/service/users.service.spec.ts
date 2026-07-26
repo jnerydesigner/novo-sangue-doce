@@ -7,7 +7,9 @@ import {
 import { UsersService } from "@app/users/users.service";
 import { BadRequestException, ConflictException } from "@nestjs/common";
 
-type MockUserRepository = jest.Mocked<UserRepository>;
+import { beforeEach, describe, expect, it, vi, type Mocked } from "vitest";
+
+type MockUserRepository = Mocked<UserRepository>;
 
 const now = new Date("2026-07-18T12:00:00.000Z");
 
@@ -38,14 +40,14 @@ function makeUserEntity(
 
 function makeRepository(): MockUserRepository {
   return {
-    create: jest.fn(),
-    findAll: jest.fn(),
-    findById: jest.fn(),
-    findByEmail: jest.fn(),
-    findByEmailWithPassword: jest.fn(),
-    updateProfile: jest.fn(),
-    updatePasswordHash: jest.fn(),
-    updateAvatarUrl: jest.fn(),
+    create: vi.fn(),
+    findAll: vi.fn(),
+    findById: vi.fn(),
+    findByEmail: vi.fn(),
+    findByEmailWithPassword: vi.fn(),
+    updateProfile: vi.fn(),
+    updatePasswordHash: vi.fn(),
+    updateAvatarUrl: vi.fn(),
   };
 }
 
@@ -68,7 +70,7 @@ describe("UsersService", () => {
     };
 
     it("validates, normalizes and persists a public user", async () => {
-      repository.create.mockImplementation(async (user) => {
+      repository.create.mockImplementation((user) => {
         const persistence = user.toPersistence();
 
         expect(persistence).toEqual({
@@ -81,14 +83,16 @@ describe("UsersService", () => {
           role: "USER",
         });
 
-        return makeUserEntity({
-          name: persistence.name,
-          email: persistence.email,
-          passwordHash: persistence.passwordHash,
-          birthDate: persistence.birthDate,
-          diabetesType: persistence.diabetesType,
-          role: persistence.role,
-        });
+        return Promise.resolve(
+          makeUserEntity({
+            name: persistence.name,
+            email: persistence.email,
+            passwordHash: persistence.passwordHash,
+            birthDate: persistence.birthDate,
+            diabetesType: persistence.diabetesType,
+            role: persistence.role,
+          }),
+        );
       });
 
       await expect(service.create(payload)).resolves.toMatchObject({

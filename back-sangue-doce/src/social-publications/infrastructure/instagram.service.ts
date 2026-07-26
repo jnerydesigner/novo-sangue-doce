@@ -2,6 +2,7 @@ import {
   type SocialPublicationRecord,
   SocialPublicationRepository,
 } from "@app/social-publications/domain/social-publication.repository";
+import { SocialPublicationStatus } from "@app/social-publications/domain/social-publication-status.enum";
 import {
   BadGatewayException,
   BadRequestException,
@@ -64,7 +65,7 @@ export class InstagramService {
   private async publishPublication(
     publication: SocialPublicationRecord,
   ): Promise<InstagramPublicationResponse> {
-    if (publication.status !== "COMPLETED") {
+    if (publication.status !== SocialPublicationStatus.COMPLETED) {
       throw new BadRequestException("Apenas publicacoes concluidas podem ser publicadas.");
     }
 

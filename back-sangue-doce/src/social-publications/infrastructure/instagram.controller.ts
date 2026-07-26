@@ -32,6 +32,10 @@ export class InstagramController {
       return this.instagramService.publishCompleted(result.data.socialPublicationId);
     }
 
-    return this.instagramService.publishLatestCompleted(result.data.postId as string);
+    if (!result.data.postId) {
+      throw new BadRequestException("Informe a materia ou a publicacao social.");
+    }
+
+    return this.instagramService.publishLatestCompleted(result.data.postId);
   }
 }

@@ -161,6 +161,7 @@ jobs:
           output.extend(f"{key}={value}" for key, value in updates.items() if key not in found)
           path.write_text("\n".join(output) + "\n")
           PY
+          chmod 600 "$DEPLOY_ENV_FILE"
 
       - name: Pull and restart stack
         env:
@@ -168,10 +169,14 @@ jobs:
         run: |
           set -euo pipefail
           cd "$VPS_APP_DIR"
+          ENV_FILE="$VPS_APP_DIR/.env.stack.portainer"
 
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml pull backend frontend recipe-importer
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d postgres minio redis
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml run --rm migrate
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d --force-recreate --wait recipe-importer
-          docker compose --env-file .env.stack.portainer -f docker-compose.portainer.yaml up -d --force-recreate backend frontend
+          test -r "$ENV_FILE"
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml config >/dev/null
+
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml pull backend frontend recipe-importer
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d postgres minio redis
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml run --rm migrate
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d --force-recreate --wait recipe-importer
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d --force-recreate backend frontend
           docker image prune -f

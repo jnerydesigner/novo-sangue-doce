@@ -1,14 +1,15 @@
 import { HealthController } from "@app/health/health.controller";
 import { HealthService } from "@app/health/health.service";
 import { Test, type TestingModule } from "@nestjs/testing";
+import { vi, type Mocked } from "vitest";
 
 describe("HealthController", () => {
   let controller: HealthController;
-  let service: jest.Mocked<Pick<HealthService, "check">>;
+  let service: Mocked<Pick<HealthService, "check">>;
 
   beforeEach(async () => {
     service = {
-      check: jest.fn().mockReturnValue({ ping: "pong" }),
+      check: vi.fn().mockReturnValue({ ping: "pong" }),
     };
 
     const module: TestingModule = await Test.createTestingModule({

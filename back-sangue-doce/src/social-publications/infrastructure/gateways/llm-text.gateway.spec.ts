@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { SOCIAL_TEXT_MAX_CONTENT_CHARACTERS } from "../prompts/social-text.prompt";
 import { normalizeTextResponse } from "./llm-text.gateway";
 

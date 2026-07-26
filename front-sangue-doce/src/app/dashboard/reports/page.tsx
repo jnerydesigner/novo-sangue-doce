@@ -6,6 +6,7 @@ import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
+import { GLUCOSE_STAGES, getGlucoseStage } from "../glucose-stage";
 import { ExportReportButton } from "./export-report-button";
 
 export const dynamic = "force-dynamic";
@@ -205,8 +206,25 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               </form>
             </div>
             <div className="flex gap-2">
-              <ExportReportButton birthDate={userData.birthDate} diabetesType={userData.diabetesType} endDate={queryEndDate} month={monthlyReport.month} reportUrl={reportUrl} startDate={queryStartDate} year={monthlyReport.year} />
-              <ExportReportButton format="png" birthDate={userData.birthDate} diabetesType={userData.diabetesType} endDate={queryEndDate} month={monthlyReport.month} reportUrl={reportUrl} startDate={queryStartDate} year={monthlyReport.year} />
+              <ExportReportButton
+                birthDate={userData.birthDate}
+                diabetesType={userData.diabetesType}
+                endDate={queryEndDate}
+                month={monthlyReport.month}
+                reportUrl={reportUrl}
+                startDate={queryStartDate}
+                year={monthlyReport.year}
+              />
+              <ExportReportButton
+                format="png"
+                birthDate={userData.birthDate}
+                diabetesType={userData.diabetesType}
+                endDate={queryEndDate}
+                month={monthlyReport.month}
+                reportUrl={reportUrl}
+                startDate={queryStartDate}
+                year={monthlyReport.year}
+              />
             </div>
           </div>
 
@@ -291,10 +309,27 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                       <td className="px-2 py-2 text-left font-semibold">{formatDate(day.date)}</td>
                       {reportColumns.map((column) => {
                         const measurement = getMeasurementForColumn(day.measurements, column);
+                        const stage = measurement
+                          ? getGlucoseStage(measurement.glucoseValueMgDl)
+                          : null;
 
                         return (
                           <td className="px-2 py-2" key={column.key}>
-                            {measurement?.glucoseValueMgDl ?? ""}
+                            {measurement && stage ? (
+                              <span
+                                className="inline-flex min-w-[52px] items-center justify-center gap-1.5 font-bold text-ink"
+                                title={`${stage.label} ${stage.range}`}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className="size-2 rounded-[2px] print:size-1.5"
+                                  style={{ backgroundColor: stage.color }}
+                                />
+                                {measurement.glucoseValueMgDl}
+                              </span>
+                            ) : (
+                              ""
+                            )}
                           </td>
                         );
                       })}
@@ -304,7 +339,34 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               </table>
             </div>
 
-            <footer className="mt-7 text-center text-muted print:mt-5">
+            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-4 sm:grid-cols-3 lg:grid-cols-6 print:grid-cols-6 print:gap-x-2 print:pt-3">
+              {GLUCOSE_STAGES.map((stage) => (
+                <div className="flex min-w-0 items-start gap-2" key={stage.label}>
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 size-2.5 shrink-0 rounded-[2px] print:size-1.5"
+                    style={{ backgroundColor: stage.color }}
+                  />
+                  <div className="min-w-0 leading-tight text-ink">
+                    <strong className="block text-[11px] font-bold print:text-[6.6px]">
+                      {stage.label}
+                    </strong>
+                    <span className="mt-1 block text-[10px] print:mt-0.5 print:text-[6.2px]">
+                      {stage.description}
+                    </span>
+                    <span className="mt-1 block text-[10px] print:mt-0.5 print:text-[6.1px]">
+                      {stage.range}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-3 text-center text-[11px] font-bold text-muted print:mt-2 print:text-[6.8px]">
+              De acordo com a American Diabetes Association (ADA)
+            </p>
+
+            <footer className="mt-5 text-center text-muted print:mt-4">
               <p className="text-[12px] font-bold uppercase tracking-[0.08em] print:text-[9px]">
                 Este relatorio foi gerado pelo site Sangue Doce
               </p>

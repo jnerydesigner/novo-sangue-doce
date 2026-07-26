@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type SubmitEvent, useRef, useState } from "react";
+import { toast } from "sonner";
 import type {
   CreateRecipePayload,
   PostAuthor,
@@ -103,9 +104,7 @@ export function RecipeForm({
         | null;
       if (!response.ok || !result) {
         throw new Error(
-          result && "message" in result
-            ? result.message
-            : "Nao foi possivel importar a receita.",
+          result && "message" in result ? result.message : "Nao foi possivel importar a receita.",
         );
       }
       const preview = result as RecipeImportPreview;
@@ -131,13 +130,16 @@ export function RecipeForm({
       setFormValue("proteinGrams", imported.nutrition?.proteinGrams);
       setFormValue("fatGrams", imported.nutrition?.fatGrams);
       setFormValue("sodiumMg", imported.nutrition?.sodiumMg);
-      setMessage(
-        preview.warnings.length
-          ? `Importada para revisao: ${preview.warnings.join(" ")}`
-          : "Receita importada. Revise os dados antes de salvar.",
-      );
+      const message = preview.warnings.length
+        ? `Importada para revisao: ${preview.warnings.join(" ")}`
+        : "Receita importada. Revise os dados antes de salvar.";
+      setMessage(message);
+      toast.success(message);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Nao foi possivel importar a receita.");
+      const message =
+        error instanceof Error ? error.message : "Nao foi possivel importar a receita.";
+      setMessage(message);
+      toast.error(message);
     } finally {
       setImporting(false);
     }
@@ -222,11 +224,15 @@ export function RecipeForm({
         setCoverFile(null);
         setCoverFileName("");
       }
-      setMessage(status === "PUBLISHED" ? "Receita publicada." : "Rascunho salvo.");
+      const message = status === "PUBLISHED" ? "Receita publicada." : "Rascunho salvo.";
+      setMessage(message);
+      toast.success(message);
       router.replace(`/admin/receitas/nova?id=${recipe.id}`);
       router.refresh();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Nao foi possivel salvar a receita.");
+      const message = error instanceof Error ? error.message : "Nao foi possivel salvar a receita.";
+      setMessage(message);
+      toast.error(message);
     } finally {
       setBusy(null);
     }

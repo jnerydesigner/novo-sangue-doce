@@ -11,7 +11,18 @@ export const glucosePoints = glucoseValues.map((value, index) => ({
   value,
 }));
 
-export const adminSidebarItems = [
+export type SidebarItem = {
+  href: string;
+  label: string;
+  mark?: string;
+};
+
+export type SidebarGroup = {
+  items: SidebarItem[];
+  label: string;
+};
+
+export const adminSidebarItems: SidebarItem[] = [
   { href: "/admin", label: "Visao geral", mark: "V" },
   { href: "/admin/posts", label: "Materias", mark: "M" },
   { href: "/admin/receitas", label: "Receitas", mark: "R" },
@@ -22,7 +33,7 @@ export const adminSidebarItems = [
   { href: "/admin/autores", label: "Autores", mark: "A" },
 ];
 
-export const dashboardSidebarItems = [
+export const dashboardSidebarItems: SidebarItem[] = [
   { href: "/dashboard", label: "Hoje" },
   { href: "/dashboard/glucose", label: "Glicemia" },
   { href: "/dashboard/sleep", label: "Sono" },
@@ -30,6 +41,36 @@ export const dashboardSidebarItems = [
   { href: "/dashboard/reports", label: "Relatorios" },
   { href: "/dashboard/account", label: "Minha conta" },
   { href: "/dashboard/account/password", label: "Senha" },
+];
+
+export const adminSidebarGroups: SidebarGroup[] = [
+  {
+    label: "Painel",
+    items: [adminSidebarItems[0]],
+  },
+  {
+    label: "Conteudo",
+    items: adminSidebarItems.slice(1, 5),
+  },
+  {
+    label: "Organizacao",
+    items: adminSidebarItems.slice(5, 8),
+  },
+];
+
+export const dashboardSidebarGroups: SidebarGroup[] = [
+  {
+    label: "Rotina",
+    items: dashboardSidebarItems.slice(0, 4),
+  },
+  {
+    label: "Analises",
+    items: [dashboardSidebarItems[4]],
+  },
+  {
+    label: "Conta",
+    items: dashboardSidebarItems.slice(5, 7),
+  },
 ];
 
 export type SummaryTile = {
