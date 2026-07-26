@@ -12,20 +12,25 @@
         android:layout_height="match_parent"
         android:background="#F4F7FA"
         android:clipToPadding="false"
-        android:paddingStart="8dp"
+        android:paddingStart="16dp"
         android:paddingEnd="8dp"
-        android:paddingTop="36dp"
-        android:paddingBottom="96dp" />
+        android:paddingTop="42dp"
+        android:paddingBottom="92dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddMeasurement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
+
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="56dp"
+
         android:contentDescription="Adicionar medição"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="#2F80C9"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

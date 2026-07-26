@@ -32,8 +32,14 @@ export class AuthController {
 
   @Post("login")
   @Public()
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.validateUser(loginDto.email, loginDto.password);
+  async login(@Body() loginDto: LoginDto) {
+    const session = await this.authService.validateUser(loginDto.email, loginDto.password);
+
+    if (!session) {
+      throw new UnauthorizedException("Invalid credentials.");
+    }
+
+    return session;
   }
 
   @Post("email-code/request")
@@ -100,5 +106,15 @@ export class AuthController {
     }
 
     return this.authService.setInitialPassword(req.user, setPasswordDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post("password")
+  changePassword(@Request() req: AuthenticatedRequest, @Body() setPasswordDto: SetPasswordDto) {
+    if (!req.user) {
+      throw new UnauthorizedException();
+    }
+
+    return this.authService.changePassword(req.user, setPasswordDto);
   }
 }

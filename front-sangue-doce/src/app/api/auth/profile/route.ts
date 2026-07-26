@@ -23,12 +23,36 @@ function getErrorMessage(error: unknown) {
   }
 }
 
+function expiredSessionResponse() {
+  const response = NextResponse.json({ message: "Sessao expirada." }, { status: 401 });
+  response.cookies.delete(AUTH_COOKIE_NAME);
+
+  return response;
+}
+
+export async function GET() {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+
+  if (!accessToken) {
+    return expiredSessionResponse();
+  }
+
+  const profile = await api.auth.profile(accessToken).catch(() => null);
+
+  if (!profile) {
+    return expiredSessionResponse();
+  }
+
+  return NextResponse.json({ ok: true, profile });
+}
+
 export async function PATCH(request: Request) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
   if (!accessToken) {
-    return NextResponse.json({ message: "Sessao expirada." }, { status: 401 });
+    return expiredSessionResponse();
   }
 
   const payload = (await request.json()) as UpdateProfilePayload;

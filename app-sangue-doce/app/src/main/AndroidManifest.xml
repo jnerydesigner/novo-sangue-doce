@@ -12,13 +12,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.SangueDoceApp">
 
 
 
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.SangueDoceApp.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,9 +29,6 @@
 
         <activity android:name=".MainActivity" android:exported="false" />
         <activity android:name=".AddReadingActivity" android:exported="false" android:label="Nova Medição" />
-        <activity android:name=".MeasurementsTodayActivity" android:exported="false"/>
-
-
 
     </application>
 

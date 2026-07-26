@@ -4,7 +4,7 @@ data class TodayResponse(
     val id : String,
     val userId: String,
     val measuredAt : String,
-    val glucoseValueMgDl : Number,
+    val glucoseValueMgDl : Int,
     val readingContext : String,
     val source : String,
     val noteType : String,

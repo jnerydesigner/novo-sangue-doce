@@ -2,38 +2,66 @@ package br.com.sanguedoce.app
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import br.com.sanguedoce.app.databinding.ActivityMainBinding
-import br.com.sanguedoce.app.ui.ReadingAdapter
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.sanguedoce.app.api.RetrofitClient
+import br.com.sanguedoce.app.repository.TodayRepository
+import br.com.sanguedoce.app.ui.today.TodayRoute
+import br.com.sanguedoce.app.ui.today.TodayViewModel
+import br.com.sanguedoce.app.ui.today.TodayViewModelFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: ReadingAdapter
+    private val viewModel: TodayViewModel by viewModels {
+        TodayViewModelFactory(
+            TodayRepository(RetrofitClient.api)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!AuthSession.isLoggedIn(this)) { startActivity(Intent(this, LoginActivity::class.java)); finish(); return }
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        setupRecyclerView()
-        setupListeners()
+        val token = AuthSession.getToken(this)
+
+        if (token == null) {
+            startActivity(
+                Intent(this, LoginActivity::class.java)
+            )
+
+            finish()
+            return
+        }
+
+        RetrofitClient.setToken(token)
+
+        setContent {
+            MaterialTheme {
+                val uiState by viewModel
+                    .uiState
+                    .collectAsStateWithLifecycle()
+
+                TodayRoute(
+                    uiState = uiState,
+                    onRetry = viewModel::loadReadings,
+                    onAddClick = {
+                        startActivity(
+                            Intent(
+                                this,
+                                AddReadingActivity::class.java
+                            )
+                        )
+                    }
+                )
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-//        adapter.updateData(GlucoseRepository.getAllReadings())
-    }
-
-    private fun setupRecyclerView() {
-//        adapter = ReadingAdapter(GlucoseRepository.getAllReadings())
-        binding.rvReadings.adapter = adapter
-    }
-
-    private fun setupListeners() {
-        binding.fabAdd.setOnClickListener {
-            startActivity(Intent(this, AddReadingActivity::class.java))
-        }
+        viewModel.loadReadings()
     }
 }
