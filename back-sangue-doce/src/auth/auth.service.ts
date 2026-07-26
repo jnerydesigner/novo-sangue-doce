@@ -127,7 +127,6 @@ export class AuthService {
     currentUser: JwtPayload,
     setPasswordDto: SetPasswordDto,
   ): Promise<{ access_token: string; profile: JwtPayload }> {
-    const payload = this.parseSetPassword(setPasswordDto);
     const user = await this.userRepository.findById(currentUser.sub);
 
     if (!user) {
@@ -138,14 +137,20 @@ export class AuthService {
       throw new BadRequestException("Password is already configured.");
     }
 
-    const updatedUser = await this.userRepository.updatePasswordHash(
-      currentUser.sub,
-      await this.hashPassword(payload.password),
-    );
-    const profile = this.createJwtPayload(updatedUser);
-    const access_token = await this.signJwt(profile);
+    return this.updateAuthenticatedUserPassword(currentUser, setPasswordDto);
+  }
 
-    return { access_token, profile };
+  async changePassword(
+    currentUser: JwtPayload,
+    setPasswordDto: SetPasswordDto,
+  ): Promise<{ access_token: string; profile: JwtPayload }> {
+    const user = await this.userRepository.findById(currentUser.sub);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return this.updateAuthenticatedUserPassword(currentUser, setPasswordDto);
   }
 
   async createSession(user: UserEntity): Promise<{ access_token: string; profile: JwtPayload }> {
@@ -265,6 +270,21 @@ export class AuthService {
 
   private signJwt(payload: JwtPayload): Promise<string> {
     return this.jwtService.signAsync(payload);
+  }
+
+  private async updateAuthenticatedUserPassword(
+    currentUser: JwtPayload,
+    setPasswordDto: SetPasswordDto,
+  ): Promise<{ access_token: string; profile: JwtPayload }> {
+    const payload = this.parseSetPassword(setPasswordDto);
+    const updatedUser = await this.userRepository.updatePasswordHash(
+      currentUser.sub,
+      await this.hashPassword(payload.password),
+    );
+    const profile = this.createJwtPayload(updatedUser);
+    const access_token = await this.signJwt(profile);
+
+    return { access_token, profile };
   }
 
   private parseUpdateProfile(updateProfileDto: UpdateProfileDto): {

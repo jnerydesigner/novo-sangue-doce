@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { PageVisitTracker } from "@/components/analytics/page-visit-tracker";
+import { SessionActivityGuard } from "@/components/auth/session-activity-guard";
 import { Toaster } from "@/components/ui/sonner";
 import { DEFAULT_SOCIAL_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 
@@ -68,6 +69,7 @@ export default function RootLayout({
       <body className={roboto.variable}>
         {children}
         <PageVisitTracker />
+        <SessionActivityGuard />
         <Toaster />
       </body>
     </html>

@@ -13,4 +13,12 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style name="Theme.SangueDoceApp.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/navi</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/sangue_doce</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/navi</item>
+        <item name="postSplashScreenTheme">@style/Theme.SangueDoceApp</item>
+    </style>
 </resources>
