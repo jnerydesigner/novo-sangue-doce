@@ -18,9 +18,7 @@ interface ApiService {
     ): LoginResponse
 
     @GET("auth/profile")
-    suspend fun getProfile(
-        @Header("Authorization") authorization: String
-    ): ProfileResponse
+    suspend fun getProfile(): ProfileResponse
 
     @GET("measurements/today")
     suspend fun getMeasurementsToday(): List<TodayResponse>
@@ -31,3 +29,5 @@ interface ApiService {
     ): TodayResponse
 
 }
+
+

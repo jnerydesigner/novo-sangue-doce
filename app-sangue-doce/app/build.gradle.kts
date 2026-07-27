@@ -91,4 +91,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    implementation("io.coil-kt.coil3:coil-compose:3.5.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.5.0")
+
+
+
+        implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.2")
+        implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.2")
+
 }

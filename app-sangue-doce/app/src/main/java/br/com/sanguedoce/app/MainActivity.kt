@@ -54,6 +54,14 @@ class MainActivity : ComponentActivity() {
                                 AddReadingActivity::class.java
                             )
                         )
+                    },
+                    onLogoutClick = {
+                        AuthSession.signOut(this)
+                        RetrofitClient.clearToken()
+                        startActivity(
+                            Intent(this, LoginActivity::class.java)
+                        )
+                        finish()
                     }
                 )
             }
