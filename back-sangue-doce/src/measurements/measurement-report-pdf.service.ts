@@ -690,21 +690,44 @@ export class MeasurementReportPdfService {
   }
 
   private resolvePublicImageUrl(value: string): string {
+    const bucket = this.configService.get<string>("AWS_S3_BUCKET") ?? "sangue-doce";
+    const region =
+      this.configService.get<string>("AWS_S3_REGION") ??
+      this.configService.get<string>("AWS_REGION") ??
+      "us-east-1";
+    const s3BaseUrl = `https://${bucket}.s3.${region}.amazonaws.com`;
+    const minioPublicUrl = this.configService.get<string>("MINIO_PUBLIC_URL") ?? "";
+
     if (/^https?:\/\//i.test(value)) {
-      return value;
+      try {
+        const parsedUrl = new URL(value);
+        const minioHost = minioPublicUrl ? new URL(minioPublicUrl).hostname : "";
+        const isMinioUrl = minioHost && parsedUrl.hostname === minioHost;
+
+        if (!isMinioUrl && parsedUrl.hostname === `${bucket}.s3.${region}.amazonaws.com`) {
+          return value;
+        }
+
+        if (!isMinioUrl) {
+          return value;
+        }
+
+        value = parsedUrl.pathname;
+      } catch {
+        return value;
+      }
     }
 
-    const publicBaseUrl = this.configService.get<string>("MINIO_PUBLIC_URL") ?? "";
-    const publicPath = this.configService.get<string>("MINIO_PUBLIC_PATH") ?? "";
+    const publicPath = (this.configService.get<string>("MINIO_PUBLIC_PATH") ?? "")
+      .replace(/^\/+|\/+$/g, "");
+    const normalizedPath = value.replace(/^\/+/, "");
+    const key = publicPath && normalizedPath.startsWith(`${publicPath}/`)
+      ? normalizedPath.slice(publicPath.length + 1)
+      : normalizedPath.replace(/^sangue-doce\/public\//, "");
 
-    if (!publicBaseUrl || !value.startsWith("/")) {
-      return value;
-    }
-
-    if (publicPath && !value.startsWith(publicPath)) {
-      return `${publicBaseUrl.replace(/\/$/, "")}/${publicPath.replace(/^\/|\/$/g, "")}/${value.replace(/^\/+/, "")}`;
-    }
-
-    return `${publicBaseUrl.replace(/\/$/, "")}${value}`;
+    return `${s3BaseUrl}/${key
+      .split("/")
+      .map((part) => encodeURIComponent(part))
+      .join("/")}`;
   }
 }
