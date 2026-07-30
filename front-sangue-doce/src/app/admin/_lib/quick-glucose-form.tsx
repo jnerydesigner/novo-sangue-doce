@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState, useTransition } from "react";
 import { createMeasurementAction } from "@/app/actions/create-measurement.action";
+import type { MeasurementNoteType } from "@/lib/api";
 
 type QuickGlucoseFormProps = {
   triggerClassName?: string;
@@ -15,6 +16,25 @@ function getCurrentTimeInputValue() {
   const minute = String(now.getMinutes()).padStart(2, "0");
   return `${hour}:${minute}`;
 }
+
+const measurementNoteOptions: Array<{ value: MeasurementNoteType; label: string }> = [
+  { value: "FASTING_WAKE_UP", label: "Jejum ao acordar" },
+  { value: "BEFORE_BREAKFAST", label: "Antes do café da manhã" },
+  { value: "AFTER_BREAKFAST", label: "Depois do café da manhã" },
+  { value: "MORNING_RANDOM_CHECK", label: "Medição aleatória pela manhã" },
+  { value: "BEFORE_LUNCH", label: "Antes do almoço" },
+  { value: "AFTER_LUNCH", label: "Depois do almoço" },
+  { value: "AFTERNOON_RANDOM_CHECK", label: "Medição aleatória à tarde" },
+  { value: "BEFORE_DINNER", label: "Antes do jantar" },
+  { value: "AFTER_DINNER", label: "Depois do jantar" },
+  { value: "BEFORE_SLEEP", label: "Antes de dormir" },
+  { value: "NIGHT_RANDOM_CHECK", label: "Medição aleatória à noite" },
+  { value: "BEFORE_EXERCISE", label: "Antes do exercício" },
+  { value: "AFTER_EXERCISE", label: "Depois do exercício" },
+  { value: "FEELING_UNWELL", label: "Sentindo mal-estar" },
+  { value: "ROUTINE_CHECK", label: "Medição de rotina" },
+  { value: "DAWN_RANDOM_CHECK", label: "Medição aleatória na madrugada" },
+];
 
 export function QuickGlucoseForm({
   triggerClassName = "mt-3 rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep",
@@ -141,6 +161,22 @@ export function QuickGlucoseForm({
                 />
                 <span className="pb-3 text-sm font-semibold text-muted">mg/dL</span>
               </div>
+              <label className="mt-4 block text-[13px] font-semibold text-muted" htmlFor="admin-note-type">
+                Momento da medição
+              </label>
+              <select
+                className="mt-2 w-full rounded-lg border border-lineStrong bg-paper px-4 py-3 text-sm font-semibold text-ink outline-none transition focus:border-green"
+                defaultValue="ROUTINE_CHECK"
+                id="admin-note-type"
+                name="noteType"
+                required
+              >
+                {measurementNoteOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
               {feedback ? (
                 <p className="mt-3 min-h-[20px] text-sm font-medium text-inkSoft">{feedback}</p>
               ) : null}

@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { api, type Measurement } from "@/lib/api";
+import { api, type Measurement, type MeasurementNoteType } from "@/lib/api";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
 
 type CreateMeasurementState = {
@@ -61,6 +61,7 @@ export async function createMeasurementAction(formData: FormData): Promise<Creat
   const glucoseValueMgDl = Number(formData.get("glucose"));
   const measuredAt = buildMeasuredAt(String(formData.get("time") || ""));
   const timeZone = String(formData.get("timeZone") || "");
+  const noteType = String(formData.get("noteType") || "") as MeasurementNoteType;
 
   if (!Number.isInteger(glucoseValueMgDl) || glucoseValueMgDl < 40 || glucoseValueMgDl > 450) {
     return {
@@ -82,6 +83,7 @@ export async function createMeasurementAction(formData: FormData): Promise<Creat
         glucoseValueMgDl,
         measuredAt,
         source: "MANUAL",
+        noteType: noteType || undefined,
         timeZone: timeZone || undefined,
       },
       { accessToken },
