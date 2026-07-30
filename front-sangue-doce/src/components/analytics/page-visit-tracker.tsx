@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 const ignoredPrefixes = ["/admin", "/dashboard", "/login", "/cadastro"];
 
@@ -12,6 +13,8 @@ export function PageVisitTracker() {
     if (!pathname || ignoredPrefixes.some((prefix) => pathname.startsWith(prefix))) {
       return;
     }
+
+    trackEvent("page_view", { page_path: pathname, page_title: document.title });
 
     const payload = JSON.stringify({
       path: pathname,
