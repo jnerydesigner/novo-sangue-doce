@@ -10,7 +10,10 @@ export const dynamic = "force-dynamic";
 
 export default async function GlucosePage() {
   const { accessToken, profile } = await requireDashboardUser();
-  const recentReadings = await api.measurements.list({ accessToken }).catch(() => []);
+  const recentReadings = await api.measurements.today({
+    accessToken,
+    timeZone: "America/Manaus",
+  }).catch(() => []);
 
   return (
     <main className="min-h-screen bg-paper text-ink">

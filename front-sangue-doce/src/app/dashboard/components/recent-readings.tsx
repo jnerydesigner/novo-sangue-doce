@@ -16,6 +16,8 @@ const contextLabels: Record<ReadingContext, string> = {
   RANDOM: "Rotina",
 };
 
+const MEASUREMENT_TIME_ZONE = "America/Manaus";
+
 function getDayLabel(measuredAt: string) {
   const date = new Date(measuredAt);
   const today = new Date();
@@ -26,6 +28,7 @@ function getDayLabel(measuredAt: string) {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    timeZone: MEASUREMENT_TIME_ZONE,
   });
 
   const dateKey = formatter.format(date);
@@ -43,6 +46,7 @@ function getDayLabel(measuredAt: string) {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
+    timeZone: MEASUREMENT_TIME_ZONE,
   }).format(date);
 }
 
@@ -50,6 +54,7 @@ function getTimeLabel(measuredAt: string) {
   return new Intl.DateTimeFormat("pt-BR", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: MEASUREMENT_TIME_ZONE,
   }).format(new Date(measuredAt));
 }
 

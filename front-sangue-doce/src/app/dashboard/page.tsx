@@ -41,7 +41,7 @@ export default async function DashboardPage() {
       year: today.getFullYear(),
       month: today.getMonth() + 1,
     }),
-    api.measurements.list({ accessToken }).catch(() => []),
+    api.measurements.today({ accessToken, timeZone: "America/Manaus" }).catch(() => []),
   ]);
 
   const dashboardData = mapDashboardData({ monthlyReport });
