@@ -37,10 +37,13 @@ export function GlucoseChart({ measurements }: { measurements: Measurement[] }) 
   const padX = 10;
   const padTop = 16;
   const padBottom = 28;
-  const min = 60;
-  const max = 160;
   const targetLow = 70;
   const targetHigh = 140;
+  const values = points.map((point) => point.value);
+  const lowestValue = values.length > 0 ? Math.min(...values) : targetLow;
+  const highestValue = values.length > 0 ? Math.max(...values) : targetHigh;
+  const min = Math.min(targetLow - 10, Math.floor((lowestValue - 10) / 10) * 10);
+  const max = Math.max(targetHigh + 10, Math.ceil((highestValue + 10) / 10) * 10);
 
   const getX = (index: number) => padX + (index / Math.max(points.length - 1, 1)) * (width - padX * 2);
   const getY = (value: number) =>
@@ -59,7 +62,7 @@ export function GlucoseChart({ measurements }: { measurements: Measurement[] }) 
   return (
     <svg
       aria-label="Grafico de glicemia nas ultimas 24 horas"
-      className="mt-5 h-[150px] w-full overflow-visible"
+      className="mt-5 h-[150px] w-full overflow-hidden"
       preserveAspectRatio="none"
       role="img"
       viewBox={`0 0 ${width} ${height}`}
