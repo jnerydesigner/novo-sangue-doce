@@ -123,7 +123,7 @@ export function GlucoseChart({ measurements }: { measurements: Measurement[] }) 
           fontSize="10"
           key={`${point.id}-label`}
           textAnchor="middle"
-          x={getX(index)}
+          x={getX(point.index)}
           y={height - 7}
         >
           {point.time}
