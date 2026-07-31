@@ -8,7 +8,9 @@ import br.com.sanguedoce.app.model.TodayResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -28,6 +30,11 @@ interface ApiService {
         @Body request: CreateMeasurementRequest
     ): TodayResponse
 
-}
+    @PATCH("measurements/{id}")
+    suspend fun updateMeasurement(
+        @Path("id") id: String,
+        @Body request: CreateMeasurementRequest
+    ): TodayResponse
 
+}
 

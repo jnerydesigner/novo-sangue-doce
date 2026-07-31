@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,13 +32,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,7 +69,9 @@ fun TodayRoute(
     uiState: TodayUiState,
     onRetry: () -> Unit,
     onAddClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onEditClick: (TodayResponse) -> Unit,
+    onDeleteClick: (TodayResponse) -> Unit
 ) {
     when (uiState) {
         TodayUiState.Loading -> LoadingContent()
@@ -74,7 +82,9 @@ fun TodayRoute(
                 isRefreshing = uiState.isRefreshing,
                 onRefresh = onRetry,
                 onAddClick = onAddClick,
-                onLogoutClick = onLogoutClick
+                onLogoutClick = onLogoutClick,
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick
             )
         }
 
@@ -94,7 +104,9 @@ private fun TodayScreen(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     onAddClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onEditClick: (TodayResponse) -> Unit,
+    onDeleteClick: (TodayResponse) -> Unit
 ) {
     val currentDate = remember { currentDisplayDate() }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -210,7 +222,11 @@ private fun TodayScreen(
                             items = readings,
                             key = { reading -> reading.id }
                         ) { reading ->
-                            TodayCard(reading)
+                            TodayCard(
+                                reading = reading,
+                                onEditClick = onEditClick,
+                                onDeleteClick = onDeleteClick
+                            )
                         }
                     }
                 }
@@ -221,8 +237,12 @@ private fun TodayScreen(
 
 @Composable
 private fun TodayCard(
-    reading: TodayResponse
+    reading: TodayResponse,
+    onEditClick: (TodayResponse) -> Unit,
+    onDeleteClick: (TodayResponse) -> Unit
 ) {
+    var menuExpanded by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
@@ -258,13 +278,41 @@ private fun TodayCard(
                 )
             }
 
-            Text(
-                text = "${reading.glucoseValueMgDl} mg/dL",
-                modifier = Modifier.padding(start = 16.dp),
-                color = glucoseColor(reading.glucoseValueMgDl),
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = "${reading.glucoseValueMgDl} mg/dL",
+                    modifier = Modifier.padding(start = 16.dp),
+                    color = glucoseColor(reading.glucoseValueMgDl),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Box {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "Opções da medição")
+                    }
+
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Editar") },
+                            onClick = {
+                                menuExpanded = false
+                                onEditClick(reading)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Excluir") },
+                            onClick = {
+                                menuExpanded = false
+                                onDeleteClick(reading)
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }

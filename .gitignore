@@ -100,3 +100,5 @@ ia/
 /.vscode
 /.impeccable
 .local-skills/
+
+/nutrition-facts-label/.venv

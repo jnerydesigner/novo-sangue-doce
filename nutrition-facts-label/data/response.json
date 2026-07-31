@@ -1,0 +1,3584 @@
+[
+  {
+    "food_number": 1,
+    "page": 29,
+    "line1": "1 Arroz, integral, cozido 70,1 124 517 2,6 1,0 NA 25,8 2,7 0,5 5 59",
+    "line2": "1 0,63 106 0,3 1 75 0,02 0,7 NA 0,08 Tr 0,08 Tr"
+  },
+  {
+    "food_number": 2,
+    "page": 29,
+    "line1": "2 Arroz, integral, cru 12,2 360 1505 7,3 1,9 NA 77,5 4,8 1,2 8 110",
+    "line2": "2 2,99 251 0,9 2 173 0,07 1,4 NA 0,26 Tr 0,18 4,18"
+  },
+  {
+    "food_number": 3,
+    "page": 29,
+    "line1": "3 Arroz, tipo 1, cozido 69,1 128 537 2,5 0,2 NA 28,1 1,6 0,1 4 2",
+    "line2": "3 0,30 18 0,1 1 15 0,02 0,5 NA Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 4,
+    "page": 29,
+    "line1": "4 Arroz, tipo 1, cru 13,2 358 1497 7,2 0,3 NA 78,8 1,6 0,5 4 30",
+    "line2": "4 1,03 104 0,7 1 62 0,11 1,2 NA 0,16 Tr 0,07 1,12"
+  },
+  {
+    "food_number": 5,
+    "page": 29,
+    "line1": "5 Arroz, tipo 2, cozido 68,7 130 544 2,6 0,4 NA 28,2 1,1 0,1 3 6",
+    "line2": "5 0,37 22 0,1 2 20 0,04 0,5 NA Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 6,
+    "page": 29,
+    "line1": "6 Arroz, tipo 2, cru 13,2 358 1498 7,2 0,3 NA 78,9 1,7 0,4 5 29",
+    "line2": "6 0,83 82 0,6 1 57 0,05 1,3 NA 0,16 Tr 0,05 0,92"
+  },
+  {
+    "food_number": 7,
+    "page": 29,
+    "line1": "7 Aveia, flocos, crua 9,1 394 1648 13,9 8,5 NA 66,6 9,1 1,8 48 119",
+    "line2": "7 1,89 153 4,4 5 336 0,44 2,6 NA 0,55 0,03 Tr 4,47 1,4"
+  },
+  {
+    "food_number": 8,
+    "page": 29,
+    "line1": "8 Biscoito, doce, maisena 3,2 443 1853 8,1 12,0 NA 75,2 2,1 1,5 54 37",
+    "line2": "8 0,78 166 1,8 352 142 0,17 1,0 NA 1,01 0,42 0,23 3,91 6,2"
+  },
+  {
+    "food_number": 9,
+    "page": 29,
+    "line1": "9 Biscoito, doce, recheado com chocolate 2,2 472 1974 6,4 19,6 Tr 70,5 3,0 1,3 27 48",
+    "line2": "9 0,59 139 2,3 239 232 0,27 1,0 Tr 0,32 0,39 0,46 2,52 3,5"
+  },
+  {
+    "food_number": 10,
+    "page": 29,
+    "line1": "10 Biscoito, doce, recheado com morango 2,7 471 1971 5,7 19,6 Tr 71,0 1,5 1,0 36 27",
+    "line2": "10 0,66 138 1,5 230 113 0,13 0,7 Tr 0,90 0,42 0,21 1,50 Tr"
+  },
+  {
+    "food_number": 11,
+    "page": 29,
+    "line1": "11 Biscoito, doce, wafer, recheado de chocolate 1,2 502 2102 5,6 24,7 Tr 67,5 1,8 1,1 23 48",
+    "line2": "11 0,44 124 2,4 137 240 0,26 0,9 Tr 0,37 0,03 0,30 1,12 Tr"
+  },
+  {
+    "food_number": 12,
+    "page": 29,
+    "line1": "12 Biscoito, doce, wafer, recheado de morango 1,2 513 2148 4,5 26,4 1 67,4 0,8 0,6 14 19",
+    "line2": "12 0,28 73 1,1 120 75 0,08 0,5 Tr 0,36 Tr 0,94 0,37"
+  },
+  {
+    "food_number": 13,
+    "page": 29,
+    "line1": "13 Biscoito, salgado, cream cracker 4,1 432 1806 10,1 14,4 NA 68,7 2,5 2,7 20 40",
+    "line2": "13 0,69 148 2,2 854 181 0,18 1,1 NA 0,71 0,13 0,17 7,14"
+  },
+  {
+    "food_number": 14,
+    "page": 29,
+    "line1": "14 Bolo, mistura para 1,0 419 1752 6,2 6,1 Tr 84,7 1,7 2,0 59 28",
+    "line2": "14 0,46 333 1,2 463 75 0,15 0,6 NA 0,18 Tr 1,50 1,52 Tr"
+  },
+  {
+    "food_number": 15,
+    "page": 29,
+    "line1": "15 Bolo, pronto, aipim 34,1 324 1355 4,4 12,7 73 47,9 0,7 0,8 85 10",
+    "line2": "15 0,11 122 0,5 111 135 0,05 0,4 Tr 0,13 0,07 Tr Tr Tr"
+  },
+  {
+    "food_number": 16,
+    "page": 29,
+    "line1": "16 Bolo, pronto, chocolate 19,3 410 1715 6,2 18,5 77 54,7 1,4 1,3 75 28",
+    "line2": "16 0,38 197 2,1 283 212 0,05 0,7 Tr 0,13 0,09 0,05 Tr Tr"
+  },
+  {
+    "food_number": 17,
+    "page": 29,
+    "line1": "17 Bolo, pronto, coco 29,3 333 1395 5,7 11,3 63 52,3 1,1 1,4 57 16",
+    "line2": "17 0,40 303 0,8 190 143 0,09 0,7 Tr 0,15 0,06 Tr Tr Tr"
+  },
+  {
+    "food_number": 18,
+    "page": 29,
+    "line1": "18 Bolo, pronto, milho 36,7 311 1303 4,8 12,4 82 45,1 0,7 1,0 83 10",
+    "line2": "18 0,11 128 0,7 134 118 0,04 0,4 57 0,11 0,05 Tr Tr Tr"
+  },
+  {
+    "food_number": 19,
+    "page": 29,
+    "line1": "19 Canjica, branca, crua 13,6 358 1496 7,2 1,0 NA 78,1 5,5 0,2 2 12",
+    "line2": "19 0,09 48 0,3 1 93 0,05 0,4 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 20,
+    "page": 29,
+    "line1": "20 Canjica, com leite integral 72,5 112 471 2,4 1,2 1 23,6 1,2 0,3 43 6",
+    "line2": "20 0,02 41 0,1 28 70 0,03 0,3 Tr Tr 0,04 Tr Tr Tr"
+  },
+  {
+    "food_number": 21,
+    "page": 29,
+    "line1": "21 Cereais, milho, flocos, com sal 9,3 370 1546 7,3 1,6 NA 80,8 5,3 1,0 2 20",
+    "line2": "21 Tr 91 0,5 272 69 Tr 0,6 NA 0,12 Tr 0,06 Tr Tr"
+  },
+  {
+    "food_number": 22,
+    "page": 29,
+    "line1": "22 Cereais, milho, flocos, sem sal 11,2 363 1520 6,9 1,2 NA 80,4 1,8 0,3 2 17",
+    "line2": "22 Tr 58 1,7 31 29 0,24 0,3 NA 0,05 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 23,
+    "page": 29,
+    "line1": "23 Cereais, mingau, milho, infantil 4,7 394 1650 6,4 1,1 NA 87,3 3,2 0,5 219 16",
+    "line2": "23 0,11 169 3,0 399 82 0,04 0,4 21 3,72 0,47 5,08 24,16 109,4"
+  },
+  {
+    "food_number": 24,
+    "page": 29,
+    "line1": "24 Cereais, mistura para vitamina, trigo, cevada e aveia 4,4 381 1595 8,9 2,1 NA 81,6 5,0 3,0 584 72",
+    "line2": "24 2,28 515 12,6 1163 244 0,21 2,0 Tr 0,76 0,88 1,49 7,46 13,1"
+  },
+  {
+    "food_number": 25,
+    "page": 29,
+    "line1": "25 Cereal matinal, milho 5,5 365 1529 7,2 1,0 NA 83,8 4,1 2,5 143 11",
+    "line2": "25 0,06 101 3,1 655 83 0,06 7,6 NA 31 15 0,76 1,02 2,25 11,04 17,3"
+  },
+  {
+    "food_number": 26,
+    "page": 29,
+    "line1": "26 Cereal matinal, milho, açúcar 4,3 377 1576 4,7 0,7 NA 88,8 2,1 1,5 56 8",
+    "line2": "26 0,13 43 3,9 405 52 0,04 8,5 NA 31 15 0,73 1,11 0,79 10,13 14,6"
+  },
+  {
+    "food_number": 27,
+    "page": 29,
+    "line1": "27 Creme de arroz, pó 7,3 386 1615 7,0 1,2 NA 83,9 1,1 0,5 7 51",
+    "line2": "27 1,24 153 0,6 1 115 0,04 1,9 NA 0,22 Tr 0,05 Tr Tr"
+  },
+  {
+    "food_number": 28,
+    "page": 29,
+    "line1": "28 Creme de milho, pó 5,7 333 1393 4,8 1,6 NA 86,1 3,7 1,7 323 30",
+    "line2": "28 0,20 303 4,3 594 166 0,04 0,8 NA 0,74 Tr 2,05 Tr 96,3"
+  },
+  {
+    "food_number": 29,
+    "page": 29,
+    "line1": "29 Curau, milho verde 81,6 78 328 2,4 1,6 5 13,9 0,5 0,5 53 16",
+    "line2": "29 0,06 75 0,4 21 162 0,03 0,4 12 20a 16a 0,04 0,07 Tr Tr Tr"
+  },
+  {
+    "food_number": 30,
+    "page": 29,
+    "line1": "30 Curau, milho verde, mistura para 3,9 402 1683 2,2 13,4 NA 79,8 2,5 0,7 31 9",
+    "line2": "30 0,05 45 0,9 223 55 0,03 0,2 NA 0,13 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 31,
+    "page": 29,
+    "line1": "31 Farinha, de arroz, enriquecida 12,7 363 1519 1,3 0,3 NA 85,5 0,6 0,2 1 4",
+    "line2": "31 0,04 36 31,4 17 13 Tr 8,5 NA 3,23 Tr 3,47 24,42 173,6"
+  },
+  {
+    "food_number": 32,
+    "page": 31,
+    "line1": "32 Farinha, de centeio, integral 10,8 336 1405 12,5 1,8 NA 73,3 15,5 1,7 34 120",
+    "line2": "32 3,86 340 4,7 41 334 0,56 2,7 NA 0,29 0,03 0,08 Tr Tr"
+  },
+  {
+    "food_number": 33,
+    "page": 31,
+    "line1": "33 Farinha, de milho, amarela 11,8 351 1467 7,2 1,5 NA 79,1 5,5 0,5 1 31",
+    "line2": "33 Tr 84 2,3 45 58 0,27 0,6 NA 18b 9b 0,25 Tr 0,25 Tr Tr"
+  },
+  {
+    "food_number": 34,
+    "page": 31,
+    "line1": "34 Farinha, de rosca 9,8 371 1550 11,4 1,5 NA 75,8 4,8 1,6 35 57",
+    "line2": "34 1,62 195 6,7 333 212 0,26 1,7 NA 0,25 Tr 0,09 Tr Tr"
+  },
+  {
+    "food_number": 35,
+    "page": 31,
+    "line1": "35 Farinha, de trigo 13,0 360 1508 9,8 1,4 NA 75,1 2,3 0,8 18 31",
+    "line2": "35 0,46 115 1,0 1 151 0,15 0,8 NA 0,31 Tr Tr 0,89 Tr"
+  },
+  {
+    "food_number": 36,
+    "page": 31,
+    "line1": "36 Farinha, láctea, de cereais 2,7 415 1736 11,9 5,8 11 77,8 1,9 1,9 196 58",
+    "line2": "36 1,49 296 8,7 125 366 0,19 1,7 492 1,43 1,13 1,14 9,50 24,3"
+  },
+  {
+    "food_number": 37,
+    "page": 31,
+    "line1": "37 Lasanha, massa fresca, cozida 59,6 164 685 5,8 1,2 NA 32,5 1,6 0,9 10 4",
+    "line2": "37 0,20 42 1,2 207 54 0,07 0,4 NA 0,04 Tr Tr 3,96"
+  },
+  {
+    "food_number": 38,
+    "page": 31,
+    "line1": "38 Lasanha, massa fresca, crua 45,0 220 922 7,0 1,3 NA 45,1 1,6 1,6 17 13",
+    "line2": "38 0,34 82 1,9 667 137 0,10 0,8 NA 0,08 Tr Tr Tr"
+  },
+  {
+    "food_number": 39,
+    "page": 31,
+    "line1": "39 Macarrão, instantâneo 6,0 436 1824 8,8 17,2 NA 62,4 5,6 5,6 18 19",
+    "line2": "39 0,25 112 0,8 1516 148 0,10 0,5 NA 1,18 0,04 0,53 9,37 Tr"
+  },
+  {
+    "food_number": 40,
+    "page": 31,
+    "line1": "40 Macarrão, trigo, cru 10,2 371 1553 10,0 1,3 NA 77,9 2,9 0,5 17 28",
+    "line2": "40 0,53 100 0,9 7 147 0,15 0,8 NA 0,18 0,02 Tr 3,57 Tr"
+  },
+  {
+    "food_number": 41,
+    "page": 31,
+    "line1": "41 Macarrão, trigo, cru, com ovos 10,6 371 1550 10,3 2,0 18 76,6 2,3 0,5 19 Tr",
+    "line2": "41 0,40 118 0,9 15 134 0,14 0,8 Tr 0,11 0,05 0,03 4,37 Tr"
+  },
+  {
+    "food_number": 42,
+    "page": 31,
+    "line1": "42 Milho, amido, cru 12,2 361 1512 0,6 Tr NA 87,1 0,7 0,1 1 3",
+    "line2": "42 0,02 13 0,1 8 9 0,02 0,1 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 43,
+    "page": 31,
+    "line1": "43 Milho, fubá, cru 11,5 353 1479 7,2 1,9 NA 78,9 4,7 0,6 3 41",
+    "line2": "43 0,34 108 0,9 Tr 168 0,08 1,1 NA 26b 13b 0,25 Tr Tr 0,75 Tr"
+  },
+  {
+    "food_number": 44,
+    "page": 31,
+    "line1": "44 Milho, verde, cru 63,5 138 578 6,6 0,6 NA 28,6 3,9 0,7 2 33",
+    "line2": "44 0,12 113 0,4 1 185 0,05 0,5 NA 32b 16b 0,30 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 45,
+    "page": 31,
+    "line1": "45 Milho, verde, enlatado, drenado 76,2 98 408 3,2 2,4 NA 17,1 4,6 1,1 2 20",
+    "line2": "45 0,09 61 0,6 260 162 0,05 0,5 NA 48b 24b Tr 0,05 Tr 3,74 1,7"
+  },
+  {
+    "food_number": 46,
+    "page": 31,
+    "line1": "46 Mingau tradicional, pó 8,1 373 1562 0,6 0,4 NA 89,3 0,9 1,6 522 4",
+    "line2": "46 Tr 273 42,0 15 Tr Tr 15,2 1533 3,41 Tr 3,11 19,39 Tr"
+  },
+  {
+    "food_number": 47,
+    "page": 31,
+    "line1": "47 Pamonha, barra para cozimento, pré-cozida 61,3 171 716 2,6 4,8 NA 30,7 2,4 0,6 4 15",
+    "line2": "47 0,12 55 0,4 132 125 0,03 0,4 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 48,
+    "page": 31,
+    "line1": "48 Pão, aveia, forma 19,9 343 1435 12,4 5,7 Tr 59,6 6,0 2,5 109 57",
+    "line2": "48 1,08 182 4,7 606 210 0,14 1,7 Tr 0,09 0,03 0,08 Tr Tr"
+  },
+  {
+    "food_number": 49,
+    "page": 31,
+    "line1": "49 Pão, de soja 26,0 309 1292 11,3 3,6 NA 56,5 5,7 2,5 90 48",
+    "line2": "49 0,57 153 3,3 663 296 0,16 1,5 NA 0,07 0,04 0,79 Tr Tr"
+  },
+  {
+    "food_number": 50,
+    "page": 31,
+    "line1": "50 Pão, glúten, forma 40,7 253 1059 12,0 2,7 NA 44,1 2,5 0,5 156 24",
+    "line2": "50 0,51 105 5,7 22 65 0,06 1,3 NA 0,04 0,03 Tr Tr Tr"
+  },
+  {
+    "food_number": 51,
+    "page": 31,
+    "line1": "51 Pão, milho, forma 30,4 292 1222 8,3 3,1 6 56,4 4,3 1,8 78 29",
+    "line2": "51 0,37 110 3,0 507 89 0,10 0,8 Tr 0,08 Tr 0,08 Tr Tr"
+  },
+  {
+    "food_number": 52,
+    "page": 31,
+    "line1": "52 Pão, trigo, forma, integral 34,7 253 1059 9,4 3,7 NA 49,9 6,9 2,3 132 60",
+    "line2": "52 1,62 193 3,0 506 163 0,15 1,6 NA 0,08 0,04 0,15 Tr Tr"
+  },
+  {
+    "food_number": 53,
+    "page": 31,
+    "line1": "53 Pão, trigo, francês 28,5 300 1254 8,0 3,1 NA 58,6 2,3 1,8 16 25",
+    "line2": "53 0,46 95 1,0 648 142 0,13 0,8 3 0,39 0,67 0,60 2,34"
+  },
+  {
+    "food_number": 54,
+    "page": 31,
+    "line1": "54 Pão, trigo, sovado 25,8 311 1301 8,4 2,8 17 61,5 2,4 1,5 52 22",
+    "line2": "54 0,31 101 2,3 431 91 Tr 2,7 Tr 0,08 0,04 0,15 Tr Tr"
+  },
+  {
+    "food_number": 55,
+    "page": 31,
+    "line1": "55 Pastel, de carne, cru 34,4 289 1208 10,7 8,8 18 42,0 1,0 4,1 17 18",
+    "line2": "55 0,34 117 2,0 1309 166 0,11 1,7 Tr 0,06 0,03 Tr 1,58 Tr"
+  },
+  {
+    "food_number": 56,
+    "page": 31,
+    "line1": "56 Pastel, de carne, frito 22,9 388 1625 10,1 20,1 25 43,8 1,0 3,1 13 14",
+    "line2": "56 0,22 90 2,5 1040 156 0,12 1,2 Tr 0,06 0,05 Tr 1,83"
+  },
+  {
+    "food_number": 57,
+    "page": 31,
+    "line1": "57 Pastel, de queijo, cru 31,3 308 1291 9,9 9,6 14 45,9 1,1 3,3 155 16",
+    "line2": "57 0,24 168 1,0 985 103 0,10 1,0 Tr 0,07 0,03 Tr Tr Tr"
+  },
+  {
+    "food_number": 58,
+    "page": 31,
+    "line1": "58 Pastel, de queijo, frito 17,5 422 1766 8,7 22,7 15 48,1 0,9 2,9 126 15",
+    "line2": "58 0,20 124 1,3 821 124 0,10 0,8 18 18 18 0,09 0,04 Tr Tr Tr"
+  },
+  {
+    "food_number": 59,
+    "page": 31,
+    "line1": "59 Pastel, massa, crua 27,1 310 1298 6,9 5,5 NA 57,4 1,4 3,2 13 14",
+    "line2": "59 0,38 73 1,1 1344 167 0,11 0,6 NA 0,15 Tr Tr Tr"
+  },
+  {
+    "food_number": 60,
+    "page": 31,
+    "line1": "60 Pastel, massa, frita 1,0 570 2384 6,0 40,9 NA 49,3 1,3 2,8 11 13",
+    "line2": "60 0,36 62 1,4 1175 143 0,08 0,5 NA 0,16 Tr Tr Tr"
+  },
+  {
+    "food_number": 61,
+    "page": 31,
+    "line1": "61 Pipoca, com óleo de soja, sem sal 2,8 448 1876 9,9 15,9 NA 70,3 14,3 1,0 3 91",
+    "line2": "61 0,65 225 1,2 4 256 0,46 2,0 NA 0,03 0,03 Tr Tr Tr"
+  },
+  {
+    "food_number": 62,
+    "page": 31,
+    "line1": "62 Polenta, pré-cozida 72,7 103 430 2,3 0,3 NA 23,3 2,4 1,4 1 4",
+    "line2": "62 Tr 17 Tr 442 100 0,04 0,1 NA 0,04 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 63,
+    "page": 31,
+    "line1": "63 Torrada, pão francês 9,0 377 1579 10,5 3,3 NA 74,6 3,4 2,6 19 32",
+    "line2": "63 0,55 114 1,2 829 189 0,16 0,9 NA 0,38 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 64,
+    "page": 33,
+    "line1": "64 Abóbora, cabotian, cozida 86,4 48 201 1,4 0,7 NA 10,8 2,5 0,7 8 9",
+    "line2": "64 0,26 33 0,3 1 199 0,06 0,3 NA 0,08 Tr 0,07 Tr 7,5"
+  },
+  {
+    "food_number": 65,
+    "page": 33,
+    "line1": "65 Abóbora, cabotian, crua 88,5 39 161 1,7 0,5 NA 8,4 2,2 0,8 18 9",
+    "line2": "65 0,11 26 0,4 Tr 351 0,06 0,3 NA 446b 223b Tr Tr 0,10 Tr 5,1"
+  },
+  {
+    "food_number": 66,
+    "page": 33,
+    "line1": "66 Abóbora, menina brasileira, crua 95,7 14 57 0,6 Tr NA 3,3 1,2 0,4 9 4",
+    "line2": "66 0,01 12 0,2 Tr 165 0,02 Tr NA 1108b 554b 0,07 Tr 0,04 Tr 1,5"
+  },
+  {
+    "food_number": 67,
+    "page": 33,
+    "line1": "67 Abóbora, moranga, crua 95,9 12 52 1,0 0,1 NA 2,7 1,7 0,4 3 2",
+    "line2": "67 0,01 8 Tr Tr 125 0,05 0,1 NA 278b 139b Tr Tr 0,06 Tr 9,6"
+  },
+  {
+    "food_number": 68,
+    "page": 33,
+    "line1": "68 Abóbora, moranga, refogada 92,5 29 121 0,4 0,8 NA 6,0 1,5 0,4 19 7",
+    "line2": "68 0,02 12 0,1 3 183 0,04 0,1 NA 95 48 0,05 Tr 0,05 Tr 6,7"
+  },
+  {
+    "food_number": 69,
+    "page": 33,
+    "line1": "69 Abobora, pescoço, crua 92,5 24 102 0,7 0,1 NA 6,1 2,3 0,6 9 7",
+    "line2": "69 0,07 32 0,3 1 264 0,09 0,2 NA Tr Tr 0,06 Tr 2,1"
+  },
+  {
+    "food_number": 70,
+    "page": 33,
+    "line1": "70 Abobrinha, italiana, cozida 95,3 15 63 1,1 0,2 NA 3,0 1,6 0,4 17 17",
+    "line2": "70 0,11 22 0,2 1 126 0,01 0,3 NA 0,05 Tr 0,06 Tr 2,1"
+  },
+  {
+    "food_number": 71,
+    "page": 33,
+    "line1": "71 Abobrinha, italiana, crua 93,9 19 81 1,1 0,1 NA 4,3 1,4 0,6 15 20",
+    "line2": "71 0,09 32 0,2 Tr 253 0,05 0,2 NA 41 20 Tr 0,06 0,03 Tr 6,9"
+  },
+  {
+    "food_number": 72,
+    "page": 33,
+    "line1": "72 Abobrinha, italiana, refogada 93,5 24 102 1,1 0,8 NA 4,2 1,4 0,4 21 13",
+    "line2": "72 0,14 32 0,4 2 194 0,02 0,3 NA 42 21 0,04 Tr Tr Tr 7,5"
+  },
+  {
+    "food_number": 73,
+    "page": 33,
+    "line1": "73 Abobrinha, paulista, crua 90,9 31 129 0,6 0,1 NA 7,9 2,6 0,5 19 9",
+    "line2": "73 0,11 33 0,2 1 213 0,10 0,2 NA Tr Tr 0,03 Tr 17,5"
+  },
+  {
+    "food_number": 74,
+    "page": 33,
+    "line1": "74 Acelga, crua 93,2 21 88 1,4 0,1 NA 4,6 1,1 0,6 43 10",
+    "line2": "74 0,11 40 0,3 1 240 0,10 0,3 NA 0,04 Tr 0,16 Tr 22,6"
+  },
+  {
+    "food_number": 75,
+    "page": 33,
+    "line1": "75 Agrião, cru 93,9 17 69 2,7 0,2 NA 2,3 2,1 0,9 133 18",
+    "line2": "75 0,28 51 3,1 7 218 0,10 0,7 NA 458b 229b 0,11 0,23 0,09 1,19 60,1"
+  },
+  {
+    "food_number": 76,
+    "page": 33,
+    "line1": "76 Aipo, cru 93,8 19 80 0,8 0,1 NA 4,3 1,0 1,1 65 9",
+    "line2": "76 0,18 28 0,7 10 274 0,31 0,1 NA 916b 458b Tr Tr 0,18 Tr 5,9"
+  },
+  {
+    "food_number": 77,
+    "page": 33,
+    "line1": "77 Alface, americana, crua 97,2 9 37 0,6 0,1 NA 1,7 1,0 0,3 14 6",
+    "line2": "77 0,12 19 0,3 7 136 0,02 0,2 NA 0,03 Tr 0,04 Tr 11,0"
+  },
+  {
+    "food_number": 78,
+    "page": 33,
+    "line1": "78 Alface, crespa, crua 96,1 11 45 1,3 0,2 NA 1,7 1,8 0,7 38 11",
+    "line2": "78 0,20 26 0,4 3 267 0,03 0,3 NA 234b 117b 0,11 0,12 Tr 1,09 15,6"
+  },
+  {
+    "food_number": 79,
+    "page": 33,
+    "line1": "79 Alface, lisa, crua 95,0 14 58 1,7 0,1 NA 2,4 2,3 0,8 28 9",
+    "line2": "79 0,33 26 0,6 4 349 0,03 0,3 NA 368b 184b 0,09 0,08 0,07 0,75 21,4"
+  },
+  {
+    "food_number": 80,
+    "page": 33,
+    "line1": "80 Alface, roxa, crua 95,7 13 53 0,9 0,2 NA 2,5 2,0 0,7 34 9",
+    "line2": "80 0,12 51 2,5 7 308 0,04 0,2 NA 312 156 Tr Tr Tr Tr 13,5"
+  },
+  {
+    "food_number": 81,
+    "page": 33,
+    "line1": "81 Alfavaca, crua 90,2 29 122 2,7 0,5 NA 5,2 4,1 1,4 258 84",
+    "line2": "81 0,15 50 1,3 5 261 0,15 0,7 NA Tr 0,12 0,56 Tr Tr"
+  },
+  {
+    "food_number": 82,
+    "page": 33,
+    "line1": "82 Alho, cru 67,5 113 473 7,0 0,2 NA 23,9 4,3 1,3 14 21",
+    "line2": "82 0,24 149 0,8 5 535 0,15 0,8 NA 0,18 Tr 0,44 Tr *"
+  },
+  {
+    "food_number": 83,
+    "page": 33,
+    "line1": "83 Alho-poró, cru 91,0 32 132 1,4 0,1 NA 6,9 2,5 0,6 34 11",
+    "line2": "83 0,10 36 0,6 2 224 0,29 0,2 NA 16 8 0,06 Tr 0,08 0,34 14,1"
+  },
+  {
+    "food_number": 84,
+    "page": 33,
+    "line1": "84 Almeirão, cru 93,7 18 75 1,8 0,2 NA 3,3 2,6 1,0 19 21",
+    "line2": "84 0,17 40 0,7 2 369 0,10 0,3 NA 566b 283b 0,10 0,18 Tr 0,63 1,7"
+  },
+  {
+    "food_number": 85,
+    "page": 33,
+    "line1": "85 Almeirão, refogado 86,5 65 272 1,7 4,8 NA 5,7 3,4 1,2 63 17",
+    "line2": "85 0,28 31 1,6 15 315 0,06 0,2 NA 0,03 0,06 0,05 4,03 1,5"
+  },
+  {
+    "food_number": 86,
+    "page": 33,
+    "line1": "86 Batata, baroa, cozida 79,3 80 335 0,9 0,2 NA 18,9 1,8 0,8 12 8",
+    "line2": "86 0,22 29 0,4 2 258 0,15 0,4 NA 0,06 Tr Tr 1,98 17,1"
+  },
+  {
+    "food_number": 87,
+    "page": 33,
+    "line1": "87 Batata, baroa, crua 73,7 101 423 1,0 0,2 NA 24,0 2,1 1,1 17 12",
+    "line2": "87 0,07 45 0,3 Tr 505 0,05 0,2 NA 25 12 0,05 Tr 0,12 Tr 7,6"
+  },
+  {
+    "food_number": 88,
+    "page": 33,
+    "line1": "88 Batata, doce, cozida 80,4 77 321 0,6 0,1 NA 18,4 2,2 0,4 17 11",
+    "line2": "88 0,14 15 0,2 3 148 0,06 0,1 NA 0,08 Tr 0,05 2,57 23,8"
+  },
+  {
+    "food_number": 89,
+    "page": 33,
+    "line1": "89 Batata, doce, crua 69,5 118 495 1,3 0,1 NA 28,2 2,6 0,9 21 17",
+    "line2": "89 0,18 36 0,4 9 340 0,11 0,2 NA 0,06 Tr 0,10 Tr 16,5"
+  },
+  {
+    "food_number": 90,
+    "page": 33,
+    "line1": "90 Batata, frita, tipo chips, industrializada 2,7 543 2271 5,6 36,6 NA 51,2 2,5 3,9 12 24",
+    "line2": "90 0,23 96 0,7 607 1014 0,12 0,6 NA 0,20 Tr 0,13 2,61 Tr"
+  },
+  {
+    "food_number": 91,
+    "page": 33,
+    "line1": "91 Batata, inglesa, cozida 86,4 52 216 1,2 Tr NA 11,9 1,3 0,5 4 5",
+    "line2": "91 0,07 24 0,2 2 161 0,06 0,2 NA 0,05 Tr 0,08 Tr 3,8"
+  },
+  {
+    "food_number": 92,
+    "page": 33,
+    "line1": "92 Batata, inglesa, crua 82,9 64 269 1,8 Tr NA 14,7 1,2 0,6 4 15",
+    "line2": "92 0,10 39 0,4 Tr 302 0,09 0,2 NA 0,10 Tr 0,15 Tr 31,1"
+  },
+  {
+    "food_number": 93,
+    "page": 33,
+    "line1": "93 Batata, inglesa, frita 44,1 267 1118 5,0 13,1 NA 35,6 8,1 2,2 6 14",
+    "line2": "93 0,15 70 0,4 2 489 0,10 0,4 NA 0,17 Tr 0,10 2,51 16,3"
+  },
+  {
+    "food_number": 94,
+    "page": 35,
+    "line1": "94 Batata, inglesa, sauté 83,1 68 284 1,3 0,9 NA 14,1 1,4 0,6 4 6",
+    "line2": "94 0,08 32 0,3 8 199 0,05 0,2 NA 0,07 Tr 0,09 1,38 Tr"
+  },
+  {
+    "food_number": 95,
+    "page": 35,
+    "line1": "95 Berinjela, cozida 94,4 19 79 0,7 0,1 NA 4,5 2,5 0,3 11 9",
+    "line2": "95 0,11 15 0,2 1 105 0,04 0,1 NA 0,04 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 96,
+    "page": 35,
+    "line1": "96 Berinjela, crua 93,8 20 82 1,2 0,1 NA 4,4 2,9 0,4 9 13",
+    "line2": "96 0,10 20 0,2 Tr 205 0,06 0,1 NA 24b 12b 0,04 0,05 Tr Tr 3,0"
+  },
+  {
+    "food_number": 97,
+    "page": 35,
+    "line1": "97 Beterraba, cozida 90,6 32 135 1,3 0,1 NA 7,2 1,9 0,8 15 17",
+    "line2": "97 0,19 30 0,2 23 245 0,04 0,4 NA 0,09 Tr Tr Tr 1,2"
+  },
+  {
+    "food_number": 98,
+    "page": 35,
+    "line1": "98 Beterraba, crua 86,0 49 204 1,9 0,1 NA 11,1 3,4 0,9 18 24",
+    "line2": "98 1,23 19 0,3 10 375 0,08 0,5 NA 0,04 Tr 0,04 Tr 3,1"
+  },
+  {
+    "food_number": 99,
+    "page": 35,
+    "line1": "99 Biscoito, polvilho doce 5,4 438 1831 1,3 12,2 9 80,5 1,2 0,5 30 6",
+    "line2": "99 0,08 23 1,8 98 54 0,04 0,1 Tr Tr 0,03 0,07 Tr Tr"
+  },
+  {
+    "food_number": 100,
+    "page": 35,
+    "line1": "100 Brócolis, cozido 92,6 25 103 2,1 0,5 NA 4,4 3,4 0,4 51 15",
+    "line2": "100 0,12 33 0,5 2 119 0,08 0,2 NA 0,04 0,03 Tr Tr 42,0"
+  },
+  {
+    "food_number": 101,
+    "page": 35,
+    "line1": "101 Brócolis, cru 91,2 25 107 3,6 0,3 NA 4,0 2,9 0,8 86 30",
+    "line2": "101 0,26 78 0,6 3 322 0,06 0,5 NA 279 140 0,12 0,18 0,08 1,39 34,3"
+  },
+  {
+    "food_number": 102,
+    "page": 35,
+    "line1": "102 Cará, cozido 78,9 78 325 1,5 0,1 NA 18,9 2,6 0,6 5 15",
+    "line2": "102 0,02 28 0,3 1 203 0,11 0,2 NA 0,12 Tr 0,12 Tr Tr"
+  },
+  {
+    "food_number": 103,
+    "page": 35,
+    "line1": "103 Cará, cru 73,7 96 400 2,3 0,1 NA 23,0 7,3 0,9 4 11",
+    "line2": "103 0,01 35 0,2 Tr 212 0,06 0,2 NA 0,11 Tr 0,02 Tr 8,8"
+  },
+  {
+    "food_number": 104,
+    "page": 35,
+    "line1": "104 Caruru, cru 87,6 34 142 3,2 0,6 NA 6,0 4,5 2,6 455 197",
+    "line2": "104 0,89 77 4,5 14 279 0,37 6,0 NA 1906b 953b Tr 0,10 0,11 Tr 5,4"
+  },
+  {
+    "food_number": 105,
+    "page": 35,
+    "line1": "105 Catalonha, crua 91,8 24 100 1,9 0,3 NA 4,8 2,0 1,3 57 17",
+    "line2": "105 0,34 32 3,1 9 412 0,27 0,5 NA Tr 0,03 0,36 1,54 7,3"
+  },
+  {
+    "food_number": 106,
+    "page": 35,
+    "line1": "106 Catalonha, refogada 87,4 63 265 2,0 4,8 NA 4,8 3,7 1,0 63 16",
+    "line2": "106 0,64 35 1,2 25 452 0,18 0,4 NA 850 425 0,04 Tr 0,03 0,60 Tr"
+  },
+  {
+    "food_number": 107,
+    "page": 35,
+    "line1": "107 Cebola, crua 88,9 39 165 1,7 0,1 NA 8,9 2,2 0,4 14 12",
+    "line2": "107 0,13 38 0,2 1 176 0,05 0,2 NA 0,04 Tr 0,14 Tr 4,7"
+  },
+  {
+    "food_number": 108,
+    "page": 35,
+    "line1": "108 Cebolinha, crua 93,9 20 82 1,9 0,4 NA 3,4 3,6 0,5 80 25",
+    "line2": "108 0,13 27 0,6 2 206 0,04 0,3 NA 134 67 0,03 0,04 0,08 Tr 31,8"
+  },
+  {
+    "food_number": 109,
+    "page": 35,
+    "line1": "109 Cenoura, cozida 91,7 30 125 0,8 0,2 NA 6,7 2,6 0,6 26 14",
+    "line2": "109 0,05 27 0,1 8 176 0,02 0,2 NA 612b 306b 0,07 Tr 0,06 2,68 Tr"
+  },
+  {
+    "food_number": 110,
+    "page": 35,
+    "line1": "110 Cenoura, crua 90,1 34 143 1,3 0,2 NA 7,7 3,2 0,9 23 11",
+    "line2": "110 0,05 28 0,2 3 315 0,05 0,2 NA 1326b 663b Tr Tr 0,05 Tr 5,1"
+  },
+  {
+    "food_number": 111,
+    "page": 35,
+    "line1": "111 Chicória, crua 95,1 14 58 1,1 0,1 NA 2,9 2,2 0,8 45 14",
+    "line2": "111 0,13 13 0,5 14 425 0,04 0,1 NA 0,03 0,10 Tr 0,68 6,5"
+  },
+  {
+    "food_number": 112,
+    "page": 35,
+    "line1": "112 Chuchu, cozido 94,6 19 78 0,4 Tr NA 4,8 1,0 0,2 8 7",
+    "line2": "112 0,07 13 0,1 2 54 Tr 0,1 NA 0,03 Tr Tr Tr 5,6"
+  },
+  {
+    "food_number": 113,
+    "page": 35,
+    "line1": "113 Chuchu, cru 94,8 17 71 0,7 0,1 NA 4,1 1,3 0,3 12 7",
+    "line2": "113 0,08 18 0,2 Tr 126 0,03 0,1 NA Tr Tr Tr Tr 10,6"
+  },
+  {
+    "food_number": 114,
+    "page": 35,
+    "line1": "114 Coentro, folhas desidratadas 10,6 309 1293 20,9 10,4 NA 48,0 37,3 10,2 784 393",
+    "line2": "114 10,48 388 81,4 18 3223 4,09 4,7 NA 0,10 0,11 0,09 Tr 40,8"
+  },
+  {
+    "food_number": 115,
+    "page": 35,
+    "line1": "115 Couve, manteiga, crua 90,9 27 113 2,9 0,5 NA 4,3 3,1 1,3 131 35",
+    "line2": "115 1,02 49 0,5 6 403 0,06 0,4 NA 496b 248b 0,20 0,31 0,06 2,29 96,7"
+  },
+  {
+    "food_number": 116,
+    "page": 35,
+    "line1": "116 Couve, manteiga, refogada 81,5 90 378 1,7 6,6 NA 8,7 5,7 1,5 177 26",
+    "line2": "116 0,12 33 0,5 11 315 0,02 0,2 NA 384b 192b Tr 0,05 0,07 Tr 76,9"
+  },
+  {
+    "food_number": 117,
+    "page": 35,
+    "line1": "117 Couve-flor, crua 92,8 23 94 1,9 0,2 NA 4,5 2,4 0,6 18 12",
+    "line2": "117 0,16 57 0,5 3 256 0,03 0,3 NA 2 1 0,03 0,09 0,10 Tr 36,1"
+  },
+  {
+    "food_number": 118,
+    "page": 35,
+    "line1": "118 Couve-flor, cozida 94,3 19 80 1,2 0,3 NA 3,9 2,1 0,3 16 5",
+    "line2": "118 0,10 25 0,1 2 80 Tr 0,3 NA 0,04 Tr Tr Tr 23,7"
+  },
+  {
+    "food_number": 119,
+    "page": 35,
+    "line1": "119 Espinafre, Nova Zelândia, cru 94,0 16 67 2,0 0,2 NA 2,6 2,1 1,2 98 82",
+    "line2": "119 0,71 25 0,4 17 336 0,06 0,3 NA 484b 242b 0,10 0,21 0,06 Tr 2,4"
+  },
+  {
+    "food_number": 120,
+    "page": 35,
+    "line1": "120 Espinafre, Nova Zelândia, refogado 86,6 67 281 2,7 5,4 NA 4,2 2,5 1,0 112 123",
+    "line2": "120 0,61 34 0,6 47 149 0,04 0,6 NA 624 312 0,08 0,13 0,13 Tr 5,3"
+  },
+  {
+    "food_number": 121,
+    "page": 35,
+    "line1": "121 Farinha, de mandioca, crua 9,4 361 1510 1,6 0,3 NA 87,9 6,4 0,9 65 37",
+    "line2": "121 Tr 42 1,1 1 340 0,08 0,4 NA 0,14 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 122,
+    "page": 35,
+    "line1": "122 Farinha, de mandioca, torrada 8,3 365 1528 1,2 0,3 NA 89,2 6,5 1,0 76 40",
+    "line2": "122 0,37 39 1,2 10 328 Tr 0,4 NA Tr Tr 0,81 Tr Tr"
+  },
+  {
+    "food_number": 123,
+    "page": 35,
+    "line1": "123 Farinha, de puba 9,8 360 1507 1,6 0,5 NA 87,3 4,2 0,8 41 27",
+    "line2": "123 0,16 33 1,4 4 338 0,07 0,3 NA 0,09 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 124,
+    "page": 35,
+    "line1": "124 Fécula, de mandioca 17,8 331 1384 0,5 0,3 NA 81,1 0,6 0,3 12 3",
+    "line2": "124 Tr 60 0,1 2 48 Tr Tr NA 0,03 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 125,
+    "page": 35,
+    "line1": "125 Feijão, broto, cru 87,5 39 162 4,2 0,1 NA 7,8 2,0 0,5 14 25",
+    "line2": "125 0,19 75 0,8 2 189 0,17 0,6 NA Tr 0,04 0,15 Tr 12,0"
+  },
+  {
+    "food_number": 126,
+    "page": 37,
+    "line1": "126 Inhame, cru 73,3 97 405 2,1 0,2 NA 23,2 1,7 1,2 12 29",
+    "line2": "126 0,15 65 0,4 Tr 568 0,17 0,3 NA 0,08 Tr 0,11 Tr 5,6"
+  },
+  {
+    "food_number": 127,
+    "page": 37,
+    "line1": "127 Jiló, cru 91,6 27 114 1,4 0,2 NA 6,2 4,8 0,6 20 21",
+    "line2": "127 0,14 29 0,3 Tr 213 0,07 0,1 NA 13 6 0,07 0,04 Tr Tr 6,8"
+  },
+  {
+    "food_number": 128,
+    "page": 37,
+    "line1": "128 Jurubeba, crua 66,6 126 526 4,4 3,9 NA 23,1 23,9 2,0 151 65",
+    "line2": "128 0,52 155 0,9 1 619 1,16 0,6 NA 0,13 0,02 0,20 Tr 13,8"
+  },
+  {
+    "food_number": 129,
+    "page": 37,
+    "line1": "129 Mandioca, cozida 68,7 125 524 0,6 0,3 NA 30,1 1,6 0,4 19 27",
+    "line2": "129 0,06 22 0,1 1 100 0,01 0,2 NA 0,06 Tr 0,03 Tr 11,1"
+  },
+  {
+    "food_number": 130,
+    "page": 37,
+    "line1": "130 Mandioca, crua 61,8 151 634 1,1 0,3 NA 36,2 1,9 0,6 15 44",
+    "line2": "130 0,05 29 0,3 2 208 0,07 0,2 NA Tr Tr 0,04 Tr 16,5"
+  },
+  {
+    "food_number": 131,
+    "page": 37,
+    "line1": "131 Mandioca, farofa, temperada 6,4 406 1697 2,1 9,1 NA 80,3 7,8 2,1 66 34",
+    "line2": "131 0,29 45 1,4 575 201 Tr 0,2 NA 0,10 Tr 0,15 Tr Tr"
+  },
+  {
+    "food_number": 132,
+    "page": 37,
+    "line1": "132 Mandioca, frita 36,6 300 1255 1,4 11,2 NA 50,3 1,9 0,6 23 95",
+    "line2": "132 0,18 57 0,3 9 176 0,12 0,4 NA 0,05 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 133,
+    "page": 37,
+    "line1": "133 Manjericão, cru 93,0 21 88 2,0 0,4 NA 3,6 3,3 1,0 211 58",
+    "line2": "133 0,17 40 1,0 4 252 0,16 0,5 NA 1035 517 0,06 0,21 0,06 0,90 2,3"
+  },
+  {
+    "food_number": 134,
+    "page": 37,
+    "line1": "134 Maxixe, cru 95,1 14 58 1,4 0,1 NA 2,7 2,2 0,7 21 10",
+    "line2": "134 0,07 25 0,4 11 328 0,02 0,2 NA 6 3 0,06 0,02 0,04 Tr 9,6"
+  },
+  {
+    "food_number": 135,
+    "page": 37,
+    "line1": "135 Mostarda, folha, crua 93,4 18 76 2,1 0,2 NA 3,2 1,9 1,1 68 16",
+    "line2": "135 0,14 58 1,1 3 364 0,05 0,3 NA 0,05 0,04 0,05 Tr 38,6"
+  },
+  {
+    "food_number": 136,
+    "page": 37,
+    "line1": "136 Nhoque, batata, cozido 55,0 181 756 5,9 1,9 15 36,8 1,8 0,5 11 18",
+    "line2": "136 0,30 68 1,6 7 164 0,10 0,5 15 0,08 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 137,
+    "page": 37,
+    "line1": "137 Nabo, cru 93,8 18 76 1,2 0,1 NA 4,1 2,6 0,8 42 15",
+    "line2": "137 4,42 17 0,2 2 280 0,02 0,2 NA 0,07 Tr 0,03 Tr 9,6"
+  },
+  {
+    "food_number": 138,
+    "page": 37,
+    "line1": "138 Palmito, juçara, em conserva 91,4 23 97 1,8 0,4 NA 4,3 3,2 2,1 58 34",
+    "line2": "138 10,82 40 0,3 514 244 0,23 0,7 NA 0,06 0,04 Tr Tr 2,0"
+  },
+  {
+    "food_number": 139,
+    "page": 37,
+    "line1": "139 Palmito, pupunha, em conserva 89,4 29 123 2,5 0,5 NA 5,5 2,6 2,1 32 25",
+    "line2": "139 0,14 55 0,2 563 206 0,08 0,4 NA 0,03 Tr Tr Tr 8,7"
+  },
+  {
+    "food_number": 140,
+    "page": 37,
+    "line1": "140 Pão, de queijo, assado 33,7 363 1519 5,1 24,6 68 34,2 0,6 2,3 102 8",
+    "line2": "140 0,03 94 0,3 773 93 0,01 0,6 61 0,04 0,10 0,04 Tr"
+  },
+  {
+    "food_number": 141,
+    "page": 37,
+    "line1": "141 Pão, de queijo, cru 41,8 295 1232 3,6 14,0 63 38,5 1,0 2,0 88 7",
+    "line2": "141 Tr 79 0,3 405 58 Tr 0,4 48 Tr 0,08 Tr Tr"
+  },
+  {
+    "food_number": 142,
+    "page": 37,
+    "line1": "142 Pepino, cru 96,8 10 40 0,9 Tr NA 2,0 1,1 0,3 10 9",
+    "line2": "142 0,08 12 0,1 Tr 154 0,04 0,1 NA 4 2 Tr 0,03 Tr Tr 5,0"
+  },
+  {
+    "food_number": 143,
+    "page": 37,
+    "line1": "143 Pimentão, amarelo, cru 91,9 28 117 1,2 0,4 NA 6,0 1,9 0,5 10 11",
+    "line2": "143 0,08 22 0,4 Tr 221 0,04 0,2 NA 40b 20b 0,04 0,03 0,06 Tr 201,4"
+  },
+  {
+    "food_number": 144,
+    "page": 37,
+    "line1": "144 Pimentão, verde, cru 93,5 21 89 1,1 0,2 NA 4,9 2,6 0,4 9 8",
+    "line2": "144 0,14 17 0,4 Tr 174 0,07 0,1 NA 46b 23b Tr Tr Tr Tr 100,2"
+  },
+  {
+    "food_number": 145,
+    "page": 37,
+    "line1": "145 Pimentão, vermelho, cru 92,9 23 97 1,0 0,1 NA 5,5 1,6 0,4 6 11",
+    "line2": "145 0,06 20 0,3 Tr 211 0,04 0,2 NA 96b 48b 0,05 0,06 0,02 Tr 158,2"
+  },
+  {
+    "food_number": 146,
+    "page": 37,
+    "line1": "146 Polvilho, doce 12,6 351 1470 0,4 Tr NA 86,8 0,2 0,2 27 4",
+    "line2": "146 0,09 8 0,5 2 38 Tr Tr NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 147,
+    "page": 37,
+    "line1": "147 Quiabo, cru 90,6 30 125 1,9 0,3 NA 6,4 4,6 0,8 112 50",
+    "line2": "147 0,46 56 0,4 1 249 0,17 0,6 NA 49 25 0,10 Tr 0,03 Tr 5,6"
+  },
+  {
+    "food_number": 148,
+    "page": 37,
+    "line1": "148 Rabanete, cru 95,1 14 57 1,4 0,1 NA 2,7 2,2 0,7 21 10",
+    "line2": "148 0,07 25 0,4 11 328 0,02 0,2 NA 0,06 0,02 0,04 Tr 9,6"
+  },
+  {
+    "food_number": 149,
+    "page": 37,
+    "line1": "149 Repolho, branco, cru 94,7 17 72 0,9 0,1 NA 3,9 1,9 0,4 35 9",
+    "line2": "149 0,13 14 0,2 4 150 0,02 0,2 NA 6b 3b Tr 0,03 0,06 Tr 18,7"
+  },
+  {
+    "food_number": 150,
+    "page": 37,
+    "line1": "150 Repolho, roxo, cru 90,1 31 129 1,9 0,1 NA 7,2 2,0 0,7 44 18",
+    "line2": "150 0,25 58 0,5 2 328 0,90 0,3 NA 0,07 Tr 0,09 Tr 43,2"
+  },
+  {
+    "food_number": 151,
+    "page": 37,
+    "line1": "151 Repolho, roxo, refogado 88,7 42 175 1,8 1,2 NA 7,6 1,8 0,7 43 17",
+    "line2": "151 0,26 59 0,5 3 321 0,02 0,3 NA 0,07 Tr 0,07 0,63 40,5"
+  },
+  {
+    "food_number": 152,
+    "page": 37,
+    "line1": "152 Rúcula, crua 94,8 13 55 1,8 0,1 NA 2,2 1,7 1,1 117 18",
+    "line2": "152 0,24 25 0,9 9 233 0,04 0,2 NA 533 266 0,04 Tr Tr 0,35 46,3"
+  },
+  {
+    "food_number": 153,
+    "page": 37,
+    "line1": "153 Salsa, crua 88,7 33 140 3,3 0,6 NA 5,7 1,9 1,8 179 21",
+    "line2": "153 1,88 49 3,2 2 711 0,20 1,3 NA 1743 872 0,12 0,15 0,47 0,72 51,7"
+  },
+  {
+    "food_number": 154,
+    "page": 37,
+    "line1": "154 Seleta de legumes, enlatada 82,1 57 237 3,4 0,4 NA 12,7 3,1 1,4 16 16",
+    "line2": "154 0,13 49 1,1 398 122 0,08 0,5 NA 244 122 0,03 Tr Tr 3,72 Tr"
+  },
+  {
+    "food_number": 155,
+    "page": 37,
+    "line1": "155 Serralha, crua 90,2 30 127 2,7 0,7 NA 4,9 3,5 1,4 126 30",
+    "line2": "155 0,23 48 1,3 19 265 0,20 1,3 NA 1134b 567b Tr 0,11 0,08 Tr 1,5"
+  },
+  {
+    "food_number": 156,
+    "page": 37,
+    "line1": "156 Taioba, crua 89,2 34 143 2,9 0,9 NA 5,4 4,5 1,5 141 38",
+    "line2": "156 0,66 53 1,9 1 290 0,16 0,6 NA 1160b 580b Tr 0,10 0,10 Tr 17,9"
+  },
+  {
+    "food_number": 157,
+    "page": 37,
+    "line1": "157 Tomate, com semente, cru 95,1 15 64 1,1 0,2 NA 3,1 1,2 0,5 7 11",
+    "line2": "157 0,07 20 0,2 1 222 0,04 0,1 NA 54b 27b 0,12 Tr 0,02 Tr 21,2"
+  },
+  {
+    "food_number": 158,
+    "page": 39,
+    "line1": "158 Tomate, extrato 79,7 61 255 2,4 0,2 NA 15,0 2,8 2,8 29 29",
+    "line2": "158 0,18 47 2,1 498 680 0,20 0,4 NA 166b 83b Tr Tr 0,11 2,42 18,0"
+  },
+  {
+    "food_number": 159,
+    "page": 39,
+    "line1": "159 Tomate, molho industrializado 88,1 38 161 1,4 0,9 NA 7,7 3,1 1,9 12 17",
+    "line2": "159 0,08 27 1,6 418 388 0,08 0,1 NA 76b 38b Tr Tr 0,06 Tr 2,7"
+  },
+  {
+    "food_number": 160,
+    "page": 39,
+    "line1": "160 Tomate, purê 90,8 28 117 1,4 Tr NA 6,9 1,0 1,0 13 15",
+    "line2": "160 30 1,3 104 308 0,09 0,3 NA 90b 45b Tr Tr 0,07 1,18 5,4"
+  },
+  {
+    "food_number": 161,
+    "page": 39,
+    "line1": "161 Tomate, salada 93,6 21 86 0,8 Tr NA 5,1 2,3 0,4 7 10",
+    "line2": "161 0,04 23 0,3 5 161 0,07 0,2 NA 0,06 0,04 0,05 Tr 12,8"
+  },
+  {
+    "food_number": 162,
+    "page": 39,
+    "line1": "162 Vagem, crua 92,2 25 104 1,8 0,2 NA 5,3 2,4 0,5 41 18",
+    "line2": "162 0,50 28 0,4 Tr 208 0,06 0,3 NA 32 16 Tr 0,08 Tr Tr 1,2"
+  },
+  {
+    "food_number": 163,
+    "page": 39,
+    "line1": "163 Abacate, cru 83,8 96 402 1,2 8,4 NA 6,0 6,3 0,5 8 15",
+    "line2": "163 0,17 22 0,2 Tr 206 0,15 0,2 NA Tr 0,04 Tr Tr 8,7"
+  },
+  {
+    "food_number": 164,
+    "page": 39,
+    "line1": "164 Abacaxi, cru 86,3 48 202 0,9 0,1 NA 12,3 1,0 0,4 22 18",
+    "line2": "164 1,62 13 0,3 Tr 131 0,11 0,1 NA 0,17 0,02 Tr Tr 34,6"
+  },
+  {
+    "food_number": 165,
+    "page": 39,
+    "line1": "165 Abacaxi, polpa, congelada 91,3 31 128 0,5 0,1 NA 7,8 0,3 0,3 14 10",
+    "line2": "165 1,02 8 0,4 1 107 0,04 0,1 NA 2 1 0,05 Tr Tr Tr 1,2"
+  },
+  {
+    "food_number": 166,
+    "page": 39,
+    "line1": "166 Abiu, cru 83,1 62 261 0,8 0,7 NA 14,9 1,7 0,4 6 9",
+    "line2": "166 0,08 20 0,2 Tr 128 0,09 0,1 NA Tr 0,04 0,05 Tr 10,3"
+  },
+  {
+    "food_number": 167,
+    "page": 39,
+    "line1": "167 Açaí, polpa, com xarope de guaraná e glucose 73,9 110 461 0,7 3,7 NA 21,5 1,7 0,3 22 13",
+    "line2": "167 3,29 11 0,3 15 75 0,14 0,2 NA Tr Tr 0,07 Tr 10,3"
+  },
+  {
+    "food_number": 168,
+    "page": 39,
+    "line1": "168 Açaí, polpa, congelada 88,7 58 243 0,8 3,9 NA 6,2 2,6 0,3 35 17",
+    "line2": "168 6,16 16 0,4 5 124 0,18 0,3 NA Tr 0,04 0,07 Tr Tr"
+  },
+  {
+    "food_number": 169,
+    "page": 39,
+    "line1": "169 Acerola, crua 90,5 33 140 0,9 0,2 NA 8,0 1,5 0,4 13 13",
+    "line2": "169 0,07 9 0,2 Tr 165 0,07 0,1 NA 247b 124b Tr 0,04 Tr 1,38 941,4"
+  },
+  {
+    "food_number": 170,
+    "page": 39,
+    "line1": "170 Acerola, polpa, congelada 93,6 22 92 0,6 Tr NA 5,5 0,7 0,3 8 9",
+    "line2": "170 0,03 13 0,2 1 112 0,04 0,1 NA 192b 96b Tr 0,10 Tr Tr 623,2"
+  },
+  {
+    "food_number": 171,
+    "page": 39,
+    "line1": "171 Ameixa, calda, enlatada 52,2 183 765 0,4 Tr NA 46,9 0,5 0,5 13 10",
+    "line2": "171 0,10 21 2,2 3 221 0,03 0,1 NA Tr 0,23 0,37 Tr 4,3"
+  },
+  {
+    "food_number": 172,
+    "page": 39,
+    "line1": "172 Ameixa, crua 84,8 53 220 0,8 Tr NA 13,9 2,4 0,6 6 5",
+    "line2": "172 0,03 14 0,1 Tr 134 0,06 0,1 NA 27 14 0,07 Tr 0,03 Tr 7,6"
+  },
+  {
+    "food_number": 173,
+    "page": 39,
+    "line1": "173 Ameixa, em calda, enlatada, drenada 50,3 177 742 1,0 0,3 NA 47,7 4,5 0,7 39 14",
+    "line2": "173 0,20 26 2,7 3 263 0,16 0,2 NA Tr 0,22 0,08 Tr 5,2"
+  },
+  {
+    "food_number": 174,
+    "page": 39,
+    "line1": "174 Atemóia, crua 72,7 97 406 1,0 0,3 NA 25,3 2,1 0,7 23 25",
+    "line2": "174 0,16 23 0,2 1 300 0,17 0,2 NA 0,09 0,07 0,07 1,58 10,1"
+  },
+  {
+    "food_number": 175,
+    "page": 39,
+    "line1": "175 Banana, da terra, crua 63,9 128 536 1,4 0,2 NA 33,7 1,5 0,8 4 24",
+    "line2": "175 0,16 26 0,3 Tr 328 0,05 0,2 NA 239 119 0,03 0,02 0,14 Tr 15,7"
+  },
+  {
+    "food_number": 176,
+    "page": 39,
+    "line1": "176 Banana, doce em barra 21,1 280 1172 2,2 0,1 NA 75,7 3,8 1,0 12 49",
+    "line2": "176 0,84 37 0,6 10 518 0,16 0,3 NA 27 14 0,03 Tr 0,06 1,41 Tr"
+  },
+  {
+    "food_number": 177,
+    "page": 39,
+    "line1": "177 Banana, figo, crua 70,1 105 440 1,1 0,1 NA 27,8 2,8 0,8 6 30",
+    "line2": "177 0,21 16 0,2 Tr 387 0,06 0,1 NA 0,09 Tr 0,03 Tr 17,5"
+  },
+  {
+    "food_number": 178,
+    "page": 39,
+    "line1": "178 Banana, maçã, crua 75,2 87 363 1,8 0,1 NA 22,3 2,6 0,6 3 24",
+    "line2": "178 0,60 29 0,2 Tr 264 0,11 0,1 NA 6 3 Tr Tr 0,14 Tr 10,5"
+  },
+  {
+    "food_number": 179,
+    "page": 39,
+    "line1": "179 Banana, nanica, crua 73,8 92 383 1,4 0,1 NA 23,8 1,9 0,8 3 28",
+    "line2": "179 0,14 27 0,3 Tr 376 0,10 0,2 NA 14 7 Tr 0,02 0,14 Tr 5,9"
+  },
+  {
+    "food_number": 180,
+    "page": 39,
+    "line1": "180 Banana, ouro, crua 68,2 112 470 1,5 0,2 NA 29,3 2,0 0,8 3 28",
+    "line2": "180 0,09 22 0,3 Tr 355 0,08 0,3 NA 50 25 Tr Tr 0,14 Tr 7,6"
+  },
+  {
+    "food_number": 181,
+    "page": 39,
+    "line1": "181 Banana, pacova, crua 77,7 78 326 1,2 0,1 NA 20,3 2,0 0,7 5 30",
+    "line2": "181 0,41 20 0,4 1 267 0,06 0,1 NA 0,05 0,03 0,17 Tr Tr"
+  },
+  {
+    "food_number": 182,
+    "page": 39,
+    "line1": "182 Banana, prata, crua 71,9 98 411 1,3 0,1 NA 26,0 2,0 0,8 8 26",
+    "line2": "182 0,42 22 0,4 Tr 358 0,05 0,1 NA 32 16 Tr 0,02 0,10 Tr 21,6"
+  },
+  {
+    "food_number": 183,
+    "page": 39,
+    "line1": "183 Cacau, cru 79,2 74 311 1,0 0,1 NA 19,4 2,2 0,3 12 25",
+    "line2": "183 0,04 9 0,3 1 72 0,15 0,6 NA 0,25 Tr 0,04 Tr 13,6"
+  },
+  {
+    "food_number": 184,
+    "page": 39,
+    "line1": "184 Cajá-Manga, cru 86,9 46 191 1,3 Tr NA 11,4 2,6 0,4 13 11",
+    "line2": "184 0,05 24 0,2 1 119 0,02 0,2 NA 0,11 Tr 0,05 Tr 26,7"
+  },
+  {
+    "food_number": 185,
+    "page": 39,
+    "line1": "185 Cajá, polpa, congelada 92,4 26 110 0,6 0,2 NA 6,4 1,4 0,4 9 7",
+    "line2": "185 0,07 26 0,3 7 148 0,10 0,1 NA 106b 53b 0,04 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 186,
+    "page": 39,
+    "line1": "186 Caju, cru 88,1 43 180 1,0 0,3 NA 10,3 1,7 0,3 1 10",
+    "line2": "186 0,12 16 0,2 3 124 0,07 0,1 NA 15b 7b Tr Tr Tr Tr 219,3"
+  },
+  {
+    "food_number": 187,
+    "page": 39,
+    "line1": "187 Caju, polpa, congelada 89,8 37 153 0,5 0,2 NA 9,4 0,8 0,2 1 7",
+    "line2": "187 0,05 10 0,1 4 88 0,07 0,1 NA 22b 11b Tr 0,02 Tr 2,25 119,7"
+  },
+  {
+    "food_number": 188,
+    "page": 41,
+    "line1": "188 Caju, suco concentrado, envasado 88,4 45 189 0,4 0,2 NA 10,7 0,6 0,3 1 8",
+    "line2": "188 0,06 11 0,1 45 107 0,04 0,1 NA 10b 5b Tr 0,03 Tr Tr 138,7"
+  },
+  {
+    "food_number": 189,
+    "page": 41,
+    "line1": "189 Caqui, chocolate, cru 79,7 71 299 0,4 0,1 NA 19,3 6,5 0,5 18 9",
+    "line2": "189 0,39 18 0,1 2 164 Tr 0,2 NA Tr Tr 0,03 Tr 29,6"
+  },
+  {
+    "food_number": 190,
+    "page": 41,
+    "line1": "190 Carambola, crua 87,1 46 191 0,9 0,2 NA 11,5 2,0 0,4 5 7",
+    "line2": "190 0,13 11 0,2 4 133 0,08 0,2 NA 0,12 Tr Tr Tr 60,9"
+  },
+  {
+    "food_number": 191,
+    "page": 41,
+    "line1": "191 Ciriguela, crua 78,7 76 316 1,4 0,4 NA 18,9 3,9 0,7 27 18",
+    "line2": "191 0,06 49 0,4 2 248 0,12 0,5 NA 0,14 Tr Tr Tr 27,0"
+  },
+  {
+    "food_number": 192,
+    "page": 41,
+    "line1": "192 Cupuaçu, cru 86,2 49 207 1,2 1,0 NA 10,4 3,1 1,2 13 18",
+    "line2": "192 0,07 21 0,5 3 331 0,07 0,3 NA 0,37 0,04 0,07 4,34 24,5"
+  },
+  {
+    "food_number": 193,
+    "page": 41,
+    "line1": "193 Cupuaçu, polpa, congelada 86,6 49 204 0,8 0,6 NA 11,4 1,6 0,6 5 14",
+    "line2": "193 0,17 14 0,3 1 291 0,14 0,2 NA 0,07 0,07 0,05 Tr 10,5"
+  },
+  {
+    "food_number": 194,
+    "page": 41,
+    "line1": "194 Figo, cru 88,2 41 173 1,0 0,2 NA 10,2 1,8 0,4 27 11",
+    "line2": "194 0,06 15 0,2 Tr 174 0,13 0,1 NA 0,05 Tr Tr Tr 0,8"
+  },
+  {
+    "food_number": 195,
+    "page": 41,
+    "line1": "195 Figo, enlatado, em calda 48,8 184 771 0,6 0,2 NA 50,3 2,0 0,2 33 7",
+    "line2": "195 0,16 6 0,5 7 39 0,25 0,1 NA Tr Tr Tr Tr 5,2"
+  },
+  {
+    "food_number": 196,
+    "page": 41,
+    "line1": "196 Fruta-pão, crua 80,9 67 281 1,1 0,2 NA 17,2 5,5 0,7 34 24",
+    "line2": "196 0,04 27 0,2 1 188 0,07 0,1 NA 0,03 Tr Tr Tr 9,9"
+  },
+  {
+    "food_number": 197,
+    "page": 41,
+    "line1": "197 Goiaba, branca, com casca, crua 85,7 52 216 0,9 0,5 NA 12,4 6,3 0,5 5 7",
+    "line2": "197 0,07 16 0,2 Tr 220 0,04 0,2 NA Tr Tr 0,03 Tr 99,2"
+  },
+  {
+    "food_number": 198,
+    "page": 41,
+    "line1": "198 Goiaba, doce em pasta 24,8 269 1125 0,6 0,0 NA 74,1 3,7 0,5 10 6",
+    "line2": "198 0,11 54 0,4 4 165 0,06 0,1 NA 136 68 0,07 Tr Tr Tr 23,1"
+  },
+  {
+    "food_number": 199,
+    "page": 41,
+    "line1": "199 Goiaba, doce, cascão 20,3 286 1195 0,4 0,1 NA 78,7 4,4 0,5 15 10",
+    "line2": "199 0,16 28 0,4 11 251 0,08 0,1 NA 50 25 Tr Tr Tr 1,41 34,3"
+  },
+  {
+    "food_number": 200,
+    "page": 41,
+    "line1": "200 Goiaba, vermelha, com casca, crua 85,0 54 227 1,1 0,4 NA 13,0 6,2 0,5 4 7",
+    "line2": "200 0,09 15 0,2 Tr 198 0,04 0,1 NA 38b 19b Tr Tr 0,03 Tr 80,6"
+  },
+  {
+    "food_number": 201,
+    "page": 41,
+    "line1": "201 Graviola, crua 82,2 62 258 0,8 0,2 NA 15,8 1,9 1,0 40 23",
+    "line2": "201 0,08 19 0,2 4 250 0,04 0,1 NA 0,17 0,12 0,03 Tr 19,1"
+  },
+  {
+    "food_number": 202,
+    "page": 41,
+    "line1": "202 Graviola, polpa, congelada 89,2 38 160 0,6 0,1 NA 9,8 1,2 0,4 6 10",
+    "line2": "202 0,06 17 0,1 3 170 0,06 0,1 NA Tr 0,09 Tr Tr 10,5"
+  },
+  {
+    "food_number": 203,
+    "page": 41,
+    "line1": "203 Jabuticaba, crua 83,6 58 243 0,6 0,1 NA 15,3 2,3 0,4 8 18",
+    "line2": "203 0,30 15 0,1 Tr 130 0,07 0,3 NA 0,06 Tr Tr Tr 16,2"
+  },
+  {
+    "food_number": 204,
+    "page": 41,
+    "line1": "204 Jaca, crua 75,1 88 368 1,4 0,3 NA 22,5 2,4 0,8 11 40",
+    "line2": "204 0,48 14 0,4 2 234 0,09 0,2 NA 0,10 0,04 0,05 Tr 14,8"
+  },
+  {
+    "food_number": 205,
+    "page": 41,
+    "line1": "205 Jambo, cru 92,1 27 113 0,9 0,1 NA 6,5 5,1 0,5 14 14",
+    "line2": "205 0,05 18 0,1 22 135 0,02 0,1 NA 0,08 Tr Tr 1,18 3,8"
+  },
+  {
+    "food_number": 206,
+    "page": 41,
+    "line1": "206 Jamelão, cru 87,7 41 172 0,5 0,1 NA 10,6 1,8 1,0 3 2",
+    "line2": "206 Tr 4 0,0 1 394 0,03 0,0 NA 8 4 0,17 Tr 0,12 Tr 27,1"
+  },
+  {
+    "food_number": 207,
+    "page": 41,
+    "line1": "207 Kiwi, cru 85,9 51 214 1,3 0,6 NA 11,5 2,7 0,7 24 11",
+    "line2": "207 0,05 33 0,3 Tr 269 0,15 0,1 NA 5 3 Tr Tr 0,06 Tr 70,8"
+  },
+  {
+    "food_number": 208,
+    "page": 41,
+    "line1": "208 Laranja, baía, crua 87,1 45 190 1,0 0,1 NA 11,5 1,1 0,4 35 9",
+    "line2": "208 0,04 24 0,1 Tr 174 0,04 0,1 NA 4 2 0,06 0,02 Tr Tr 56,9"
+  },
+  {
+    "food_number": 209,
+    "page": 41,
+    "line1": "209 Laranja, baía, suco 90,2 37 153 0,7 Tr NA 8,7 Tr 0,4 6 8",
+    "line2": "209 0,02 22 0,1 Tr 173 0,02 Tr NA 4 2 0,03 Tr 0,02 Tr 94,5"
+  },
+  {
+    "food_number": 210,
+    "page": 41,
+    "line1": "210 Laranja, da terra, crua 85,4 51 215 1,1 0,2 NA 12,9 4,0 0,5 51 14",
+    "line2": "210 0,04 20 0,1 1 173 0,04 0,2 NA 0,07 0,09 0,03 Tr 34,7"
+  },
+  {
+    "food_number": 211,
+    "page": 41,
+    "line1": "211 Laranja, da terra, suco 89,2 41 171 0,7 0,1 NA 9,6 1,0 0,4 13 10",
+    "line2": "211 0,02 15 0,1 Tr 145 0,02 0,1 NA 4 2 0,04 Tr 0,04 Tr 44,3"
+  },
+  {
+    "food_number": 212,
+    "page": 41,
+    "line1": "212 Laranja, lima, crua 87,0 46 191 1,1 0,1 NA 11,5 1,8 0,4 31 10",
+    "line2": "212 0,05 15 0,1 1 130 0,03 0,1 NA 0,09 0,05 0,04 Tr 43,5"
+  },
+  {
+    "food_number": 213,
+    "page": 41,
+    "line1": "213 Laranja, lima, suco 89,7 39 165 0,7 0,1 NA 9,2 0,4 0,3 8 11",
+    "line2": "213 0,02 16 Tr Tr 129 0,02 0,0 NA 0,10 0,03 0,04 Tr 41,3"
+  },
+  {
+    "food_number": 214,
+    "page": 41,
+    "line1": "214 Laranja, pêra, crua 89,6 37 154 1,0 0,1 NA 8,9 0,8 0,3 22 9",
+    "line2": "214 0,05 23 0,1 Tr 163 0,03 0,1 NA 1 0 0,07 0,02 0,02 Tr 53,7"
+  },
+  {
+    "food_number": 215,
+    "page": 41,
+    "line1": "215 Laranja, pêra, suco 91,3 33 137 0,7 0,1 NA 7,6 Tr 0,3 7 8",
+    "line2": "215 0,03 14 Tr Tr 149 0,01 Tr NA 1 1 Tr Tr Tr Tr 73,3"
+  },
+  {
+    "food_number": 216,
+    "page": 41,
+    "line1": "216 Laranja, valência, crua 86,9 46 193 0,8 0,2 NA 11,7 1,7 0,4 34 14",
+    "line2": "216 0,06 20 0,1 1 158 0,04 0,1 NA 0,07 0,04 0,03 Tr 47,8"
+  },
+  {
+    "food_number": 217,
+    "page": 41,
+    "line1": "217 Laranja, valência, suco 90,5 36 151 0,5 0,1 NA 8,6 0,4 0,3 9 10",
+    "line2": "217 0,03 17 Tr Tr 143 0,02 Tr NA 2b 1b * * 0,03 Tr *"
+  },
+  {
+    "food_number": 218,
+    "page": 41,
+    "line1": "218 Limão, cravo, suco 94,2 14 59 0,3 Tr NA 5,2 Tr 0,2 10 9",
+    "line2": "218 0,03 11 0,1 Tr 120 0,03 NA 31 16 Tr Tr Tr Tr 32,8"
+  },
+  {
+    "food_number": 219,
+    "page": 41,
+    "line1": "219 Limão, galego, suco 91,8 22 93 0,6 0,1 NA 7,3 Tr 0,3 5 6",
+    "line2": "219 0,01 13 0,1 Tr 113 0,02 0,1 NA Tr Tr 0,03 Tr 34,5"
+  },
+  {
+    "food_number": 220,
+    "page": 43,
+    "line1": "220 Limão, tahiti, cru 87,4 32 133 0,9 0,1 NA 11,1 1,2 0,4 51 10",
+    "line2": "220 0,07 24 0,2 1 128 0,06 0,2 NA 0,30 0,04 Tr Tr 38,2"
+  },
+  {
+    "food_number": 221,
+    "page": 43,
+    "line1": "221 Maçã, Argentina, com casca, crua 82,6 63 262 0,2 0,2 NA 16,6 2,0 0,3 3 5",
+    "line2": "221 0,01 11 0,1 1 117 0,03 Tr NA 0,05 Tr Tr Tr 1,5"
+  },
+  {
+    "food_number": 222,
+    "page": 43,
+    "line1": "222 Maçã, Fuji, com casca, crua 84,3 56 232 0,3 Tr NA 15,2 1,3 0,2 2 2",
+    "line2": "222 0,03 9 0,1 Tr 75 0,06 Tr NA 4 2 Tr Tr 0,03 Tr 2,4"
+  },
+  {
+    "food_number": 223,
+    "page": 43,
+    "line1": "223 Macaúba, crua 41,5 404 1692 2,1 40,7 NA 13,9 13,4 1,8 67 66",
+    "line2": "223 0,08 44 0,8 1 306 0,35 0,7 NA 1020 510 0,11 0,11 0,03 Tr 13,4"
+  },
+  {
+    "food_number": 224,
+    "page": 43,
+    "line1": "224 Mamão, doce em calda, drenado 45,5 196 819 0,2 0,1 NA 54,0 1,3 0,2 20 6",
+    "line2": "224 0,02 4 0,1 3 68 0,02 0,1 NA 0,03 Tr Tr Tr 3,9"
+  },
+  {
+    "food_number": 225,
+    "page": 43,
+    "line1": "225 Mamão, Formosa, cru 86,9 45 190 0,8 0,1 NA 11,6 1,8 0,6 25 17",
+    "line2": "225 0,04 11 0,2 3 222 1,36 0,1 NA 148b 74b 0,03 0,03 Tr Tr 78,5"
+  },
+  {
+    "food_number": 226,
+    "page": 43,
+    "line1": "226 Mamão, Papaia, cru 88,6 40 168 0,5 0,1 NA 10,4 1,0 0,4 22 22",
+    "line2": "226 0,01 11 0,2 2 126 0,02 0,1 NA 118b 59b 0,03 0,04 Tr 1,03 82,2"
+  },
+  {
+    "food_number": 227,
+    "page": 43,
+    "line1": "227 Mamão verde, doce em calda, drenado 41,9 209 876 0,3 0,1 NA 57,6 1,2 0,1 12 5",
+    "line2": "227 0,04 3 0,2 5 9 0,02 0,0 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 228,
+    "page": 43,
+    "line1": "228 Manga, Haden, crua 82,3 64 266 0,4 0,3 NA 16,7 1,6 0,4 12 8",
+    "line2": "228 0,17 9 0,1 1 148 0,10 0,1 NA 162b 81b 0,02 0,06 0,05 Tr 17,4"
+  },
+  {
+    "food_number": 229,
+    "page": 43,
+    "line1": "229 Manga, Palmer, crua 79,7 72 303 0,4 0,2 NA 19,4 1,6 0,3 12 9",
+    "line2": "229 0,05 14 0,1 2 157 0,09 0,1 NA 787 393 0,09 0,03 Tr Tr 65,5"
+  },
+  {
+    "food_number": 230,
+    "page": 43,
+    "line1": "230 Manga, polpa, congelada 86,5 48 202 0,4 0,2 NA 12,5 1,1 0,4 7 9",
+    "line2": "230 0,12 9 0,1 7 131 0,06 0,1 NA Tr 0,07 0,03 Tr 24,9"
+  },
+  {
+    "food_number": 231,
+    "page": 43,
+    "line1": "231 Manga, Tommy Atkins, crua 85,8 51 212 0,9 0,2 NA 12,8 2,1 0,3 8 7",
+    "line2": "231 0,34 14 0,1 Tr 138 0,06 0,1 NA 118 59 Tr 0,04 0,03 Tr 7,9"
+  },
+  {
+    "food_number": 232,
+    "page": 43,
+    "line1": "232 Maracujá, cru 82,9 68 286 2,0 2,1 NA 12,3 1,1 0,8 5 28",
+    "line2": "232 0,12 51 0,6 2 338 0,19 0,4 NA 114b 57b Tr 0,05 0,05 Tr 19,8"
+  },
+  {
+    "food_number": 233,
+    "page": 43,
+    "line1": "233 Maracujá, polpa, congelada 88,9 39 162 0,8 0,2 NA 9,6 0,5 0,5 5 10",
+    "line2": "233 0,07 15 0,3 8 228 0,05 0,2 NA Tr 0,09 0,06 Tr 7,3"
+  },
+  {
+    "food_number": 234,
+    "page": 43,
+    "line1": "234 Maracujá, suco concentrado, envasado 88,9 42 176 0,8 0,2 NA 9,6 0,4 0,5 4 4",
+    "line2": "234 0,07 14 0,3 22 201 0,05 0,1 NA Tr 0,08 0,05 1,92 13,7"
+  },
+  {
+    "food_number": 235,
+    "page": 43,
+    "line1": "235 Melancia, crua 90,7 33 136 0,9 Tr NA 8,1 0,1 0,3 8 10",
+    "line2": "235 0,14 12 0,2 Tr 104 0,04 0,1 NA 61b 31b Tr Tr Tr Tr 6,1"
+  },
+  {
+    "food_number": 236,
+    "page": 43,
+    "line1": "236 Melão, cru 91,3 29 123 0,7 Tr NA 7,5 0,3 0,5 3 6",
+    "line2": "236 0,05 10 0,2 11 216 0,04 0,1 NA 2b 1b Tr Tr 0,02 Tr 8,7"
+  },
+  {
+    "food_number": 237,
+    "page": 43,
+    "line1": "237 Mexerica, Murcote, crua 83,7 58 241 0,9 0,1 NA 14,9 3,1 0,5 33 12",
+    "line2": "237 0,05 19 0,1 1 159 0,06 0,1 NA 0,08 0,07 0,05 Tr 21,8"
+  },
+  {
+    "food_number": 238,
+    "page": 43,
+    "line1": "238 Mexerica, Rio, crua 89,6 37 154 0,7 0,1 NA 9,3 2,7 0,3 17 8",
+    "line2": "238 0,05 14 0,1 2 125 0,07 0,2 NA 0,03 Tr Tr Tr 112,0"
+  },
+  {
+    "food_number": 239,
+    "page": 43,
+    "line1": "239 Morango, cru 91,5 30 126 0,9 0,3 NA 6,8 1,7 0,5 11 10",
+    "line2": "239 0,33 22 0,3 Tr 184 0,06 0,2 NA Tr 0,03 0,03 Tr 63,6"
+  },
+  {
+    "food_number": 240,
+    "page": 43,
+    "line1": "240 Nêspera, crua 87,8 43 178 0,3 Tr NA 11,5 3,0 0,4 20 10",
+    "line2": "240 0,07 10 0,1 Tr 113 0,12 0,1 NA 170b 85b Tr Tr Tr Tr 3,2"
+  },
+  {
+    "food_number": 241,
+    "page": 43,
+    "line1": "241 Pequi, cru 65,9 205 858 2,3 18,0 NA 13,0 19,0 0,8 32 30",
+    "line2": "241 0,64 34 0,3 Tr 298 0,21 1,0 NA 60b 30b 0,17 0,48 0,06 2,57 8,3"
+  },
+  {
+    "food_number": 242,
+    "page": 43,
+    "line1": "242 Pêra, Park, crua 83,2 61 254 0,2 0,2 NA 16,1 3,0 0,3 9 6",
+    "line2": "242 0,04 12 0,3 1 102 0,08 0,1 NA 0,06 Tr Tr Tr 2,4"
+  },
+  {
+    "food_number": 243,
+    "page": 43,
+    "line1": "243 Pêra, Williams, crua 85,0 53 223 0,6 0,1 NA 14,0 3,0 0,3 8 6",
+    "line2": "243 0,04 12 0,1 Tr 116 0,07 0,1 NA Tr Tr Tr Tr 2,8"
+  },
+  {
+    "food_number": 244,
+    "page": 43,
+    "line1": "244 Pêssego, Aurora, cru 89,3 36 152 0,8 Tr NA 9,3 1,4 0,5 3 4",
+    "line2": "244 0,05 15 0,2 Tr 124 0,02 0,1 NA 0,05 Tr Tr Tr 3,3"
+  },
+  {
+    "food_number": 245,
+    "page": 43,
+    "line1": "245 Pêssego, enlatado, em calda 82,2 63 264 0,7 Tr NA 16,9 1,0 0,2 4 4",
+    "line2": "245 0,03 9 0,6 3 95 0,04 0,1 NA 48 24 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 246,
+    "page": 43,
+    "line1": "246 Pinha, crua 75,0 88 370 1,5 0,3 NA 22,4 3,4 0,7 21 31",
+    "line2": "246 0,15 34 0,2 1 283 0,11 0,2 NA 0,12 0,04 0,09 Tr 35,9"
+  },
+  {
+    "food_number": 247,
+    "page": 43,
+    "line1": "247 Pitanga, crua 88,3 41 173 0,9 0,2 NA 10,2 3,2 0,4 18 12",
+    "line2": "247 0,36 13 0,4 2 113 0,08 0,4 NA 154b 77b 0,03 0,10 Tr Tr 24,9"
+  },
+  {
+    "food_number": 248,
+    "page": 43,
+    "line1": "248 Pitanga, polpa, congelada 94,6 19 80 0,3 0,1 NA 4,8 0,7 0,3 8 6",
+    "line2": "248 0,05 12 0,4 5 87 0,06 0,1 NA 146 73 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 249,
+    "page": 43,
+    "line1": "249 Romã, crua 84,0 56 233 0,4 Tr NA 15,1 0,4 0,5 5 13",
+    "line2": "249 0,13 40 0,3 1 485 0,19 0,7 NA 0,12 0,17 0,05 Tr 8,1"
+  },
+  {
+    "food_number": 250,
+    "page": 43,
+    "line1": "250 Tamarindo, cru 22,0 276 1154 3,2 0,5 NA 72,5 6,4 1,9 37 59",
+    "line2": "250 0,34 55 0,6 0 723 0,29 0,7 NA 0,31 Tr 0,10 Tr 7,2"
+  },
+  {
+    "food_number": 251,
+    "page": 43,
+    "line1": "251 Tangerina, Poncã, crua 89,2 38 158 0,8 0,1 NA 9,6 0,9 0,3 13 8",
+    "line2": "251 0,04 12 0,1 Tr 131 0,03 Tr NA 47 24 0,06 0,02 0,02 Tr 48,8"
+  },
+  {
+    "food_number": 252,
+    "page": 45,
+    "line1": "252 Tangerina, Poncã, suco 90,4 36 151 0,5 Tr NA 8,8 Tr 0,3 4 6",
+    "line2": "252 0,02 9 Tr Tr 119 0,02 Tr NA 51 26 0,06 Tr 0,03 Tr 41,8"
+  },
+  {
+    "food_number": 253,
+    "page": 45,
+    "line1": "253 Tucumã, cru 51,3 262 1096 2,1 19,1 NA 26,5 12,7 1,1 46 121",
+    "line2": "253 0,55 53 0,6 4 401 0,39 0,9 NA 2363 1181 0,04 Tr 0,11 Tr 18,0"
+  },
+  {
+    "food_number": 254,
+    "page": 45,
+    "line1": "254 Umbu, cru 89,3 37 155 0,8 Tr NA 9,4 2,0 0,5 12 11",
+    "line2": "254 0,03 13 0,1 Tr 152 0,04 0,4 NA 0,05 0,06 0,03 Tr 24,1"
+  },
+  {
+    "food_number": 255,
+    "page": 45,
+    "line1": "255 Umbu, polpa, congelada 90,2 34 142 0,5 0,1 NA 8,8 1,3 0,4 11 8",
+    "line2": "255 0,05 13 0,2 6 154 0,04 0,1 NA Tr 0,06 Tr Tr 4,0"
+  },
+  {
+    "food_number": 256,
+    "page": 45,
+    "line1": "256 Uva, Itália, crua 85,0 53 221 0,7 0,2 NA 13,6 0,9 0,6 7 5",
+    "line2": "256 0,13 12 0,1 Tr 162 0,11 Tr NA 5 3 Tr Tr 0,03 Tr 3,3"
+  },
+  {
+    "food_number": 257,
+    "page": 45,
+    "line1": "257 Uva, Rubi, crua 86,1 49 205 0,6 0,2 NA 12,7 0,9 0,5 8 6",
+    "line2": "257 0,07 23 0,2 8 159 0,05 Tr NA 0,02 0,02 Tr Tr 1,9"
+  },
+  {
+    "food_number": 258,
+    "page": 45,
+    "line1": "258 Uva, suco concentrado, envasado 85,1 58 241 Tr Tr NA 14,7 0,2 0,2 9 7",
+    "line2": "258 0,20 10 0,1 10 54 0,13 0,1 NA 0,07 0,02 0,05 Tr 21,0"
+  },
+  {
+    "food_number": 259,
+    "page": 45,
+    "line1": "259 Azeite, de dendê NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "259 NA"
+  },
+  {
+    "food_number": 260,
+    "page": 45,
+    "line1": "260 Azeite, de oliva, extra virgem NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "260 NA"
+  },
+  {
+    "food_number": 261,
+    "page": 45,
+    "line1": "261 Manteiga, com sal 15,8 726 3037 0,4 82,4 201 0,1 NA 1,4 9 1",
+    "line2": "261 Tr 28 0,2 579 15 Tr Tr 924 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 262,
+    "page": 45,
+    "line1": "262 Manteiga, sem sal 13,6 758 3170 0,4 86,0 214 0,0 NA 0,1 4 1",
+    "line2": "262 Tr 7 Tr 4 5 0,04 Tr 1013 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 263,
+    "page": 45,
+    "line1": "263 Margarina, com óleo hidrogenado, com sal (65% de lipídeos) 32,2 596 2494 Tr 67,4 NA 0,0 NA 1,9 6 1",
+    "line2": "263 Tr 7 0,1 894 21 Tr Tr 462 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 264,
+    "page": 45,
+    "line1": "264 Margarina, com óleo hidrogenado, sem sal (80% de lipídeos) 19,6 723 3023 Tr 81,7 NA 0,0 NA 0,2 3 1",
+    "line2": "264 Tr 4 0,1 78 2 Tr Tr 534 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 265,
+    "page": 45,
+    "line1": "265 Margarina, com óleo interesterificado, com sal (65%de lipídeos) 32,0 594 2487 Tr 67,2 NA 0,0 NA 1,2 5 1",
+    "line2": "265 Tr 6 Tr 561 15 Tr Tr 385 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 266,
+    "page": 45,
+    "line1": "266 Margarina, com óleo interesterificado, sem sal (65% de lipídeos) 33,4 593 2482 Tr 67,1 NA 0,0 NA 0,1 5 1",
+    "line2": "266 Tr 7 0,1 33 5 Tr Tr 245 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 267,
+    "page": 45,
+    "line1": "267 Óleo, de babaçu NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "267 NA"
+  },
+  {
+    "food_number": 268,
+    "page": 45,
+    "line1": "268 Óleo, de canola NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "268 NA"
+  },
+  {
+    "food_number": 269,
+    "page": 45,
+    "line1": "269 Óleo, de girassol NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "269 NA"
+  },
+  {
+    "food_number": 270,
+    "page": 45,
+    "line1": "270 Óleo, de milho NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "270 NA"
+  },
+  {
+    "food_number": 271,
+    "page": 45,
+    "line1": "271 Óleo, de pequi NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "271 NA"
+  },
+  {
+    "food_number": 272,
+    "page": 45,
+    "line1": "272 Óleo, de soja NA 884 3699 NA 100,0 NA NA NA",
+    "line2": "272 NA"
+  },
+  {
+    "food_number": 273,
+    "page": 45,
+    "line1": "273 Abadejo, filé, congelado, assado 74,3 112 467 23,5 1,2 103 0,0 NA 1,6 23 20",
+    "line2": "273 Tr 338 0,5 334 156 0,03 0,5 Tr Tr Tr Tr Tr Tr 0,44"
+  },
+  {
+    "food_number": 274,
+    "page": 45,
+    "line1": "274 Abadejo, filé, congelado,cozido 79,7 91 381 19,3 0,9 87 0,0 NA 0,9 17 16",
+    "line2": "274 Tr 351 0,3 189 146 0,03 0,4 Tr Tr Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 275,
+    "page": 45,
+    "line1": "275 Abadejo, filé, congelado, cru 86,4 59 247 13,1 0,4 31 0,0 NA 0,6 10 14",
+    "line2": "275 0,01 91 0,1 79 148 0,14 0,4 Tr Tr Tr 0,04 Tr Tr 4,60"
+  },
+  {
+    "food_number": 276,
+    "page": 45,
+    "line1": "276 Abadejo, filé, congelado, grelhado 71,0 130 542 27,6 1,3 136 0,0 NA 1,6 20 22",
+    "line2": "276 Tr 581 0,3 305 279 Tr 0,4 6 6 6 0,03 Tr Tr 0,44"
+  },
+  {
+    "food_number": 277,
+    "page": 45,
+    "line1": "277 Atum, conserva em óleo 64,5 166 694 26,2 6,0 53 0,0 NA 1,5 7 29",
+    "line2": "277 Tr 211 1,2 362 280 0,04 0,6 Tr Tr Tr 0,15 0,03 Tr 3,17"
+  },
+  {
+    "food_number": 278,
+    "page": 45,
+    "line1": "278 Atum, fresco, cru 73,1 118 492 25,7 0,9 48 0,0 NA 1,3 7 32",
+    "line2": "278 Tr 254 1,3 30 308 0,09 0,4 20 20 20 Tr 0,04 Tr 5,94"
+  },
+  {
+    "food_number": 279,
+    "page": 47,
+    "line1": "279 Bacalhau, salgado, cru 47,9 136 569 29,0 1,3 139 0,0 NA 22,5 157 49",
+    "line2": "279 0,03 186 0,9 13585 434 0,09 0,7 Tr Tr Tr Tr 0,21 Tr *"
+  },
+  {
+    "food_number": 280,
+    "page": 47,
+    "line1": "280 Bacalhau, salgado, refogado 65,9 140 584 24,0 3,6 112 1,2 * 5,3 59 15",
+    "line2": "280 Tr 51 0,2 1256 50 0,04 0,6 Tr Tr Tr 0,03 0,05 Tr 5,17 Tr"
+  },
+  {
+    "food_number": 281,
+    "page": 47,
+    "line1": "281 Cação, posta, com farinha de trigo, frita 60,6 208 872 25,0 10,0 75 3,1 0,5 1,4 30 26",
+    "line2": "281 0,06 462 1,0 160 420 Tr 0,6 17 17 17 Tr Tr Tr 0,77"
+  },
+  {
+    "food_number": 282,
+    "page": 47,
+    "line1": "282 Cação, posta, cozida 75,9 116 485 25,6 0,7 83 0,0 NA 1,2 10 21",
+    "line2": "282 Tr 204 0,3 115 249 0,03 0,6 12 12 12 Tr 0,04 Tr 9,77"
+  },
+  {
+    "food_number": 283,
+    "page": 47,
+    "line1": "283 Cação, posta, crua 81,4 83 349 17,9 0,8 36 0,0 NA 1,2 9 19",
+    "line2": "283 0,04 181 0,2 176 299 0,13 0,3 6 6 6 0,04 Tr Tr 1,31"
+  },
+  {
+    "food_number": 284,
+    "page": 47,
+    "line1": "284 Camarão, Rio Grande, grande, cozido 78,7 90 377 19,0 1,0 241 0,0 NA 1,7 90 19",
+    "line2": "284 0,06 266 1,3 367 102 0,17 1,2 Tr Tr Tr Tr Tr Tr 1,07"
+  },
+  {
+    "food_number": 285,
+    "page": 47,
+    "line1": "285 Camarão, Rio Grande, grande, cru 89,1 47 197 10,0 0,5 124 0,0 NA 0,8 51 27",
+    "line2": "285 0,04 234 0,7 201 72 0,11 0,7 20 20 20 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 286,
+    "page": 47,
+    "line1": "286 Camarão, Sete Barbas, sem cabeça, com casca, frito 61,0 231 968 18,4 15,6 283 2,9 NA 2,1 960 74",
+    "line2": "286 0,38 337 2,4 99 107 0,19 1,1 Tr Tr Tr 0,05 Tr Tr 0,35"
+  },
+  {
+    "food_number": 287,
+    "page": 47,
+    "line1": "287 Caranguejo, cozido 77,0 83 346 18,5 0,4 85 0,0 NA 3,5 357 52",
+    "line2": "287 0,07 154 2,9 360 186 0,72 5,7 Tr Tr Tr 0,04 0,31 Tr 4,17 Tr"
+  },
+  {
+    "food_number": 288,
+    "page": 47,
+    "line1": "288 Corimba, cru 75,6 128 536 17,4 6,0 40 0,0 NA 1,0 40 23",
+    "line2": "288 0,02 190 0,5 47 317 0,03 0,4 Tr Tr Tr Tr Tr Tr 1,87"
+  },
+  {
+    "food_number": 289,
+    "page": 47,
+    "line1": "289 Corimbatá, assado 59,9 261 1094 19,9 19,6 80 0,0 NA 1,0 22 24",
+    "line2": "289 0,01 221 1,0 40 326 0,03 0,7 Tr Tr Tr 0,13 0,06 Tr 2,70"
+  },
+  {
+    "food_number": 290,
+    "page": 47,
+    "line1": "290 Corimbatá, cozido 64,6 239 999 20,1 16,9 75 0,0 NA 0,8 65 23",
+    "line2": "290 0,02 185 0,6 37 254 0,05 1,0 Tr Tr Tr Tr Tr Tr 2,09"
+  },
+  {
+    "food_number": 291,
+    "page": 47,
+    "line1": "291 Corvina de água doce, crua 79,2 101 423 18,9 2,2 73 0,0 NA 1,0 39 25",
+    "line2": "291 0,02 154 0,3 45 293 0,02 0,4 8 8 8 Tr 0,08 Tr *"
+  },
+  {
+    "food_number": 292,
+    "page": 47,
+    "line1": "292 Corvina do mar, crua 79,4 94 392 18,6 1,6 67 0,0 NA 1,1 * 24",
+    "line2": "292 0,01 183 0,4 68 339 0,03 0,4 65 65 65 0,12 0,05 Tr 2,62"
+  },
+  {
+    "food_number": 293,
+    "page": 47,
+    "line1": "293 Corvina grande, assada 69,0 147 613 26,8 3,6 117 0,0 NA 1,3 60 24",
+    "line2": "293 0,03 176 0,5 85 291 0,02 0,7 Tr Tr Tr 0,11 0,10 Tr 4,23"
+  },
+  {
+    "food_number": 294,
+    "page": 47,
+    "line1": "294 Corvina grande, cozida 73,6 100 419 23,4 2,6 123 0,0 NA 0,9 69 22",
+    "line2": "294 0,02 164 0,6 68 194 0,03 0,7 6 6 6 Tr 0,03 Tr 0,77"
+  },
+  {
+    "food_number": 295,
+    "page": 47,
+    "line1": "295 Dourada de água doce, fresca 76,2 131 549 18,8 5,6 52 0,0 NA 1,1 12 26",
+    "line2": "295 0,01 189 0,2 40 393 0,02 0,5 Tr Tr Tr Tr Tr Tr 3,70"
+  },
+  {
+    "food_number": 296,
+    "page": 47,
+    "line1": "296 Lambari, congelado, cru 71,9 131 547 16,8 6,5 159 0,0 NA 3,6 1181 45",
+    "line2": "296 0,28 696 0,9 48 244 0,09 3,3 4 4 4 0,05 Tr Tr 3,30"
+  },
+  {
+    "food_number": 297,
+    "page": 47,
+    "line1": "297 Lambari, congelado, frito 40,1 327 1368 28,4 22,8 246 0,0 NA 6,2 1881 66",
+    "line2": "297 0,34 1067 0,8 65 331 0,31 5,6 9 9 9 0,25 0,03 0,04 8,93"
+  },
+  {
+    "food_number": 298,
+    "page": 47,
+    "line1": "298 Lambari, fresco, cru 72,2 152 634 15,7 9,4 144 0,0 NA 2,2 590 32",
+    "line2": "298 0,41 441 0,6 41 207 0,05 2,4 Tr Tr Tr Tr 0,03 0,07 1,86"
+  },
+  {
+    "food_number": 299,
+    "page": 47,
+    "line1": "299 Manjuba, com farinha de trigo, frita 41,3 344 1437 23,5 22,6 282 10,2 0,4 2,4 763 47",
+    "line2": "299 0,36 578 3,0 37 319 0,15 3,8 30 30 30 0,05 0,07 Tr 0,79"
+  },
+  {
+    "food_number": 300,
+    "page": 47,
+    "line1": "300 Manjuba, frita 40,7 349 1462 30,1 24,5 270 0,0 NA 4,2 575 32",
+    "line2": "300 0,21 735 0,9 41 318 0,14 3,2 12 12 12 0,03 0,03 Tr 7,27"
+  },
+  {
+    "food_number": 301,
+    "page": 47,
+    "line1": "301 Merluza, filé, assado 70,7 122 510 26,6 0,9 91 0,0 NA 1,2 36 20",
+    "line2": "301 0,03 273 0,4 120 364 0,03 0,9 Tr Tr Tr 0,05 Tr Tr 7,97"
+  },
+  {
+    "food_number": 302,
+    "page": 47,
+    "line1": "302 Merluza, filé, cru 82,1 89 373 16,6 2,0 57 0,0 NA 1,1 20 27",
+    "line2": "302 0,01 185 0,2 80 340 Tr 0,3 Tr Tr Tr Tr Tr Tr 1,34"
+  },
+  {
+    "food_number": 303,
+    "page": 47,
+    "line1": "303 Merluza, filé, frito 63,5 192 802 26,9 8,5 109 0,0 NA 1,5 36 38",
+    "line2": "303 0,02 279 0,4 90 447 0,03 0,6 Tr Tr Tr 0,05 Tr Tr 0,77"
+  },
+  {
+    "food_number": 304,
+    "page": 47,
+    "line1": "304 Pescada, branca, crua 79,6 111 464 16,3 4,6 51 0,0 NA 0,9 16 19",
+    "line2": "304 0,01 136 0,2 76 261 Tr 0,3 3 3 3 Tr 0,04 Tr 0,60"
+  },
+  {
+    "food_number": 305,
+    "page": 47,
+    "line1": "305 Pescada, branca, frita 57,0 223 933 27,4 11,8 165 0,0 NA 3,2 378 30",
+    "line2": "305 0,06 504 0,5 107 355 0,08 1,1 39 39 39 0,08 0,11 Tr 8,07"
+  },
+  {
+    "food_number": 306,
+    "page": 47,
+    "line1": "306 Pescada, filé, com farinha de trigo, frito 53,2 283 1186 21,4 19,1 73 5,0 Tr 1,2 26 28",
+    "line2": "306 0,07 216 0,9 91 216 0,03 0,4 18 18 18 Tr 0,03 Tr 0,60"
+  },
+  {
+    "food_number": 307,
+    "page": 47,
+    "line1": "307 Pescada, filé, cru 79,5 107 449 16,7 4,0 65 0,0 NA 0,9 14 23",
+    "line2": "307 0,01 141 0,2 77 253 Tr 0,3 48 48 48 Tr 0,05 Tr 3,10"
+  },
+  {
+    "food_number": 308,
+    "page": 47,
+    "line1": "308 Pescada, filé, frito 66,8 154 645 28,6 3,6 81 0,0 NA 1,7 10 21",
+    "line2": "308 Tr 204 0,3 115 249 0,03 0,6 4 4 4 0,14 Tr Tr 8,87"
+  },
+  {
+    "food_number": 309,
+    "page": 47,
+    "line1": "309 Pescada, filé, molho escabeche 74,5 142 594 11,8 8,0 43 5,0 0,8 0,7 20 18",
+    "line2": "309 0,08 105 1,5 51 208 0,36 0,3 19 Tr 0,03 Tr 1,10 6,9"
+  },
+  {
+    "food_number": 310,
+    "page": 47,
+    "line1": "310 Pescadinha, crua 80,6 76 320 15,5 1,1 84 0,0 NA 2,0 332 34",
+    "line2": "310 0,07 327 0,5 120 304 0,10 0,6 Tr Tr Tr 0,08 Tr Tr 6,60"
+  },
+  {
+    "food_number": 311,
+    "page": 49,
+    "line1": "311 Pintado, assado 57,0 192 801 36,5 4,0 126 0,0 NA 2,0 114 42",
+    "line2": "311 0,08 332 0,8 81 527 0,04 2,1 7 7 7 0,03 Tr Tr 6,63"
+  },
+  {
+    "food_number": 312,
+    "page": 49,
+    "line1": "312 Pintado, cru 80,3 91 381 18,6 1,3 50 0,0 NA 1,1 12 24",
+    "line2": "312 0,01 174 0,2 43 294 0,03 0,4 Tr Tr Tr Tr Tr Tr 4,95"
+  },
+  {
+    "food_number": 313,
+    "page": 49,
+    "line1": "313 Pintado, grelhado 65,5 152 637 30,8 2,3 99 0,0 NA 1,6 69 27",
+    "line2": "313 0,03 237 0,5 53 360 0,04 0,8 5 5 5 0,03 Tr Tr 2,87"
+  },
+  {
+    "food_number": 314,
+    "page": 49,
+    "line1": "314 Porquinho, cru 79,2 93 389 20,5 0,6 49 0,0 NA 1,3 26 24",
+    "line2": "314 0,05 207 0,4 67 313 0,04 0,7 5 5 5 Tr Tr Tr 1,19"
+  },
+  {
+    "food_number": 315,
+    "page": 49,
+    "line1": "315 Salmão, filé, com pele, fresco, grelhado 60,9 229 957 23,9 14,0 85 0,0 NA 1,3 29 28",
+    "line2": "315 0,02 300 0,5 85 384 0,04 0,6 Tr Tr Tr 0,13 0,06 Tr 5,35"
+  },
+  {
+    "food_number": 316,
+    "page": 49,
+    "line1": "316 Salmão, sem pele, fresco, cru 69,0 170 710 19,3 9,7 53 0,0 NA 1,2 9 27",
+    "line2": "316 Tr 259 0,2 64 376 0,02 0,3 Tr Tr Tr 0,20 0,03 Tr 3,21"
+  },
+  {
+    "food_number": 317,
+    "page": 49,
+    "line1": "317 Salmão, sem pele, fresco, grelhado 58,1 243 1015 26,1 14,5 73 0,0 NA 1,6 15 38",
+    "line2": "317 0,01 352 0,4 96 518 0,04 0,5 Tr Tr Tr 0,23 0,03 Tr 6,30"
+  },
+  {
+    "food_number": 318,
+    "page": 49,
+    "line1": "318 Sardinha, assada 60,1 164 688 32,2 3,0 109 0,0 NA 4,4 438 51",
+    "line2": "318 0,24 578 1,3 74 574 0,14 1,8 Tr Tr Tr 0,06 Tr Tr 5,83"
+  },
+  {
+    "food_number": 319,
+    "page": 49,
+    "line1": "319 Sardinha, conserva em óleo 55,1 285 1192 15,9 24,0 73 0,0 NA 2,9 550 35",
+    "line2": "319 0,11 496 3,5 666 367 0,03 1,6 Tr Tr Tr 0,42 0,04 Tr 6,55"
+  },
+  {
+    "food_number": 320,
+    "page": 49,
+    "line1": "320 Sardinha, frita 48,5 257 1075 33,4 12,7 103 0,0 NA 4,3 482 39",
+    "line2": "320 0,25 629 1,1 60 460 0,14 1,6 Tr Tr Tr 0,06 Tr Tr 7,10"
+  },
+  {
+    "food_number": 321,
+    "page": 49,
+    "line1": "321 Sardinha, inteira, crua 76,6 114 477 21,1 2,7 61 0,0 NA 1,6 167 29",
+    "line2": "321 0,10 294 1,3 60 312 0,13 1,3 Tr Tr Tr Tr 0,07 Tr 7,70"
+  },
+  {
+    "food_number": 322,
+    "page": 49,
+    "line1": "322 Tucunaré, filé, congelado, cru 79,9 88 367 18,0 1,2 47 0,0 NA 1,0 19 26",
+    "line2": "322 0,01 168 0,3 57 288 0,10 0,4 Tr Tr Tr Tr 0,05 Tr 0,90"
+  },
+  {
+    "food_number": 323,
+    "page": 49,
+    "line1": "323 Apresuntado 73,7 129 539 13,5 6,7 38 2,9 NA 3,3 23 15",
+    "line2": "323 0,04 225 0,9 943 270 0,03 1,6 Tr 0,62 0,04 Tr 0,70 Tr"
+  },
+  {
+    "food_number": 324,
+    "page": 49,
+    "line1": "324 Caldo de carne, tablete 2,9 241 1007 7,8 16,6 Tr 15,1 0,6 57,6 129 22",
+    "line2": "324 0,02 123 Tr 22180 218 Tr Tr Tr 0,70 0,07 0,27 Tr"
+  },
+  {
+    "food_number": 325,
+    "page": 49,
+    "line1": "325 Caldo de galinha, tablete 3,4 251 1052 6,3 20,4 2 10,6 11,8 59,3 16 13",
+    "line2": "325 0,13 48 0,7 22300 68 Tr 0,3 Tr 0,05 0,04 Tr *"
+  },
+  {
+    "food_number": 326,
+    "page": 49,
+    "line1": "326 Carne, bovina, acém, moído, cozido 61,6 212 889 26,7 10,9 103 0,0 NA 0,8 4 17",
+    "line2": "326 0,01 164 2,7 52 256 0,06 8,1 Tr Tr Tr Tr 0,32 Tr 1,76"
+  },
+  {
+    "food_number": 327,
+    "page": 49,
+    "line1": "327 Carne, bovina, acém, moído, cru 72,7 137 571 19,4 5,9 58 0,0 NA 0,9 3 14",
+    "line2": "327 Tr 158 1,8 49 237 0,08 6,3 2 2 2 0,15 0,21 0,03 4,33"
+  },
+  {
+    "food_number": 328,
+    "page": 49,
+    "line1": "328 Carne, bovina, acém, sem gordura, cozido 60,4 215 898 27,3 10,9 107 0,0 NA 0,8 7 14",
+    "line2": "328 Tr 164 2,4 56 254 0,07 8,0 Tr Tr Tr Tr 0,04 0,07 1,63"
+  },
+  {
+    "food_number": 329,
+    "page": 49,
+    "line1": "329 Carne, bovina, acém, sem gordura, cru 71,5 144 603 20,8 6,1 53 0,0 NA 1,0 5 13",
+    "line2": "329 Tr 144 1,5 50 234 0,04 5,2 2 2 2 0,12 0,12 Tr 2,33"
+  },
+  {
+    "food_number": 330,
+    "page": 49,
+    "line1": "330 Carne, bovina, almôndegas, cruas 64,3 189 792 12,3 11,2 34 9,8 * 2,4 22 24",
+    "line2": "330 0,17 145 1,6 621 328 0,15 2,3 Tr 0,11 0,04 Tr 2,20"
+  },
+  {
+    "food_number": 331,
+    "page": 49,
+    "line1": "331 Carne, bovina, almôndegas, fritas 48,1 272 1137 18,2 15,8 36 14,3 * 3,7 27 48",
+    "line2": "331 0,41 244 1,9 1030 536 0,19 2,6 Tr 0,13 0,07 Tr 6,60"
+  },
+  {
+    "food_number": 332,
+    "page": 49,
+    "line1": "332 Carne, bovina, bucho, cozido 74,1 133 557 21,6 4,5 245 0,0 NA 0,3 13 7",
+    "line2": "332 0,01 63 0,6 38 70 0,05 2,5 Tr Tr Tr Tr Tr Tr 2,18"
+  },
+  {
+    "food_number": 333,
+    "page": 49,
+    "line1": "333 Carne, bovina, bucho, cru 75,0 137 574 20,5 5,5 145 0,0 NA 0,4 9 6",
+    "line2": "333 0,01 61 0,5 45 85 0,06 2,1 Tr Tr Tr Tr Tr Tr 2,13"
+  },
+  {
+    "food_number": 334,
+    "page": 49,
+    "line1": "334 Carne, bovina, capa de contra-filé, com gordura, crua 64,8 217 908 19,2 15,0 63 0,0 NA 0,9 6 17",
+    "line2": "334 0,01 144 1,5 58 267 0,06 3,5 4 4 4 0,09 0,09 0,12 1,55"
+  },
+  {
+    "food_number": 335,
+    "page": 49,
+    "line1": "335 Carne, bovina, capa de contra-filé, com gordura, grelhada 47,9 312 1304 30,7 20,0 120 0,0 NA 1,1 7 18",
+    "line2": "335 Tr 214 2,6 81 323 0,13 6,2 Tr Tr Tr Tr 0,06 Tr 1,74"
+  },
+  {
+    "food_number": 336,
+    "page": 49,
+    "line1": "336 Carne, bovina, capa de contra-filé, sem gordura, crua 73,0 131 548 21,5 4,3 58 0,0 NA 1,0 6 20",
+    "line2": "336 Tr 178 2,0 79 325 0,06 4,6 Tr Tr Tr Tr 0,04 Tr 1,81"
+  },
+  {
+    "food_number": 337,
+    "page": 49,
+    "line1": "337 Carne, bovina, capa de contra-filé, sem gordura, grelhada 53,7 239 1002 35,1 10,0 80 0,0 NA 1,3 9 26",
+    "line2": "337 0,01 287 2,8 83 385 0,12 7,6 Tr Tr Tr 0,03 0,08 Tr 1,86"
+  },
+  {
+    "food_number": 338,
+    "page": 49,
+    "line1": "338 Carne, bovina, charque, cozido 45,8 263 1099 36,4 11,9 113 0,0 NA 3,6 15 13",
+    "line2": "338 0,02 101 3,5 1443 90 0,07 6,1 Tr Tr Tr 0,05 0,07 Tr 1,50"
+  },
+  {
+    "food_number": 339,
+    "page": 49,
+    "line1": "339 Carne, bovina, charque, cru 44,5 249 1041 22,7 16,8 81 0,0 NA 14,5 15 13",
+    "line2": "339 Tr 122 1,5 5875 236 0,03 3,9 Tr Tr Tr 0,12 0,07 Tr 1,63"
+  },
+  {
+    "food_number": 340,
+    "page": 49,
+    "line1": "340 Carne, bovina, contra-filé, à milanesa 42,2 352 1471 20,6 24,0 99 12,2 0,4 1,1 15 27",
+    "line2": "340 0,27 203 2,9 77 271 0,10 2,9 15 0,07 0,04 Tr 3,02"
+  },
+  {
+    "food_number": 341,
+    "page": 51,
+    "line1": "341 Carne, bovina, contra-filé de costela, cru 66,4 202 847 19,8 13,1 52 0,0 NA 1,0 3 14",
+    "line2": "341 Tr 164 1,6 39 245 0,04 4,4 3 3 3 0,14 0,08 Tr 2,68"
+  },
+  {
+    "food_number": 342,
+    "page": 51,
+    "line1": "342 Carne, bovina, contra-filé de costela, grelhado 52,2 275 1150 29,9 16,3 98 0,0 NA 1,2 4 24",
+    "line2": "342 0,01 252 2,8 51 383 0,08 6,7 Tr Tr Tr Tr 0,19 0,17 2,75"
+  },
+  {
+    "food_number": 343,
+    "page": 51,
+    "line1": "343 Carne, bovina, contra-filé, com gordura, cru 65,7 206 861 21,2 12,8 73 0,0 NA 0,9 4 18",
+    "line2": "343 0,01 164 1,3 44 285 0,04 2,8 4 4 4 0,11 0,08 0,03 3,79"
+  },
+  {
+    "food_number": 344,
+    "page": 51,
+    "line1": "344 Carne, bovina, contra-filé, com gordura, grelhado 51,7 278 1163 32,4 15,5 144 0,0 NA 1,2 4 19",
+    "line2": "344 Tr 219 2,4 57 352 0,09 4,8 Tr Tr Tr Tr 0,18 0,13 4,91"
+  },
+  {
+    "food_number": 345,
+    "page": 51,
+    "line1": "345 Carne, bovina, contra-filé, sem gordura, cru 69,1 157 655 24,0 6,0 59 0,0 NA 1,0 4 21",
+    "line2": "345 Tr 184 1,7 53 335 0,05 3,2 Tr Tr Tr Tr 0,20 Tr 4,64"
+  },
+  {
+    "food_number": 346,
+    "page": 51,
+    "line1": "346 Carne, bovina, contra-filé, sem gordura, grelhado 57,5 194 810 35,9 4,5 102 0,0 NA 1,3 5 21",
+    "line2": "346 Tr 241 2,4 58 386 0,09 5,1 Tr Tr Tr Tr 0,17 0,16 4,93"
+  },
+  {
+    "food_number": 347,
+    "page": 51,
+    "line1": "347 Carne, bovina, costela, assada 43,2 373 1561 28,8 27,7 95 0,0 NA 1,0 28 20",
+    "line2": "347 Tr 179 2,2 92 270 0,08 5,5 Tr Tr Tr Tr 0,08 0,35 0,56"
+  },
+  {
+    "food_number": 348,
+    "page": 51,
+    "line1": "348 Carne, bovina, costela, crua 52,7 358 1497 16,7 31,8 44 0,0 NA 0,9 * 12",
+    "line2": "348 Tr 130 1,2 70 151 Tr 2,7 5 5 5 0,12 0,11 Tr 5,99"
+  },
+  {
+    "food_number": 349,
+    "page": 51,
+    "line1": "349 Carne, bovina, coxão duro, sem gordura, cozido 58,5 217 906 31,9 8,9 71 0,0 NA 0,9 4 14",
+    "line2": "349 Tr 189 1,7 41 252 0,07 5,0 2 2 2 Tr Tr Tr 3,26"
+  },
+  {
+    "food_number": 350,
+    "page": 51,
+    "line1": "350 Carne, bovina, coxão duro, sem gordura, cru 69,8 148 619 21,5 6,2 60 0,0 NA 1,1 3 21",
+    "line2": "350 Tr 189 1,9 49 358 0,05 2,8 2 2 2 0,12 0,20 Tr 4,38"
+  },
+  {
+    "food_number": 351,
+    "page": 51,
+    "line1": "351 Carne, bovina, coxão mole, sem gordura, cozido 58,0 219 915 32,4 8,9 84 0,0 NA 1,2 4 13",
+    "line2": "351 Tr 183 2,6 44 239 0,11 4,7 2 2 2 Tr Tr Tr 4,09"
+  },
+  {
+    "food_number": 352,
+    "page": 51,
+    "line1": "352 Carne, bovina, coxão mole, sem gordura, cru 68,6 169 707 21,2 8,7 84 0,0 NA 1,0 3 21",
+    "line2": "352 Tr 175 1,9 61 335 0,05 2,6 3 3 3 0,12 0,19 Tr 2,32"
+  },
+  {
+    "food_number": 353,
+    "page": 51,
+    "line1": "353 Carne, bovina, cupim, assado 48,4 330 1381 28,6 23,0 91 0,0 NA 1,0 8 18",
+    "line2": "353 Tr 212 2,7 72 321 0,08 5,3 Tr Tr Tr Tr 0,08 0,14 2,16"
+  },
+  {
+    "food_number": 354,
+    "page": 51,
+    "line1": "354 Carne, bovina, cupim, cru 64,8 221 926 19,5 15,3 51 0,0 NA 0,9 4 13",
+    "line2": "354 Tr 220 1,1 47 151 0,03 2,4 3 3 3 0,11 0,05 0,03 3,33"
+  },
+  {
+    "food_number": 355,
+    "page": 51,
+    "line1": "355 Carne, bovina, fígado, cru 71,3 141 590 20,7 5,4 393 1,1 NA 1,5 4 12",
+    "line2": "355 0,26 334 5,6 76 265 9,01 3,5 7937 7937 7937 0,14 0,90 Tr 10,66"
+  },
+  {
+    "food_number": 356,
+    "page": 51,
+    "line1": "356 Carne, bovina, fígado, grelhado 55,0 225 942 29,9 9,0 601 4,2 NA 2,0 6 10",
+    "line2": "356 0,22 420 5,8 82 309 12,58 4,0 14574 14574 14574 0,21 2,69 Tr 11,92"
+  },
+  {
+    "food_number": 357,
+    "page": 51,
+    "line1": "357 Carne, bovina, filé mingnon, sem gordura, cru 71,9 143 598 21,6 5,6 55 0,0 NA 1,1 3 21",
+    "line2": "357 0,01 193 1,9 49 322 0,08 2,8 4 4 4 0,12 0,10 0,04 1,78"
+  },
+  {
+    "food_number": 358,
+    "page": 51,
+    "line1": "358 Carne, bovina, filé mingnon, sem gordura, grelhado 57,0 220 919 32,8 8,8 103 0,0 NA 1,3 4 28",
+    "line2": "358 0,02 308 2,9 58 326 0,14 4,1 Tr Tr Tr 0,03 0,08 0,05 4,27"
+  },
+  {
+    "food_number": 359,
+    "page": 51,
+    "line1": "359 Carne, bovina, flanco, sem gordura, cozido 62,0 196 818 29,4 7,8 62 0,0 NA 0,9 4 14",
+    "line2": "359 Tr 181 2,8 42 249 0,07 5,6 2 2 2 Tr Tr Tr 2,32"
+  },
+  {
+    "food_number": 360,
+    "page": 51,
+    "line1": "360 Carne, bovina, flanco, sem gordura, cru 72,1 141 592 20,0 6,2 50 0,0 NA 1,0 3 18",
+    "line2": "360 Tr 167 1,6 54 324 0,05 4,5 2 2 2 0,11 0,16 Tr 3,28"
+  },
+  {
+    "food_number": 361,
+    "page": 51,
+    "line1": "361 Carne, bovina, fraldinha, com gordura, cozida 49,7 338 1416 24,2 26,0 65 0,0 NA 0,7 3 14",
+    "line2": "361 Tr 161 2,0 39 207 0,07 6,5 Tr Tr Tr Tr 0,05 0,07 1,61"
+  },
+  {
+    "food_number": 362,
+    "page": 51,
+    "line1": "362 Carne, bovina, fraldinha, com gordura, crua 65,4 221 924 17,6 16,1 54 0,0 NA 0,9 3 16",
+    "line2": "362 0,00 131 1,5 51 274 0,04 4,2 5 5 5 0,08 0,07 0,03 3,56"
+  },
+  {
+    "food_number": 363,
+    "page": 51,
+    "line1": "363 Carne, bovina, lagarto, cozido 57,6 222 931 32,9 9,1 56 0,0 NA 0,9 4 13",
+    "line2": "363 Tr 167 1,9 48 254 0,05 7,0 3 3 3 Tr Tr Tr 2,55"
+  },
+  {
+    "food_number": 364,
+    "page": 51,
+    "line1": "364 Carne, bovina, lagarto, cru 71,0 135 564 20,5 5,2 56 0,0 NA 1,1 3 20",
+    "line2": "364 Tr 185 1,3 54 362 0,05 2,4 2 2 2 0,10 0,14 0,03 2,19"
+  },
+  {
+    "food_number": 365,
+    "page": 51,
+    "line1": "365 Carne, bovina, língua, cozida 53,4 315 1318 21,4 24,8 105 0,0 NA 0,7 6 12",
+    "line2": "365 0,01 136 2,1 59 175 0,08 4,1 Tr Tr Tr Tr 0,08 Tr 1,83"
+  },
+  {
+    "food_number": 366,
+    "page": 51,
+    "line1": "366 Carne, bovina, língua, crua 65,0 215 901 17,1 15,8 118 0,0 NA 0,8 5 15",
+    "line2": "366 0,02 164 1,7 73 251 0,09 2,9 Tr Tr Tr 0,05 0,04 Tr 1,18"
+  },
+  {
+    "food_number": 367,
+    "page": 51,
+    "line1": "367 Carne, bovina, maminha, crua 70,0 153 639 20,9 7,0 51 0,0 NA 1,0 3 16",
+    "line2": "367 Tr 181 1,1 37 274 0,03 3,5 3 3 3 0,12 0,08 0,03 4,27"
+  },
+  {
+    "food_number": 368,
+    "page": 51,
+    "line1": "368 Carne, bovina, maminha, grelhada 65,3 153 641 30,7 2,4 88 0,0 NA 1,4 4 21",
+    "line2": "368 Tr 237 2,4 58 386 0,08 5,6 Tr Tr Tr Tr 0,04 0,13 1,46"
+  },
+  {
+    "food_number": 369,
+    "page": 51,
+    "line1": "369 Carne, bovina, miolo de alcatra, sem gordura, cru 69,5 163 681 21,6 7,8 60 0,0 NA 1,0 3 20",
+    "line2": "369 0,01 165 2,0 43 299 0,06 3,0 4 4 4 0,12 0,07 Tr 3,59"
+  },
+  {
+    "food_number": 370,
+    "page": 51,
+    "line1": "370 Carne, bovina, miolo de alcatra, sem gordura, grelhado 52,4 241 1010 31,9 11,6 92 0,0 NA 1,2 5 26",
+    "line2": "370 0,02 279 3,2 52 385 0,11 4,8 Tr Tr Tr 0,03 0,05 0,05 4,66"
+  },
+  {
+    "food_number": 371,
+    "page": 51,
+    "line1": "371 Carne, bovina, músculo, sem gordura, cozido 62,8 194 811 31,2 6,7 56 0,0 NA 0,9 5 13",
+    "line2": "371 Tr 176 2,4 62 253 0,08 6,4 2 2 2 Tr Tr Tr 1,97"
+  },
+  {
+    "food_number": 372,
+    "page": 51,
+    "line1": "372 Carne, bovina, músculo, sem gordura, cru 72,4 142 592 21,6 5,5 51 0,0 NA 1,0 4 17",
+    "line2": "372 Tr 162 1,9 66 296 0,05 3,7 2 2 2 0,09 0,19 0,04 2,79"
+  },
+  {
+    "food_number": 373,
+    "page": 53,
+    "line1": "373 Carne, bovina, paleta, com gordura, crua 70,6 159 664 21,4 7,5 58 0,0 NA 0,9 4 14",
+    "line2": "373 Tr 158 1,8 65 250 0,08 3,7 Tr Tr Tr Tr 0,04 0,02 0,91"
+  },
+  {
+    "food_number": 374,
+    "page": 53,
+    "line1": "374 Carne, bovina, paleta, sem gordura, cozida 62,9 194 810 29,7 7,4 56 0,0 NA 0,8 6 18",
+    "line2": "374 Tr 197 2,2 58 250 0,10 6,8 Tr Tr Tr 0,03 0,04 Tr 2,16"
+  },
+  {
+    "food_number": 375,
+    "page": 53,
+    "line1": "375 Carne, bovina, paleta, sem gordura, crua 72,1 141 590 21,0 5,7 42 0,0 NA 1,0 4 18",
+    "line2": "375 Tr 163 1,9 66 319 0,05 3,3 3 3 3 0,13 0,21 Tr 2,67"
+  },
+  {
+    "food_number": 376,
+    "page": 53,
+    "line1": "376 Carne, bovina, patinho, sem gordura, cru 72,9 133 558 21,7 4,5 56 0,0 NA 1,0 3 20",
+    "line2": "376 0,01 170 1,8 49 318 0,05 4,5 2 2 2 0,11 0,08 Tr 3,61"
+  },
+  {
+    "food_number": 377,
+    "page": 53,
+    "line1": "377 Carne, bovina, patinho, sem gordura, grelhado 55,2 219 917 35,9 7,3 126 0,0 NA 1,3 5 27",
+    "line2": "377 0,02 289 3,0 60 421 0,12 8,1 Tr Tr Tr 0,04 0,03 Tr 3,01"
+  },
+  {
+    "food_number": 378,
+    "page": 53,
+    "line1": "378 Carne, bovina, peito, sem gordura, cozido 51,2 338 1416 22,2 27,0 100 0,0 NA 0,7 4 14",
+    "line2": "378 Tr 136 1,6 56 204 0,05 3,9 Tr Tr Tr Tr 0,30 Tr 4,54"
+  },
+  {
+    "food_number": 379,
+    "page": 53,
+    "line1": "379 Carne, bovina, peito, sem gordura, cru 61,5 259 1085 17,6 20,4 59 0,0 NA 0,9 4 15",
+    "line2": "379 Tr 124 1,3 64 241 0,06 2,6 4 4 4 0,11 0,07 0,03 3,91"
+  },
+  {
+    "food_number": 380,
+    "page": 53,
+    "line1": "380 Carne, bovina, picanha, com gordura, crua 65,6 213 891 18,8 14,7 60 0,0 NA 0,9 2 14",
+    "line2": "380 Tr 165 1,7 38 232 0,06 3,8 3 3 3 0,13 0,16 Tr 4,77"
+  },
+  {
+    "food_number": 381,
+    "page": 53,
+    "line1": "381 Carne, bovina, picanha, com gordura, grelhada 53,4 289 1208 26,4 19,5 92 0,0 NA 1,1 4 24",
+    "line2": "381 Tr 246 3,2 60 355 0,14 5,5 Tr Tr Tr 0,03 0,06 0,13 1,60"
+  },
+  {
+    "food_number": 382,
+    "page": 53,
+    "line1": "382 Carne, bovina, picanha, sem gordura, crua 72,4 134 559 21,3 4,7 75 0,0 NA 1,0 3 20",
+    "line2": "382 Tr 183 2,1 61 322 0,08 4,2 Tr Tr Tr Tr 0,05 Tr 1,89"
+  },
+  {
+    "food_number": 383,
+    "page": 53,
+    "line1": "383 Carne, bovina, picanha, sem gordura, grelhada 54,6 238 998 31,9 11,3 100 0,0 NA 1,2 4 25",
+    "line2": "383 0,02 282 3,6 61 377 0,17 6,7 Tr Tr Tr Tr 0,08 0,03 1,82"
+  },
+  {
+    "food_number": 384,
+    "page": 53,
+    "line1": "384 Carne, bovina, seca, cozida 47,2 313 1309 26,9 21,9 100 0,0 NA 4,7 13 12",
+    "line2": "384 0,02 82 1,9 1943 86 0,03 7,7 Tr Tr Tr Tr 0,06 Tr 2,32"
+  },
+  {
+    "food_number": 385,
+    "page": 53,
+    "line1": "385 Carne, bovina, seca, crua 39,2 313 1309 19,7 25,4 92 0,0 NA 15,3 14 12",
+    "line2": "385 0,01 100 1,3 4440 190 Tr 3,7 Tr Tr Tr Tr 0,07 Tr 2,83"
+  },
+  {
+    "food_number": 386,
+    "page": 53,
+    "line1": "386 Coxinha de frango, frita 42,2 283 1184 9,6 11,8 15 34,5 5,0 1,8 18 17",
+    "line2": "386 0,28 93 1,3 532 166 0,09 0,5 Tr 0,09 Tr Tr 2,60 Tr"
+  },
+  {
+    "food_number": 387,
+    "page": 53,
+    "line1": "387 Croquete, de carne, cru 56,0 246 1028 12,0 15,6 30 13,9 2,5 15 24",
+    "line2": "387 0,34 144 2,5 711 221 0,10 2,7 Tr 0,11 0,04 Tr 1,95 Tr"
+  },
+  {
+    "food_number": 388,
+    "page": 53,
+    "line1": "388 Croquete, de carne, frito 39,2 347 1451 16,9 22,7 38 18,1 3,1 18 30",
+    "line2": "388 0,39 176 2,3 916 313 0,09 3,3 Tr 0,14 0,04 Tr 4,77 Tr"
+  },
+  {
+    "food_number": 389,
+    "page": 53,
+    "line1": "389 Empada de frango, pré-cozida, assada 28,2 358 1499 6,9 15,6 23 47,5 2,2 1,8 16 18",
+    "line2": "389 0,32 78 1,2 525 138 0,07 0,6 Tr 0,12 Tr Tr Tr"
+  },
+  {
+    "food_number": 390,
+    "page": 53,
+    "line1": "390 Empada, de frango, pré-cozida 32,0 377 1579 7,3 22,9 23 35,5 2,2 2,2 14 17",
+    "line2": "390 0,25 78 0,7 771 156 0,09 0,5 Tr 0,11 Tr 0,03 Tr"
+  },
+  {
+    "food_number": 391,
+    "page": 53,
+    "line1": "391 Frango, asa, com pele, crua 67,5 213 892 18,1 15,1 113 0,0 NA 0,7 11 23",
+    "line2": "391 0,01 155 0,6 96 211 0,02 1,2 10 10 10 0,11 0,04 Tr 2,58"
+  },
+  {
+    "food_number": 392,
+    "page": 53,
+    "line1": "392 Frango, caipira, inteiro, com pele, cozido 59,7 243 1016 23,9 15,6 110 0,0 NA 0,8 17 18",
+    "line2": "392 0,01 162 1,7 56 210 0,08 1,7 16 16 16 0,03 Tr Tr 6,33"
+  },
+  {
+    "food_number": 393,
+    "page": 53,
+    "line1": "393 Frango, caipira, inteiro, sem pele, cozido 61,4 196 819 29,6 7,7 106 0,0 NA 1,1 66 23",
+    "line2": "393 0,02 210 2,1 53 224 0,15 2,7 6 6 6 0,03 0,03 Tr 9,20"
+  },
+  {
+    "food_number": 394,
+    "page": 53,
+    "line1": "394 Frango, coração, cru 69,1 222 927 12,6 18,6 159 0,0 NA 0,8 6 20",
+    "line2": "394 0,05 193 4,1 95 220 0,20 2,0 9 9 9 0,23 0,35 Tr 3,39"
+  },
+  {
+    "food_number": 395,
+    "page": 53,
+    "line1": "395 Frango, coração, grelhado 63,5 207 867 22,4 12,1 280 0,6 NA 1,3 8 20",
+    "line2": "395 0,06 276 6,5 128 243 0,30 3,4 Tr Tr Tr 0,20 0,19 Tr 9,70"
+  },
+  {
+    "food_number": 396,
+    "page": 53,
+    "line1": "396 Frango, coxa, com pele, assada 59,8 215 900 28,5 10,4 145 0,1 NA 1,3 8 14",
+    "line2": "396 Tr 251 1,2 95 318 0,05 2,6 6 6 6 0,05 0,05 Tr 10,40"
+  },
+  {
+    "food_number": 397,
+    "page": 53,
+    "line1": "397 Frango, coxa, com pele, crua 72,9 161 676 17,1 9,8 97 0,0 NA 0,8 8 26",
+    "line2": "397 0,02 185 0,7 95 275 0,03 2,0 10 10 10 0,16 0,05 Tr 2,04"
+  },
+  {
+    "food_number": 398,
+    "page": 53,
+    "line1": "398 Frango, coxa, sem pele, cozida 66,7 167 701 26,9 5,8 133 0,0 NA 0,9 12 11",
+    "line2": "398 Tr 187 0,8 64 191 0,03 2,8 Tr Tr Tr 0,07 Tr Tr 8,20"
+  },
+  {
+    "food_number": 399,
+    "page": 53,
+    "line1": "399 Frango, coxa, sem pele, crua 76,4 120 502 17,8 4,9 91 0,0 NA 0,9 8 27",
+    "line2": "399 0,02 196 0,8 98 291 0,03 2,2 12 12 12 0,17 0,05 Tr 3,53"
+  },
+  {
+    "food_number": 400,
+    "page": 53,
+    "line1": "400 Frango, fígado, cru 77,8 106 446 17,6 3,5 341 0,0 NA 1,2 6 28",
+    "line2": "400 0,35 344 9,5 82 281 0,26 3,7 3863 3863 3863 0,62 0,56 Tr 6,36"
+  },
+  {
+    "food_number": 401,
+    "page": 53,
+    "line1": "401 Frango, filé, à milanesa 54,9 221 924 28,5 7,8 84 7,5 1,1 1,3 9 35",
+    "line2": "401 0,06 249 1,1 122 408 0,05 0,8 7 7 7 0,05 0,04 0,52 11,07"
+  },
+  {
+    "food_number": 402,
+    "page": 53,
+    "line1": "402 Frango, inteiro, com pele, cru 66,5 226 947 16,4 17,3 85 0,0 NA 0,7 6 24",
+    "line2": "402 0,01 174 0,6 63 217 0,04 1,1 7 7 7 0,08 0,03 Tr 3,28"
+  },
+  {
+    "food_number": 403,
+    "page": 53,
+    "line1": "403 Frango, inteiro, sem pele, assado 63,2 187 784 28,0 7,5 111 0,0 NA 1,2 9 14",
+    "line2": "403 Tr 233 0,6 70 283 0,03 1,6 Tr Tr Tr 0,09 Tr Tr 11,20"
+  },
+  {
+    "food_number": 404,
+    "page": 53,
+    "line1": "404 Frango, inteiro, sem pele, cozido 67,5 170 713 25,0 7,1 99 0,0 NA 0,9 8 12",
+    "line2": "404 Tr 194 0,5 51 217 0,04 1,2 Tr Tr Tr 0,10 Tr Tr 12,83"
+  },
+  {
+    "food_number": 405,
+    "page": 55,
+    "line1": "405 Frango, inteiro, sem pele, cru 74,9 129 540 20,6 4,6 78 0,0 NA 0,9 7 27",
+    "line2": "405 0,01 190 0,5 73 238 0,03 1,2 4 4 4 0,12 0,03 Tr 3,28"
+  },
+  {
+    "food_number": 406,
+    "page": 55,
+    "line1": "406 Frango, peito, com pele, assado 58,5 212 886 33,4 7,6 109 0,0 NA 1,5 8 18",
+    "line2": "406 0,01 297 0,5 56 380 0,01 1,0 6 6 6 0,12 Tr Tr 15,80"
+  },
+  {
+    "food_number": 407,
+    "page": 55,
+    "line1": "407 Frango, peito, com pele, cru 71,9 149 625 20,8 6,7 80 0,0 NA 0,9 8 28",
+    "line2": "407 0,01 213 0,4 62 252 0,05 0,6 4 4 4 0,09 Tr Tr 2,58"
+  },
+  {
+    "food_number": 408,
+    "page": 55,
+    "line1": "408 Frango, peito, sem pele, cozido 65,6 163 681 31,5 3,2 89 0,0 NA 1,0 6 14",
+    "line2": "408 Tr 224 0,3 36 231 0,02 0,9 Tr Tr Tr 0,10 Tr Tr 7,60"
+  },
+  {
+    "food_number": 409,
+    "page": 55,
+    "line1": "409 Frango, peito, sem pele, cru 74,8 119 499 21,5 3,0 59 0,0 NA 1,0 7 31",
+    "line2": "409 0,01 222 0,4 56 267 0,03 0,7 2 2 2 0,10 Tr Tr 5,86"
+  },
+  {
+    "food_number": 410,
+    "page": 55,
+    "line1": "410 Frango, peito, sem pele, grelhado 63,8 159 666 32,0 2,5 89 0,0 NA 1,4 5 18",
+    "line2": "410 Tr 295 0,3 50 387 0,02 0,8 Tr Tr Tr 0,11 Tr Tr 24,83"
+  },
+  {
+    "food_number": 411,
+    "page": 55,
+    "line1": "411 Frango, sobrecoxa, com pele, assada 55,0 260 1086 28,7 15,2 158 0,0 NA 1,3 11 15",
+    "line2": "411 Tr 252 1,2 96 323 0,06 2,2 8 8 8 0,10 0,05 Tr 11,20"
+  },
+  {
+    "food_number": 412,
+    "page": 55,
+    "line1": "412 Frango, sobrecoxa, com pele, crua 63,6 255 1065 15,5 20,9 88 0,0 NA 0,8 7 22",
+    "line2": "412 0,01 154 0,7 68 190 0,05 1,3 7 7 7 0,09 0,06 Tr 3,40"
+  },
+  {
+    "food_number": 413,
+    "page": 55,
+    "line1": "413 Frango, sobrecoxa, sem pele, assada 55,6 233 974 29,2 12,0 145 0,0 NA 1,5 12 17",
+    "line2": "413 Tr 281 1,2 106 382 0,07 2,2 11 11 11 0,10 0,05 Tr 10,20"
+  },
+  {
+    "food_number": 414,
+    "page": 55,
+    "line1": "414 Frango, sobrecoxa, sem pele, crua 72,7 162 677 17,6 9,6 84 0,0 NA 0,9 6 26",
+    "line2": "414 0,02 187 0,9 80 241 0,06 1,7 4 4 4 0,12 0,06 Tr 4,06"
+  },
+  {
+    "food_number": 415,
+    "page": 55,
+    "line1": "415 Hambúrguer, bovino, cru 63,6 215 899 13,2 16,2 70 4,2 * 2,9 34 25",
+    "line2": "415 0,36 141 1,9 869 383 0,16 1,7 Tr 0,06 0,08 0,04 3,53"
+  },
+  {
+    "food_number": 416,
+    "page": 55,
+    "line1": "416 Hambúrguer, bovino, frito 52,5 258 1081 20,0 17,0 49 6,3 * 4,2 62 60",
+    "line2": "416 0,52 324 3,0 1252 660 0,17 3,2 Tr 0,13 0,06 Tr 2,73"
+  },
+  {
+    "food_number": 417,
+    "page": 55,
+    "line1": "417 Hambúrguer, bovino, grelhado 59,2 210 878 13,2 12,4 59 11,3 * 3,9 56 48",
+    "line2": "417 0,40 263 2,6 1090 538 0,18 3,0 Tr 0,18 0,06 Tr 5,77"
+  },
+  {
+    "food_number": 418,
+    "page": 55,
+    "line1": "418 Lingüiça, frango, crua 64,8 218 913 14,2 17,4 64 0,0 NA 3,3 11 19",
+    "line2": "418 0,05 182 0,5 1126 280 0,05 0,7 Tr 0,11 0,05 Tr 4,60"
+  },
+  {
+    "food_number": 419,
+    "page": 55,
+    "line1": "419 Lingüiça, frango, frita 59,6 245 1027 18,3 18,5 76 0,0 NA 3,8 15 29",
+    "line2": "419 0,10 262 0,8 1374 364 0,04 1,2 Tr 0,11 0,05 Tr 5,67"
+  },
+  {
+    "food_number": 420,
+    "page": 55,
+    "line1": "420 Lingüiça, frango, grelhada 58,6 244 1019 18,2 18,4 80 0,0 NA 3,8 14 21",
+    "line2": "420 0,10 228 0,7 1351 356 0,09 1,0 Tr 0,12 0,04 Tr 5,97"
+  },
+  {
+    "food_number": 421,
+    "page": 55,
+    "line1": "421 Lingüiça, porco, crua 62,5 227 951 16,1 17,6 53 0,0 NA 3,2 6 14",
+    "line2": "421 0,01 157 0,4 1176 316 0,04 1,4 Tr 0,49 0,05 Tr 2,60"
+  },
+  {
+    "food_number": 422,
+    "page": 55,
+    "line1": "422 Lingüiça, porco, frita 54,6 280 1170 20,5 21,3 75 0,0 NA 3,9 8 18",
+    "line2": "422 0,01 211 0,9 1432 409 0,06 3,1 Tr 0,41 0,07 Tr 5,83"
+  },
+  {
+    "food_number": 423,
+    "page": 55,
+    "line1": "423 Lingüiça, porco, grelhada 50,5 296 1241 23,2 21,9 82 0,0 NA 4,0 8 19",
+    "line2": "423 0,01 210 1,0 1456 427 0,07 3,5 Tr 0,40 0,07 Tr 6,60"
+  },
+  {
+    "food_number": 424,
+    "page": 55,
+    "line1": "424 Mortadela 56,4 269 1125 12,0 21,6 83 5,8 NA 4,1 67 19",
+    "line2": "424 0,11 216 1,5 1212 247 0,08 1,0 25 0,14 0,06 Tr 3,00"
+  },
+  {
+    "food_number": 425,
+    "page": 55,
+    "line1": "425 Peru, congelado, assado 65,3 163 682 26,2 5,7 91 0,0 NA 2,2 14 12",
+    "line2": "425 0,02 197 0,6 628 175 0,03 1,2 Tr Tr Tr 0,06 Tr Tr 6,23"
+  },
+  {
+    "food_number": 426,
+    "page": 55,
+    "line1": "426 Peru, congelado, cru 78,2 94 392 18,1 1,8 68 0,0 NA 2,5 10 19",
+    "line2": "426 Tr 217 0,9 711 281 0,36 1,4 Tr Tr Tr 0,06 Tr Tr 4,23"
+  },
+  {
+    "food_number": 427,
+    "page": 55,
+    "line1": "427 Porco, bisteca, crua 67,7 164 687 21,5 8,0 56 0,0 NA 1,0 6 24",
+    "line2": "427 Tr 195 0,5 54 335 0,07 1,4 Tr Tr Tr 0,90 Tr Tr 2,65"
+  },
+  {
+    "food_number": 428,
+    "page": 55,
+    "line1": "428 Porco, bisteca, frita 47,3 311 1302 33,7 18,5 126 0,0 NA 1,6 69 29",
+    "line2": "428 0,01 290 0,8 63 404 0,07 2,2 10 10 10 0,34 Tr Tr 3,25"
+  },
+  {
+    "food_number": 429,
+    "page": 55,
+    "line1": "429 Porco, bisteca, grelhada 51,8 280 1172 28,9 17,4 82 0,0 NA 1,2 34 25",
+    "line2": "429 Tr 229 0,9 51 366 0,06 2,3 Tr Tr Tr 0,77 0,14 0,03 1,92"
+  },
+  {
+    "food_number": 430,
+    "page": 55,
+    "line1": "430 Porco, costela, assada 36,9 402 1683 30,2 30,3 113 0,0 NA 1,4 17 14",
+    "line2": "430 Tr 201 1,0 63 246 0,07 3,1 Tr Tr Tr 0,71 0,05 Tr 10,63"
+  },
+  {
+    "food_number": 431,
+    "page": 55,
+    "line1": "431 Porco, costela, crua 61,2 256 1069 18,0 19,8 69 0,0 NA 0,9 15 18",
+    "line2": "431 Tr 159 0,9 88 248 0,05 2,3 Tr Tr Tr 0,62 Tr Tr 8,27"
+  },
+  {
+    "food_number": 432,
+    "page": 55,
+    "line1": "432 Porco, lombo, assado 56,6 210 880 35,7 6,4 103 0,0 NA 1,4 20 18",
+    "line2": "432 Tr 238 0,5 39 311 0,03 1,8 Tr Tr Tr 0,75 0,07 0,11 12,43"
+  },
+  {
+    "food_number": 433,
+    "page": 55,
+    "line1": "433 Porco, lombo, cru 67,7 176 735 22,6 8,8 55 0,0 NA 1,0 4 24",
+    "line2": "433 Tr 195 0,5 53 334 0,01 0,9 Tr Tr Tr 0,95 Tr Tr 13,83"
+  },
+  {
+    "food_number": 434,
+    "page": 55,
+    "line1": "434 Porco, orelha, salgada, crua 59,7 258 1082 18,5 19,9 83 0,0 NA 2,0 5 2",
+    "line2": "434 0,01 31 1,4 616 228 0,23 0,6 Tr Tr Tr 0,07 0,03 Tr Tr"
+  },
+  {
+    "food_number": 435,
+    "page": 55,
+    "line1": "435 Porco, pernil, assado 49,3 262 1097 32,1 13,9 110 0,0 NA 1,4 18 27",
+    "line2": "435 0,01 247 1,3 62 395 0,09 3,3 Tr Tr Tr 0,77 0,09 Tr 6,57"
+  },
+  {
+    "food_number": 436,
+    "page": 55,
+    "line1": "436 Porco, pernil, cru 67,1 186 778 20,1 11,1 59 0,0 NA 1,0 13 23",
+    "line2": "436 Tr 192 0,9 102 256 0,16 1,7 Tr Tr Tr 1,06 0,06 Tr 5,67"
+  },
+  {
+    "food_number": 437,
+    "page": 57,
+    "line1": "437 Porco, rabo, salgado, cru 43,8 377 1579 15,6 34,5 89 0,0 NA 3,5 22 4",
+    "line2": "437 0,01 42 0,6 1158 24 0,05 1,4 Tr Tr Tr 0,20 0,06 Tr 1,43"
+  },
+  {
+    "food_number": 438,
+    "page": 57,
+    "line1": "438 Presunto, com capa de gordura 73,9 128 535 14,4 6,8 40 1,4 NA 3,5 12 17",
+    "line2": "438 0,04 274 0,7 1021 295 0,04 1,3 Tr 0,62 0,03 Tr 3,78"
+  },
+  {
+    "food_number": 439,
+    "page": 57,
+    "line1": "439 Presunto, sem capa de gordura 77,2 94 392 14,3 2,7 36 2,1 NA 3,7 23 18",
+    "line2": "439 0,04 244 0,8 1039 307 0,04 1,5 Tr 0,50 0,03 Tr 4,00"
+  },
+  {
+    "food_number": 440,
+    "page": 57,
+    "line1": "440 Quibe, assado 69,0 136 570 14,6 2,7 34 12,9 1,9 0,9 16 36",
+    "line2": "440 0,76 174 2,2 40 288 0,51 4,1 Tr 0,04 0,04 Tr 1,81 Tr"
+  },
+  {
+    "food_number": 441,
+    "page": 57,
+    "line1": "441 Quibe, cru 74,5 109 458 12,4 1,7 27 10,8 1,6 0,7 12 26",
+    "line2": "441 0,39 126 1,7 39 242 0,13 2,8 Tr 0,09 0,03 Tr 1,20 Tr"
+  },
+  {
+    "food_number": 442,
+    "page": 57,
+    "line1": "442 Quibe, frito 54,0 254 1062 14,9 15,8 38 12,3 3,0 22 39",
+    "line2": "442 0,72 166 2,0 836 322 0,16 2,8 Tr 0,12 0,10 Tr 1,50 Tr"
+  },
+  {
+    "food_number": 443,
+    "page": 57,
+    "line1": "443 Salame 34,7 398 1665 25,8 30,6 85 2,9 NA 5,9 87 30",
+    "line2": "443 0,03 354 1,3 1574 548 0,05 3,2 Tr 0,88 0,23 Tr 12,49"
+  },
+  {
+    "food_number": 444,
+    "page": 57,
+    "line1": "444 Toucinho, cru 27,6 593 2479 11,5 60,3 73 0,0 NA 0,3 2 4",
+    "line2": "444 Tr 35 0,4 50 58 0,11 0,2 Tr Tr Tr Tr Tr Tr 5,10"
+  },
+  {
+    "food_number": 445,
+    "page": 57,
+    "line1": "445 Toucinho, frito 6,3 697 2914 27,3 64,3 89 0,0 NA 0,7 9 9",
+    "line2": "445 0,01 95 0,9 125 171 0,10 0,8 Tr Tr Tr Tr Tr Tr 5,03"
+  },
+  {
+    "food_number": 446,
+    "page": 57,
+    "line1": "446 Bebida láctea, pêssego 87,7 55 231 2,1 1,9 5 7,6 0,3 0,7 89 9",
+    "line2": "446 Tr 63 Tr 46 62 0,02 0,2 Tr 0,03 0,14 Tr 0,33 2,1"
+  },
+  {
+    "food_number": 447,
+    "page": 57,
+    "line1": "447 Creme de Leite 70,9 221 927 1,5 22,5 66 4,5 NA 0,6 83 8",
+    "line2": "447 0,01 118 0,3 52 119 0,02 0,3 128 Tr 0,10 Tr 0,00 Tr"
+  },
+  {
+    "food_number": 448,
+    "page": 57,
+    "line1": "448 Iogurte, natural 90,0 51 215 4,1 3,0 14 1,9 NA 0,9 143 11",
+    "line2": "448 Tr 119 Tr 52 71 0,02 0,4 23 0,04 0,22 Tr Tr 0,9"
+  },
+  {
+    "food_number": 449,
+    "page": 57,
+    "line1": "449 Iogurte, natural, desnatado 89,2 41 174 3,8 0,3 3 5,8 NA 0,9 157 12",
+    "line2": "449 Tr 110 Tr 60 182 Tr 0,5 * Tr 0,22 Tr Tr 0,3"
+  },
+  {
+    "food_number": 450,
+    "page": 57,
+    "line1": "450 Iogurte, sabor abacaxi * * * * * 6 * * * * *",
+    "line2": "450 * * * * * * * * * * * *"
+  },
+  {
+    "food_number": 451,
+    "page": 57,
+    "line1": "451 Iogurte, sabor morango 84,6 70 291 2,7 2,3 7 9,7 0,2 0,6 101 8",
+    "line2": "451 Tr 73 Tr 38 52 0,02 0,3 27 0,03 0,12 0,02 Tr Tr"
+  },
+  {
+    "food_number": 452,
+    "page": 57,
+    "line1": "452 Iogurte, sabor pêssego 85,1 68 284 2,5 2,3 8 9,4 0,7 0,6 95 8",
+    "line2": "452 Tr 66 0,1 37 52 0,02 0,3 21 0,02 0,10 Tr 0,38 Tr"
+  },
+  {
+    "food_number": 453,
+    "page": 57,
+    "line1": "453 Leite, condensado 27,0 313 1308 7,7 6,7 28 57,0 NA 1,6 246 22",
+    "line2": "453 Tr 187 0,1 94 329 0,03 0,9 53 0,06 0,33 0,57 Tr 2,1"
+  },
+  {
+    "food_number": 454,
+    "page": 57,
+    "line1": "454 Leite, de cabra 87,1 66 278 3,1 3,8 14 5,2 NA 0,9 112 10",
+    "line2": "454 Tr 113 0,1 74 140 0,04 0,4 35 Tr 0,14 Tr Tr Tr"
+  },
+  {
+    "food_number": 455,
+    "page": 57,
+    "line1": "455 Leite, de vaca, achocolatado 80,9 83 347 2,1 2,2 6 14,2 0,6 0,7 70 13",
+    "line2": "455 0,05 71 0,5 72 155 0,04 0,3 39 0,07 0,29 0,14 1,23 3,3"
+  },
+  {
+    "food_number": 456,
+    "page": 57,
+    "line1": "456 Leite, de vaca, desnatado, pó 3,1 362 1513 34,7 0,9 25 53,0 NA 8,2 1363 109",
+    "line2": "456 Tr 1673 0,9 432 1556 0,16 3,8 299 0,32 1,20 Tr 0,81"
+  },
+  {
+    "food_number": 457,
+    "page": 57,
+    "line1": "457 Leite, de vaca, desnatado, UHT * * * * * 4 * NA 0,8 134 10",
+    "line2": "457 Tr 85 Tr 51 140 0,02 0,4 Tr 0,04 0,26 Tr 1,49 Tr"
+  },
+  {
+    "food_number": 458,
+    "page": 57,
+    "line1": "458 Leite, de vaca, integral * * * * * 10 * NA 0,8 123 10",
+    "line2": "458 Tr 82 Tr 64 133 0,02 0,4 21 0,04 0,24 Tr 1,52 Tr"
+  },
+  {
+    "food_number": 459,
+    "page": 57,
+    "line1": "459 Leite, de vaca, integral, pó 2,7 497 2078 25,4 26,9 85 39,2 NA 5,8 890 77",
+    "line2": "459 Tr 1242 0,5 323 1132 0,11 2,7 361 0,24 1,03 Tr Tr *"
+  },
+  {
+    "food_number": 460,
+    "page": 57,
+    "line1": "460 Leite, fermentado 81,9 70 291 1,9 0,1 2 15,7 NA 0,5 72 6",
+    "line2": "460 0,02 63 Tr 33 94 0,01 0,3 Tr 0,08 0,11 Tr Tr 0,5"
+  },
+  {
+    "food_number": 461,
+    "page": 57,
+    "line1": "461 Queijo, minas, frescal 56,1 264 1106 17,4 20,2 62 3,2 NA 3,0 579 7",
+    "line2": "461 0,02 123 0,9 31 105 Tr 0,3 161 Tr 0,25 Tr Tr Tr"
+  },
+  {
+    "food_number": 462,
+    "page": 57,
+    "line1": "462 Queijo, minas, meia cura 47,1 321 1342 21,2 24,6 76 3,6 NA 3,5 696 27",
+    "line2": "462 0,02 403 0,2 501 120 0,07 2,7 111 0,03 0,32 Tr Tr"
+  },
+  {
+    "food_number": 463,
+    "page": 57,
+    "line1": "463 Queijo, mozarela 45,3 330 1380 22,6 25,2 80 3,0 NA 3,8 875 24",
+    "line2": "463 0,03 470 0,3 581 62 0,08 3,5 109 Tr 0,20 Tr Tr"
+  },
+  {
+    "food_number": 464,
+    "page": 57,
+    "line1": "464 Queijo, parmesão 21,2 453 1895 35,6 33,5 106 1,7 NA 8,0 992 33",
+    "line2": "464 0,05 745 0,5 1844 96 0,17 4,4 66 Tr 0,44 0,23 Tr Tr"
+  },
+  {
+    "food_number": 465,
+    "page": 57,
+    "line1": "465 Queijo, pasteurizado 54,4 303 1268 9,4 27,4 82 5,7 NA 3,1 323 16",
+    "line2": "465 0,01 578 0,3 780 194 0,05 1,3 57 Tr 0,20 Tr Tr Tr"
+  },
+  {
+    "food_number": 466,
+    "page": 59,
+    "line1": "466 Queijo, petit suisse, morango 72,2 121 507 5,8 2,8 12 18,5 NA 0,7 731 27",
+    "line2": "466 0,02 448 0,1 412 121 0,01 2,7 273 0,22 0,27 0,21 2,68 Tr"
+  },
+  {
+    "food_number": 467,
+    "page": 59,
+    "line1": "467 Queijo, prato 42,4 360 1506 22,7 29,1 91 1,9 NA 3,9 940 28",
+    "line2": "467 0,03 461 0,3 580 73 0,10 3,5 123 Tr 0,22 Tr Tr"
+  },
+  {
+    "food_number": 468,
+    "page": 59,
+    "line1": "468 Queijo, requeijão, cremoso 62,5 257 1074 9,6 23,4 74 2,4 NA 2,0 259 12",
+    "line2": "468 0,02 448 0,1 558 93 0,05 1,3 195 Tr 0,19 Tr Tr Tr"
+  },
+  {
+    "food_number": 469,
+    "page": 59,
+    "line1": "469 Queijo, ricota 73,6 140 585 12,6 8,1 49 3,8 NA 1,9 253 12",
+    "line2": "469 Tr 162 0,1 283 112 Tr 0,5 53 Tr 0,15 Tr Tr Tr"
+  },
+  {
+    "food_number": 470,
+    "page": 59,
+    "line1": "470 Bebida isotônica, sabores variados 93,5 26 107 0,0 0,0 NA 6,4 NA 0,1 1 Tr",
+    "line2": "470 Tr 9 0,7 44 13 Tr Tr NA"
+  },
+  {
+    "food_number": 471,
+    "page": 59,
+    "line1": "471 Café, infusão 10% 97,4 9 38 0,7 0,1 NA 1,5 NA 0,4 3 10",
+    "line2": "471 0,04 9 Tr 1 156 0,01 Tr NA"
+  },
+  {
+    "food_number": 472,
+    "page": 59,
+    "line1": "472 Cana, aguardente 1 216 902 NA NA Tr Tr",
+    "line2": "472 Tr Tr Tr 3 Tr 0,06 Tr NA Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 473,
+    "page": 59,
+    "line1": "473 Cana, caldo de 81,7 65 273 Tr Tr NA 18,2 0,1 0,1 9 12",
+    "line2": "473 0,21 5 0,8 Tr 18 0,01 0,1 NA Tr Tr 0,03 Tr 2,8"
+  },
+  {
+    "food_number": 474,
+    "page": 59,
+    "line1": "474 Cerveja, pilsen 2 92,4 41 170 0,6 Tr NA 3,3 NA 0,1 5 7",
+    "line2": "474 0,01 19 Tr 4 29 Tr Tr NA Tr Tr 0,14 2,92 Tr"
+  },
+  {
+    "food_number": 475,
+    "page": 59,
+    "line1": "475 Chá, erva-doce, infusão 5% 99,6 1 6 0,0 0,0 NA 0,4 NA 0,0 2 1",
+    "line2": "475 0,01 1 Tr 1 10 0,01 Tr NA 1,23 0,23"
+  },
+  {
+    "food_number": 476,
+    "page": 59,
+    "line1": "476 Chá, mate, infusão 5% 99,3 3 11 0,0 0,1 NA 0,6 NA 0,0 1 2",
+    "line2": "476 0,27 Tr Tr Tr 5 Tr Tr NA 0,89 Tr"
+  },
+  {
+    "food_number": 477,
+    "page": 59,
+    "line1": "477 Chá, preto, infusão 5% 99,4 2 9 0,0 0,0 NA 0,6 NA 0,0 0 1",
+    "line2": "477 0,09 2 Tr Tr 13 Tr Tr NA 3,11 0,48"
+  },
+  {
+    "food_number": 478,
+    "page": 59,
+    "line1": "478 Coco, água de 94,3 22 90 0,0 0,0 NA 5,3 0,1 0,5 19 5",
+    "line2": "478 0,25 4 Tr 2 162 Tr Tr NA 0,01 Tr Tr Tr 2,4"
+  },
+  {
+    "food_number": 479,
+    "page": 59,
+    "line1": "479 Refrigerante, tipo água tônica 92,0 31 129 0,0 0,0 NA 8,0 NA 0,0 1 Tr",
+    "line2": "479 Tr 0 Tr 8 2 Tr Tr NA"
+  },
+  {
+    "food_number": 480,
+    "page": 59,
+    "line1": "480 Refrigerante, tipo cola 91,3 34 140 0,0 0,0 NA 8,7 NA 0,1 1 Tr",
+    "line2": "480 Tr 17 Tr 7 1 Tr Tr NA"
+  },
+  {
+    "food_number": 481,
+    "page": 59,
+    "line1": "481 Refrigerante, tipo guaraná 90,0 39 162 0,0 0,0 NA 10,0 NA 0,0 1 Tr",
+    "line2": "481 Tr Tr Tr 9 1 Tr Tr NA"
+  },
+  {
+    "food_number": 482,
+    "page": 59,
+    "line1": "482 Refrigerante, tipo laranja 88,2 46 191 0,0 0,0 NA 11,8 NA 0,0 2 1",
+    "line2": "482 Tr 1 Tr 9 16 Tr Tr NA"
+  },
+  {
+    "food_number": 483,
+    "page": 59,
+    "line1": "483 Refrigerante, tipo limão 89,7 40 166 0,0 0,0 NA 10,3 NA 0,0 2 1",
+    "line2": "483 Tr Tr Tr 9 4 Tr Tr NA"
+  },
+  {
+    "food_number": 484,
+    "page": 59,
+    "line1": "484 Omelete, de queijo 60,5 268 1121 15,6 22,0 384 0,4 NA 1,5 166 14",
+    "line2": "484 0,03 314 1,4 216 127 0,03 1,4 59 0,03 0,24 Tr Tr Tr"
+  },
+  {
+    "food_number": 485,
+    "page": 59,
+    "line1": "485 Ovo, de codorna, inteiro, cru 71,7 177 740 13,7 12,7 568 0,8 NA 1,2 79 11",
+    "line2": "485 Tr 279 3,3 129 79 0,04 2,1 305 0,11 0,12 Tr 0,97"
+  },
+  {
+    "food_number": 486,
+    "page": 59,
+    "line1": "486 Ovo, de galinha, clara, cozida/10minutos 85,2 59 249 13,4 0,1 NA 0,0 NA 0,7 6 11",
+    "line2": "486 Tr 15 0,1 181 146 0,03 Tr NA Tr 0,08 Tr Tr"
+  },
+  {
+    "food_number": 487,
+    "page": 59,
+    "line1": "487 Ovo, de galinha, gema, cozida/10minutos 50,0 353 1476 15,9 30,8 1272 1,6 NA 1,7 114 9",
+    "line2": "487 0,06 386 2,9 45 87 Tr 2,9 148 0,18 0,22 Tr Tr"
+  },
+  {
+    "food_number": 488,
+    "page": 59,
+    "line1": "488 Ovo, de galinha, inteiro, cozido/10minutos 75,8 146 610 13,3 9,5 397 0,6 NA 0,8 49 11",
+    "line2": "488 0,02 184 1,5 146 139 0,04 1,2 32 0,08 0,30 Tr Tr"
+  },
+  {
+    "food_number": 489,
+    "page": 59,
+    "line1": "489 Ovo, de galinha, inteiro, cru 75,6 143 599 13,0 8,9 356 1,6 NA 0,8 42 13",
+    "line2": "489 Tr 164 1,6 168 150 0,06 1,1 79 0,07 0,58 Tr 0,75"
+  },
+  {
+    "food_number": 490,
+    "page": 59,
+    "line1": "490 Ovo, de galinha, inteiro, frito 63,5 240 1005 15,6 18,6 516 1,2 NA 1,1 73 16",
+    "line2": "490 0,03 422 2,1 166 184 0,04 1,5 94 0,06 0,32 Tr Tr Tr"
+  },
+  {
+    "food_number": 491,
+    "page": 59,
+    "line1": "491 Achocolatado, pó 1,1 401 1678 4,2 2,2 Tr 91,2 3,9 1,4 44 77",
+    "line2": "491 0,55 200 5,4 65 496 0,56 1,0 796 1,38 1,02 1,52 4,99 Tr"
+  },
+  {
+    "food_number": 492,
+    "page": 59,
+    "line1": "492 Açúcar, cristal 0,1 387 1619 0,3 Tr NA 99,6 NA Tr 8 1",
+    "line2": "492 Tr 0,2 Tr 3 Tr Tr NA"
+  },
+  {
+    "food_number": 493,
+    "page": 61,
+    "line1": "493 Açúcar, mascavo 3,3 369 1542 0,8 0,1 NA 94,5 NA 1,4 127 80",
+    "line2": "493 2,03 38 8,3 25 522 0,17 0,5 NA Tr 0,03 Tr Tr Tr"
+  },
+  {
+    "food_number": 494,
+    "page": 61,
+    "line1": "494 Açúcar, refinado 0,1 387 1617 0,3 Tr NA 99,5 NA Tr 4 1",
+    "line2": "494 Tr 0,1 12 6 Tr Tr NA"
+  },
+  {
+    "food_number": 495,
+    "page": 61,
+    "line1": "495 Chocolate, ao leite 1,3 540 2258 7,2 30,3 17 59,6 2,2 1,7 191 57",
+    "line2": "495 0,30 212 1,6 77 355 0,31 1,1 Tr 0,05 0,22 0,59 0,63 Tr"
+  },
+  {
+    "food_number": 496,
+    "page": 61,
+    "line1": "496 Chocolate, ao leite, com castanha do Pará 1,2 559 2338 7,4 34,2 16 55,4 2,5 1,8 171 80",
+    "line2": "496 0,36 303 1,5 64 431 0,45 1,3 36 0,04 0,24 Tr 1,37 1,4"
+  },
+  {
+    "food_number": 497,
+    "page": 61,
+    "line1": "497 Chocolate, ao leite, dietético 1,7 557 2330 6,9 33,8 13 56,3 2,8 1,3 188 67",
+    "line2": "497 0,41 276 3,3 85 458 0,43 1,1 7 0,31 0,25 Tr 0,79 2,0"
+  },
+  {
+    "food_number": 498,
+    "page": 61,
+    "line1": "498 Chocolate, meio amargo 1,0 475 1987 4,9 29,9 2 62,4 4,9 1,8 45 107",
+    "line2": "498 0,83 220 3,6 9 432 0,77 1,5 Tr 0,20 0,04 Tr 1,06 2,1"
+  },
+  {
+    "food_number": 499,
+    "page": 61,
+    "line1": "499 Cocada branca 3,4 449 1878 1,1 13,6 NA 81,4 3,6 0,5 7 17",
+    "line2": "499 0,36 396 1,2 29 183 0,20 0,4 NA Tr Tr 0,16 0,47 Tr"
+  },
+  {
+    "food_number": 500,
+    "page": 61,
+    "line1": "500 Doce, de abóbora, cremoso 43,9 199 832 0,9 0,2 NA 54,6 2,3 0,4 13 6",
+    "line2": "500 0,01 14 0,9 Tr 137 Tr Tr NA 0,08 Tr 0,04 Tr 0,1"
+  },
+  {
+    "food_number": 501,
+    "page": 61,
+    "line1": "501 Doce, de leite, cremoso 27,5 306 1282 5,5 6,0 20 59,5 NA 1,5 195 16",
+    "line2": "501 0,01 141 0,1 120 259 0,02 0,5 36 36 36 0,05 0,26 Tr Tr Tr"
+  },
+  {
+    "food_number": 502,
+    "page": 61,
+    "line1": "502 Geléia, mocotó, natural 73,5 106 444 2,1 0,1 Tr 24,2 NA 0,1 4 1",
+    "line2": "502 Tr Tr 0,1 43 2 Tr Tr Tr 0,19 Tr 0,22 Tr Tr"
+  },
+  {
+    "food_number": 503,
+    "page": 61,
+    "line1": "503 Glicose de milho 20,4 292 1222 0,0 0,0 NA 79,4 NA 0,2 6 2",
+    "line2": "503 Tr 5 0,1 59 5 Tr Tr NA"
+  },
+  {
+    "food_number": 504,
+    "page": 61,
+    "line1": "504 Maria mole 21,6 301 1260 3,8 0,2 NA 73,6 0,7 0,9 13 7",
+    "line2": "504 0,06 4 0,4 15 24 0,20 0,1 NA 0,04 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 505,
+    "page": 61,
+    "line1": "505 Maria mole, coco queimado 20,7 307 1283 3,9 0,1 NA 75,1 0,6 0,2 19 6",
+    "line2": "505 0,09 5 0,5 14 36 0,03 0,1 NA 0,04 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 506,
+    "page": 61,
+    "line1": "506 Marmelada 28,5 257 1076 0,4 0,1 NA 70,8 4,1 0,2 11 6",
+    "line2": "506 0,06 20 0,7 11 83 0,09 0,1 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 507,
+    "page": 61,
+    "line1": "507 Mel, de abelha 15,8 309 1294 0,0 0,0 NA 84,0 NA 0,1 10 6",
+    "line2": "507 0,38 4 0,3 6 99 Tr 0,2 NA 0,11 Tr Tr Tr 0,7"
+  },
+  {
+    "food_number": 508,
+    "page": 61,
+    "line1": "508 Melado 22,1 297 1241 0,0 0,0 NA 76,6 NA 1,3 102 115",
+    "line2": "508 2,62 74 5,4 4 395 0,84 0,3 NA Tr 0,05 0,20 Tr Tr"
+  },
+  {
+    "food_number": 509,
+    "page": 61,
+    "line1": "509 Quindim 23,9 411 1721 4,7 24,4 271 46,3 3,2 0,6 37 15",
+    "line2": "509 0,25 168 1,4 27 111 0,10 1,1 76 Tr 0,04 0,04 1,14 Tr"
+  },
+  {
+    "food_number": 510,
+    "page": 61,
+    "line1": "510 Rapadura 7,1 352 1473 1,0 0,1 NA 90,8 NA 1,1 30 47",
+    "line2": "510 1,66 21 4,4 22 459 0,17 0,6 NA Tr Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 511,
+    "page": 61,
+    "line1": "511 Café, pó, torrado 2,9 419 1752 14,7 11,9 NA 65,8 51,2 4,7 107 165",
+    "line2": "511 2,58 169 8,1 1 1609 1,30 0,5 NA Tr Tr Tr 11,89 Tr"
+  },
+  {
+    "food_number": 512,
+    "page": 61,
+    "line1": "512 Capuccino, pó 2,6 417 1746 11,3 8,6 29 73,6 2,4 3,8 467 71",
+    "line2": "512 0,17 358 2,3 382 886 Tr 1,1 52 Tr 1,41 Tr Tr Tr"
+  },
+  {
+    "food_number": 513,
+    "page": 61,
+    "line1": "513 Fermento em pó, químico 7,1 90 375 0,5 0,1 NA 43,9 NA 48,5",
+    "line2": "513 10052 NA"
+  },
+  {
+    "food_number": 514,
+    "page": 61,
+    "line1": "514 Fermento, biológico, levedura, tablete 71,9 90 376 17,0 1,5 NA 7,7 4,2 1,9 18 38",
+    "line2": "514 0,20 419 2,6 40 576 0,29 11,0 NA 0,30 0,36 Tr Tr Tr"
+  },
+  {
+    "food_number": 515,
+    "page": 61,
+    "line1": "515 Gelatina, sabores variados, pó 1,2 380 1591 8,9 Tr NA 89,2 NA 0,6 27 2",
+    "line2": "515 0,03 2 0,3 235 7 Tr Tr NA Tr Tr Tr Tr 40,0"
+  },
+  {
+    "food_number": 516,
+    "page": 61,
+    "line1": "516 Sal, dietético 0,6 NA NA NA NA NA NA NA 99,4",
+    "line2": "516 23432 20468 NA"
+  },
+  {
+    "food_number": 517,
+    "page": 61,
+    "line1": "517 Sal, grosso 0,4 NA NA NA NA NA NA NA",
+    "line2": "517 39943 NA"
+  },
+  {
+    "food_number": 518,
+    "page": 61,
+    "line1": "518 Shoyu 70,6 61 255 3,3 0,3 NA 11,6 NA 14,1 15 24",
+    "line2": "518 0,07 47 0,5 5024 165 Tr 0,2 NA 0,83 0,06 0,15 2,10 Tr"
+  },
+  {
+    "food_number": 519,
+    "page": 61,
+    "line1": "519 Tempero a base de sal 7,7 21 89 2,7 0,3 NA 2,1 0,6 87,3",
+    "line2": "519 32560 NA"
+  },
+  {
+    "food_number": 520,
+    "page": 61,
+    "line1": "520 Azeitona, preta, conserva 68,5 194 812 1,2 20,3 NA 5,5 4,6 4,5 59 5",
+    "line2": "520 0,06 16 5,5 1567 79 0,25 0,3 NA Tr Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 521,
+    "page": 63,
+    "line1": "521 Azeitona, verde, conserva 76,3 137 573 0,9 14,2 NA 4,1 3,8 4,5 46 4",
+    "line2": "521 0,03 5 0,2 1347 20 0,14 0,1 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 522,
+    "page": 63,
+    "line1": "522 Chantilly, spray, com gordura vegetal 55,1 315 1318 0,5 27,3 Tr 16,9 NA 0,2 2 1",
+    "line2": "522 Tr 16 Tr 110 5 0,01 0,1 Tr 0,07 Tr Tr Tr"
+  },
+  {
+    "food_number": 523,
+    "page": 63,
+    "line1": "523 Leite, de coco 78,0 166 695 1,0 18,4 NA 2,2 0,7 0,4 6 17",
+    "line2": "523 0,24 26 0,5 44 144 0,16 0,3 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 524,
+    "page": 63,
+    "line1": "524 Maionese, tradicional com ovos 58,4 302 1264 0,6 30,5 42 7,9 NA 2,6 3 1",
+    "line2": "524 Tr 14 0,1 787 16 Tr 0,1 8 Tr 0,05 Tr Tr Tr"
+  },
+  {
+    "food_number": 525,
+    "page": 63,
+    "line1": "525 Acarajé 50,5 289 1210 8,3 19,9 25 19,1 9,4 2,1 124 51",
+    "line2": "525 0,59 142 1,9 305 354 0,23 1,2 Tr 0,06 Tr Tr Tr"
+  },
+  {
+    "food_number": 526,
+    "page": 63,
+    "line1": "526 Arroz carreteiro 68,0 154 643 10,8 7,1 36 11,6 1,5 2,4 13 9",
+    "line2": "526 0,18 48 1,0 1622 87 0,08 2,7 Tr 0,03 Tr 0,07 1,60"
+  },
+  {
+    "food_number": 527,
+    "page": 63,
+    "line1": "527 Baião de dois, arroz e feijão-de-corda 69,1 136 568 6,2 3,2 4 20,4 5,1 1,1 33 19",
+    "line2": "527 0,27 72 0,6 93 157 0,08 0,6 Tr 0,04 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 528,
+    "page": 63,
+    "line1": "528 Barreado 71,2 165 690 18,3 9,5 60 0,2 0,1 0,8 15 21",
+    "line2": "528 0,05 169 2,4 48 295 0,17 4,8 Tr 0,03 0,04 Tr 2,09 Tr"
+  },
+  {
+    "food_number": 529,
+    "page": 63,
+    "line1": "529 Bife à cavalo, com contra filé 54,2 291 1219 23,7 21,1 257 0,0 NA 1,1 26 19",
+    "line2": "529 0,02 216 2,1 83 272 0,06 3,2 37 0,05 0,10 Tr 2,92"
+  },
+  {
+    "food_number": 530,
+    "page": 63,
+    "line1": "530 Bolinho de arroz 41,5 274 1144 8,0 8,3 70 41,7 2,7 0,5 24 13",
+    "line2": "530 0,42 87 2,1 59 96 0,13 0,9 Tr 0,08 0,05 Tr Tr Tr"
+  },
+  {
+    "food_number": 531,
+    "page": 63,
+    "line1": "531 Camarão à baiana 82,0 101 422 7,9 6,0 117 3,2 0,4 0,9 43 15",
+    "line2": "531 0,11 244 1,4 85 139 0,07 0,5 Tr Tr Tr Tr 0,31 4,1"
+  },
+  {
+    "food_number": 532,
+    "page": 63,
+    "line1": "532 Charuto, de repolho 81,5 78 327 6,8 1,1 21 10,1 1,5 0,4 23 13",
+    "line2": "532 0,22 68 0,9 12 184 1,45 1,8 Tr 0,03 Tr Tr 0,32 4,8"
+  },
+  {
+    "food_number": 533,
+    "page": 63,
+    "line1": "533 Cuscuz, de milho, cozido com sal 71,1 113 475 2,2 0,7 NA 25,3 2,1 0,7 2 3",
+    "line2": "533 0,02 23 0,2 248 11 Tr 0,2 Tr Tr Tr 0,06 Tr Tr"
+  },
+  {
+    "food_number": 534,
+    "page": 63,
+    "line1": "534 Cuscuz, paulista 68,9 142 595 2,6 4,6 15 22,5 2,4 1,3 14 5",
+    "line2": "534 0,06 26 0,3 236 53 0,05 0,2 Tr Tr Tr Tr 0,93 Tr"
+  },
+  {
+    "food_number": 535,
+    "page": 63,
+    "line1": "535 Cuxá, molho 81,0 80 335 5,6 3,6 58 5,7 3,0 4,0 105 34",
+    "line2": "535 0,23 111 0,9 1344 124 0,17 0,6 Tr 33 16 0,04 Tr 0,03 1,10 10,3"
+  },
+  {
+    "food_number": 536,
+    "page": 63,
+    "line1": "536 Dobradinha 75,3 125 521 19,8 4,4 144 0,0 NA 0,3 11 8",
+    "line2": "536 0,11 57 1,0 29 58 0,06 2,7 Tr Tr Tr Tr 4,27"
+  },
+  {
+    "food_number": 537,
+    "page": 63,
+    "line1": "537 Estrogonofe de carne 70,1 173 724 15,0 10,8 66 3,0 1,1 28 22",
+    "line2": "537 0,03 186 2,7 123 322 0,14 2,0 28 0,06 0,05 Tr 3,25 Tr"
+  },
+  {
+    "food_number": 538,
+    "page": 63,
+    "line1": "538 Estrogonofe de frango 70,9 157 656 17,6 8,0 80 2,6 1,0 26 25",
+    "line2": "538 0,03 195 1,5 99 307 0,12 0,6 28 0,07 0,04 0,03 3,37 Tr"
+  },
+  {
+    "food_number": 539,
+    "page": 63,
+    "line1": "539 Feijão tropeiro mineiro 61,7 152 634 10,2 6,8 68 19,6 3,6 1,8 41 36",
+    "line2": "539 0,38 199 2,2 365 349 0,22 1,4 9 Tr Tr Tr 1,44 Tr"
+  },
+  {
+    "food_number": 540,
+    "page": 63,
+    "line1": "540 Feijoada 71,8 117 489 8,7 6,5 22 11,6 5,1 1,4 32 32",
+    "line2": "540 0,24 105 1,3 278 303 0,15 0,8 Tr 0,08 0,03 Tr 0,93 Tr"
+  },
+  {
+    "food_number": 541,
+    "page": 63,
+    "line1": "541 Frango, com açafrão 79,5 113 472 9,7 6,2 50 4,1 0,2 0,5 13 16",
+    "line2": "541 0,09 167 0,8 29 256 0,02 0,5 8 0,03 Tr Tr 1,64 5,3"
+  },
+  {
+    "food_number": 542,
+    "page": 63,
+    "line1": "542 Macarrão, molho bolognesa 71,4 120 500 4,9 0,9 7 22,5 0,8 0,2 11 10",
+    "line2": "542 0,22 54 1,4 9 84 0,09 0,8 Tr 0,04 Tr Tr 1,44 Tr"
+  },
+  {
+    "food_number": 543,
+    "page": 63,
+    "line1": "543 Maniçoba 76,4 134 562 10,0 8,7 43 3,4 2,2 1,5 66 24",
+    "line2": "543 0,60 55 3,2 407 148 0,16 2,0 Tr 222 111 0,04 0,07 0,05 2,58 Tr"
+  },
+  {
+    "food_number": 544,
+    "page": 63,
+    "line1": "544 Quibebe 81,1 86 361 8,6 2,7 NA 6,6 1,7 1,0 8 10",
+    "line2": "544 0,05 43 0,8 247 153 0,61 1,6 Tr 105 52 Tr 0,03 0,04 Tr"
+  },
+  {
+    "food_number": 545,
+    "page": 63,
+    "line1": "545 Salada, de legumes, com maionese 82,0 96 402 1,1 7,0 7 8,9 2,2 0,9 12 9",
+    "line2": "545 0,10 22 0,2 228 141 0,04 0,2 Tr 283 141 0,04 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 546,
+    "page": 63,
+    "line1": "546 Salada, de legumes, cozida no vapor 90,0 35 148 2,0 0,3 NA 7,1 2,5 0,6 33 19",
+    "line2": "546 0,24 45 0,4 3 244 0,17 0,3 NA 510 255 0,05 0,03 0,03 Tr 29,4"
+  },
+  {
+    "food_number": 547,
+    "page": 63,
+    "line1": "547 Salpicão, de frango 72,5 148 619 13,9 7,8 53 4,6 0,4 1,1 9 13",
+    "line2": "547 0,03 103 0,3 248 149 0,08 0,4 Tr 15 7 0,05 Tr Tr 1,48 9,3"
+  },
+  {
+    "food_number": 548,
+    "page": 63,
+    "line1": "548 Sarapatel 75,0 123 515 18,5 4,4 315 1,1 1,1 12 13",
+    "line2": "548 0,10 164 7,2 216 199 1,48 1,8 1464 Tr 0,11 Tr 3,84 Tr"
+  },
+  {
+    "food_number": 549,
+    "page": 63,
+    "line1": "549 Tabule 85,8 57 240 2,0 1,2 NA 10,6 2,1 0,4 19 18",
+    "line2": "549 0,37 35 0,6 1 188 0,12 0,6 NA 0,03 Tr Tr 0,60 16,2"
+  },
+  {
+    "food_number": 550,
+    "page": 65,
+    "line1": "550 Tacacá 85,2 47 196 7,0 0,4 71 3,4 0,2 4,1 45 30",
+    "line2": "550 0,12 89 0,9 1349 240 0,22 0,8 Tr 35 18 0,05 Tr Tr Tr"
+  },
+  {
+    "food_number": 551,
+    "page": 65,
+    "line1": "551 Tapioca, com manteiga 24,9 348 1455 0,1 10,9 31 63,6 Tr 0,5 30 3",
+    "line2": "551 0,06 8 0,2 158 19 0,01 0,0 75 Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 552,
+    "page": 65,
+    "line1": "552 Tucupi, com pimenta-de-cheiro 91,9 27 114 2,1 0,3 NA 4,7 0,2 1,0 28 42",
+    "line2": "552 0,52 31 1,1 5 391 0,12 0,9 NA 51 25 Tr Tr 0,05 Tr 46,4"
+  },
+  {
+    "food_number": 553,
+    "page": 65,
+    "line1": "553 Vaca atolada 75,0 145 606 5,1 9,3 19 10,1 2,3 0,5 63 16",
+    "line2": "553 0,04 72 0,7 26 220 0,12 1,2 Tr Tr Tr Tr 0,77 Tr"
+  },
+  {
+    "food_number": 554,
+    "page": 65,
+    "line1": "554 Vatapá 58,4 255 1066 6,0 23,2 44 9,7 1,7 2,7 47 39",
+    "line2": "554 0,48 108 1,4 880 209 0,28 0,9 Tr Tr Tr Tr 1,80 Tr"
+  },
+  {
+    "food_number": 555,
+    "page": 65,
+    "line1": "555 Virado à paulista 48,6 307 1284 10,2 25,6 66 14,1 2,2 1,5 41 22",
+    "line2": "555 0,15 135 1,1 346 237 0,07 1,0 10 0,14 0,05 Tr 2,60 Tr"
+  },
+  {
+    "food_number": 556,
+    "page": 65,
+    "line1": "556 Yakisoba 69,4 113 472 7,5 2,6 NA 18,3 1,1 2,2 14 13",
+    "line2": "556 0,15 83 0,6 794 159 0,06 0,7 NA 62 31 0,16 Tr Tr 2,09 Tr"
+  },
+  {
+    "food_number": 557,
+    "page": 65,
+    "line1": "557 Amendoim, grão, cru 6,4 544 2276 27,2 43,9 NA 20,3 8,0 2,2 Tr 171",
+    "line2": "557 1,96 407 2,5 Tr 580 0,78 3,2 NA 0,10 0,03 0,76 10,18 Tr"
+  },
+  {
+    "food_number": 558,
+    "page": 65,
+    "line1": "558 Amendoim, torrado, salgado 1,7 606 2535 22,5 54,0 NA 18,7 7,8 3,2 39 159",
+    "line2": "558 1,70 261 1,3 376 496 0,68 2,1 NA 0,08 Tr 0,21 7,47 Tr"
+  },
+  {
+    "food_number": 559,
+    "page": 65,
+    "line1": "559 Ervilha, em vagem 76,8 88 367 7,5 0,5 NA 14,2 9,7 1,0 24 42",
+    "line2": "559 0,40 152 1,4 Tr 311 0,20 1,2 NA 0,27 0,07 0,06 1,16 12,4"
+  },
+  {
+    "food_number": 560,
+    "page": 65,
+    "line1": "560 Ervilha, enlatada, drenada 80,1 74 309 4,6 0,4 NA 13,4 5,1 1,4 22 23",
+    "line2": "560 0,46 79 1,4 372 147 0,14 0,9 NA 9 5 0,07 0,03 Tr Tr"
+  },
+  {
+    "food_number": 561,
+    "page": 65,
+    "line1": "561 Feijão, carioca, cozido 80,4 76 320 4,8 0,5 NA 13,6 8,5 0,7 27 42",
+    "line2": "561 0,28 87 1,3 2 255 0,19 0,7 NA 0,04 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 562,
+    "page": 65,
+    "line1": "562 Feijão, carioca, cru 14,0 329 1377 20,0 1,3 NA 61,2 18,4 3,5 123 210",
+    "line2": "562 1,02 385 8,0 Tr 1352 0,79 2,9 NA 0,17 Tr 0,65 4,02"
+  },
+  {
+    "food_number": 563,
+    "page": 65,
+    "line1": "563 Feijão, fradinho, cozido 80,0 78 326 5,1 0,6 NA 13,5 7,5 0,8 17 38",
+    "line2": "563 0,53 85 1,1 1 253 0,10 1,1 NA 0,12 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 564,
+    "page": 65,
+    "line1": "564 Feijão, fradinho, cru 12,7 339 1419 20,2 2,4 NA 61,2 23,6 3,5 78 178",
+    "line2": "564 1,43 355 5,1 10 1083 0,70 3,9 NA 0,14 0,03 0,26 Tr Tr"
+  },
+  {
+    "food_number": 565,
+    "page": 65,
+    "line1": "565 Feijão, jalo, cozido 75,8 93 388 6,1 0,5 NA 16,5 13,9 1,0 29 44",
+    "line2": "565 0,32 121 1,9 1 348 0,24 1,0 NA 0,13 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 566,
+    "page": 65,
+    "line1": "566 Feijão, jalo, cru 13,5 328 1372 20,1 0,9 NA 61,5 30,3 3,9 98 170",
+    "line2": "566 0,99 427 7,0 25 1276 0,95 3,0 NA 0,10 Tr 0,12 Tr Tr"
+  },
+  {
+    "food_number": 567,
+    "page": 65,
+    "line1": "567 Feijão, preto, cozido 80,2 77 322 4,5 0,5 NA 14,0 8,4 0,8 29 40",
+    "line2": "567 0,37 88 1,5 2 256 0,20 0,7 NA 0,06 Tr 0,03 Tr Tr"
+  },
+  {
+    "food_number": 568,
+    "page": 65,
+    "line1": "568 Feijão, preto, cru 14,9 324 1354 21,3 1,2 NA 58,8 21,8 3,8 111 188",
+    "line2": "568 1,32 471 6,5 Tr 1416 0,83 2,9 NA 0,12 Tr 0,59 4,60"
+  },
+  {
+    "food_number": 569,
+    "page": 65,
+    "line1": "569 Feijão, rajado, cozido 77,9 85 354 5,5 0,4 NA 15,3 9,3 0,9 29 42",
+    "line2": "569 0,29 113 1,4 1 315 0,23 0,9 NA 0,09 Tr 0,04 Tr Tr"
+  },
+  {
+    "food_number": 570,
+    "page": 65,
+    "line1": "570 Feijão, rajado, cru 15,0 326 1363 17,3 1,2 NA 62,9 24,0 3,7 111 170",
+    "line2": "570 1,17 335 18,6 14 1135 0,84 2,6 NA 0,07 0,03 0,07 Tr Tr"
+  },
+  {
+    "food_number": 571,
+    "page": 65,
+    "line1": "571 Feijão, rosinha, cozido 82,6 68 284 4,5 0,5 NA 11,8 4,8 0,6 19 43",
+    "line2": "571 0,46 90 1,2 2 241 0,09 1,3 NA Tr Tr Tr 3,69 Tr"
+  },
+  {
+    "food_number": 572,
+    "page": 65,
+    "line1": "572 Feijão, rosinha, cru 12,0 337 1410 20,9 1,3 NA 62,2 20,6 3,6 68 184",
+    "line2": "572 1,08 394 5,3 24 1109 0,60 4,0 NA 0,16 0,03 Tr 3,92 Tr"
+  },
+  {
+    "food_number": 573,
+    "page": 65,
+    "line1": "573 Feijão, roxo, cozido 80,0 77 322 5,7 0,5 NA 12,9 11,5 0,8 23 34",
+    "line2": "573 0,32 106 1,4 1 268 0,22 1,0 NA 0,15 Tr 0,03 Tr Tr"
+  },
+  {
+    "food_number": 574,
+    "page": 65,
+    "line1": "574 Feijão, roxo, cru 12,6 331 1387 22,2 1,2 NA 60,0 33,8 4,0 120 162",
+    "line2": "574 1,34 394 6,9 10 1221 1,04 3,3 NA 0,26 Tr 0,08 Tr Tr"
+  },
+  {
+    "food_number": 575,
+    "page": 65,
+    "line1": "575 Grão-de-bico, cru 12,3 355 1484 21,2 5,4 NA 57,9 12,4 3,2 114 146",
+    "line2": "575 3,16 342 5,4 5 1116 0,67 3,2 NA 0,52 Tr 0,75 Tr Tr"
+  },
+  {
+    "food_number": 576,
+    "page": 65,
+    "line1": "576 Guandu, cru 11,4 344 1440 19,0 2,1 NA 64,0 21,3 3,5 129 166",
+    "line2": "576 1,02 269 1,9 2 1215 0,57 2,0 NA 1,06 Tr 0,07 2,69 1,5"
+  },
+  {
+    "food_number": 577,
+    "page": 65,
+    "line1": "577 Lentilha, cozida 76,3 93 388 6,3 0,5 NA 16,3 7,9 0,6 16 22",
+    "line2": "577 0,29 104 1,5 1 220 0,17 1,1 NA 0,03 Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 578,
+    "page": 67,
+    "line1": "578 Lentilha, crua 11,5 339 1419 23,2 0,8 NA 62,0 16,9 2,6 54 94",
+    "line2": "578 1,08 368 7,0 Tr 887 0,83 3,5 NA 0,11 Tr 0,42 5,07"
+  },
+  {
+    "food_number": 579,
+    "page": 67,
+    "line1": "579 Paçoca, amendoim 1,8 487 2037 16,0 26,1 NA 52,4 7,3 3,8 22 101",
+    "line2": "579 1,06 198 1,1 167 348 0,38 1,6 NA Tr Tr 1,20 Tr Tr"
+  },
+  {
+    "food_number": 580,
+    "page": 67,
+    "line1": "580 Pé-de-moleque, amendoim 2,9 503 2105 13,2 28,0 NA 54,7 3,4 1,1 27 108",
+    "line2": "580 1,09 171 1,3 16 355 0,43 1,4 NA 0,04 0,03 0,11 5,94 Tr"
+  },
+  {
+    "food_number": 581,
+    "page": 67,
+    "line1": "581 Soja, farinha 5,8 404 1690 36,0 14,6 NA 38,4 20,2 5,1 206 242",
+    "line2": "581 2,87 539 13,1 6 1922 1,29 4,5 NA 0,20 0,04 0,03 Tr Tr"
+  },
+  {
+    "food_number": 582,
+    "page": 67,
+    "line1": "582 Soja, extrato solúvel, natural, fluido 91,3 39 164 2,4 1,6 NA 4,3 0,4 0,5 17 15",
+    "line2": "582 0,15 53 0,4 57 121 0,08 0,3 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 583,
+    "page": 67,
+    "line1": "583 Soja, extrato solúvel, pó 4,5 459 1920 35,7 26,2 NA 28,5 7,3 5,2 359 216",
+    "line2": "583 2,68 647 7,0 83 1607 1,19 5,8 NA Tr 0,11 0,35 Tr 9,2"
+  },
+  {
+    "food_number": 584,
+    "page": 67,
+    "line1": "584 Soja, queijo (tofu) 86,6 64 270 6,6 4,0 NA 2,1 0,8 0,7 81 38",
+    "line2": "584 0,33 130 1,4 1 182 0,18 0,9 NA 0,04 Tr 0,03 Tr Tr"
+  },
+  {
+    "food_number": 585,
+    "page": 67,
+    "line1": "585 Tremoço, cru 9,7 381 1595 33,6 10,3 NA 43,8 32,3 2,6 177 121",
+    "line2": "585 * 265 2,8 3 708 0,79 4,2 NA 0,24 Tr 0,07 Tr 25,0"
+  },
+  {
+    "food_number": 586,
+    "page": 67,
+    "line1": "586 Tremoço, em conserva 67,7 121 505 11,1 3,8 NA 12,4 14,4 5,0 16 4",
+    "line2": "586 * 40 0,3 1809 5 0,27 0,6 NA Tr Tr Tr Tr Tr"
+  },
+  {
+    "food_number": 587,
+    "page": 67,
+    "line1": "587 Amêndoa, torrada, salgada 3,1 581 2430 18,6 47,3 NA 29,5 11,6 1,5 237 222",
+    "line2": "587 1,95 493 3,1 279 640 0,93 2,6 NA 0,29 0,16 Tr Tr Tr"
+  },
+  {
+    "food_number": 588,
+    "page": 67,
+    "line1": "588 Castanha-de-caju, torrada, salgada 3,5 570 2386 18,5 46,3 NA 29,1 3,7 2,6 33 237",
+    "line2": "588 1,59 594 5,2 125 671 1,92 4,7 NA 0,29 0,05 0,39 Tr Tr"
+  },
+  {
+    "food_number": 589,
+    "page": 67,
+    "line1": "589 Castanha-do-Brasil, crua 3,5 643 2690 14,5 63,5 NA 15,1 7,9 3,4 146 365",
+    "line2": "589 1,10 853 2,3 1 651 1,79 4,2 NA 0,30 Tr 0,44 Tr Tr"
+  },
+  {
+    "food_number": 590,
+    "page": 67,
+    "line1": "590 Coco, cru 43,0 406 1701 3,7 42,0 NA 10,4 5,4 1,0 6 51",
+    "line2": "590 1,00 118 1,8 15 354 0,45 0,9 NA Tr Tr 0,03 Tr 2,5"
+  },
+  {
+    "food_number": 591,
+    "page": 67,
+    "line1": "591 Coco, verde, cru * * * * * * * * * * *",
+    "line2": "591 * * * * * * * NA * * * * *"
+  },
+  {
+    "food_number": 592,
+    "page": 67,
+    "line1": "592 Farinha, de mesocarpo de babaçu, crua 15,8 329 1376 1,4 0,2 NA 79,2 17,9 3,4 61 39",
+    "line2": "592 0,38 26 18,3 12 362 0,22 0,3 NA Tr Tr Tr 2,58 Tr"
+  },
+  {
+    "food_number": 593,
+    "page": 67,
+    "line1": "593 Gergelim, semente 3,9 584 2442 21,2 50,4 NA 21,6 11,9 2,9 825 361",
+    "line2": "593 2,67 741 5,4 3 546 1,51 5,2 NA 0,94 Tr 0,13 5,92 Tr"
+  },
+  {
+    "food_number": 594,
+    "page": 67,
+    "line1": "594 Linhaça, semente 6,7 495 2072 14,1 32,3 NA 43,3 33,5 3,7 211 347",
+    "line2": "594 2,81 615 4,7 9 869 1,09 4,4 NA 0,12 Tr 0,13 Tr Tr"
+  },
+  {
+    "food_number": 595,
+    "page": 67,
+    "line1": "595 Pinhão, cozido 50,5 174 730 3,0 0,7 NA 43,9 15,6 1,8 16 53",
+    "line2": "595 0,41 166 0,8 1 727 0,18 0,8 NA Tr Tr Tr Tr 27,7"
+  },
+  {
+    "food_number": 596,
+    "page": 67,
+    "line1": "596 Pupunha, cozida 54,5 219 914 2,5 12,8 NA 29,6 4,3 0,7 28 25",
+    "line2": "596 0,13 49 0,5 1 303 0,28 0,3 NA 875 438 Tr 0,09 0,03 Tr 2,2"
+  },
+  {
+    "food_number": 597,
+    "page": 67,
+    "line1": "597 Noz, crua 6,2 620 2594 14,0 59,4 NA 18,4 7,2 2,1 105 153",
+    "line2": "597 4,05 396 2,0 5 533 0,75 2,1 NA 0,38 Tr 0,13 1,08 Tr"
+  }
+]

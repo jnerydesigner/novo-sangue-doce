@@ -13,3 +13,13 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Kotlin/Compose and Android Studio generated state
+.kotlin/
+*.hprof
+captures/
+
+# Release/signing files kept only on the developer machine
+*.jks
+*.keystore
+keystore.properties

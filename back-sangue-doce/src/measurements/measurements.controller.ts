@@ -1,7 +1,8 @@
 import { type AuthenticatedRequest, AuthGuard } from "@app/@infra/guard/auth.guard";
-import { Body, Controller, Get, Param, Post, Query, Request, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, Request, Res, UseGuards } from "@nestjs/common";
 import type { Response } from "express";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
+import type { UpdateMeasurementDto } from "./dto/update-measurement.dto";
 import { MeasurementReportPdfService } from "./measurement-report-pdf.service";
 import {
   MeasurementsService,
@@ -23,6 +24,16 @@ export class MeasurementsController {
     @Request() req: AuthenticatedRequest,
   ): Promise<PublicMeasurement> {
     return this.measurementsService.create(req, createMeasurementDto);
+  }
+
+  @Patch(":id")
+  @UseGuards(AuthGuard)
+  update(
+    @Param("id") id: string,
+    @Body() updateMeasurementDto: UpdateMeasurementDto,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<PublicMeasurement> {
+    return this.measurementsService.update(req, id, updateMeasurementDto);
   }
 
   @Get()

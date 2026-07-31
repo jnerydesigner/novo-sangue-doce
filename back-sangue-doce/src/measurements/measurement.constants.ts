@@ -32,6 +32,17 @@ export const MEASUREMENT_NOTE_TYPES = [
 export type MeasurementReadingContext = (typeof READING_CONTEXTS)[number];
 export type MeasurementNoteType = (typeof MEASUREMENT_NOTE_TYPES)[number];
 
+export const MEASUREMENT_NOTE_SCHEDULE: Partial<Record<MeasurementNoteType, { hour: number; minute: number }>> = {
+  FASTING_WAKE_UP: { hour: 5, minute: 30 },
+  BEFORE_BREAKFAST: { hour: 6, minute: 0 },
+  AFTER_BREAKFAST: { hour: 8, minute: 0 },
+  BEFORE_LUNCH: { hour: 12, minute: 0 },
+  AFTER_LUNCH: { hour: 14, minute: 0 },
+  BEFORE_DINNER: { hour: 18, minute: 0 },
+  AFTER_DINNER: { hour: 20, minute: 0 },
+  BEFORE_SLEEP: { hour: 22, minute: 0 },
+};
+
 export const MEASUREMENT_NOTE_LABELS: Record<MeasurementNoteType, string> = {
   FASTING_WAKE_UP: "Jejum ao acordar",
   BEFORE_BREAKFAST: "Antes do cafe da manha",

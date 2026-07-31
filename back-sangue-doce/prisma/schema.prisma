@@ -86,6 +86,58 @@ enum NewsletterSubscriberStatus {
   BLOCKED
 }
 
+model TacoCategory {
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique
+  name      String
+  foods     TacoFood[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("taco_categories")
+}
+
+model TacoFood {
+  id          Int          @id @default(autoincrement())
+  foodId      Int          @unique @map("food_id")
+  foodNumber  Int          @unique @map("food_number")
+  page        Int?
+  description String
+  categoryId  Int          @map("category_id")
+  category    TacoCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  moisturePercent Decimal? @map("moisture_percent") @db.Decimal(10, 4)
+  energyKcal      Decimal? @map("energy_kcal") @db.Decimal(10, 4)
+  energyKj        Decimal? @map("energy_kj") @db.Decimal(10, 4)
+  proteinG        Decimal? @map("protein_g") @db.Decimal(10, 4)
+  fatG            Decimal? @map("fat_g") @db.Decimal(10, 4)
+  cholesterolMg   Decimal? @map("cholesterol_mg") @db.Decimal(10, 4)
+  carbohydratesG  Decimal? @map("carbohydrates_g") @db.Decimal(10, 4)
+  fiberG          Decimal? @map("fiber_g") @db.Decimal(10, 4)
+  ashG            Decimal? @map("ash_g") @db.Decimal(10, 4)
+  calciumMg       Decimal? @map("calcium_mg") @db.Decimal(10, 4)
+  magnesiumMg     Decimal? @map("magnesium_mg") @db.Decimal(10, 4)
+  manganeseMg     Decimal? @map("manganese_mg") @db.Decimal(10, 4)
+  phosphorusMg    Decimal? @map("phosphorus_mg") @db.Decimal(10, 4)
+  ironMg          Decimal? @map("iron_mg") @db.Decimal(10, 4)
+  sodiumMg        Decimal? @map("sodium_mg") @db.Decimal(10, 4)
+  potassiumMg     Decimal? @map("potassium_mg") @db.Decimal(10, 4)
+  copperMg        Decimal? @map("copper_mg") @db.Decimal(10, 4)
+  zincMg          Decimal? @map("zinc_mg") @db.Decimal(10, 4)
+  retinolMcg      Decimal? @map("retinol_mcg") @db.Decimal(10, 4)
+  vitaminAReMcg   Decimal? @map("vitamin_a_re_mcg") @db.Decimal(10, 4)
+  vitaminARaeMcg  Decimal? @map("vitamin_a_rae_mcg") @db.Decimal(10, 4)
+  thiamineMg      Decimal? @map("thiamine_mg") @db.Decimal(10, 4)
+  riboflavinMg    Decimal? @map("riboflavin_mg") @db.Decimal(10, 4)
+  pyridoxineMg    Decimal? @map("pyridoxine_mg") @db.Decimal(10, 4)
+  niacinMg        Decimal? @map("niacin_mg") @db.Decimal(10, 4)
+  vitaminCMg      Decimal? @map("vitamin_c_mg") @db.Decimal(10, 4)
+
+  @@index([description])
+  @@index([categoryId])
+  @@map("taco_foods")
+}
+
 model User {
   id            String         @id @default(uuid()) @db.Uuid
   name          String

@@ -71,6 +71,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 LoginScreen(
+                    initialEmail = "",
+                    initialPassword = "",
                     onLogin = { email, password, onFinished ->
                         login(
                             email = email,
@@ -120,8 +122,12 @@ class LoginActivity : ComponentActivity() {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LoginScreen(
+    initialEmail: String = "",
+    initialPassword: String = "",
     onLogin: (String, String, (String?) -> Unit) -> Unit
 ) {
+//    var email by remember { mutableStateOf(initialEmail) }
+//    var password by remember { mutableStateOf(initialPassword) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -161,7 +167,7 @@ private fun LoginScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(
+                colors = CardDefaults.cardColors(// var email by remember { mutableStateOf("") }
                     containerColor = SangueDoceCard
                 ),
                 elevation = CardDefaults.cardElevation(

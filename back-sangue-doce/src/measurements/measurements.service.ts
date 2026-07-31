@@ -2,7 +2,7 @@ import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import { AuthService } from "@app/auth/auth.service";
 import { UsersService } from "@app/users/users.service";
 import { PrismaService } from "@infra/database/prisma.service";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { $Enums, Prisma } from "@prisma/client";
 import type { ZodType } from "zod";
 import {
@@ -13,10 +13,12 @@ import {
 import {
     classifyMeasurementMoment,
     MEASUREMENT_NOTE_LABELS,
+    MEASUREMENT_NOTE_SCHEDULE,
     type MeasurementNoteType,
 } from "./measurement.constants";
+import { type UpdateMeasurementDto, updateMeasurementSchema } from "./dto/update-measurement.dto";
 
-const MEASUREMENT_TIME_ZONE = "America/Sao_Paulo";
+const MEASUREMENT_TIME_ZONE = "America/Manaus";
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 type MeasurementRecord = Prisma.MeasurementGetPayload<Record<string, never>>;
@@ -86,8 +88,13 @@ export class MeasurementsService {
     }
 
     const userTimeZone = this.getSupportedTimeZone(payload.timeZone);
-    const measuredAt = this.parseDateTimeInMeasurementTimeZone(payload.measuredAt, userTimeZone);
-    const inferredMoment = classifyMeasurementMoment(measuredAt, userTimeZone);
+    const sentMeasuredAt = this.parseDateTimeInMeasurementTimeZone(payload.measuredAt, userTimeZone);
+    const measuredAt = payload.noteType
+      ? this.resolveMeasuredAtForNoteType(sentMeasuredAt, payload.noteType, userTimeZone)
+      : sentMeasuredAt;
+    const inferredMoment = payload.noteType
+      ? { noteType: payload.noteType, readingContext: this.getReadingContext(payload.noteType) }
+      : classifyMeasurementMoment(measuredAt, userTimeZone);
     const measurementDay = this.getDatePartsInTimeZone(measuredAt, userTimeZone);
     const dayStart = this.createDateInTimeZone(
       measurementDay.year,
@@ -155,6 +162,37 @@ export class MeasurementsService {
 
       throw error;
     }
+  }
+
+  async update(
+    userRequest: AuthenticatedRequest,
+    id: string,
+    updateMeasurementDto: UpdateMeasurementDto,
+  ): Promise<PublicMeasurement> {
+    const userId = this.authService.getAuthenticatedUser(userRequest).sub;
+    if (!this.isValidUuid(id)) throw new BadRequestException("Invalid measurement id.");
+    if (!this.isValidUuid(userId)) throw new BadRequestException("Invalid user id.");
+    const parsed = updateMeasurementSchema.safeParse(updateMeasurementDto);
+    if (!parsed.success) throw new BadRequestException(parsed.error.issues.map((issue) => issue.message));
+
+    const existing = await this.prisma.measurement.findFirst({ where: { id, userId } });
+    if (!existing) throw new NotFoundException("Measurement not found.");
+    const noteType = parsed.data.noteType ?? existing.noteType;
+    const timeZone = this.getSupportedTimeZone(parsed.data.timeZone);
+    const dateParts = this.getDatePartsInTimeZone(existing.measuredAt, timeZone);
+    const measuredAt = noteType
+      ? this.resolveMeasuredAtForNoteType(existing.measuredAt, noteType, timeZone, dateParts)
+      : existing.measuredAt;
+    const measurement = await this.prisma.measurement.update({
+      where: { id },
+      data: {
+        ...(parsed.data.glucoseValueMgDl === undefined ? {} : { glucoseValueMgDl: parsed.data.glucoseValueMgDl }),
+        noteType,
+        measuredAt,
+        readingContext: noteType ? this.getReadingContext(noteType) : existing.readingContext,
+      },
+    });
+    return this.toPublicMeasurement(measurement);
   }
 
   async findAll(
@@ -415,6 +453,28 @@ export class MeasurementsService {
       Number(millisecond.padEnd(3, "0")),
       timeZone,
     );
+  }
+
+  private resolveMeasuredAtForNoteType(
+    date: Date,
+    noteType: MeasurementNoteType,
+    timeZone: string,
+    dateParts = this.getDatePartsInTimeZone(date, timeZone),
+  ): Date {
+    const schedule = MEASUREMENT_NOTE_SCHEDULE[noteType];
+    if (!schedule) return date;
+    return this.createDateInTimeZone(
+      dateParts.year, dateParts.month, dateParts.day, schedule.hour, schedule.minute, 0, 8, timeZone,
+    );
+  }
+
+  private getReadingContext(noteType: MeasurementNoteType) {
+    if (noteType === "FASTING_WAKE_UP") return "FASTING" as const;
+    if (["BEFORE_BREAKFAST", "BEFORE_LUNCH", "BEFORE_DINNER"].includes(noteType)) return "BEFORE_MEAL" as const;
+    if (["AFTER_BREAKFAST", "AFTER_LUNCH", "AFTER_DINNER"].includes(noteType)) return "AFTER_MEAL" as const;
+    if (noteType === "BEFORE_SLEEP") return "BEDTIME" as const;
+    if (["BEFORE_EXERCISE", "AFTER_EXERCISE"].includes(noteType)) return "EXERCISE" as const;
+    return ["FEELING_UNWELL", "ROUTINE_CHECK"].includes(noteType) ? "MANUAL" as const : "RANDOM" as const;
   }
 
   private parseReportMonth(value: string | undefined, fallback: number) {

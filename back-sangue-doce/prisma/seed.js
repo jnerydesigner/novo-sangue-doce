@@ -1,5 +1,8 @@
 require("dotenv/config");
 
+const fs = require("node:fs");
+const path = require("node:path");
+
 const { PrismaPg } = require("@prisma/adapter-pg");
 const { PrismaClient } = require("@prisma/client");
 const { scryptSync } = require("node:crypto");
@@ -8,6 +11,8 @@ const { buildSimplePostContent } = require("./seed-data/post-content");
 const { postCategories } = require("./seed-data/post-categories");
 const { postTags } = require("./seed-data/post-tags");
 const { seedPosts } = require("./seed-data/posts");
+
+const tacoFoodsPath = path.resolve(__dirname, "../../nutrition-facts-label/data/foods-consolidated.json");
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -119,7 +124,65 @@ function buildSeedMeasurements(userId) {
   }));
 }
 
+function decimalValue(value) {
+  if (value === null || value === undefined || value === "NA" || value === "Tr") return null;
+  const normalized = String(value).replace(/[^0-9,.-]/g, "").replace(",", ".");
+  const number = Number(normalized);
+  return Number.isFinite(number) ? number : null;
+}
+
+function readTacoFoods() {
+  const grouped = JSON.parse(fs.readFileSync(tacoFoodsPath, "utf8"));
+  return Object.entries(grouped).flatMap(([categorySlug, foods]) =>
+    foods.map((food) => ({ categorySlug, food })),
+  );
+}
+
+async function seedTacoFoods() {
+  for (const [categorySlug, foods] of Object.entries(JSON.parse(fs.readFileSync(tacoFoodsPath, "utf8")))) {
+    const category = await prisma.tacoCategory.upsert({
+      where: { slug: categorySlug },
+      update: { name: categorySlug.replaceAll("_", " ") },
+      create: { slug: categorySlug, name: categorySlug.replaceAll("_", " ") },
+    });
+
+    for (const food of foods) {
+      const nutrition = Object.fromEntries([
+        ["moisturePercent", food.moisture_percent], ["energyKcal", food.energy_kcal], ["energyKj", food.energy_kj],
+        ["proteinG", food.protein_g], ["fatG", food.fat_g], ["cholesterolMg", food.cholesterol_mg],
+        ["carbohydratesG", food.carbohydrates_g], ["fiberG", food.fiber_g], ["ashG", food.ash_g],
+        ["calciumMg", food.calcium_mg], ["magnesiumMg", food.magnesium_mg], ["manganeseMg", food.manganese_mg],
+        ["phosphorusMg", food.phosphorus_mg], ["ironMg", food.iron_mg], ["sodiumMg", food.sodium_mg],
+        ["potassiumMg", food.potassium_mg], ["copperMg", food.copper_mg], ["zincMg", food.zinc_mg],
+        ["retinolMcg", food.retinol_mcg], ["vitaminAReMcg", food.vitamin_a_re_mcg], ["vitaminARaeMcg", food.vitamin_a_rae_mcg],
+        ["thiamineMg", food.thiamine_mg], ["riboflavinMg", food.riboflavin_mg], ["pyridoxineMg", food.pyridoxine_mg],
+        ["niacinMg", food.niacin_mg], ["vitaminCMg", food.vitamin_c_mg],
+      ].reduce((result, [key, value]) => ({ ...result, [key]: decimalValue(value) }), {}));
+
+      await prisma.tacoFood.upsert({
+        where: { foodNumber: food.food_number },
+        update: {
+          foodId: food.food_id ?? food.food_number,
+          page: food.page ?? null,
+          description: food.description,
+          categoryId: category.id,
+          ...nutrition,
+        },
+        create: {
+          foodId: food.food_id ?? food.food_number,
+          foodNumber: food.food_number,
+          page: food.page ?? null,
+          description: food.description,
+          categoryId: category.id,
+          ...nutrition,
+        },
+      });
+    }
+  }
+}
+
 async function main() {
+  await seedTacoFoods();
   const jander = await prisma.user.upsert({
     where: { email: "jander.webmaster@gmail.com" },
     update: {
