@@ -1,8 +1,9 @@
+import type { Measurement } from "@/lib/api";
 import { quickActions } from "../dashboard.data";
 import { GlucoseChart } from "./glucose-chart";
 import { ToneDot } from "./tone-dot";
 
-export function GlucosePanel() {
+export function GlucosePanel({ measurements }: { measurements: Measurement[] }) {
   return (
     <section className="rounded-lg border border-line bg-card p-[clamp(20px,3vw,28px)] shadow-editorial">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -28,7 +29,7 @@ export function GlucosePanel() {
           ))}
         </div>
       </div>
-      <GlucoseChart />
+      <GlucoseChart measurements={measurements} />
     </section>
   );
 }

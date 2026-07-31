@@ -35,7 +35,7 @@ export default async function GlucosePage() {
                 triggerLabel="+ Nova leitura"
               />
             </div>
-            <GlucosePanel />
+            <GlucosePanel measurements={recentReadings} />
             <RecentReadings measurements={recentReadings} />
           </div>
         </section>

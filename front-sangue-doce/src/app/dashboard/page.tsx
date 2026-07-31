@@ -72,7 +72,7 @@ export default async function DashboardPage() {
           <SummaryTiles tiles={dashboardSummaryTiles} />
 
           <div className="mt-5 grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
-            <GlucosePanel />
+            <GlucosePanel measurements={recentReadings} />
             <RecentReadings measurements={recentReadings} />
           </div>
 
