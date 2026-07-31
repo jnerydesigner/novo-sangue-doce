@@ -76,6 +76,13 @@ function getCurrentTimeInputValue() {
   return `${hour}:${minute}`;
 }
 
+function getCurrentDateInputValue() {
+  const now = new Date();
+  return [now.getFullYear(), now.getMonth() + 1, now.getDate()]
+    .map((part, index) => (index === 0 ? String(part) : String(part).padStart(2, "0")))
+    .join("-");
+}
+
 function mapMeasurementToReading(measurement: Measurement): Reading {
   return {
     id: measurement.id,
@@ -143,6 +150,7 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     formData.set("time", time);
+    formData.set("date", getCurrentDateInputValue());
     formData.set("timeZone", timeZone);
 
     if (!value || value < 40 || value > 450) {

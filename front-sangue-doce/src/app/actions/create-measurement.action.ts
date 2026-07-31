@@ -10,21 +10,18 @@ type CreateMeasurementState = {
   ok: boolean;
 };
 
-function buildMeasuredAt(time: string) {
-  const today = new Date();
+function buildMeasuredAt(date: string, time: string) {
   const [hour, minute] = time.split(":").map(Number);
 
   if (!Number.isInteger(hour) || !Number.isInteger(minute)) {
     return null;
   }
 
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
   const formattedHour = String(hour).padStart(2, "0");
   const formattedMinute = String(minute).padStart(2, "0");
 
-  return `${year}-${month}-${day}T${formattedHour}:${formattedMinute}:00.000`;
+  return `${date}T${formattedHour}:${formattedMinute}:00.000`;
 }
 
 function getErrorMessage(error: unknown) {
@@ -59,7 +56,10 @@ export async function createMeasurementAction(formData: FormData): Promise<Creat
   }
 
   const glucoseValueMgDl = Number(formData.get("glucose"));
-  const measuredAt = buildMeasuredAt(String(formData.get("time") || ""));
+  const measuredAt = buildMeasuredAt(
+    String(formData.get("date") || ""),
+    String(formData.get("time") || ""),
+  );
   const timeZone = String(formData.get("timeZone") || "");
   const noteType = String(formData.get("noteType") || "") as MeasurementNoteType;
 

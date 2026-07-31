@@ -122,7 +122,7 @@ const MEASUREMENT_MOMENT_RULES: MeasurementMomentRule[] = [
 
 export function classifyMeasurementMoment(
   measuredAt: Date,
-  timeZone = "America/Sao_Paulo",
+  timeZone = "America/Manaus",
 ): {
   readingContext: MeasurementReadingContext;
   noteType: MeasurementNoteType;

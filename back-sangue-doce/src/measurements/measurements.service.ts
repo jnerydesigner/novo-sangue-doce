@@ -433,6 +433,14 @@ export class MeasurementsService {
     value: string,
     timeZone = MEASUREMENT_TIME_ZONE,
   ): Date {
+    // Timestamps with an explicit offset (especially the Android payload ending in Z)
+    // represent an instant in time. Preserve that instant and only convert it to the
+    // measurement timezone when determining the local day or scheduled note time.
+    if (/(?:Z|[+-]\d{2}:?\d{2})$/i.test(value)) {
+      const instant = new Date(value);
+      return Number.isNaN(instant.getTime()) ? new Date(Number.NaN) : instant;
+    }
+
     const match = value.match(
       /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3})\d*)?)?/,
     );

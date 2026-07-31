@@ -17,6 +17,13 @@ function getCurrentTimeInputValue() {
   return `${hour}:${minute}`;
 }
 
+function getCurrentDateInputValue() {
+  const now = new Date();
+  return [now.getFullYear(), now.getMonth() + 1, now.getDate()]
+    .map((part, index) => (index === 0 ? String(part) : String(part).padStart(2, "0")))
+    .join("-");
+}
+
 const measurementNoteOptions: Array<{ value: MeasurementNoteType; label: string }> = [
   { value: "FASTING_WAKE_UP", label: "Jejum ao acordar" },
   { value: "BEFORE_BREAKFAST", label: "Antes do café da manhã" },
@@ -74,6 +81,7 @@ export function QuickGlucoseForm({
     }
 
     formData.set("time", getCurrentTimeInputValue());
+    formData.set("date", getCurrentDateInputValue());
     formData.set("timeZone", Intl.DateTimeFormat().resolvedOptions().timeZone);
 
     startTransition(async () => {
