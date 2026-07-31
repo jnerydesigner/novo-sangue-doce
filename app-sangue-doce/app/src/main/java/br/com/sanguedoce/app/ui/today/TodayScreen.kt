@@ -1,5 +1,6 @@
 package br.com.sanguedoce.app.ui.today
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,8 +18,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -28,22 +30,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sanguedoce.app.component.AppDrawer
 import br.com.sanguedoce.app.model.TodayResponse
+import br.com.sanguedoce.app.ui.SangueDocePrimary
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -241,13 +238,16 @@ private fun TodayCard(
     onEditClick: (TodayResponse) -> Unit,
     onDeleteClick: (TodayResponse) -> Unit
 ) {
-    var menuExpanded by remember { mutableStateOf(false) }
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             containerColor = CardSurface
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = SangueDocePrimary
+
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
@@ -287,28 +287,19 @@ private fun TodayCard(
                     fontWeight = FontWeight.Bold
                 )
 
-                Box {
-                    IconButton(onClick = { menuExpanded = true }) {
-                        Icon(Icons.Default.MoreVert, contentDescription = "Opções da medição")
-                    }
-
-                    DropdownMenu(
-                        expanded = menuExpanded,
-                        onDismissRequest = { menuExpanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Editar") },
-                            onClick = {
-                                menuExpanded = false
-                                onEditClick(reading)
-                            }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { onEditClick(reading) }) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Editar medição",
+                            tint = PrimaryBlue
                         )
-                        DropdownMenuItem(
-                            text = { Text("Excluir") },
-                            onClick = {
-                                menuExpanded = false
-                                onDeleteClick(reading)
-                            }
+                    }
+                    IconButton(onClick = { onDeleteClick(reading) }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Excluir medição",
+                            tint = Color(0xFFB3261E)
                         )
                     }
                 }

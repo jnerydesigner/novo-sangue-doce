@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="navi">#1A3868</color>
     <color name="azure">#2E80C2</color>
+    <!-- Cor exclusiva da barra de status, contrastando com o conteúdo da aplicação. -->
+    <color name="status_bar_background">#102746</color>
 </resources>

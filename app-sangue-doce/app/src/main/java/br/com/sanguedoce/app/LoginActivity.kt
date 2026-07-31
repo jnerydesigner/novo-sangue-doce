@@ -71,8 +71,6 @@ class LoginActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 LoginScreen(
-                    initialEmail = "",
-                    initialPassword = "",
                     onLogin = { email, password, onFinished ->
                         login(
                             email = email,
@@ -126,10 +124,8 @@ private fun LoginScreen(
     initialPassword: String = "",
     onLogin: (String, String, (String?) -> Unit) -> Unit
 ) {
-//    var email by remember { mutableStateOf(initialEmail) }
-//    var password by remember { mutableStateOf(initialPassword) }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf(initialEmail) }
+    var password by remember { mutableStateOf(initialPassword) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
 

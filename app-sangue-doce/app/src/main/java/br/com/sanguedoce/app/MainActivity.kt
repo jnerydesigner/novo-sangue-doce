@@ -6,8 +6,17 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.sanguedoce.app.api.RetrofitClient
 import br.com.sanguedoce.app.repository.TodayRepository
@@ -51,43 +60,46 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                val uiState by viewModel
-                    .uiState
-                    .collectAsStateWithLifecycle()
+                Box {
+                    val uiState by viewModel
+                        .uiState
+                        .collectAsStateWithLifecycle()
 
-                TodayRoute(
-                    uiState = uiState,
-                    onRetry = viewModel::loadReadings,
-                    onAddClick = {
-                        startActivity(
-                            Intent(
-                                this,
-                                AddReadingActivity::class.java
-                            )
-                        )
-                    },
-                    onLogoutClick = {
-                        AuthSession.signOut(this)
-                        RetrofitClient.clearToken()
-                        startActivity(
-                            Intent(this, LoginActivity::class.java)
-                        )
-                        finish()
-                    },
-                    onEditClick = { reading ->
-                        startActivity(
-                            Intent(this, AddReadingActivity::class.java).apply {
+                    TodayRoute(
+                        uiState = uiState,
+                        onRetry = viewModel::loadReadings,
+                        onAddClick = {
+                            startActivity(Intent(this@MainActivity, AddReadingActivity::class.java))
+                        },
+                        onLogoutClick = {
+                            AuthSession.signOut(this@MainActivity)
+                            RetrofitClient.clearToken()
+                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                            finish()
+                        },
+                        onEditClick = { reading ->
+                            startActivity(Intent(this@MainActivity, AddReadingActivity::class.java).apply {
                                 putExtra(AddReadingActivity.EXTRA_EDIT_MODE, true)
                                 putExtra(AddReadingActivity.EXTRA_MEASUREMENT_ID, reading.id)
                                 putExtra(AddReadingActivity.EXTRA_GLUCOSE_VALUE, reading.glucoseValueMgDl)
                                 putExtra(AddReadingActivity.EXTRA_NOTE_TYPE, reading.noteType)
-                            }
-                        )
-                    },
-                    onDeleteClick = { reading ->
-                        Toast.makeText(this, "Excluir: ${reading.id}", Toast.LENGTH_SHORT).show()
-                    }
-                )
+                            })
+                        },
+                        onDeleteClick = { reading ->
+                            Toast.makeText(this@MainActivity, "Excluir: ${reading.id}", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+
+                    // Android 15+ draws edge-to-edge and ignores statusBarColor.
+                    // This scrim keeps the system-information area visually distinct.
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .fillMaxWidth()
+                            .background(Color(0xFF102746))
+                            .windowInsetsTopHeight(WindowInsets.systemBars)
+                    )
+                }
             }
         }
     }
