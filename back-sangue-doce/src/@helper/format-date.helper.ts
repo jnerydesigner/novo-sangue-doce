@@ -13,8 +13,27 @@ export function formatDateToDayMonthYear(value: Date | string | number): string 
   }
 
   const day = String(date.getUTCDate()).padStart(2, "0");
+
+  console.log("date", day);
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   const year = date.getUTCFullYear();
 
   return `${day}/${month}/${year}`;
+}
+
+export function formatDateHour(value: Date | string | number): string {
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    throw new Error("Invalid date.");
+  }
+
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = date.getUTCFullYear();
+
+  const hour = String(date.getUTCHours()).padStart(2, "0");
+  const minute = String(date.getUTCMinutes()).padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hour}:${minute}`;
 }
