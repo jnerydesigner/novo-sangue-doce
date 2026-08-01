@@ -13,10 +13,16 @@ export type AppHomeCard = {
   tone: string;
 };
 
+export type AppHomeGraph = {
+  hour: string;
+  value: number;
+};
+
 export type AppHomeResponse = {
   greeting: string;
   title: string;
   cards: AppHomeCard[];
+  graph?: AppHomeGraph[];
 };
 
 @Injectable()
@@ -59,6 +65,36 @@ export class AppHomeService {
           status: glucoseResult.label,
           detail: hourNow,
           tone: glucoseResult.color,
+        },
+        {
+          id: "last-sleep",
+          title: "Sono",
+          value: `7h10min`,
+          status: "Ontem",
+          detail: "meta 7h30min",
+          tone: "#279CF5",
+        },
+        {
+          id: "carbohydrates",
+          title: "Carboidratos",
+          value: `120g`,
+          status: "Ontem",
+          detail: "meta 150g",
+          tone: "#FF6B6B",
+        },
+      ],
+      graph: [
+        {
+          hour: "08:00",
+          value: 120,
+        },
+        {
+          hour: "12:00",
+          value: 150,
+        },
+        {
+          hour: "16:00",
+          value: 180,
         },
       ],
     };
