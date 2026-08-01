@@ -86,7 +86,7 @@ export class AppHomeService {
       graph: [
         {
           hour: "08:00",
-          value: 120,
+          value: 240,
         },
         {
           hour: "12:00",
@@ -95,6 +95,10 @@ export class AppHomeService {
         {
           hour: "16:00",
           value: 180,
+        },
+        {
+          hour: "18:00",
+          value: 120,
         },
       ],
     };
