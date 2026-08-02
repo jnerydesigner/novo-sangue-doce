@@ -28,5 +28,9 @@
     "shadcn": "^4.11.0",
     "tailwindcss": "3.4.17",
     "typescript": "5.7.3"
+  },
+  "resolutions": {
+    "@hono/node-server": "1.19.17",
+    "sharp": "0.35.3"
   }
 }
