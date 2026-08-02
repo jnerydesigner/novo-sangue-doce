@@ -102,6 +102,9 @@ class HomeActivity : ComponentActivity() {
                     onMeasurementsClick = {
                         startActivity(Intent(this@HomeActivity, MainActivity::class.java))
                     },
+                    onBloodClick = {
+                        startActivity(Intent(this@HomeActivity, AddReadingActivity::class.java))
+                    },
                     onContentClick = {
                         // Add navigation when the content screen is available.
                     },
@@ -134,6 +137,7 @@ private fun HomeRoute(
     onRetry: () -> Unit,
     onHomeClick: () -> Unit,
     onMeasurementsClick: () -> Unit,
+    onBloodClick: () -> Unit,
     onContentClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -145,6 +149,7 @@ private fun HomeRoute(
                 home = uiState.home,
                 onHomeClick = onHomeClick,
                 onMeasurementsClick = onMeasurementsClick,
+                onBloodClick = onBloodClick,
                 onContentClick = onContentClick,
                 onProfileClick = onProfileClick
             )
@@ -164,6 +169,7 @@ private fun HomeScreen(
     home: AppHomeResponse,
     onHomeClick: () -> Unit,
     onMeasurementsClick: () -> Unit,
+    onBloodClick: () -> Unit,
     onContentClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -176,7 +182,8 @@ private fun HomeScreen(
                 onHomeClick = onHomeClick,
                 onMeasurementsClick = onMeasurementsClick,
                 onContentClick = onContentClick,
-                onProfileClick = onProfileClick
+                onProfileClick = onProfileClick,
+                onBloodClick = onBloodClick
             )
         }
     ) { innerPadding ->
@@ -568,6 +575,7 @@ private fun HomeScreenPreview() {
             ),
             onHomeClick = {},
             onMeasurementsClick = {},
+            onBloodClick = {},
             onContentClick = {},
             onProfileClick = {}
         )

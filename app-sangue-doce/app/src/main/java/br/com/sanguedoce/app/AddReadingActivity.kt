@@ -1,5 +1,6 @@
 package br.com.sanguedoce.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -43,6 +44,7 @@ import androidx.lifecycle.lifecycleScope
 import br.com.sanguedoce.app.constants.MeasurementNoteType
 import br.com.sanguedoce.app.service.SaveReadingService
 import br.com.sanguedoce.app.ui.componentes.SangueDoceButton
+import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -82,6 +84,17 @@ class AddReadingActivity : ComponentActivity() {
                     initialValue = initialValue,
                     initialNoteType = initialNoteType,
                     onBackClick = ::finish,
+                    onHomeClick = {
+                        startActivity(Intent(this@AddReadingActivity, HomeActivity::class.java))
+                        finish()
+                    },
+                    onMeasurementsClick = {
+                        startActivity(Intent(this@AddReadingActivity, MainActivity::class.java))
+                        finish()
+                    },
+                    onBloodClick = {
+                        // Already on the new measurement screen.
+                    },
                     onSaveReading = { value, noteType, onFinished ->
                         saveReading(
                             value = value,
@@ -148,6 +161,9 @@ private fun AddReadingScreen(
     initialValue: String,
     initialNoteType: MeasurementNoteType,
     onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onMeasurementsClick: () -> Unit,
+    onBloodClick: () -> Unit,
     onSaveReading: (
         value: Int,
         noteType: MeasurementNoteType,
@@ -194,6 +210,20 @@ private fun AddReadingScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = ScreenBackground
                 )
+            )
+        },
+        bottomBar = {
+            SangueDoceBottomBar(
+                selectedItem = "measurements",
+                onHomeClick = onHomeClick,
+                onMeasurementsClick = onMeasurementsClick,
+                onContentClick = {
+                    // Add navigation when the content screen is available.
+                },
+                onProfileClick = {
+                    // Add navigation when the profile screen is available.
+                },
+                onBloodClick = onBloodClick
             )
         }
     ) { innerPadding ->
