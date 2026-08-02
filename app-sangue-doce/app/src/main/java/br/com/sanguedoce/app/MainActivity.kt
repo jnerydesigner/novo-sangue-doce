@@ -90,7 +90,22 @@ class MainActivity : ComponentActivity() {
                             })
                         },
                         onDeleteClick = { reading ->
-                            Toast.makeText(this@MainActivity, "Excluir: ${reading.id}", Toast.LENGTH_SHORT).show()
+                            lifecycleScope.launch {
+                                try {
+                                    RetrofitClient.api.deleteMeasurement(reading.id)
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Medição excluída",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    viewModel.loadReadings()
+
+                                } catch(e: Exception) {
+                                    Toast.makeText(this@MainActivity, "Erro ao Excluir a Medição: ${reading.id}", Toast.LENGTH_SHORT).show()
+
+                                }
+                            }
                         }
                     )
 

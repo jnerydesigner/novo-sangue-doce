@@ -63,8 +63,8 @@ import br.com.sanguedoce.app.ui.componentes.SangueDoceButton
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-private const val MOCK_LOGIN_EMAIL = ""
-private const val MOCK_LOGIN_PASSWORD = ""
+private const val MOCK_LOGIN_EMAIL = "jander.webmaster@gmail.com"
+private const val MOCK_LOGIN_PASSWORD = "Jcn526379@#"
 
 class LoginActivity : ComponentActivity() {
 

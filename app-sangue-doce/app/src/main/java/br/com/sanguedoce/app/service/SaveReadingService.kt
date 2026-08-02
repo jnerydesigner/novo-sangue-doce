@@ -19,7 +19,8 @@ class SaveReadingService(
         val request = CreateMeasurementRequest(
             measuredAt = currentTimestamp(),
             glucoseValueMgDl = value,
-            noteType = readingContext
+            noteType = readingContext,
+            timeZone = currentTimeZone()
         )
 
         RetrofitClient.api.createMeasurement(request)
@@ -33,20 +34,26 @@ class SaveReadingService(
         val request = CreateMeasurementRequest(
             measuredAt = currentTimestamp(),
             glucoseValueMgDl = value,
-            noteType = readingContext
+            noteType = readingContext,
+            timeZone = currentTimeZone()
         )
 
         RetrofitClient.api.updateMeasurement(id, request)
     }
 
     private fun currentTimestamp(): String {
+        val timeZone = TimeZone.getDefault()
         val formatter = SimpleDateFormat(
-            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",
             Locale.US
         )
 
-        formatter.timeZone = TimeZone.getTimeZone("UTC")
+        formatter.timeZone = timeZone
 
         return formatter.format(Date())
+    }
+
+    private fun currentTimeZone(): String {
+        return TimeZone.getDefault().id
     }
 }

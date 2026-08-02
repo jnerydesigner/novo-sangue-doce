@@ -7,10 +7,12 @@ import br.com.sanguedoce.app.model.ProfileResponse
 import br.com.sanguedoce.app.model.TodayResponse
 import br.com.sanguedoce.app.model.home.AppHomeResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -26,7 +28,9 @@ interface ApiService {
     suspend fun getProfile(): ProfileResponse
 
     @GET("measurements/today")
-    suspend fun getMeasurementsToday(): List<TodayResponse>
+    suspend fun getMeasurementsToday(
+        @Query("timeZone") timeZone: String
+    ): List<TodayResponse>
 
     @POST("measurements")
     suspend fun createMeasurement(
@@ -38,6 +42,11 @@ interface ApiService {
         @Path("id") id: String,
         @Body request: CreateMeasurementRequest
     ): TodayResponse
+
+    @DELETE("measurements/{id}/measurement")
+    suspend fun deleteMeasurement(
+        @Path("id") id: String
+    ): List<TodayResponse>
 
 
 }
