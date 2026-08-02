@@ -16,24 +16,24 @@ const contextLabels: Record<ReadingContext, string> = {
   RANDOM: "Rotina",
 };
 
-const MEASUREMENT_TIME_ZONE = "America/Manaus";
+function getDateKey(measuredAt: string) {
+  return measuredAt.split("T")[0] ?? measuredAt;
+}
+
+function formatDateKey(date: Date) {
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+    .map((part, index) => (index === 0 ? String(part) : String(part).padStart(2, "0")))
+    .join("-");
+}
 
 function getDayLabel(measuredAt: string) {
-  const date = new Date(measuredAt);
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  const formatter = new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: MEASUREMENT_TIME_ZONE,
-  });
-
-  const dateKey = formatter.format(date);
-  const todayKey = formatter.format(today);
-  const yesterdayKey = formatter.format(yesterday);
+  const dateKey = getDateKey(measuredAt);
+  const todayKey = formatDateKey(today);
+  const yesterdayKey = formatDateKey(yesterday);
 
   if (dateKey === todayKey) {
     return "Hoje";
@@ -43,19 +43,16 @@ function getDayLabel(measuredAt: string) {
     return "Ontem";
   }
 
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    timeZone: MEASUREMENT_TIME_ZONE,
-  }).format(date);
+  const [, month, day] = dateKey.split("-");
+
+  return day && month ? `${day}/${month}` : measuredAt;
 }
 
 function getTimeLabel(measuredAt: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: MEASUREMENT_TIME_ZONE,
-  }).format(new Date(measuredAt));
+  const time = measuredAt.split("T")[1] ?? "";
+  const [hour, minute] = time.split(":");
+
+  return hour && minute ? `${hour}:${minute}` : measuredAt;
 }
 
 function getReadingTag(measurement: Measurement) {

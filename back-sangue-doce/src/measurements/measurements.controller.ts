@@ -1,5 +1,17 @@
 import { type AuthenticatedRequest, AuthGuard } from "@app/@infra/guard/auth.guard";
-import { Body, Controller, Get, Param, Patch, Post, Query, Request, Res, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Request,
+  Res,
+  UseGuards,
+  Delete,
+} from "@nestjs/common";
 import type { Response } from "express";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
 import type { UpdateMeasurementDto } from "./dto/update-measurement.dto";
@@ -123,8 +135,19 @@ export class MeasurementsController {
     @Query("diabetesType") diabetesType?: string,
     @Query("reportUrl") reportUrl?: string,
   ) {
-    const report = await this.measurementsService.getMonthlyFormalReport(req, year, month, startDate, endDate);
-    const image = await this.measurementReportPdfService.generateMonthlyReportImage({ birthDate, diabetesType, report, reportUrl });
+    const report = await this.measurementsService.getMonthlyFormalReport(
+      req,
+      year,
+      month,
+      startDate,
+      endDate,
+    );
+    const image = await this.measurementReportPdfService.generateMonthlyReportImage({
+      birthDate,
+      diabetesType,
+      report,
+      reportUrl,
+    });
     res.setHeader("Content-Type", "image/png");
     res.setHeader("Content-Disposition", 'attachment; filename="relatorio-glicemia.png"');
     res.setHeader("Content-Length", image.length);
@@ -138,5 +161,14 @@ export class MeasurementsController {
     @Request() req: AuthenticatedRequest,
   ): Promise<PublicMeasurement> {
     return this.measurementsService.findOne(req, id);
+  }
+
+  @Delete(":id/measurement")
+  @UseGuards(AuthGuard)
+  delete(
+    @Param("id") id: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<PublicMeasurement[]> {
+    return this.measurementsService.delete(req, id);
   }
 }

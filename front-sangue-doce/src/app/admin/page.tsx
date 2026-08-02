@@ -54,10 +54,10 @@ function getMeasurementTime(value?: string) {
     return "";
   }
 
-  return new Intl.DateTimeFormat("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
+  const time = value.split("T")[1] ?? "";
+  const [hour, minute] = time.split(":");
+
+  return hour && minute ? `${hour}:${minute}` : value;
 }
 
 export default async function AdminPage() {

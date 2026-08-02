@@ -1,4 +1,3 @@
-import { formatDateHour, formatDateToDayMonthYear } from "@app/@helper/format-date.helper";
 import { PrismaService } from "@app/@infra/database/prisma.service";
 import { classifyGlucose } from "@app/@shared/pattern/classify-glucose.pattern";
 import type { JwtPayload } from "@app/auth/types/jwt-payload.type";
@@ -25,17 +24,32 @@ export type AppHomeResponse = {
   graph?: AppHomeGraph[];
 };
 
-function formatHourMinute(value: Date | string | number): string {
+function getStoredDateTimeParts(value: Date | string | number) {
   const date = value instanceof Date ? value : new Date(value);
 
   if (Number.isNaN(date.getTime())) {
     throw new Error("Invalid date.");
   }
 
-  const hour = String(date.getUTCHours()).padStart(2, "0");
-  const minute = String(date.getUTCMinutes()).padStart(2, "0");
+  return {
+    day: String(date.getUTCDate()).padStart(2, "0"),
+    hour: String(date.getUTCHours()).padStart(2, "0"),
+    minute: String(date.getUTCMinutes()).padStart(2, "0"),
+    month: String(date.getUTCMonth() + 1).padStart(2, "0"),
+    year: String(date.getUTCFullYear()),
+  };
+}
 
-  return `${hour}:${minute}`;
+function formatHourMinute(value: Date | string | number): string {
+  const values = getStoredDateTimeParts(value);
+
+  return `${values.hour}:${values.minute}`;
+}
+
+function formatDateHour(value: Date | string | number): string {
+  const values = getStoredDateTimeParts(value);
+
+  return `${values.day}/${values.month}/${values.year} ${values.hour}:${values.minute}`;
 }
 
 @Injectable()
@@ -71,10 +85,8 @@ export class AppHomeService {
     const glucoseResult = classifyGlucose(lastMeasurement?.glucoseValueMgDl ?? 0);
     console.log("glucoseResult", glucoseResult);
 
-    const dateNow = formatDateToDayMonthYear(lastMeasurement?.measuredAt ?? new Date());
     const hourNow = formatDateHour(lastMeasurement?.measuredAt ?? new Date());
 
-    console.log("dateNow", dateNow);
     console.log("hourNow", hourNow);
 
     return {

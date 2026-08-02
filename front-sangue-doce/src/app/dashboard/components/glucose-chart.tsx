@@ -14,9 +14,10 @@ const scheduledTimes: Partial<Record<MeasurementNoteType, string>> = {
 };
 
 function formatMeasurementTime(value: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    hour: "2-digit", minute: "2-digit", timeZone: "America/Manaus",
-  }).format(new Date(value)).replace(":", "h");
+  const time = value.split("T")[1] ?? "";
+  const [hour, minute] = time.split(":");
+
+  return hour && minute ? `${hour}h${minute}` : value;
 }
 
 export function GlucoseChart({ measurements }: { measurements: Measurement[] }) {

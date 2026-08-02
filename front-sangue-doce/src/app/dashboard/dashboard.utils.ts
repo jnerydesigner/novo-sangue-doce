@@ -1,10 +1,13 @@
 export function formatMeasurementTime(measuredAt: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    month: "2-digit",
-  }).format(new Date(measuredAt));
+  const [date = "", time = ""] = measuredAt.split("T");
+  const [year, month, day] = date.split("-");
+  const [hour, minute] = time.split(":");
+
+  if (!day || !month || !hour || !minute) {
+    return measuredAt;
+  }
+
+  return `${day}/${month} ${hour}:${minute}`;
 }
 
 export function getInitials(name: string) {

@@ -62,10 +62,10 @@ function getMomentLabel(readingContext: Measurement["readingContext"], noteLabel
 }
 
 function formatReadingTime(measuredAt: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(measuredAt));
+  const time = measuredAt.split("T")[1] ?? "";
+  const [hour, minute] = time.split(":");
+
+  return hour && minute ? `${hour}:${minute}` : measuredAt;
 }
 
 function getCurrentTimeInputValue() {
