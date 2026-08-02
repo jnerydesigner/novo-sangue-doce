@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import br.com.sanguedoce.app.component.AppDrawer
 import br.com.sanguedoce.app.model.TodayResponse
 import br.com.sanguedoce.app.ui.SangueDocePrimary
+import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -65,6 +66,7 @@ private val CardSurface = Color.White
 fun TodayRoute(
     uiState: TodayUiState,
     onRetry: () -> Unit,
+    onHomeClick: () -> Unit,
     onAddClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onEditClick: (TodayResponse) -> Unit,
@@ -78,6 +80,7 @@ fun TodayRoute(
                 readings = uiState.readings,
                 isRefreshing = uiState.isRefreshing,
                 onRefresh = onRetry,
+                onHomeClick = onHomeClick,
                 onAddClick = onAddClick,
                 onLogoutClick = onLogoutClick,
                 onEditClick = onEditClick,
@@ -100,6 +103,7 @@ private fun TodayScreen(
     readings: List<TodayResponse>,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    onHomeClick: () -> Unit,
     onAddClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onEditClick: (TodayResponse) -> Unit,
@@ -161,6 +165,21 @@ private fun TodayScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = ScreenBackground
                     )
+                )
+            },
+            bottomBar = {
+                SangueDoceBottomBar(
+                    selectedItem = "measurements",
+                    onHomeClick = onHomeClick,
+                    onMeasurementsClick = {
+                        // Already on the measurements screen.
+                    },
+                    onContentClick = {
+                        // Add navigation when the content screen is available.
+                    },
+                    onProfileClick = {
+                        // Add navigation when the profile screen is available.
+                    }
                 )
             },
             floatingActionButton = {

@@ -5,14 +5,17 @@ import br.com.sanguedoce.app.model.LoginRequest
 import br.com.sanguedoce.app.model.LoginResponse
 import br.com.sanguedoce.app.model.ProfileResponse
 import br.com.sanguedoce.app.model.TodayResponse
+import br.com.sanguedoce.app.model.home.AppHomeResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
+
+    @GET("app/home")
+    suspend fun getAppHome(): AppHomeResponse
 
     @POST("auth/login")
     suspend fun login(
@@ -36,5 +39,5 @@ interface ApiService {
         @Body request: CreateMeasurementRequest
     ): TodayResponse
 
-}
 
+}

@@ -68,6 +68,10 @@ class MainActivity : ComponentActivity() {
                     TodayRoute(
                         uiState = uiState,
                         onRetry = viewModel::loadReadings,
+                        onHomeClick = {
+                            startActivity(Intent(this@MainActivity, HomeActivity::class.java))
+                            finish()
+                        },
                         onAddClick = {
                             startActivity(Intent(this@MainActivity, AddReadingActivity::class.java))
                         },
