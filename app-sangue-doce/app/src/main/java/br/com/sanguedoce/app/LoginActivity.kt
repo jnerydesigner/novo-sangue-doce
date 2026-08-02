@@ -61,6 +61,10 @@ import br.com.sanguedoce.app.ui.SangueDoceInk
 import br.com.sanguedoce.app.ui.SangueDoceMutedText
 import br.com.sanguedoce.app.ui.componentes.SangueDoceButton
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+
+private const val MOCK_LOGIN_EMAIL = "jander.webmaster@gmail.com"
+private const val MOCK_LOGIN_PASSWORD = "Jcn526379@#"
 
 class LoginActivity : ComponentActivity() {
 
@@ -71,6 +75,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 LoginScreen(
+                    initialEmail = if (BuildConfig.DEBUG) MOCK_LOGIN_EMAIL else "",
+                    initialPassword = if (BuildConfig.DEBUG) MOCK_LOGIN_PASSWORD else "",
                     onLogin = { email, password, onFinished ->
                         login(
                             email = email,
@@ -100,11 +106,24 @@ class LoginActivity : ComponentActivity() {
                 RetrofitClient.setToken(response.accessToken)
                 AuthSession.signIn(this@LoginActivity, response.accessToken, email)
                 openMain()
-            } catch (erro: Exception) {
-                onFinished("Erro ao conectar com o servidor")
+            } catch (error: HttpException) {
+                val message = if (error.code() == 401) {
+                    "E-mail ou senha inválidos."
+                } else {
+                    "Erro ao conectar com o servidor."
+                }
+
+                onFinished(message)
                 Toast.makeText(
                     this@LoginActivity,
-                    "Não foi possível fazer login",
+                    message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (error: Exception) {
+                onFinished("Erro ao conectar com o servidor.")
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Erro ao conectar com o servidor",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -112,7 +131,7 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun openMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }
 }
