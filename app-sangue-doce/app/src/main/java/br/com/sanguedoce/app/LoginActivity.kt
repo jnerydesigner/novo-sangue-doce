@@ -61,10 +61,6 @@ import br.com.sanguedoce.app.ui.SangueDoceInk
 import br.com.sanguedoce.app.ui.SangueDoceMutedText
 import br.com.sanguedoce.app.ui.componentes.SangueDoceButton
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-
-private const val MOCK_LOGIN_EMAIL = ""
-private const val MOCK_LOGIN_PASSWORD = ""
 
 class LoginActivity : ComponentActivity() {
 
@@ -75,8 +71,6 @@ class LoginActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 LoginScreen(
-                    initialEmail = if (BuildConfig.DEBUG) MOCK_LOGIN_EMAIL else "",
-                    initialPassword = if (BuildConfig.DEBUG) MOCK_LOGIN_PASSWORD else "",
                     onLogin = { email, password, onFinished ->
                         login(
                             email = email,
@@ -106,24 +100,11 @@ class LoginActivity : ComponentActivity() {
                 RetrofitClient.setToken(response.accessToken)
                 AuthSession.signIn(this@LoginActivity, response.accessToken, email)
                 openMain()
-            } catch (error: HttpException) {
-                val message = if (error.code() == 401) {
-                    "E-mail ou senha inválidos."
-                } else {
-                    "Erro ao conectar com o servidor."
-                }
-
-                onFinished(message)
+            } catch (erro: Exception) {
+                onFinished("Erro ao conectar com o servidor")
                 Toast.makeText(
                     this@LoginActivity,
-                    message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (error: Exception) {
-                onFinished("Erro ao conectar com o servidor.")
-                Toast.makeText(
-                    this@LoginActivity,
-                    "Erro ao conectar com o servidor",
+                    "Não foi possível fazer login",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -131,7 +112,7 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun openMain() {
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }
