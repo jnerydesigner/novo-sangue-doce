@@ -182,57 +182,27 @@ async function seedTacoFoods() {
 }
 
 async function main() {
-  await seedTacoFoods();
+  // await seedTacoFoods();
   const jander = await prisma.user.upsert({
     where: { email: "jander.webmaster@gmail.com" },
     update: {
       birthDate: new Date("1978-01-23T00:00:00.000Z"),
       diabetesType: "TYPE_1",
       name: "Jander Nery",
-      passwordHash: hashPassword("12345678"),
+      passwordHash: hashPassword("Jcn526379@#"),
       role: "ADMIN",
     },
     create: {
       name: "Jander Nery",
       email: "jander.webmaster@gmail.com",
-      passwordHash: hashPassword("12345678"),
+      passwordHash: hashPassword("Jcn526379@#"),
       birthDate: new Date("1978-01-23T00:00:00.000Z"),
       diabetesType: "TYPE_1",
       role: "ADMIN",
     },
   });
 
-  const user = await prisma.user.upsert({
-    where: { email: "ana.ribeiro@sanguedoce.com" },
-    update: {
-      passwordHash: hashPassword("12345678"),
-      role: "USER",
-    },
-    create: {
-      name: "Ana Ribeiro",
-      email: "ana.ribeiro@sanguedoce.com",
-      passwordHash: hashPassword("12345678"),
-      birthDate: new Date("1992-05-12T00:00:00.000Z"),
-      diabetesType: "TYPE_1",
-      role: "USER",
-    },
-  });
 
-  const helenaUser = await prisma.user.upsert({
-    where: { email: "helena.marques@sanguedoce.com" },
-    update: {
-      name: "Helena Marques",
-      passwordHash: hashPassword("12345678"),
-      role: "USER",
-    },
-    create: {
-      name: "Helena Marques",
-      email: "helena.marques@sanguedoce.com",
-      passwordHash: hashPassword("12345678"),
-      diabetesType: "UNKNOWN",
-      role: "USER",
-    },
-  });
 
   const janderAuthor = await prisma.postAuthor.upsert({
     where: { slug: "jander-nery" },
@@ -253,24 +223,6 @@ async function main() {
     },
   });
 
-  const helenaAuthor = await prisma.postAuthor.upsert({
-    where: { slug: "helena-marques" },
-    update: {
-      name: "Helena Marques",
-      role: "Editora de Saude Metabolica",
-      bio: "Jornalista com mais de dez anos cobrindo saude e ciencia. Escreve sobre diabetes com foco no dia a dia de quem vive com a condicao, traduzindo evidencia em decisoes praticas, sem alarmismo.",
-      email: "helena.marques@sanguedoce.com",
-      userId: helenaUser.id,
-    },
-    create: {
-      name: "Helena Marques",
-      slug: "helena-marques",
-      role: "Editora de Saude Metabolica",
-      bio: "Jornalista com mais de dez anos cobrindo saude e ciencia. Escreve sobre diabetes com foco no dia a dia de quem vive com a condicao, traduzindo evidencia em decisoes praticas, sem alarmismo.",
-      email: "helena.marques@sanguedoce.com",
-      userId: helenaUser.id,
-    },
-  });
 
   const categories = await Promise.all(
     postCategories.map((category) =>
@@ -299,7 +251,6 @@ async function main() {
 
   const authorBySlug = {
     [janderAuthor.slug]: janderAuthor,
-    [helenaAuthor.slug]: helenaAuthor,
   };
   const categoryBySlug = Object.fromEntries(
     categories.map((category) => [category.slug, category]),
@@ -380,13 +331,13 @@ async function main() {
     where: {
       source: "IMPORT",
       userId: {
-        in: [jander.id, user.id],
+        in: [jander.id],
       },
     },
   });
 
   await prisma.measurement.createMany({
-    data: [...buildSeedMeasurements(jander.id), ...buildSeedMeasurements(user.id)],
+    data: [...buildSeedMeasurements(jander.id)],
   });
 }
 

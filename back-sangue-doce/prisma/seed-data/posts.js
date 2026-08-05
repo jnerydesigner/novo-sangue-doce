@@ -9,7 +9,7 @@ const seedPosts = [
     standfirst:
       "Monitores continuos sairam do hospital e entraram na rotina. Entenda como a leitura em tempo real muda decisoes sobre comida, movimento e descanso, sem transformar o dia em planilha.",
     categorySlug: "cuidado-diario",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["glicemia", "monitoramento", "tecnologia", "rotina", "autonomia"],
     readingMinutes: 8,
     coverImageUrl: "/images/sensor.png",
@@ -26,7 +26,7 @@ const seedPosts = [
     title: "Prato equilibrado sem contagem complicada",
     excerpt: "Um metodo visual para montar refeicoes que sustentam a glicemia.",
     categorySlug: "alimentacao",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["alimentacao", "glicemia", "rotina"],
     readingMinutes: 5,
     coverImageUrl: "/original-project/screenshots/02-scan.png",
@@ -39,7 +39,7 @@ const seedPosts = [
     title: "Sono irregular pode afetar a resistencia a insulina",
     excerpt: "O que a ciencia do sono diz sobre noites curtas e picos de acucar.",
     categorySlug: "prevencao",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["sono", "prevencao", "glicemia"],
     readingMinutes: 6,
     coverImageUrl: "/original-project/screenshots/03-scan.png",
@@ -67,7 +67,7 @@ const seedPosts = [
     excerpt:
       "Combinar fibras, proteinas e escolhas simples pode reduzir picos logo nas primeiras horas do dia.",
     categorySlug: "alimentacao",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["alimentacao", "glicemia", "rotina"],
     readingMinutes: 5,
     coverImageUrl: "/images/comida_saudavel.png",
@@ -81,7 +81,7 @@ const seedPosts = [
     excerpt:
       "Alguns sinais merecem ser levados para consulta com historico, horarios e observacoes bem organizados.",
     categorySlug: "consulta",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["consulta", "monitoramento", "seguranca"],
     readingMinutes: 8,
     coverImageUrl: "/antes_da_consulta.png",
@@ -109,7 +109,7 @@ const seedPosts = [
     excerpt:
       "Treinos podem impactar a glicose por horas. Veja sinais que ajudam a planejar recuperacao e descanso.",
     categorySlug: "movimento",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["movimento", "glicemia", "sono"],
     readingMinutes: 7,
     coverImageUrl: "/depois_do_exercicio.png",
@@ -137,7 +137,7 @@ const seedPosts = [
     excerpt:
       "Ter opcoes simples por perto ajuda a atravessar intervalos maiores com mais previsibilidade.",
     categorySlug: "alimentacao",
-    authorSlug: "helena-marques",
+    authorSlug: "jander-nery",
     tagSlugs: ["alimentacao", "rotina", "glicemia"],
     readingMinutes: 4,
     coverImageUrl: "/images/comida_saudavel_vertical.png",
