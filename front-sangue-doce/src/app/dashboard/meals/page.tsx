@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { DashboardSidebar } from "../components/dashboard-sidebar";
+import { DateTimeField } from "../components/date-time-field";
+import { UserMenu } from "@/components/home/user-menu";
 
 type Food = {
   name: string;
@@ -61,7 +64,10 @@ export default function MealsPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#f3f8fd] px-4 py-6 text-[#102a4a] sm:px-8 lg:px-10">
+    <main className="min-h-screen bg-[#f3f8fd] text-[#102a4a]">
+      <div className="grid min-h-screen lg:grid-cols-[248px_1fr]">
+        <DashboardSidebar />
+        <section className="min-w-0 px-4 py-6 sm:px-8 lg:px-10">
       <header className="mb-5 flex flex-wrap items-start justify-between gap-5">
         <div>
           <div className="mb-1 text-xs text-[#66809d]">
@@ -74,17 +80,14 @@ export default function MealsPage() {
           </p>
         </div>
         <div className="flex gap-6">
-          <label className="rounded-lg border border-[#bad0e6] bg-white px-4 py-2 text-xs font-semibold text-[#55718f]">
-            Data e hora
-            <input
-              className="mt-1 block border-0 p-0 text-sm font-bold text-[#132e4d] outline-none"
-              type="datetime-local"
-              defaultValue="2026-08-02T12:30"
-            />
-          </label>
-          <button className="hidden rounded-lg border border-[#bad0e6] bg-white px-4 py-3 text-left text-sm font-bold sm:block">
-            👤 Jander da Costa Nery　⌄
-          </button>
+          <DateTimeField />
+          <UserMenu
+            actionLabel="Ver site"
+            dashboardHref="/"
+            name="Jander da Costa Nery"
+            sectionLabel="Site público"
+            statusLabel="Sangue Doce"
+          />
         </div>
       </header>
 
@@ -304,6 +307,8 @@ export default function MealsPage() {
             </div>
           </Card>
         </aside>
+      </div>
+        </section>
       </div>
     </main>
   );
