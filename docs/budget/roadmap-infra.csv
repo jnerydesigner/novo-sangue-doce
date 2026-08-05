@@ -1,0 +1,6 @@
+"Usuários ativos";"Banco";"Servidor";"Storage";"IA";"Gatilho de revisão"
+"0-500";"Neon Free ou PostgreSQL atual";"VPS atual";"MinIO";"Sem IA ou uso controlado";"Medir consumo real mensal"
+"500-2.000";"Neon Launch";"VPS 4 vCPU";"MinIO com backup";"Gemini Flash";"CPU acima de 60% ou banco acima de 60% da franquia"
+"2.000-10.000";"PostgreSQL gerenciado 20 GB";"EC2 t4g.large/VPS equivalente";"S3";"Modelo econômico com limites";"P95 de latência, storage e custo por usuário"
+"10.000-50.000";"RDS/Aurora PostgreSQL";"ECS ou múltiplas instâncias";"S3 + CDN";"IA com filas e rate limit";"Alta disponibilidade e filas persistentes"
+"50.000+";"Aurora Cluster ou equivalente";"Kubernetes somente se necessário";"S3 + CloudFront";"Modelos especializados";"Equipe de plataforma e SLO formal"

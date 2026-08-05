@@ -1,0 +1,35 @@
+{
+    "cereais_e_derivados": [
+        {
+            "id": 1,
+            "food_number": 1,
+            "food_id": 1,
+            "page": 29,
+            "name": "Arroz",
+            "description": "integral cozido",
+            "moisture_percent": "70,1",
+            "energy_kcal": "124",
+            "energy_kj": "517",
+            "protein_g": "2,6",
+            "fat_g": "1,0",
+            "cholesterol_mg": "NA",
+            "carbohydrates_g": "25,8",
+            "fiber_g": "2,7",
+            "ash_g": "0,5",
+            "calcium_mg": "5",
+            "magnesium_mg": "59",
+            "manganese_mg": "0,63",
+            "phosphorus_mg": "106",
+            "iron_mg": "0,3",
+            "sodium_mg": "1",
+            "potassium_mg": "75",
+            "copper_mg": "0,02",
+            "zinc_mg": "0,7",
+            "retinol_mcg": "NA",
+            "thiamine_mg": "0,08",
+            "riboflavin_mg": "Tr",
+            "pyridoxine_mg": "0,08",
+            "niacin_mg": "Tr"
+        }
+    ]
+}
