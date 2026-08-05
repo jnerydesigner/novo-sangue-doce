@@ -39,7 +39,7 @@ const foods: Food[] = [
     protein: "1,60",
     fat: "0,10",
     color: "#ffb71b",
-    image: "/images/batata-doce-cozida.jpg",
+    image: "/images/atata-doce-cozida.jpg",
   },
   {
     name: "Suco de laranja natural",
