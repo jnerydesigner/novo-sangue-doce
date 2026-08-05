@@ -24,6 +24,15 @@ async function seedFoods() {
     const { foodsCategories, ...foodData } = seedFood;
     const categoryName = foodsCategories.create[0].name;
 
+    const category = await prisma.foodsCategory.upsert({
+      where: { name: categoryName },
+      update: {},
+      create: { name: categoryName },
+      select: { id: true },
+    });
+
+    foodData.categoryId = category.id;
+
     const existingFood = await prisma.foods.findFirst({
       where: {
         name: foodData.name,
@@ -36,16 +45,6 @@ async function seedFoods() {
       ? await prisma.foods.update({ where: { id: existingFood.id }, data: foodData })
       : await prisma.foods.create({ data: foodData });
 
-    const existingCategory = await prisma.foodsCategory.findFirst({
-      where: { foodsId: food.id, name: categoryName },
-      select: { id: true },
-    });
-
-    if (!existingCategory) {
-      await prisma.foodsCategory.create({
-        data: { name: categoryName, foodsId: food.id },
-      });
-    }
   }
 
   console.log(`Foods seed concluído: ${foods.length} registros processados.`);

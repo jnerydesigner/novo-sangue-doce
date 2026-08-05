@@ -153,6 +153,7 @@ model User {
   measurements  Measurement[]
   postAuthors   PostAuthor[]
   recipeAuthors RecipeAuthor[]
+  foodConsumptions FoodConsumption[]
 
   @@map("users")
 }
@@ -556,20 +557,22 @@ model PageVisitorDaily {
 
 model FoodsCategory {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  foodsId   Int?     @map("foods_id")
-  foods     Foods?   @relation(fields: [foodsId], references: [id], onDelete: SetNull)
+  foods     Foods[]
 
   @@index([name])
   @@map("foods_category")
 }
 
 model Foods {
-  id              Int             @id @default(autoincrement())
-  name            String
-  description     String
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  categoryId Int           @map("category_id")
+  category   FoodsCategory @relation(fields: [categoryId], references: [id])
   moisturePercent Decimal?        @map("moisture_percent") @db.Decimal(10, 4)
   energyKcal      Decimal?        @map("energy_kcal") @db.Decimal(10, 4)
   energyKj        Decimal?        @map("energy_kj") @db.Decimal(10, 4)
@@ -593,10 +596,110 @@ model Foods {
   riboflavinMg    Decimal?        @map("riboflavin_mg") @db.Decimal(10, 4)
   pyridoxineMg    Decimal?        @map("pyridoxine_mg") @db.Decimal(10, 4)
   niacinMg        Decimal?        @map("niacin_mg") @db.Decimal(10, 4)
-  createdAt       DateTime        @default(now()) @map("created_at")
-  updatedAt       DateTime        @updatedAt @map("updated_at")
-  foodsCategories FoodsCategory[]
+  consumptionItems FoodConsumptionItem[]
+  servings         FoodServing[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@index([description, name])
+  @@index([categoryId])
+  @@index([name, description])
   @@map("foods")
+}
+
+enum MealType {
+  BREAKFAST
+  MORNING_SNACK
+  LUNCH
+  AFTERNOON_SNACK
+  DINNER
+  SUPPER
+  OTHER
+}
+
+enum FoodQuantityUnit {
+  GRAM
+  MILLILITER
+  UNIT
+  SLICE
+  TABLESPOON
+  TEASPOON
+  CUP
+  SCOOP
+  PORTION
+}
+
+model FoodConsumption {
+  id Int @id @default(autoincrement())
+
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  mealType   MealType @map("meal_type")
+  consumedAt DateTime @default(now()) @map("consumed_at")
+
+  description String?
+  notes       String?
+
+  totalCarbohydratesG Decimal @default(0) @map("total_carbohydrates_g") @db.Decimal(10, 4)
+  totalProteinG       Decimal @default(0) @map("total_protein_g") @db.Decimal(10, 4)
+  totalFatG           Decimal @default(0) @map("total_fat_g") @db.Decimal(10, 4)
+  totalFiberG         Decimal @default(0) @map("total_fiber_g") @db.Decimal(10, 4)
+  totalEnergyKcal     Decimal @default(0) @map("total_energy_kcal") @db.Decimal(10, 4)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  items FoodConsumptionItem[]
+
+  @@index([userId, consumedAt])
+  @@map("food_consumption")
+}
+
+model FoodConsumptionItem {
+  id Int @id @default(autoincrement())
+
+  consumptionId Int             @map("consumption_id")
+  consumption   FoodConsumption @relation(fields: [consumptionId], references: [id], onDelete: Cascade)
+
+  foodId Int   @map("food_id")
+  food   Foods @relation(fields: [foodId], references: [id])
+
+  quantity Decimal         @db.Decimal(10, 4)
+  unit     FoodQuantityUnit
+  weightG  Decimal         @map("weight_g") @db.Decimal(10, 4)
+
+  carbohydratesG Decimal @map("carbohydrates_g") @db.Decimal(10, 4)
+  proteinG       Decimal @map("protein_g") @db.Decimal(10, 4)
+  fatG           Decimal @map("fat_g") @db.Decimal(10, 4)
+  fiberG         Decimal @map("fiber_g") @db.Decimal(10, 4)
+  energyKcal     Decimal @map("energy_kcal") @db.Decimal(10, 4)
+
+  foodNameSnapshot        String  @map("food_name_snapshot")
+  foodDescriptionSnapshot String? @map("food_description_snapshot")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([consumptionId])
+  @@index([foodId])
+  @@map("food_consumption_item")
+}
+
+model FoodServing {
+  id Int @id @default(autoincrement())
+
+  foodId Int   @map("food_id")
+  food   Foods @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  name     String
+  unit     FoodQuantityUnit
+  quantity Decimal @default(1) @db.Decimal(10, 4)
+  weightG  Decimal @map("weight_g") @db.Decimal(10, 4)
+  isDefault Boolean @default(false) @map("is_default")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([foodId])
+  @@map("food_serving")
 }
