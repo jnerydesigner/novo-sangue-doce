@@ -8,8 +8,8 @@ export default async function SleepPage() {
   const { profile } = await requireDashboardUser();
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
-      <div className="grid min-h-screen lg:grid-cols-[248px_1fr]">
+    <main className="dashboard-shell bg-paper text-ink">
+      <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
         <DashboardSidebar showAdminItems={profile.role === "ADMIN"} />
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">

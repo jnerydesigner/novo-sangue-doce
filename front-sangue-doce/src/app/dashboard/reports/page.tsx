@@ -149,8 +149,8 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
       : getMonthLabel(monthlyReport.year, monthlyReport.month);
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
-      <div className="grid min-h-screen lg:grid-cols-[248px_1fr] print:block">
+    <main className="dashboard-shell bg-paper text-ink">
+      <div className="dashboard-grid lg:grid-cols-[248px_1fr] print:block">
         <div className="print:hidden">
           <DashboardSidebar showAdminItems={showAdminItems} />
         </div>

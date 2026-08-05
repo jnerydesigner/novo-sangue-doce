@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
 import { DateTimeField } from "../components/date-time-field";
-import { UserMenu } from "@/components/home/user-menu";
+import { DashboardHeader } from "../components/dashboard-header";
 
 type Food = {
   name: string;
@@ -64,32 +64,16 @@ export default function MealsPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#f3f8fd] text-[#102a4a]">
-      <div className="grid min-h-screen lg:grid-cols-[248px_1fr]">
+    <main className="dashboard-shell bg-[#f3f8fd] text-[#102a4a]">
+      <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
         <DashboardSidebar />
-        <section className="min-w-0 px-4 py-6 sm:px-8 lg:px-10">
-      <header className="mb-5 flex flex-wrap items-start justify-between gap-5">
-        <div>
-          <div className="mb-1 text-xs text-[#66809d]">
-            Refeições <span className="mx-2">/</span>{" "}
-            <b className="text-[#284b70]">Nova refeição</b>
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight">Nova refeição</h1>
-          <p className="text-sm text-[#315477]">
-            Registre os alimentos que você consumiu e acompanhe os nutrientes.
-          </p>
-        </div>
-        <div className="flex gap-6">
-          <DateTimeField />
-          <UserMenu
-            actionLabel="Ver site"
-            dashboardHref="/"
-            name="Jander da Costa Nery"
-            sectionLabel="Site público"
-            statusLabel="Sangue Doce"
-          />
-        </div>
-      </header>
+        <section className="min-w-0 overflow-x-hidden overflow-y-auto px-4 py-6 sm:px-8 lg:px-10">
+      <DashboardHeader
+        action={<DateTimeField />}
+        subtitle="Registre os alimentos que você consumiu e acompanhe os nutrientes."
+        title="Nova refeição"
+        userName="Jander da Costa Nery"
+      />
 
       <div className="grid gap-3.5 xl:grid-cols-[minmax(0,2fr)_520px]">
         <section className="space-y-3.5">

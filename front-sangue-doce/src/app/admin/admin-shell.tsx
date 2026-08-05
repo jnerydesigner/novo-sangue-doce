@@ -92,8 +92,8 @@ export function AdminShell({
   const sidebarGroups = [...adminSidebarGroups, ...dashboardSidebarGroups];
 
   return (
-    <main className="min-h-screen bg-paper text-ink">
-      <div className="grid min-h-screen lg:grid-cols-[248px_1fr]">
+    <main className="dashboard-shell bg-paper text-ink">
+      <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
         <aside className="hidden border-r border-line bg-card px-5 py-7 lg:flex lg:flex-col">
           <div className="mb-8 px-2 text-greenDeep">
             <Brand />
@@ -118,7 +118,7 @@ export function AdminShell({
           </div>
         </aside>
 
-        <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
+        <section className="min-w-0 overflow-x-hidden overflow-y-auto px-[clamp(18px,4vw,42px)] py-6">
           <header className="border-b border-line pb-5">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>

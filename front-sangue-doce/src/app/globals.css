@@ -41,6 +41,18 @@ body {
 }
 
 @layer components {
+  .dashboard-shell {
+    @apply h-screen overflow-hidden;
+  }
+
+  .dashboard-grid {
+    @apply grid h-full;
+  }
+
+  .dashboard-grid > section {
+    @apply min-w-0 overflow-x-hidden overflow-y-auto;
+  }
+
   .wrap {
     @apply mx-auto max-w-page px-[clamp(20px,5vw,64px)];
   }
