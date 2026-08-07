@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto";
+import { createReadStream } from "node:fs";
+import { Readable } from "node:stream";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -15,6 +17,12 @@ type UploadObjectInput = {
   fileName?: string;
   key?: string;
   keyPrefix?: string;
+};
+
+type UploadFileInput = Omit<UploadObjectInput, "buffer"> & { filePath: string };
+type UploadStreamInput = Omit<UploadObjectInput, "buffer"> & {
+  body: Readable;
+  contentLength?: number;
 };
 
 type UploadedObject = {
@@ -89,6 +97,46 @@ export class AwsS3Service {
     }
   }
 
+  async uploadFile({ filePath, contentType, fileName, key, keyPrefix }: UploadFileInput) {
+    const objectKey = this.withUploadsBasePath(
+      key ?? this.createObjectKey(keyPrefix ?? DEFAULT_KEY_PREFIX, fileName),
+    );
+
+    try {
+      await this.getClient().send(
+        new PutObjectCommand({
+          Bucket: this.bucket,
+          Key: objectKey,
+          Body: createReadStream(filePath),
+          ContentType: contentType,
+        }),
+      );
+
+      return { bucket: this.bucket, key: objectKey, url: this.createPublicUrl(objectKey) };
+    } catch (error) {
+      this.logger.error(
+        `Failed to stream file to S3 bucket=${this.bucket} key=${objectKey}: ${this.formatAwsError(error)}`,
+      );
+      throw new InternalServerErrorException("Nao foi possivel enviar o arquivo para o S3.", {
+        cause: error,
+      });
+    }
+  }
+
+  async uploadStream({ body, contentType, contentLength, fileName, key, keyPrefix }: UploadStreamInput) {
+    const objectKey = this.withUploadsBasePath(
+      key ?? this.createObjectKey(keyPrefix ?? DEFAULT_KEY_PREFIX, fileName),
+    );
+    await this.getClient().send(new PutObjectCommand({
+      Bucket: this.bucket,
+      Key: objectKey,
+      Body: body,
+      ContentType: contentType,
+      ContentLength: contentLength,
+    }));
+    return { bucket: this.bucket, key: objectKey, url: this.createPublicUrl(objectKey) };
+  }
+
   async deleteObject(key: string): Promise<void> {
     try {
       this.logger.log(
@@ -156,6 +204,7 @@ export class AwsS3Service {
   private getClient(): S3Client {
     this.client ??= new S3Client({
       region: this.region,
+      requestStreamBufferSize: 65_536,
     });
 
     return this.client;

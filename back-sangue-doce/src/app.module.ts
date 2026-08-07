@@ -5,11 +5,13 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { SharedModule } from "@shared/shared.module";
 import { AuthGuard } from "./@infra/guard/auth.guard";
+import { RequestIdMiddleware } from "./@infra/middleware/request-id.middleware";
 import { AnalyticsModule } from "./analytics/analytics.module";
 import { AppHomeModule } from "./app-home/app-home.module";
 import { AuthModule } from "./auth/auth.module";
 import { AuthorsModule } from "./authors/authors.module";
 import { CarbAnalysisModule } from "./carb-analysis/carb-analysis.module";
+import { FoodsModule } from "./foods/foods.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { InstitutionalPublicationsModule } from "./institutional-publications/institutional-publications.module";
@@ -21,7 +23,6 @@ import { RecipesModule } from "./recipes/recipes.module";
 import { SocialPublicationsModule } from "./social-publications/social-publications.module";
 import { UploadsModule } from "./uploads/uploads.module";
 import { UsersModule } from "./users/users.module";
-import { RequestIdMiddleware } from "./@infra/middleware/request-id.middleware";
 
 @Global()
 @Module({
@@ -57,6 +58,7 @@ import { RequestIdMiddleware } from "./@infra/middleware/request-id.middleware";
     NewsletterModule,
     UploadsModule,
     SocialPublicationsModule,
+    FoodsModule
   ],
   controllers: [],
   providers: [

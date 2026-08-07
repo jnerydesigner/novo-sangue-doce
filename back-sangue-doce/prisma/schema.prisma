@@ -139,20 +139,20 @@ model TacoFood {
 }
 
 model User {
-  id            String         @id @default(uuid()) @db.Uuid
-  name          String
-  email         String         @unique
-  passwordHash  String         @map("password_hash")
-  avatarUrl     String?        @map("avatar_url")
-  birthDate     DateTime?      @map("birth_date")
-  diabetesType  DiabetesType   @default(UNKNOWN) @map("diabetes_type")
-  role          Role           @default(USER)
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  carbAnalyses  CarbAnalysis[]
-  measurements  Measurement[]
-  postAuthors   PostAuthor[]
-  recipeAuthors RecipeAuthor[]
+  id               String            @id @default(uuid()) @db.Uuid
+  name             String
+  email            String            @unique
+  passwordHash     String            @map("password_hash")
+  avatarUrl        String?           @map("avatar_url")
+  birthDate        DateTime?         @map("birth_date")
+  diabetesType     DiabetesType      @default(UNKNOWN) @map("diabetes_type")
+  role             Role              @default(USER)
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  carbAnalyses     CarbAnalysis[]
+  measurements     Measurement[]
+  postAuthors      PostAuthor[]
+  recipeAuthors    RecipeAuthor[]
   foodConsumptions FoodConsumption[]
 
   @@map("users")
@@ -571,39 +571,57 @@ model Foods {
   name        String
   description String
 
-  categoryId Int           @map("category_id")
-  category   FoodsCategory @relation(fields: [categoryId], references: [id])
-  moisturePercent Decimal?        @map("moisture_percent") @db.Decimal(10, 4)
-  energyKcal      Decimal?        @map("energy_kcal") @db.Decimal(10, 4)
-  energyKj        Decimal?        @map("energy_kj") @db.Decimal(10, 4)
-  proteinG        Decimal?        @map("protein_g") @db.Decimal(10, 4)
-  fatG            Decimal?        @map("fat_g") @db.Decimal(10, 4)
-  cholesterolMg   Decimal?        @map("cholesterol_mg") @db.Decimal(10, 4)
-  carbohydratesG  Decimal?        @map("carbohydrates_g") @db.Decimal(10, 4)
-  fiberG          Decimal?        @map("fiber_g") @db.Decimal(10, 4)
-  ashG            Decimal?        @map("ash_g") @db.Decimal(10, 4)
-  calciumMg       Decimal?        @map("calcium_mg") @db.Decimal(10, 4)
-  magnesiumMg     Decimal?        @map("magnesium_mg") @db.Decimal(10, 4)
-  manganeseMg     Decimal?        @map("manganese_mg") @db.Decimal(10, 4)
-  phosphorusMg    Decimal?        @map("phosphorus_mg") @db.Decimal(10, 4)
-  ironMg          Decimal?        @map("iron_mg") @db.Decimal(10, 4)
-  sodiumMg        Decimal?        @map("sodium_mg") @db.Decimal(10, 4)
-  potassiumMg     Decimal?        @map("potassium_mg") @db.Decimal(10, 4)
-  copperMg        Decimal?        @map("copper_mg") @db.Decimal(10, 4)
-  zincMg          Decimal?        @map("zinc_mg") @db.Decimal(10, 4)
-  retinolMcg      Decimal?        @map("retinol_mcg") @db.Decimal(10, 4)
-  thiamineMg      Decimal?        @map("thiamine_mg") @db.Decimal(10, 4)
-  riboflavinMg    Decimal?        @map("riboflavin_mg") @db.Decimal(10, 4)
-  pyridoxineMg    Decimal?        @map("pyridoxine_mg") @db.Decimal(10, 4)
-  niacinMg        Decimal?        @map("niacin_mg") @db.Decimal(10, 4)
+  categoryId       Int                   @map("category_id")
+  category         FoodsCategory         @relation(fields: [categoryId], references: [id])
+  moisturePercent  Decimal?              @map("moisture_percent") @db.Decimal(10, 4)
+  energyKcal       Decimal?              @map("energy_kcal") @db.Decimal(10, 4)
+  energyKj         Decimal?              @map("energy_kj") @db.Decimal(10, 4)
+  proteinG         Decimal?              @map("protein_g") @db.Decimal(10, 4)
+  fatG             Decimal?              @map("fat_g") @db.Decimal(10, 4)
+  cholesterolMg    Decimal?              @map("cholesterol_mg") @db.Decimal(10, 4)
+  carbohydratesG   Decimal?              @map("carbohydrates_g") @db.Decimal(10, 4)
+  fiberG           Decimal?              @map("fiber_g") @db.Decimal(10, 4)
+  ashG             Decimal?              @map("ash_g") @db.Decimal(10, 4)
+  calciumMg        Decimal?              @map("calcium_mg") @db.Decimal(10, 4)
+  magnesiumMg      Decimal?              @map("magnesium_mg") @db.Decimal(10, 4)
+  manganeseMg      Decimal?              @map("manganese_mg") @db.Decimal(10, 4)
+  phosphorusMg     Decimal?              @map("phosphorus_mg") @db.Decimal(10, 4)
+  ironMg           Decimal?              @map("iron_mg") @db.Decimal(10, 4)
+  sodiumMg         Decimal?              @map("sodium_mg") @db.Decimal(10, 4)
+  potassiumMg      Decimal?              @map("potassium_mg") @db.Decimal(10, 4)
+  copperMg         Decimal?              @map("copper_mg") @db.Decimal(10, 4)
+  zincMg           Decimal?              @map("zinc_mg") @db.Decimal(10, 4)
+  retinolMcg       Decimal?              @map("retinol_mcg") @db.Decimal(10, 4)
+  thiamineMg       Decimal?              @map("thiamine_mg") @db.Decimal(10, 4)
+  riboflavinMg     Decimal?              @map("riboflavin_mg") @db.Decimal(10, 4)
+  pyridoxineMg     Decimal?              @map("pyridoxine_mg") @db.Decimal(10, 4)
+  niacinMg         Decimal?              @map("niacin_mg") @db.Decimal(10, 4)
   consumptionItems FoodConsumptionItem[]
   servings         FoodServing[]
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt        DateTime              @default(now()) @map("created_at")
+  updatedAt        DateTime              @updatedAt @map("updated_at")
+  images           FoodImage[]
 
   @@index([categoryId])
   @@index([name, description])
   @@map("foods")
+}
+
+model FoodImage {
+  id             String   @id @default(uuid())
+  normalizedName String   @unique @map("normalized_name")
+  imageUrl       String   @map("image_url")
+  s3Key          String   @map("s3_key")
+  sourceUrl      String?  @map("source_url")
+  sourceName     String?  @map("source_name")
+  license        String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  foods Foods[]
+
+  @@index([normalizedName])
+  @@map("food_images")
 }
 
 enum MealType {
@@ -664,9 +682,9 @@ model FoodConsumptionItem {
   foodId Int   @map("food_id")
   food   Foods @relation(fields: [foodId], references: [id])
 
-  quantity Decimal         @db.Decimal(10, 4)
+  quantity Decimal          @db.Decimal(10, 4)
   unit     FoodQuantityUnit
-  weightG  Decimal         @map("weight_g") @db.Decimal(10, 4)
+  weightG  Decimal          @map("weight_g") @db.Decimal(10, 4)
 
   carbohydratesG Decimal @map("carbohydrates_g") @db.Decimal(10, 4)
   proteinG       Decimal @map("protein_g") @db.Decimal(10, 4)
@@ -691,11 +709,11 @@ model FoodServing {
   foodId Int   @map("food_id")
   food   Foods @relation(fields: [foodId], references: [id], onDelete: Cascade)
 
-  name     String
-  unit     FoodQuantityUnit
-  quantity Decimal @default(1) @db.Decimal(10, 4)
-  weightG  Decimal @map("weight_g") @db.Decimal(10, 4)
-  isDefault Boolean @default(false) @map("is_default")
+  name      String
+  unit      FoodQuantityUnit
+  quantity  Decimal          @default(1) @db.Decimal(10, 4)
+  weightG   Decimal          @map("weight_g") @db.Decimal(10, 4)
+  isDefault Boolean          @default(false) @map("is_default")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

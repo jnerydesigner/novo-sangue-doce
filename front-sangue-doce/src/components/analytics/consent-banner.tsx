@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CONSENT_KEY = "sangue-doce-analytics-consent";
 
 export function ConsentBanner() {
-  const [visible, setVisible] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return !localStorage.getItem(CONSENT_KEY);
-  });
+  // O mesmo estado inicial precisa ser renderizado no servidor e no cliente.
+  // A leitura do localStorage acontece somente depois da hidratação.
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(!localStorage.getItem(CONSENT_KEY));
+  }, []);
 
   if (!visible) return null;
 
@@ -28,4 +31,3 @@ export function ConsentBanner() {
     </aside>
   );
 }
-

@@ -1,54 +1,49 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
 
 type Food = {
+  id: number;
   name: string;
   category: string;
-  carbs: string;
-  protein: string;
-  fat: string;
+  carbohydratesG: number;
+  proteinG: number;
+  fatG: number;
+  fiberG: number;
+  energyKcal: number;
   color: string;
-  image: string;
+  image?: string;
 };
 
-const foods: Food[] = [
+const demoFoods: Food[] = [
   {
-    name: "Arroz integral cozido",
+    id: 1, name: "Arroz integral cozido",
     category: "Cereais e derivados",
-    carbs: "25,80",
-    protein: "2,60",
-    fat: "1,00",
+    carbohydratesG: 25.8, proteinG: 2.6, fatG: 1, fiberG: 0, energyKcal: 0,
     color: "#2d78d6",
     image: "/images/arroz-integral-cozido.webp",
   },
   {
-    name: "Carne patinho grelhado",
+    id: 2, name: "Carne patinho grelhado",
     category: "Carnes e ovos",
-    carbs: "0,00",
-    protein: "32,00",
-    fat: "8,40",
+    carbohydratesG: 0, proteinG: 32, fatG: 8.4, fiberG: 0, energyKcal: 0,
     color: "#38c994",
     image: "/images/carne-patinho-grelhado.jpg",
   },
   {
-    name: "Batata doce cozida",
+    id: 3, name: "Batata doce cozida",
     category: "Tubérculos e raízes",
-    carbs: "18,40",
-    protein: "1,60",
-    fat: "0,10",
+    carbohydratesG: 18.4, proteinG: 1.6, fatG: 0.1, fiberG: 0, energyKcal: 0,
     color: "#ffb71b",
     image: "/images/atata-doce-cozida.jpg",
   },
   {
-    name: "Suco de laranja natural",
+    id: 4, name: "Suco de laranja natural",
     category: "Bebidas não alcoólicas",
-    carbs: "24,96",
-    protein: "3,55",
-    fat: "5,32",
+    carbohydratesG: 24.96, proteinG: 3.55, fatG: 5.32, fiberG: 0, energyKcal: 0,
     color: "#ed6396",
     image: "/images/suco-de-laranja-natural.jpg",
   },
@@ -63,12 +58,68 @@ export function MealsClient({
   showAdminItems?: boolean;
   userName: string;
 }) {
-  const [items, setItems] = useState(foods);
+  const [availableFoods, setAvailableFoods] = useState(demoFoods);
+  const [items, setItems] = useState<Food[]>([]);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [foodSearch, setFoodSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("Todas");
+  const [todayMeals, setTodayMeals] = useState<any[]>([]);
+  useEffect(() => {
+    fetch("/api/foods")
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => {
+        const mapped: Food[] = data.map((food: any) => ({
+          id: food.id,
+          name: [food.name, food.description].filter(Boolean).join(" "),
+          category: food.category?.name ?? "Sem categoria",
+          carbohydratesG: Number(food.carbohydratesG ?? 0), proteinG: Number(food.proteinG ?? 0),
+          fatG: Number(food.fatG ?? 0), fiberG: Number(food.fiberG ?? 0), energyKcal: Number(food.energyKcal ?? 0),
+          color: "#2d78d6", image: food.images?.[0]?.imageUrl,
+        }));
+        if (mapped.length) { setAvailableFoods(mapped); setItems([]); }
+      }).catch(() => undefined);
+  }, []);
+  useEffect(() => {
+    fetch("/api/food-consumptions/today").then((response) => response.ok ? response.json() : []).then(setTodayMeals).catch(() => undefined);
+  }, []);
   const total = items.reduce(
-    (sum, food) => sum + Number(food.carbs.replace(",", ".")),
+    (sum, food) => sum + food.carbohydratesG,
     0,
   );
+  const categories = Array.from(new Set(availableFoods.map((food) => food.category))).sort();
+  const filteredFoods = availableFoods
+    .filter((food) => categoryFilter === "Todas" || food.category === categoryFilter)
+    .filter((food) => food.name.toLowerCase().includes(foodSearch.toLowerCase()))
+    .filter((food, index, foods) => foods.findIndex((item) => item.name === food.name) === index)
+    .slice(0, 12);
+  const canSuggestFoods = foodSearch.trim().length >= 5;
+
+  function addFood(food: Food) {
+    setItems((current) => [...current, { ...food }]);
+    setFoodSearch("");
+  }
+
+  async function saveMeal() {
+    if (!items.length || saving) return;
+    setSaving(true);
+    try {
+      const response = await fetch("/api/food-consumptions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mealType: "LUNCH",
+          items: items.map((food) => ({ foodId: food.id, quantity: 100, unit: "GRAM", weightG: 100 })),
+        }),
+      });
+      if (!response.ok) throw new Error("Não foi possível salvar a refeição.");
+      const createdMeal = await response.json();
+      setTodayMeals((current) => [...current, createdMeal]);
+      setSaved(true);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <main className="dashboard-shell bg-[#f3f8fd] text-[#102a4a]">
@@ -110,17 +161,23 @@ export function MealsClient({
                   {items.map((food, i) => (
                     <div
                       className="grid items-center gap-3 border-b border-[#e1eaf3] py-2.5 md:grid-cols-[1fr_78px_106px_64px_110px_24px] md:gap-4"
-                      key={food.name}
+                      key={food.id}
                     >
                       <div className="flex items-center gap-3">
                         <div className="h-14 w-16 overflow-hidden rounded-lg bg-[#edf2f4]">
-                          <Image
-                            src={food.image}
-                            alt={food.name}
-                            className="h-full w-full object-cover"
-                            width={200}
-                            height={200}
-                          />
+                          {food.image ? (
+                            <Image
+                              src={food.image}
+                              alt={food.name}
+                              className="h-full w-full object-cover"
+                              width={200}
+                              height={200}
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-2xl" aria-label={`Imagem não disponível para ${food.name}`}>
+                              🍽️
+                            </div>
+                          )}
                         </div>
                         <div>
                           <b className="text-sm">{food.name}</b>
@@ -141,7 +198,7 @@ export function MealsClient({
                         defaultValue={i === 3 ? "240" : i === 1 ? "250" : "100"}
                       />
                       <b className="text-right text-sm text-[#1466bd]">
-                        {food.carbs}
+                        {food.carbohydratesG.toFixed(2).replace(".", ",")}
                       </b>
                       <button
                         aria-label="Remover alimento"
@@ -155,13 +212,7 @@ export function MealsClient({
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 flex justify-between">
-                  <button
-                    onClick={() => setItems([...items, foods[0]])}
-                    className="rounded-lg border border-[#1768c4] px-4 py-2 text-sm font-bold text-[#1768c4]"
-                  >
-                    ＋ Adicionar alimento
-                  </button>
+                <div className="mt-4 flex justify-end">
                   <button
                     onClick={() => setItems([])}
                     className="rounded-lg border border-red-400 px-4 py-2 text-sm font-bold text-red-500"
@@ -173,33 +224,34 @@ export function MealsClient({
               <Card title="Buscar alimento">
                 <div className="grid gap-3 sm:grid-cols-[1.5fr_1fr_1fr]">
                   <Field label="">
-                    <input placeholder="Digite o nome do alimento　⌕" />
+                    <input
+                      className="mt-1 w-full rounded-lg border border-[#c9dbea] bg-white px-3 py-2 text-sm text-[#102a4a] outline-none transition focus:border-[#1768c4] focus:ring-2 focus:ring-[#1768c4]/15"
+                      value={foodSearch}
+                      onChange={(event) => setFoodSearch(event.target.value)}
+                      placeholder="Digite o nome do alimento　⌕"
+                    />
                   </Field>
                   <Field label="Categoria">
-                    <select>
+                    <select className="mt-1 w-full rounded-lg border border-[#c9dbea] bg-white px-3 py-2 text-sm text-[#102a4a] outline-none transition focus:border-[#1768c4] focus:ring-2 focus:ring-[#1768c4]/15" value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
                       <option>Todas</option>
+                      {categories.map((category) => <option key={category}>{category}</option>)}
                     </select>
                   </Field>
                   <Field label="Tipo de medida">
-                    <select>
+                    <select className="mt-1 w-full rounded-lg border border-[#c9dbea] bg-white px-3 py-2 text-sm text-[#102a4a] outline-none transition focus:border-[#1768c4] focus:ring-2 focus:ring-[#1768c4]/15">
                       <option>Todas</option>
                     </select>
                   </Field>
                 </div>
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-[#55718f]">
-                  <span>Sugestões populares:</span>
-                  {[
-                    "Arroz integral cozido",
-                    "Frango grelhado",
-                    "Batata doce",
-                    "Ovo",
-                    "Suco de laranja",
-                  ].map((x) => (
+                  <span>{canSuggestFoods ? "Resultados:" : "Digite pelo menos 5 letras:"}</span>
+                  {canSuggestFoods && filteredFoods.slice(0, 6).map((food) => (
                     <button
+                      onClick={() => addFood(food)}
                       className="rounded-full border border-[#d5e2ef] bg-white px-3 py-1"
-                      key={x}
+                      key={food.id}
                     >
-                      {x}
+                      {food.name}
                     </button>
                   ))}
                 </div>
@@ -261,16 +313,16 @@ export function MealsClient({
                   Distribuição de carboidratos
                 </h3>
                 {items.map((f) => (
-                  <div className="mb-3" key={f.name}>
+                  <div className="mb-3" key={f.id}>
                     <div className="flex justify-between text-sm">
                       <span style={{ color: f.color }}>
                         ●　<span className="text-[#55718f]">{f.name}</span>
                       </span>
                       <b>
-                        {f.carbs} g　
+                        {f.carbohydratesG.toFixed(2).replace(".", ",")} g　
                         <span className="font-normal text-[#55718f]">
                           {Math.round(
-                            (Number(f.carbs.replace(",", ".")) /
+                            (f.carbohydratesG /
                               Math.max(total, 1)) *
                               100,
                           )}
@@ -283,7 +335,7 @@ export function MealsClient({
                         className="h-1 rounded"
                         style={{
                           background: f.color,
-                          width: `${Math.min(100, (Number(f.carbs.replace(",", ".")) / Math.max(total, 1)) * 100)}%`,
+                          width: `${Math.min(100, (f.carbohydratesG / Math.max(total, 1)) * 100)}%`,
                         }}
                       />
                     </div>
@@ -291,10 +343,10 @@ export function MealsClient({
                 ))}
                 <div className="mt-5 grid gap-3 border-t border-[#d5e2ef] pt-4">
                   <button
-                    onClick={() => setSaved(true)}
+                    onClick={saveMeal}
                     className="rounded-lg bg-[#15509a] py-3 font-bold text-white"
                   >
-                    ◉　{saved ? "Refeição salva!" : "Salvar refeição"}
+                    ◉　{saving ? "Salvando..." : saved ? "Refeição salva!" : "Salvar refeição"}
                   </button>
                   <button className="rounded-lg border border-[#c8dcec] bg-white py-3 font-bold text-[#55718f]">
                     Cancelar
@@ -303,6 +355,26 @@ export function MealsClient({
               </Card>
             </aside>
           </div>
+          <section className="mt-4">
+            <Card title="Refeições de hoje">
+              {todayMeals.length === 0 ? (
+                <p className="text-sm text-[#55718f]">Nenhuma refeição registrada hoje.</p>
+              ) : (
+                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                  {todayMeals.map((meal) => (
+                    <div key={meal.id} className="rounded-lg border border-[#d5e2ef] p-3">
+                      <div className="flex justify-between text-sm font-bold">
+                        <span>{String(meal.mealType).replaceAll("_", " ")}</span>
+                        <span>{new Date(meal.consumedAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+                      </div>
+                      <p className="mt-2 text-xs text-[#55718f]">{meal.items.length} alimento(s)</p>
+                      <b className="text-sm text-[#1466bd]">{Number(meal.totalCarbohydratesG).toFixed(2).replace(".", ",")} g carboidratos</b>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Card>
+          </section>
         </section>
       </div>
     </main>
@@ -332,7 +404,7 @@ function Field({
 }) {
   return (
     <label className="block text-xs font-medium text-[#55718f]">
-      {label}
+      <span className="block min-h-4">{label}</span>
       {children}
     </label>
   );
