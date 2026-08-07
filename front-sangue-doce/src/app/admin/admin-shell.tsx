@@ -1,13 +1,9 @@
 import Link from "next/link";
 import type React from "react";
-import { Brand } from "@/components/home/brand";
 import { UserMenu } from "@/components/home/user-menu";
-import { SidebarNav } from "../dashboard/components/dashboard-sidebar";
-import {
-  adminSidebarGroups,
-  adminSidebarItems,
-  dashboardSidebarGroups,
-} from "../dashboard/dashboard.data";
+import { DashboardSidebar } from "../dashboard/components/dashboard-sidebar";
+import { DateTimeCard } from "../dashboard/components/date-time-card";
+import { adminSidebarItems } from "../dashboard/dashboard.data";
 
 type AdminShellProps = {
   active:
@@ -86,37 +82,26 @@ export function AdminShell({
     subtitle: subtitle ?? pageTitles[active].subtitle,
     title: title ?? pageTitles[active].title,
   };
-  const activeHref =
-    Object.entries(adminActiveByHref).find(([, itemActive]) => itemActive === active)?.[0] ??
-    "/admin";
-  const sidebarGroups = [...adminSidebarGroups, ...dashboardSidebarGroups];
-
   return (
     <main className="dashboard-shell bg-paper text-ink">
       <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
-        <aside className="hidden border-r border-line bg-card px-5 py-7 lg:flex lg:flex-col">
-          <div className="mb-8 px-2 text-greenDeep">
-            <Brand />
-          </div>
-
-          <SidebarNav
-            activeHref={activeHref}
-            ariaLabel="Menu administrativo"
-            groups={sidebarGroups}
-          />
-
-          <div className="mt-auto rounded-lg border border-line bg-paper p-4">
-            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
-              Acesso
-            </span>
-            <p className="mt-2 text-sm font-semibold text-ink">{userName ?? "Painel"}</p>
-            {userRole ? (
-              <span className="mt-3 inline-flex rounded-full border border-green/30 bg-green/10 px-3 py-1 text-xs font-bold text-greenDeep">
-                {userRole}
+        <DashboardSidebar
+          navLabel="Menu administrativo"
+          showAdminItems
+          footer={
+            <div className="mt-auto rounded-lg border border-line bg-paper p-4">
+              <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+                Acesso
               </span>
-            ) : null}
-          </div>
-        </aside>
+              <p className="mt-2 text-sm font-semibold text-ink">{userName ?? "Painel"}</p>
+              {userRole ? (
+                <span className="mt-3 inline-flex rounded-full border border-green/30 bg-green/10 px-3 py-1 text-xs font-bold text-greenDeep">
+                  {userRole}
+                </span>
+              ) : null}
+            </div>
+          }
+        />
 
         <section className="min-w-0 overflow-x-hidden overflow-y-auto px-[clamp(18px,4vw,42px)] py-6">
           <header className="border-b border-line pb-5">
@@ -129,6 +114,7 @@ export function AdminShell({
               </div>
 
               <div className="flex items-center gap-3">
+                <DateTimeCard />
                 {userName ? (
                   <UserMenu
                     actionLabel="Ver site"

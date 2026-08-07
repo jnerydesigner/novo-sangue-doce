@@ -1,5 +1,6 @@
-import type React from "react";
 import { UserMenu } from "@/components/home/user-menu";
+import type React from "react";
+import { DateTimeCard } from "./date-time-card";
 
 type DashboardHeaderProps = {
   action?: React.ReactNode;
@@ -29,6 +30,7 @@ export function DashboardHeader({
 
       <div className="flex items-center gap-3">
         {action}
+        <DateTimeCard />
         <UserMenu
           actionLabel="Ver site"
           avatarUrl={avatarUrl}

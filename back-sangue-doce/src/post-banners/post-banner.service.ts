@@ -85,16 +85,16 @@ export class PostBannerService {
     });
     await updateProgress(70);
 
-    const webp = await this.imageService.toWebp(generated.image, 88);
+    const png = await this.imageService.png(generated.image);
     const coverImageAlt = await this.textGateway.generateImageAltText({
-      image: webp,
-      mimeType: "image/webp",
+      image: png,
+      mimeType: "image/png",
       title: data.title,
     });
     await updateProgress(80);
 
-    const key = `${this.uploadsPath}/posts/${postId}/banner-${randomUUID()}.webp`;
-    const uploaded = await this.s3.uploadObject({ buffer: webp, contentType: "image/webp", key });
+    const key = `${this.uploadsPath}/posts/${postId}/banner-${randomUUID()}.png`;
+    const uploaded = await this.s3.uploadObject({ buffer: png, contentType: "image/png", key });
     await this.posts.updatePostCoverImage(postId, uploaded.url, coverImageAlt);
     await updateProgress(100);
 

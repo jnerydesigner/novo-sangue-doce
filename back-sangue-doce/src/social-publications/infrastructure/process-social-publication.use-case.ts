@@ -179,7 +179,7 @@ export class ProcessSocialPublicationUseCase {
 
           imageResult = await this.imageGateway.generateSocialImage({
             sourceImage: sourceImageBuffer as Buffer,
-            mimeType: sourceImageKey.endsWith(".webp") ? "image/webp" : "image/jpeg",
+          mimeType: sourceImageKey.endsWith(".png") ? "image/png" : sourceImageKey.endsWith(".webp") ? "image/webp" : "image/jpeg",
             title: postProps.title,
             summary: textResult.content,
             targetAspectRatio: "1:1",
@@ -193,7 +193,7 @@ export class ProcessSocialPublicationUseCase {
           );
         }
 
-      let webpBuffer: Buffer = Buffer.alloc(0);
+      let pngBuffer: Buffer = Buffer.alloc(0);
 
       if (shouldGenerateImage)
         try {
@@ -202,7 +202,7 @@ export class ProcessSocialPublicationUseCase {
             SocialPublicationStatus.CONVERTING_IMAGE,
           );
 
-          webpBuffer = await this.imageService.toWebp(imageResult.image, 88);
+          pngBuffer = await this.imageService.png(imageResult.image);
         } catch (error) {
           throw this.createError(
             "IMAGE_CONVERSION_FAILED",
@@ -223,11 +223,11 @@ export class ProcessSocialPublicationUseCase {
             SocialPublicationStatus.UPLOADING_IMAGE,
           );
 
-          const imageKey = `${this.uploadsMediaPath}/${input.postId}/${publication.id}/cover.webp`;
+          const imageKey = `${this.uploadsMediaPath}/${input.postId}/${publication.id}/cover.png`;
 
           uploadedImage = await this.awsS3Service.uploadObject({
-            buffer: webpBuffer,
-            contentType: "image/webp",
+            buffer: pngBuffer,
+            contentType: "image/png",
             key: imageKey,
           });
         } catch (error) {
@@ -259,7 +259,7 @@ export class ProcessSocialPublicationUseCase {
           imageRequestId: imageResult.requestId,
           sourceImageKey,
           articleUrl,
-          imageSizeBytes: webpBuffer.length,
+          imageSizeBytes: pngBuffer.length,
         },
       });
 

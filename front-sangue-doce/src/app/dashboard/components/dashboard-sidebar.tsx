@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 import { Brand } from "@/components/home/brand";
 import {
   adminSidebarGroups,
@@ -11,6 +12,8 @@ import {
 } from "../dashboard.data";
 
 type DashboardSidebarProps = {
+  footer?: ReactNode;
+  navLabel?: string;
   showAdminItems?: boolean;
 };
 
@@ -89,7 +92,11 @@ export function SidebarNav({ activeHref, ariaLabel, groups }: SidebarNavProps) {
   );
 }
 
-export function DashboardSidebar({ showAdminItems = false }: DashboardSidebarProps) {
+export function DashboardSidebar({
+  footer,
+  navLabel = "Menu da dashboard",
+  showAdminItems = false,
+}: DashboardSidebarProps) {
   const pathname = usePathname();
   const sidebarGroups = showAdminItems
     ? [...adminSidebarGroups, ...dashboardSidebarGroups]
@@ -101,16 +108,18 @@ export function DashboardSidebar({ showAdminItems = false }: DashboardSidebarPro
         <Brand />
       </div>
 
-      <SidebarNav activeHref={pathname} ariaLabel="Menu da dashboard" groups={sidebarGroups} />
+      <SidebarNav activeHref={pathname} ariaLabel={navLabel} groups={sidebarGroups} />
 
-      <div className="mt-auto rounded-lg border border-line bg-paper p-4">
-        <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
-          Proxima etapa
-        </span>
-        <p className="mt-2 text-sm text-inkSoft">
-          Conectar leituras ao banco e liberar filtros por periodo.
-        </p>
-      </div>
+      {footer ?? (
+        <div className="mt-auto rounded-lg border border-line bg-paper p-4">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+            Proxima etapa
+          </span>
+          <p className="mt-2 text-sm text-inkSoft">
+            Conectar leituras ao banco e liberar filtros por periodo.
+          </p>
+        </div>
+      )}
     </aside>
   );
 }

@@ -108,10 +108,10 @@ export class UploadsService {
       postId: publicPost.id,
       slug: publicPost.slug,
     });
-    const imageBuffer = await this.convertToPostWebp(file);
+    const imageBuffer = await this.convertToPostPng(file);
     const uploadedObject = await this.awsS3Service.uploadObject({
       buffer: imageBuffer,
-      contentType: "image/webp",
+      contentType: "image/png",
       key: objectName,
     });
     const coverUrl = uploadedObject.url;
@@ -147,11 +147,11 @@ export class UploadsService {
       postId: publicPost.id,
       slug: publicPost.slug,
     });
-    const imageBuffer = await this.convertToPostWebp(file);
+    const imageBuffer = await this.convertToPostPng(file);
     const previousImageUrl = await this.postRepository.findPostImageByPostId(postId);
     const uploadedObject = await this.awsS3Service.uploadObject({
       buffer: imageBuffer,
-      contentType: "image/webp",
+      contentType: "image/png",
       key: objectName,
     });
     const imageUrl = uploadedObject.url;
@@ -180,10 +180,10 @@ export class UploadsService {
     this.validateImage(file);
     const recipe = await this.prisma.recipe.findUnique({ where: { id: recipeId } });
     if (!recipe) throw new NotFoundException("Recipe not found.");
-    const imageBuffer = await this.convertToPostWebp(file);
+    const imageBuffer = await this.convertToPostPng(file);
     const uploaded = await this.awsS3Service.uploadObject({
       buffer: imageBuffer,
-      contentType: "image/webp",
+      contentType: "image/png",
       key: this.createRecipeCoverName({ recipeId, slug: recipe.slug }),
     });
     if (recipe.coverImageUrl && recipe.coverImageUrl !== uploaded.url) {
@@ -197,10 +197,10 @@ export class UploadsService {
     this.validateImage(file);
     const recipe = await this.prisma.recipe.findUnique({ where: { id: recipeId } });
     if (!recipe) throw new NotFoundException("Recipe not found.");
-    const imageBuffer = await this.convertToPostWebp(file);
+    const imageBuffer = await this.convertToPostPng(file);
     const uploaded = await this.awsS3Service.uploadObject({
       buffer: imageBuffer,
-      contentType: "image/webp",
+      contentType: "image/png",
       key: this.createRecipeImageName({ recipeId, slug: recipe.slug }),
     });
     return { imageUrl: uploaded.url, bucket: uploaded.bucket, objectName: uploaded.key };
@@ -211,10 +211,10 @@ export class UploadsService {
   ): Promise<UploadPostImagesResponse> {
     this.validateImage(file);
 
-    const imageBuffer = await this.convertToPostWebp(file);
+    const imageBuffer = await this.convertToPostPng(file);
     const uploaded = await this.awsS3Service.uploadObject({
       buffer: imageBuffer,
-      contentType: "image/webp",
+      contentType: "image/png",
       key: this.createInstitutionalPublicationImageName(),
     });
 
@@ -241,11 +241,11 @@ export class UploadsService {
     }
   }
 
-  private async convertToPostWebp(file: UploadedImageFile): Promise<Buffer> {
+  private async convertToPostPng(file: UploadedImageFile): Promise<Buffer> {
     try {
       const resizedBuffer = await this.imageService.resize(file.buffer, 1600);
 
-      return await this.imageService.toWebp(resizedBuffer, 75);
+      return await this.imageService.png(resizedBuffer);
     } catch (error) {
       throw new BadRequestException("Nao foi possivel processar a imagem enviada.", {
         cause: error,
@@ -284,23 +284,23 @@ export class UploadsService {
   }
 
   private createPostCoverName({ postId, slug }: { postId: string; slug: string }): string {
-    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.webp`;
+    return `${this.publicPrefix}/posts/${this.slugify(slug)}/cover-${postId}.png`;
   }
 
   private createPostImageName({ postId, slug }: { postId: string; slug: string }): string {
-    return `${this.publicPrefix}/posts/images/${this.slugify(slug)}/${randomUUID()}-${postId}.webp`;
+    return `${this.publicPrefix}/posts/images/${this.slugify(slug)}/${randomUUID()}-${postId}.png`;
   }
 
   private createRecipeCoverName({ recipeId, slug }: { recipeId: string; slug: string }) {
-    return `${this.publicPrefix}/recipes/${this.slugify(slug)}/cover-${recipeId}.webp`;
+    return `${this.publicPrefix}/recipes/${this.slugify(slug)}/cover-${recipeId}.png`;
   }
 
   private createRecipeImageName({ recipeId, slug }: { recipeId: string; slug: string }) {
-    return `${this.publicPrefix}/recipes/images/${this.slugify(slug)}/${randomUUID()}-${recipeId}.webp`;
+    return `${this.publicPrefix}/recipes/images/${this.slugify(slug)}/${randomUUID()}-${recipeId}.png`;
   }
 
   private createInstitutionalPublicationImageName() {
-    return `${this.publicPrefix}/institutional-publications/${randomUUID()}.webp`;
+    return `${this.publicPrefix}/institutional-publications/${randomUUID()}.png`;
   }
 
   private createPublicObjectPath(objectName: string): string {

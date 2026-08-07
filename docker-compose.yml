@@ -1,11 +1,11 @@
 services:
-  recipe-importer:
-    build:
-      context: ./recipe-importer
-    container_name: sangue-doce-recipe-importer
-    restart: unless-stopped
-    ports:
-      - "${RECIPE_IMPORTER_PORT:-8030}:8030"
+  # recipe-importer:
+  #   build:
+  #     context: ./recipe-importer
+  #   container_name: sangue-doce-recipe-importer
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${RECIPE_IMPORTER_PORT:-8030}:8030"
 
   # backend:
   #   build:
@@ -88,7 +88,7 @@ services:
     container_name: sangue-doce-postgres
     restart: unless-stopped
     ports:
-      - "${POSTGRES_PORT:-5433}:5432"
+      - "5434:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -102,97 +102,97 @@ services:
       retries: 5
       start_period: 10s
 
-  minio:
-    image: minio/minio:latest
-    container_name: sangue-doce-minio
-    restart: unless-stopped
-    command: server /data --console-address ":9001"
-    ports:
-      - "${MINIO_API_PORT:-9000}:9000"
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    volumes:
-      - ${MINIO_DATA_DIR:-./.docker/minio}:/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+  # minio:
+  #   image: minio/minio:latest
+  #   container_name: sangue-doce-minio
+  #   restart: unless-stopped
+  #   command: server /data --console-address ":9001"
+  #   ports:
+  #     - "${MINIO_API_PORT:-9000}:9000"
+  #     - "${MINIO_CONSOLE_PORT:-9001}:9001"
+  #   environment:
+  #     MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+  #     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+  #   volumes:
+  #     - ${MINIO_DATA_DIR:-./.docker/minio}:/data
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s
 
-  minio-init:
-    image: minio/mc:latest
-    container_name: sangue-doce-minio-init
-    depends_on:
-      minio:
-        condition: service_healthy
-    entrypoint: >
-      /bin/sh -c '
-      mc alias set local http://minio:9000 "${MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD}";
-      mc mb --ignore-existing local/"${MINIO_BUCKET}";
-      mc anonymous set private local/"${MINIO_BUCKET}";
-      mc anonymous set download local/"${MINIO_BUCKET}"/"${MINIO_PUBLIC_PREFIX}";
-      '
+  # minio-init:
+  #   image: minio/mc:latest
+  #   container_name: sangue-doce-minio-init
+  #   depends_on:
+  #     minio:
+  #       condition: service_healthy
+  #   entrypoint: >
+  #     /bin/sh -c '
+  #     mc alias set local http://minio:9000 "${MINIO_ROOT_USER}" "${MINIO_ROOT_PASSWORD}";
+  #     mc mb --ignore-existing local/"${MINIO_BUCKET}";
+  #     mc anonymous set private local/"${MINIO_BUCKET}";
+  #     mc anonymous set download local/"${MINIO_BUCKET}"/"${MINIO_PUBLIC_PREFIX}";
+  #     '
 
-  infisical:
-    image: infisical/infisical:${INFISICAL_VERSION:-latest}
-    container_name: sangue-doce-infisical
-    restart: unless-stopped
-    profiles:
-      - secrets
-    ports:
-      - "${INFISICAL_PORT:-8080}:8080"
-    environment:
-      NODE_ENV: production
-      SITE_URL: ${INFISICAL_SITE_URL:-http://localhost:8080}
-      AUTH_SECRET: ${INFISICAL_AUTH_SECRET:-}
-      ENCRYPTION_KEY: ${INFISICAL_ENCRYPTION_KEY:-}
-      DB_CONNECTION_URI: postgresql://${INFISICAL_POSTGRES_USER:-infisical}:${INFISICAL_POSTGRES_PASSWORD:-}@infisical-postgres:5432/${INFISICAL_POSTGRES_DB:-infisical}
-      REDIS_URL: redis://infisical-redis:6379
-    depends_on:
-      infisical-postgres:
-        condition: service_healthy
-      infisical-redis:
-        condition: service_started
-    networks:
-      - infisical
+  # infisical:
+  #   image: infisical/infisical:${INFISICAL_VERSION:-latest}
+  #   container_name: sangue-doce-infisical
+  #   restart: unless-stopped
+  #   profiles:
+  #     - secrets
+  #   ports:
+  #     - "${INFISICAL_PORT:-8080}:8080"
+  #   environment:
+  #     NODE_ENV: production
+  #     SITE_URL: ${INFISICAL_SITE_URL:-http://localhost:8080}
+  #     AUTH_SECRET: ${INFISICAL_AUTH_SECRET:-}
+  #     ENCRYPTION_KEY: ${INFISICAL_ENCRYPTION_KEY:-}
+  #     DB_CONNECTION_URI: postgresql://${INFISICAL_POSTGRES_USER:-infisical}:${INFISICAL_POSTGRES_PASSWORD:-}@infisical-postgres:5432/${INFISICAL_POSTGRES_DB:-infisical}
+  #     REDIS_URL: redis://infisical-redis:6379
+  #   depends_on:
+  #     infisical-postgres:
+  #       condition: service_healthy
+  #     infisical-redis:
+  #       condition: service_started
+  #   networks:
+  #     - infisical
 
-  infisical-postgres:
-    image: postgres:16-alpine
-    container_name: sangue-doce-infisical-postgres
-    restart: unless-stopped
-    profiles:
-      - secrets
-    environment:
-      POSTGRES_USER: ${INFISICAL_POSTGRES_USER:-infisical}
-      POSTGRES_PASSWORD: ${INFISICAL_POSTGRES_PASSWORD:-}
-      POSTGRES_DB: ${INFISICAL_POSTGRES_DB:-infisical}
-    ports:
-      - "${INFISICAL_POSTGRES_PORT:-5434}:5432"
-    volumes:
-      - ${INFISICAL_POSTGRES_DATA_DIR:-./.docker/infisical/postgres}:/var/lib/postgresql/data
-    networks:
-      - infisical
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
+  # infisical-postgres:
+  #   image: postgres:16-alpine
+  #   container_name: sangue-doce-infisical-postgres
+  #   restart: unless-stopped
+  #   profiles:
+  #     - secrets
+  #   environment:
+  #     POSTGRES_USER: ${INFISICAL_POSTGRES_USER:-infisical}
+  #     POSTGRES_PASSWORD: ${INFISICAL_POSTGRES_PASSWORD:-}
+  #     POSTGRES_DB: ${INFISICAL_POSTGRES_DB:-infisical}
+  #   ports:
+  #     - "${INFISICAL_POSTGRES_PORT:-5434}:5432"
+  #   volumes:
+  #     - ${INFISICAL_POSTGRES_DATA_DIR:-./.docker/infisical/postgres}:/var/lib/postgresql/data
+  #   networks:
+  #     - infisical
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 10
+  #     start_period: 10s
 
-  infisical-redis:
-    image: redis:7-alpine
-    container_name: sangue-doce-infisical-redis
-    restart: unless-stopped
-    profiles:
-      - secrets
-    command: redis-server --appendonly yes
-    volumes:
-      - ${INFISICAL_REDIS_DATA_DIR:-./.docker/infisical/redis}:/data
-    networks:
-      - infisical
+  # infisical-redis:
+  #   image: redis:7-alpine
+  #   container_name: sangue-doce-infisical-redis
+  #   restart: unless-stopped
+  #   profiles:
+  #     - secrets
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - ${INFISICAL_REDIS_DATA_DIR:-./.docker/infisical/redis}:/data
+  #   networks:
+  #     - infisical
 
   redis:
     image: redis:8-alpine
@@ -207,15 +207,15 @@ services:
     volumes:
       - redis_data:/data
 
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
 
-networks:
-  infisical:
-    name: sangue-doce-infisical
+# networks:
+#   infisical:
+#     name: sangue-doce-infisical
 
 volumes:
   backend_node_modules:
