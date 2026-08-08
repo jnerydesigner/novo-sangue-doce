@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Brand } from "@/components/home/brand";
 import {
   adminSidebarGroups,
@@ -31,26 +31,44 @@ function getActiveHref(groups: SidebarGroup[], activeHref: string) {
     .sort((first, second) => second.href.length - first.href.length)[0]?.href;
 }
 
-function getItemMark(item: SidebarItem) {
-  return item.mark ?? item.label.slice(0, 1);
+function getActiveGroupLabel(groups: SidebarGroup[], currentHref?: string) {
+  return groups.find((group) => group.items.some((item) => item.href === currentHref))?.label;
 }
 
 export function SidebarNav({ activeHref, ariaLabel, groups }: SidebarNavProps) {
   const currentHref = getActiveHref(groups, activeHref);
+  const activeGroupLabel = getActiveGroupLabel(groups, currentHref);
+  const firstGroupLabel = groups[0]?.label;
+  const [openGroupLabel, setOpenGroupLabel] = useState<string | undefined>(
+    () => activeGroupLabel ?? firstGroupLabel,
+  );
+
+  useEffect(() => {
+    setOpenGroupLabel(activeGroupLabel ?? firstGroupLabel);
+  }, [activeGroupLabel, firstGroupLabel]);
 
   return (
     <nav aria-label={ariaLabel}>
       <div className="grid gap-2">
         {groups.map((group) => {
           const hasActiveItem = group.items.some((item) => item.href === currentHref);
+          const isOpen = openGroupLabel === group.label;
 
           return (
             <details
               className="group rounded-lg border border-transparent open:border-line open:bg-paper/55"
-              open={hasActiveItem}
               key={group.label}
+              open={isOpen}
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em] text-muted transition hover:bg-paper2/70 hover:text-inkSoft [&::-webkit-details-marker]:hidden">
+              <summary
+                className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em] text-muted transition hover:bg-paper2/70 hover:text-inkSoft [&::-webkit-details-marker]:hidden"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenGroupLabel((currentGroupLabel) =>
+                    currentGroupLabel === group.label ? undefined : group.label,
+                  );
+                }}
+              >
                 <span>{group.label}</span>
                 <span className="text-[14px] leading-none transition group-open:rotate-90">
                   &gt;
@@ -60,10 +78,12 @@ export function SidebarNav({ activeHref, ariaLabel, groups }: SidebarNavProps) {
               <ul className="grid gap-1 px-1 pb-2">
                 {group.items.map((item) => {
                   const isActive = item.href === currentHref;
+                  const Icon = item.icon;
 
                   return (
                     <li key={item.href}>
                       <Link
+                        aria-current={isActive ? "page" : undefined}
                         className={`flex min-h-11 w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-[15px] font-semibold transition ${
                           isActive
                             ? "bg-green/10 text-greenDeep"
@@ -76,7 +96,7 @@ export function SidebarNav({ activeHref, ariaLabel, groups }: SidebarNavProps) {
                             isActive ? "bg-card text-greenDeep" : "bg-paper text-inkSoft"
                           }`}
                         >
-                          {getItemMark(item)}
+                          <Icon aria-hidden="true" className="h-4 w-4" strokeWidth={2.2} />
                         </span>
                         <span className="min-w-0 leading-snug">{item.label}</span>
                       </Link>

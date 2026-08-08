@@ -1,5 +1,5 @@
 import { AuthenticatedRequest, AuthGuard } from "@app/@infra/guard/auth.guard";
-import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { z } from "zod";
 import { FoodConsumptionsService } from "./food-consumptions.service";
 
@@ -10,7 +10,7 @@ const createConsumptionSchema = z.object({
   items: z.array(z.object({
     foodId: z.number().int().positive(),
     quantity: z.number().positive(),
-    unit: z.string().default("GRAM"),
+    unit: z.enum(["CUP", "GRAM", "MILLILITER", "PORTION", "SCOOP", "SLICE", "TABLESPOON", "TEASPOON", "UNIT"]).default("GRAM"),
     weightG: z.number().positive().optional(),
   })).min(1),
 });
@@ -34,5 +34,16 @@ export class FoodConsumptionsController {
   @Get("today")
   findToday(@Req() request: AuthenticatedRequest) {
     return this.service.findToday(request.user!.sub);
+  }
+
+  @Delete(":id")
+  remove(@Req() request: AuthenticatedRequest, @Param("id", ParseIntPipe) id: number) {
+    return this.service.remove(request.user!.sub, id);
+  }
+
+  @Patch(":id")
+  update(@Req() request: AuthenticatedRequest, @Param("id", ParseIntPipe) id: number, @Body() body: unknown) {
+    const input = createConsumptionSchema.parse(body);
+    return this.service.update(request.user!.sub, id, input);
   }
 }

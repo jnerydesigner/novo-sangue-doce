@@ -68,7 +68,7 @@ export default async function DashboardPage() {
         <DashboardSidebar showAdminItems={userData.role === "ADMIN"} />
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
-          <DashboardHeader avatarUrl={userData.avatarUrl} userName={userData.name} />
+          <DashboardHeader userName={userData.name} />
           <SummaryTiles tiles={dashboardSummaryTiles} />
 
           <div className="mt-5 grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">

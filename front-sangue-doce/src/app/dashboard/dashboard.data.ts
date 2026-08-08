@@ -1,3 +1,22 @@
+import type { LucideIcon } from "lucide-react";
+import {
+  CalendarDays,
+  ChartNoAxesCombined,
+  CircleUserRound,
+  CookingPot,
+  Droplet,
+  KeyRound,
+  Landmark,
+  LayoutDashboard,
+  Moon,
+  Newspaper,
+  PenTool,
+  Share2,
+  Tags,
+  Users,
+  Utensils,
+} from "lucide-react";
+
 export type DashboardTone = "blue" | "green" | "tomato";
 
 export const glucoseValues = [112, 98, 134, 121, 105, 96, 118, 142, 108, 101, 99, 115];
@@ -13,8 +32,8 @@ export const glucosePoints = glucoseValues.map((value, index) => ({
 
 export type SidebarItem = {
   href: string;
+  icon: LucideIcon;
   label: string;
-  mark?: string;
 };
 
 export type SidebarGroup = {
@@ -23,24 +42,24 @@ export type SidebarGroup = {
 };
 
 export const adminSidebarItems: SidebarItem[] = [
-  { href: "/admin", label: "Visao geral", mark: "V" },
-  { href: "/admin/posts", label: "Materias", mark: "M" },
-  { href: "/admin/receitas", label: "Receitas", mark: "R" },
-  { href: "/admin/publicacoes-sociais", label: "Publicacoes sociais", mark: "P" },
-  { href: "/admin/publicacoes-institucionais", label: "Institucional", mark: "I" },
-  { href: "/admin/taxonomia", label: "Tags e Categorias", mark: "T" },
-  { href: "/admin/usuarios", label: "Usuarios", mark: "U" },
-  { href: "/admin/autores", label: "Autores", mark: "A" },
+  { href: "/admin", icon: LayoutDashboard, label: "Visao geral" },
+  { href: "/admin/posts", icon: Newspaper, label: "Materias" },
+  { href: "/admin/receitas", icon: CookingPot, label: "Receitas" },
+  { href: "/admin/publicacoes-sociais", icon: Share2, label: "Publicacoes sociais" },
+  { href: "/admin/publicacoes-institucionais", icon: Landmark, label: "Institucional" },
+  { href: "/admin/taxonomia", icon: Tags, label: "Tags e Categorias" },
+  { href: "/admin/usuarios", icon: Users, label: "Usuarios" },
+  { href: "/admin/autores", icon: PenTool, label: "Autores" },
 ];
 
 export const dashboardSidebarItems: SidebarItem[] = [
-  { href: "/dashboard", label: "Hoje" },
-  { href: "/dashboard/glucose", label: "Glicemia" },
-  { href: "/dashboard/sleep", label: "Sono" },
-  { href: "/dashboard/meals", label: "Refeicoes" },
-  { href: "/dashboard/reports", label: "Relatorios" },
-  { href: "/dashboard/account", label: "Minha conta" },
-  { href: "/dashboard/account/password", label: "Senha" },
+  { href: "/dashboard", icon: CalendarDays, label: "Hoje" },
+  { href: "/dashboard/glucose", icon: Droplet, label: "Glicemia" },
+  { href: "/dashboard/sleep", icon: Moon, label: "Sono" },
+  { href: "/dashboard/meals", icon: Utensils, label: "Refeicoes" },
+  { href: "/dashboard/reports", icon: ChartNoAxesCombined, label: "Relatorios" },
+  { href: "/dashboard/account", icon: CircleUserRound, label: "Minha conta" },
+  { href: "/dashboard/account/password", icon: KeyRound, label: "Senha" },
 ];
 
 export const adminSidebarGroups: SidebarGroup[] = [

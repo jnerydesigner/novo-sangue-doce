@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { LogoutButton } from "@/app/dashboard/components/logout-button";
 import { UserAvatar } from "@/app/dashboard/components/user-avatar";
+import type { AuthProfile } from "@/lib/api";
 
 type UserMenuProps = {
   actionLabel?: string;
@@ -11,7 +12,7 @@ type UserMenuProps = {
   accountLabel?: string;
   avatarUrl?: string;
   dashboardHref: string;
-  name: string;
+  name?: string;
   sectionLabel?: string;
   statusLabel?: string;
   tone?: "light" | "solid";
@@ -29,7 +30,27 @@ export function UserMenu({
   tone = "solid",
 }: UserMenuProps) {
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState<AuthProfile | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const displayName = profile?.name ?? name ?? "Conta";
+  const displayAvatarUrl = profile?.avatarUrl ?? avatarUrl;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/auth/profile")
+      .then((response) => (response.ok ? response.json() : Promise.reject()))
+      .then((data: { profile?: AuthProfile }) => {
+        if (isMounted && data.profile) {
+          setProfile(data.profile);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -69,8 +90,8 @@ export function UserMenu({
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
-        <UserAvatar avatarUrl={avatarUrl} name={name} />
-        <span className="max-w-[150px] truncate">{name}</span>
+        <UserAvatar avatarUrl={displayAvatarUrl} name={displayName} />
+        <span className="max-w-[150px] truncate">{displayName}</span>
         <span className="text-xs" aria-hidden="true">
           v
         </span>
@@ -86,9 +107,9 @@ export function UserMenu({
               {sectionLabel}
             </span>
             <div className="mt-2 flex items-center gap-3">
-              <UserAvatar avatarUrl={avatarUrl} name={name} />
+              <UserAvatar avatarUrl={displayAvatarUrl} name={displayName} />
               <div className="min-w-0">
-                <div className="truncate text-sm font-bold text-ink">{name}</div>
+                <div className="truncate text-sm font-bold text-ink">{displayName}</div>
                 <div className="text-xs text-muted">{statusLabel}</div>
               </div>
             </div>

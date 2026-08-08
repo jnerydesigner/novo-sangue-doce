@@ -1,10 +1,10 @@
+import { randomUUID } from "node:crypto";
+import { Readable } from "node:stream";
+import { ImageService } from "@app/image/image.service";
+import type { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
 import { PrismaService } from "@infra/database/prisma.service";
 import { AwsS3Service } from "@infra/storage/aws-s3.service";
 import { BadGatewayException, Injectable, NotFoundException } from "@nestjs/common";
-import { randomUUID } from "node:crypto";
-import { Readable } from "node:stream";
-import type { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
-import { ImageService } from "@app/image/image.service";
 
 type WikimediaImageInfo = {
   descriptionurl?: string;
@@ -149,10 +149,11 @@ export class FoodImagesService {
       return { food: await this.prisma.foods.findUnique({ where: { id: food.id }, include: { images: true } }), image: existingImage, reused: true };
     }
 
+    const optimizedImage = await this.imageService.toWebp(file.buffer, 78);
     const uploaded = await this.s3.uploadObject({
-      buffer: file.buffer,
-      contentType: file.mimetype,
-      key: `public/foods/${normalizedName}/manual-${randomUUID()}`,
+      buffer: optimizedImage,
+      contentType: "image/webp",
+      key: `public/foods/${normalizedName}/manual-${randomUUID()}.webp`,
     });
     const image = await this.prisma.foodImage.create({
       data: {

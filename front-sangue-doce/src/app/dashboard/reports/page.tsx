@@ -158,7 +158,6 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6 print:p-0">
           <div className="print:hidden">
             <DashboardHeader
-              avatarUrl={userData.avatarUrl}
               subtitle="Essa e uma area de atualizacao de dados."
               title="Relatorios de glicemia"
               userName={userData.name}

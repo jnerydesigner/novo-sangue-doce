@@ -8,7 +8,6 @@ export default async function MealsPage() {
 
   return (
     <MealsClient
-      avatarUrl={profile.avatarUrl}
       showAdminItems={profile.role === "ADMIN"}
       userName={profile.name}
     />

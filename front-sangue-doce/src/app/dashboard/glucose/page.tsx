@@ -22,7 +22,6 @@ export default async function GlucosePage() {
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
           <DashboardHeader
-            avatarUrl={profile.avatarUrl}
             subtitle="Area para atualizar e acompanhar suas leituras."
             title="Glicemia"
             userName={profile.name}

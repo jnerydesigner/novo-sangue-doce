@@ -14,7 +14,6 @@ export default async function SleepPage() {
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
           <DashboardHeader
-            avatarUrl={profile.avatarUrl}
             subtitle="Area para atualizar dados de descanso e rotina."
             title="Sono"
             userName={profile.name}

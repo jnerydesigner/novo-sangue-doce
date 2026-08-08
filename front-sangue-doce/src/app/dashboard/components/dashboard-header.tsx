@@ -1,10 +1,9 @@
-import { UserMenu } from "@/components/home/user-menu";
 import type React from "react";
+import { UserMenu } from "@/components/home/user-menu";
 import { DateTimeCard } from "./date-time-card";
 
 type DashboardHeaderProps = {
   action?: React.ReactNode;
-  avatarUrl?: string;
   subtitle?: string;
   title?: string;
   userName: string;
@@ -12,7 +11,6 @@ type DashboardHeaderProps = {
 
 export function DashboardHeader({
   action,
-  avatarUrl,
   subtitle,
   title = "Resumo de hoje",
   userName,
@@ -33,9 +31,7 @@ export function DashboardHeader({
         <DateTimeCard />
         <UserMenu
           actionLabel="Ver site"
-          avatarUrl={avatarUrl}
           dashboardHref="/"
-          name={userName}
           sectionLabel="Site publico"
           statusLabel="Sangue Doce"
         />

@@ -38,7 +38,6 @@ export default async function AccountPage() {
 
         <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
           <DashboardHeader
-            avatarUrl={userData.avatarUrl}
             subtitle="Essa e uma area de atualizacao de dados."
             title="Atualizacao de dados"
             userName={userData.name}
