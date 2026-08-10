@@ -1,0 +1,10 @@
+# Ambiente virtual local
+.venv/
+venv/
+
+# Arquivos gerados pelo Python
+__pycache__/
+*.py[cod]
+
+# Resultados gerados pelo OCR
+out/
