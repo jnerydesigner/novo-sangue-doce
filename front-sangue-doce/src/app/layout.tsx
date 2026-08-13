@@ -1,12 +1,18 @@
+import { AnalyticsScripts } from "@/components/analytics/analytics-scripts";
+import { AdsenseScript } from "@/components/analytics/adsense-script";
+import { ConsentBanner } from "@/components/analytics/consent-banner";
+import { PageVisitTracker } from "@/components/analytics/page-visit-tracker";
+import { SessionActivityGuard } from "@/components/auth/session-activity-guard";
+import { Toaster } from "@/components/ui/sonner";
+import {
+  DEFAULT_SOCIAL_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import { PageVisitTracker } from "@/components/analytics/page-visit-tracker";
-import { AnalyticsScripts } from "@/components/analytics/analytics-scripts";
-import { ConsentBanner } from "@/components/analytics/consent-banner";
-import { SessionActivityGuard } from "@/components/auth/session-activity-guard";
-import { Toaster } from "@/components/ui/sonner";
-import { DEFAULT_SOCIAL_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -58,7 +64,12 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   manifest: "/manifest.webmanifest",
 };
@@ -69,7 +80,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" data-scroll-behavior="smooth" className={roboto.variable}>
+    <html
+      lang="pt-BR"
+      data-scroll-behavior="smooth"
+      className={roboto.variable}
+    >
       <body className={roboto.variable}>
         {children}
         <PageVisitTracker />
@@ -77,6 +92,8 @@ export default function RootLayout({
         <ConsentBanner />
         <SessionActivityGuard />
         <Toaster />
+
+        <AdsenseScript />
       </body>
     </html>
   );
