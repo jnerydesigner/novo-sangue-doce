@@ -1,3 +1,2 @@
-# Add the authorized Google AdSense seller line here when an account is approved.
-# Example: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-
+# Google AdSense
+google.com, pub-1600331961556195, DIRECT, f08c47fec0942fa0
