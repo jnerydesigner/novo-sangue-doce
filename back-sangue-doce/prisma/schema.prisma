@@ -260,6 +260,8 @@ model PostTagRelation {
 
 model Post {
   id                 String              @id @default(uuid()) @db.Uuid
+  parentPostId       String?             @map("parent_post_id") @db.Uuid
+  version            Int                 @default(1)
   slug               String              @unique
   title              String
   excerpt            String              @db.Text
@@ -281,6 +283,8 @@ model Post {
   categoryId         String              @map("category_id") @db.Uuid
   author             PostAuthor          @relation(fields: [authorId], references: [id])
   category           PostCategory        @relation(fields: [categoryId], references: [id])
+  parentPost         Post?               @relation("PostVersions", fields: [parentPostId], references: [id], onDelete: SetNull)
+  versions           Post[]              @relation("PostVersions")
   tags               PostTagRelation[]
   postImages         PostImages[]
   socialPublications SocialPublication[]
@@ -289,6 +293,7 @@ model Post {
   @@index([featured, publishedAt(sort: Desc)])
   @@index([categoryId, publishedAt(sort: Desc)])
   @@index([authorId])
+  @@index([parentPostId])
   @@map("posts")
 }
 
