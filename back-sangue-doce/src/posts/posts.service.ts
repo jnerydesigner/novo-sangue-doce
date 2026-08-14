@@ -83,6 +83,20 @@ export class PostsService {
     }
   }
 
+  async createDraft(id: string): Promise<PublicPost> {
+    if (!this.isValidUuid(id)) throw new BadRequestException("Invalid post id.");
+    const original = await this.postRepository.findById(id);
+    if (!original || original.getStatus() !== "PUBLISHED") {
+      throw new BadRequestException("Only published posts can be edited as drafts.");
+    }
+    return (await this.postRepository.findDraftForPost(id) ?? await this.postRepository.createDraftFromPost(id)).toPublic();
+  }
+
+  async publishDraft(id: string): Promise<PublicPost> {
+    if (!this.isValidUuid(id)) throw new BadRequestException("Invalid draft id.");
+    return (await this.postRepository.publishDraft(id)).toPublic();
+  }
+
   async delete(id: string): Promise<void> {
     if (!this.isValidUuid(id)) {
       throw new BadRequestException("Invalid post id.");

@@ -4,7 +4,7 @@ import { ArrowIcon } from "./icons";
 
 export function GuidesSection() {
   return (
-    <section className="border-y border-line bg-subtle py-[clamp(56px,8vw,96px)]" id="guias">
+    <section className="scroll-mt-[260px] border-y border-line bg-subtle py-[clamp(56px,8vw,96px)] md:scroll-mt-28" id="guias">
       <div className="wrap">
         <div className="mb-10">
           <span className="eyebrow">Guias rapidos</span>

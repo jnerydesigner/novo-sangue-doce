@@ -52,7 +52,7 @@ export function PublishPostButton({ post }: PublishPostButtonProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        method: "PATCH",
+        method: post.parentPostId ? "POST" : "PATCH",
       });
 
       if (!response.ok) {
@@ -61,6 +61,7 @@ export function PublishPostButton({ post }: PublishPostButtonProps) {
         throw new Error(error?.message ?? "Nao foi possivel publicar a materia.");
       }
 
+      router.push("/admin/posts");
       router.refresh();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Nao foi possivel publicar.");

@@ -24,7 +24,7 @@ export function Brand({ dark = false }: { dark?: boolean }) {
         loading={dark ? "lazy" : "eager"}
         title="Sangue Doce"
       />
-      <span>Sangue Doce</span>
+      <span className="whitespace-nowrap">Sangue Doce</span>
     </Link>
   );
 }

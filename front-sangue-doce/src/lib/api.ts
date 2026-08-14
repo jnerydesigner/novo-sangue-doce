@@ -257,6 +257,8 @@ export type PostContentBlock =
 
 export type Post = {
   id: string;
+  parentPostId?: string | null;
+  version?: number;
   slug: string;
   title: string;
   excerpt: string;
@@ -704,6 +706,16 @@ export const api = {
         },
         method: "PATCH",
         body: payload,
+      }),
+    createDraft: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<Post>(`/posts/${id}/draft`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
+      }),
+    publishDraft: (id: string, params: AuthenticatedApiParams) =>
+      apiFetch<Post>(`/posts/${id}/publish-draft`, {
+        headers: { Authorization: `Bearer ${params.accessToken}` },
+        method: "POST",
       }),
     delete: (id: string, params: AuthenticatedApiParams) =>
       apiFetch<DeleteResponse>(`/posts/${id}`, {

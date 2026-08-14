@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { twMerge as tw } from "tailwind-merge";
 
 function formatDateTime(date: Date) {
   return {
@@ -17,7 +18,11 @@ function formatDateTime(date: Date) {
   };
 }
 
-export function DateTimeCard() {
+interface DateTimeCardProps {
+  className?: string;
+}
+
+export function DateTimeCard({ className }: DateTimeCardProps) {
   const [dateTime, setDateTime] = useState<{ date: string; time: string }>();
 
   useEffect(() => {
@@ -29,11 +34,20 @@ export function DateTimeCard() {
   }, []);
 
   return (
-    <div className="inline-flex min-h-[60px] min-w-[232px] items-center justify-between rounded-lg border border-lineStrong bg-card px-4 py-2.5">
+    <div
+      className={tw(
+        "inline-flex min-h-[60px] min-w-[232px] items-center justify-between rounded-lg border border-lineStrong bg-card px-4 py-2.5",
+        className,
+      )}
+    >
       <div className="grid gap-0.5">
-        <span className="text-[12px] font-semibold text-muted">Data e hora</span>
+        <span className="text-[12px] font-semibold text-muted">
+          Data e hora
+        </span>
         <span className="text-[15px] font-bold text-navy">
-          {dateTime ? `${dateTime.date}, ${dateTime.time}` : "--/--/----, --:--"}
+          {dateTime
+            ? `${dateTime.date}, ${dateTime.time}`
+            : "--/--/----, --:--"}
         </span>
       </div>
       <svg

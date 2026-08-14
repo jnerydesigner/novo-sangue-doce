@@ -61,3 +61,21 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     return NextResponse.json({ message: getErrorMessage(error) }, { status: 400 });
   }
 }
+
+export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+
+  if (!accessToken) {
+    return NextResponse.json({ message: "Nao autenticado." }, { status: 401 });
+  }
+
+  const { id } = await params;
+
+  try {
+    const post = await api.posts.publishDraft(id, { accessToken });
+    return NextResponse.json(post);
+  } catch (error) {
+    return NextResponse.json({ message: getErrorMessage(error) }, { status: 400 });
+  }
+}

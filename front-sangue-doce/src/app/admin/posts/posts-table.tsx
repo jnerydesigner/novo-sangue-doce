@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CreatePostPayload, Post, PostStatus } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
 import { toPublicImagePath } from "@/lib/public-image-url";
@@ -56,7 +56,26 @@ export function PostsTable({ posts }: PostsTableProps) {
   const router = useRouter();
   const [busyPostId, setBusyPostId] = useState<string | null>(null);
   const [generatingPostId, setGeneratingPostId] = useState<string | null>(null);
+  const [desktopPage, setDesktopPage] = useState(1);
+  const [mobilePage, setMobilePage] = useState(1);
   const [message, setMessage] = useState<{ tone: "error" | "success"; text: string } | null>(null);
+  const mobilePageSize = 5;
+  const desktopPageSize = 5;
+  const desktopPageCount = Math.max(1, Math.ceil(posts.length / desktopPageSize));
+  const mobilePageCount = Math.max(1, Math.ceil(posts.length / mobilePageSize));
+  const desktopPosts = useMemo(
+    () => posts.slice((desktopPage - 1) * desktopPageSize, desktopPage * desktopPageSize),
+    [desktopPage, posts],
+  );
+  const mobilePosts = useMemo(
+    () => posts.slice((mobilePage - 1) * mobilePageSize, mobilePage * mobilePageSize),
+    [mobilePage, posts],
+  );
+
+  useEffect(() => {
+    setMobilePage((page) => Math.min(page, mobilePageCount));
+    setDesktopPage((page) => Math.min(page, desktopPageCount));
+  }, [desktopPageCount, mobilePageCount]);
 
   async function updateStatus(post: Post, status: PostStatus) {
     setBusyPostId(post.id);
@@ -153,7 +172,7 @@ export function PostsTable({ posts }: PostsTableProps) {
         </div>
       ) : null}
 
-      <div className="overflow-x-auto">
+      <div className="hidden overflow-x-auto lg:block">
         <table className="min-w-[980px] w-full border-collapse text-left">
           <thead className="bg-paper2 text-[12px] uppercase tracking-[0.08em] text-muted">
             <tr>
@@ -166,7 +185,7 @@ export function PostsTable({ posts }: PostsTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-line">
-            {posts.map((post) => {
+            {desktopPosts.map((post) => {
               const busy = busyPostId === post.id;
               const generating = generatingPostId === post.id;
               const rowBusy = busy || generating;
@@ -261,6 +280,164 @@ export function PostsTable({ posts }: PostsTableProps) {
           </tbody>
         </table>
       </div>
+
+      {desktopPageCount > 1 ? (
+        <Pagination
+          className="hidden border-t border-line px-4 py-4 lg:flex"
+          page={desktopPage}
+          pageCount={desktopPageCount}
+          setPage={setDesktopPage}
+        />
+      ) : null}
+
+      <div className="grid min-w-0 gap-4 p-4 lg:hidden">
+        {mobilePosts.map((post) => {
+          const busy = busyPostId === post.id;
+          const generating = generatingPostId === post.id;
+          const rowBusy = busy || generating;
+
+          return (
+            <article className="min-w-0 overflow-hidden rounded-lg border border-line bg-card p-4" key={post.id}>
+              <div className="border-b border-line pb-4">
+                <h2 className="break-words font-serif text-xl font-medium leading-tight text-ink">
+                  {post.title}
+                </h2>
+                <p className="mt-1 truncate text-sm text-muted">/{post.slug}</p>
+              </div>
+
+              <dl className="grid gap-3 py-4 text-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <dt className="font-bold text-muted">Status</dt>
+                  <dd>
+                    <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${statusClasses[post.status]}`}>
+                      {statusLabels[post.status]}
+                    </span>
+                  </dd>
+                </div>
+                <div className="flex min-w-0 items-start justify-between gap-4">
+                  <dt className="font-bold text-muted">Categoria</dt>
+                  <dd className="min-w-0 break-words text-right font-semibold text-inkSoft">{post.category.name}</dd>
+                </div>
+                <div className="flex min-w-0 items-center justify-between gap-4">
+                  <dt className="font-bold text-muted">Autor</dt>
+                  <dd className="min-w-0 break-words text-right text-inkSoft">{post.author.name}</dd>
+                </div>
+                <div className="flex min-w-0 items-center justify-between gap-4">
+                  <dt className="font-bold text-muted">Atualizado</dt>
+                  <dd className="shrink-0 text-right text-muted">{formatPostDate(post.updatedAt)}</dd>
+                </div>
+              </dl>
+
+              <div className="grid min-w-0 gap-2 border-t border-line pt-4 sm:grid-cols-2">
+                <Link
+                  className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-center text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                  href={`/admin/posts/novo?id=${post.id}`}
+                >
+                  Editar
+                </Link>
+                {post.status === "PUBLISHED" ? (
+                  <>
+                    <Link
+                      className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-center text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                      href={`/materias/${post.slug}`}
+                    >
+                      Ver site
+                    </Link>
+                    <button
+                      className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-green px-3 py-2 text-sm font-bold text-greenDeep transition hover:bg-green/10 disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={rowBusy}
+                      onClick={() => generateSocialPublication(post)}
+                      type="button"
+                    >
+                      {generating ? "Gerando..." : "Gerar para redes"}
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-center text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                    href={`/admin/posts/preview?id=${post.id}`}
+                  >
+                    Previa
+                  </Link>
+                )}
+                <button
+                  className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:opacity-50"
+                  disabled={rowBusy}
+                  onClick={() => updateStatus(post, post.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED")}
+                  type="button"
+                >
+                  {post.status === "PUBLISHED" ? "Rascunho" : "Publicar"}
+                </button>
+                <button
+                  className="w-full min-w-0 whitespace-normal break-words rounded-lg bg-tomato px-3 py-2 text-sm font-bold text-white transition hover:bg-[#a94735] disabled:opacity-50"
+                  disabled={rowBusy}
+                  onClick={() => updateStatus(post, post.status === "ARCHIVED" ? "DRAFT" : "ARCHIVED")}
+                  type="button"
+                >
+                  {post.status === "ARCHIVED" ? "Restaurar" : "Arquivar"}
+                </button>
+              </div>
+            </article>
+          );
+        })}
+
+        {mobilePageCount > 1 ? (
+          <Pagination
+            className="flex pt-2 lg:hidden"
+            page={mobilePage}
+            pageCount={mobilePageCount}
+            setPage={setMobilePage}
+          />
+        ) : null}
+      </div>
     </div>
+  );
+}
+
+function Pagination({
+  className,
+  page,
+  pageCount,
+  setPage,
+}: {
+  className: string;
+  page: number;
+  pageCount: number;
+  setPage: (page: number) => void;
+}) {
+  return (
+    <nav aria-label="Paginação de matérias" className={`flex-wrap items-center justify-center gap-2 ${className}`}>
+      <button
+        className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft disabled:cursor-not-allowed disabled:opacity-40"
+        disabled={page === 1}
+        onClick={() => setPage(Math.max(1, page - 1))}
+        type="button"
+      >
+        Anterior
+      </button>
+      {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
+        <button
+          aria-current={page === pageNumber ? "page" : undefined}
+          className={`grid h-10 min-w-10 place-items-center rounded-lg border px-3 text-sm font-bold ${
+            page === pageNumber
+              ? "border-green bg-green/10 text-greenDeep"
+              : "border-lineStrong text-inkSoft hover:bg-paper2"
+          }`}
+          key={pageNumber}
+          onClick={() => setPage(pageNumber)}
+          type="button"
+        >
+          {pageNumber}
+        </button>
+      ))}
+      <button
+        className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft disabled:cursor-not-allowed disabled:opacity-40"
+        disabled={page === pageCount}
+        onClick={() => setPage(Math.min(pageCount, page + 1))}
+        type="button"
+      >
+        Próxima
+      </button>
+    </nav>
   );
 }

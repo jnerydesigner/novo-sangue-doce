@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { Brand } from "@/components/home/brand";
 import {
   adminSidebarGroups,
@@ -21,6 +22,7 @@ type SidebarNavProps = {
   activeHref: string;
   ariaLabel: string;
   groups: SidebarGroup[];
+  onNavigate?: () => void;
 };
 
 function getActiveHref(groups: SidebarGroup[], activeHref: string) {
@@ -35,7 +37,7 @@ function getActiveGroupLabel(groups: SidebarGroup[], currentHref?: string) {
   return groups.find((group) => group.items.some((item) => item.href === currentHref))?.label;
 }
 
-export function SidebarNav({ activeHref, ariaLabel, groups }: SidebarNavProps) {
+export function SidebarNav({ activeHref, ariaLabel, groups, onNavigate }: SidebarNavProps) {
   const currentHref = getActiveHref(groups, activeHref);
   const activeGroupLabel = getActiveGroupLabel(groups, currentHref);
   const firstGroupLabel = groups[0]?.label;
@@ -90,6 +92,7 @@ export function SidebarNav({ activeHref, ariaLabel, groups }: SidebarNavProps) {
                             : "text-inkSoft hover:bg-paper2 hover:text-ink"
                         }`}
                         href={item.href}
+                        onClick={onNavigate}
                       >
                         <span
                           className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg text-sm ${
@@ -123,7 +126,14 @@ export function DashboardSidebar({
     : dashboardSidebarGroups;
 
   return (
-    <aside className="hidden border-r border-line bg-card px-5 py-7 lg:flex lg:flex-col">
+    <>
+      <MobileSidebar
+        activeHref={pathname}
+        ariaLabel={navLabel}
+        groups={sidebarGroups}
+      />
+
+      <aside className="hidden border-r border-line bg-card px-5 py-7 lg:flex lg:flex-col">
       <div className="mb-8 px-2 text-greenDeep">
         <Brand />
       </div>
@@ -140,6 +150,51 @@ export function DashboardSidebar({
           </p>
         </div>
       )}
-    </aside>
+      </aside>
+    </>
+  );
+}
+
+function MobileSidebar({ activeHref, ariaLabel, groups }: SidebarNavProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="lg:hidden">
+      <button
+        aria-expanded={isOpen}
+        aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+        className="fixed left-4 top-4 z-50 grid h-11 w-11 place-items-center rounded-lg border border-line bg-card text-ink shadow-sm"
+        onClick={() => setIsOpen((open) => !open)}
+        type="button"
+      >
+        {isOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
+      </button>
+
+      {isOpen ? (
+        <button
+          aria-label="Fechar menu"
+          className="fixed inset-0 z-40 bg-ink/30"
+          onClick={() => setIsOpen(false)}
+          type="button"
+        />
+      ) : null}
+
+      <aside
+        aria-label={ariaLabel}
+        className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,300px)] overflow-y-auto border-r border-line bg-card px-5 py-7 shadow-xl transition-transform duration-200 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="mb-8 px-2 text-greenDeep">
+          <Brand />
+        </div>
+        <SidebarNav
+          activeHref={activeHref}
+          ariaLabel={ariaLabel}
+          groups={groups}
+          onNavigate={() => setIsOpen(false)}
+        />
+      </aside>
+    </div>
   );
 }

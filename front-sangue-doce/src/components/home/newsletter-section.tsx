@@ -37,8 +37,8 @@ export function NewsletterSection() {
   }
 
   return (
-    <section className="py-[clamp(70px,9vw,120px)]" id="news">
-      <div className="wrap" id="rotina">
+    <section className="scroll-mt-[260px] py-[clamp(70px,9vw,120px)] md:scroll-mt-28" id="news">
+      <div className="wrap scroll-mt-[260px] md:scroll-mt-28" id="rotina">
         <div className="relative grid gap-[clamp(30px,5vw,60px)] overflow-hidden rounded-[12px] bg-navy p-[clamp(38px,6vw,72px)] text-white before:absolute before:right-[-80px] before:top-[-80px] before:h-[340px] before:w-[340px] before:rounded-full before:bg-[radial-gradient(circle_at_center,#18C0E4_0%,transparent_70%)] before:opacity-30 lg:grid-cols-[1.1fr_1fr]">
           <div className="relative z-10">
             <span className="eyebrow text-white/75 before:bg-spark">Boletim semanal</span>
@@ -58,9 +58,9 @@ export function NewsletterSection() {
             >
               Seu melhor e-mail
             </label>
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-col gap-2.5 sm:flex-row">
               <input
-                className="min-w-[200px] flex-1 rounded-lg border border-white/30 bg-white/10 px-[18px] py-[15px] text-base text-white outline-none transition placeholder:text-white/65 focus:border-spark focus:bg-white/15"
+                className="w-full min-w-0 flex-1 rounded-lg border border-white/30 bg-white/10 px-[18px] py-[15px] text-base text-white outline-none transition placeholder:text-white/65 focus:border-spark focus:bg-white/15"
                 id="email"
                 name="email"
                 type="email"
@@ -74,7 +74,7 @@ export function NewsletterSection() {
                 }}
               />
               <button
-                className="btn bg-energy px-6 py-[15px] text-white hover:-translate-y-px hover:bg-azure"
+                className="btn w-full justify-center bg-energy px-6 py-[15px] text-white hover:-translate-y-px hover:bg-azure sm:w-auto"
                 type="submit"
               >
                 Assinar

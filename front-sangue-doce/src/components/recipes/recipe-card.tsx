@@ -6,8 +6,8 @@ import { totalRecipeMinutes } from "@/lib/recipes";
 
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
-    <article className="group overflow-hidden rounded-xl bg-surface shadow-editorial">
-      <Link className="block" href={`/receitas/${recipe.slug}`}>
+    <article className="group h-full overflow-hidden rounded-xl bg-surface shadow-editorial">
+      <Link className="flex h-full flex-col" href={`/receitas/${recipe.slug}`}>
         <div className="relative aspect-[4/3] overflow-hidden bg-subtle">
           <Image
             alt={recipe.coverImageAlt ?? recipe.title}
@@ -18,7 +18,7 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
             width={560}
           />
         </div>
-        <div className="p-5">
+        <div className="flex flex-1 flex-col p-5">
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px] font-semibold text-muted">
             <span>{totalRecipeMinutes(recipe)} min</span>
             <span>{recipe.servings} porções</span>
@@ -29,7 +29,7 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
           <h2 className="mt-3 text-balance font-serif text-[1.65rem] font-medium leading-[1.12] text-ink transition group-hover:text-navy">
             {recipe.title}
           </h2>
-          <p className="mt-3 line-clamp-3 text-pretty text-[15px] leading-relaxed text-inkSoft">
+          <p className="mt-3 line-clamp-3 flex-1 text-pretty text-[15px] leading-relaxed text-inkSoft">
             {recipe.excerpt}
           </p>
         </div>

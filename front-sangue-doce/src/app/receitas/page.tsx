@@ -43,17 +43,33 @@ export default async function RecipesPage({
             width={1920}
           />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(10,24,36,.94)_0%,rgba(10,24,36,.78)_40%,rgba(26,56,104,.48)_70%,rgba(26,56,104,.28)_100%),linear-gradient(to_top,rgba(10,24,36,.86)_0%,rgba(10,24,36,.36)_58%,rgba(10,24,36,.20)_100%)]" />
-          <div className="wrap grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+          <div className="wrap grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
               <p className="text-sm font-semibold text-spark">Cozinha Sangue Doce</p>
               <h1 className="mt-4 max-w-[13ch] text-balance font-serif text-[clamp(2.8rem,6vw,5.2rem)] font-medium leading-[1.01] tracking-[-0.025em]">
                 Receitas para comer bem, com mais clareza
               </h1>
             </div>
-            <p className="max-w-[36rem] text-pretty text-[1.08rem] leading-relaxed text-white/80">
-              Ingredientes acessíveis, preparo direto e informações por porção. Sem promessas
-              milagrosas — só escolhas que cabem na vida real.
-            </p>
+            <div className="max-w-[36rem] lg:justify-self-end">
+              <p className="text-pretty text-[1.08rem] leading-relaxed text-white/80">
+                Ingredientes acessíveis, preparo direto e informações por porção. Sem promessas
+                milagrosas — só escolhas que cabem na vida real.
+              </p>
+              <div className="mt-6 grid grid-cols-3 divide-x divide-white/20 overflow-hidden rounded-lg border border-white/25 bg-white/10">
+                <div className="flex min-h-[86px] flex-col items-center justify-center px-3 py-3 text-center">
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">Total</span>
+                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">{recipes.meta.total}</strong>
+                </div>
+                <div className="flex min-h-[86px] flex-col items-center justify-center px-3 py-3 text-center">
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">Página</span>
+                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">{recipes.meta.page}</strong>
+                </div>
+                <div className="flex min-h-[86px] flex-col items-center justify-center px-3 py-3 text-center">
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">Série</span>
+                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">{recipes.meta.totalPages}</strong>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
         <section className="py-[clamp(52px,8vw,92px)]">
@@ -72,27 +88,25 @@ export default async function RecipesPage({
                 <p className="mt-3 text-inkSoft">Volte em breve para conhecer a nova seleção.</p>
               </div>
             )}
-            {recipes.meta.totalPages > 1 ? (
-              <nav aria-label="Paginação de receitas" className="mt-12 flex justify-center gap-3">
+            <nav aria-label="Paginação de receitas" className="mx-auto mt-12 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
                 <Link
                   aria-disabled={!recipes.meta.hasPreviousPage}
-                  className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                  className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-center text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:w-auto"
                   href={`/receitas?pagina=${Math.max(1, recipes.meta.page - 1)}`}
                 >
                   Anterior
                 </Link>
-                <span className="px-3 py-2.5 text-sm text-muted">
+                <span className="order-first px-3 py-2.5 text-center text-sm text-muted sm:order-none">
                   Página {recipes.meta.page} de {recipes.meta.totalPages}
                 </span>
                 <Link
                   aria-disabled={!recipes.meta.hasNextPage}
-                  className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50"
+                  className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-center text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:w-auto"
                   href={`/receitas?pagina=${Math.min(recipes.meta.totalPages, recipes.meta.page + 1)}`}
                 >
                   Próxima
                 </Link>
-              </nav>
-            ) : null}
+            </nav>
           </div>
         </section>
       </main>

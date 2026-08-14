@@ -200,7 +200,7 @@ export function LoginForm() {
         </button>
 
         <button
-          className="text-center text-[14px] font-semibold text-greenDeep"
+          className="min-h-11 w-full rounded-lg border border-azure/30 bg-azure/10 px-4 py-3 text-center text-[14px] font-semibold text-navy transition hover:bg-azure/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-azure"
           onClick={() => {
             setErrorMessage("");
             setPasswordMode(false);
@@ -300,7 +300,7 @@ export function LoginForm() {
 
       {codeRequested ? (
         <button
-          className="text-center text-[14px] font-semibold text-greenDeep"
+          className="min-h-11 w-full rounded-lg border border-azure/30 bg-azure/10 px-4 py-3 text-center text-[14px] font-semibold text-navy transition hover:bg-azure/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-azure"
           onClick={() => {
             setCode("");
             setCodeRequested(false);

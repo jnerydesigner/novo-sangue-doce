@@ -70,6 +70,10 @@ export abstract class PostRepository {
   abstract findById(id: string): Promise<PostEntity | null>;
   abstract findBySlug(slug: string): Promise<PostEntity | null>;
   abstract findAnyBySlug(slug: string): Promise<PostEntity | null>;
+  abstract findDraftForPost(postId: string): Promise<PostEntity | null>;
+  abstract createDraftFromPost(postId: string): Promise<PostEntity>;
+  abstract publishDraft(draftId: string): Promise<PostEntity>;
+  abstract deleteDraft(draftId: string): Promise<void>;
   abstract findByAuthorId(authorId: string): Promise<PostEntity[]>;
   abstract updatePostCoverImage(
     postId: string,

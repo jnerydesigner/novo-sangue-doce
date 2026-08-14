@@ -52,6 +52,8 @@ export type CreatePostEntityProps = {
 };
 
 export type PostPersistence = {
+  parentPostId?: string | null;
+  version?: number;
   slug: string;
   title: string;
   excerpt: string;

@@ -65,6 +65,7 @@ function NewPostFormFields({
   const [coverFileName, setCoverFileName] = useState("");
   const [selectedCoverFile, setSelectedCoverFile] = useState<File | null>(null);
   const [draftId, setDraftId] = useState(initialDraft?.id ?? "");
+  const [draftSlug, setDraftSlug] = useState(initialDraft?.slug ?? "");
   const formRef = useRef<HTMLFormElement | null>(null);
   const [currentStatus, setCurrentStatus] = useState<PostStatus>(initialDraft?.status ?? "DRAFT");
   const [readingMinutes, setReadingMinutes] = useState(initialDraft?.readingMinutes ?? 0);
@@ -144,7 +145,9 @@ function NewPostFormFields({
       title,
     });
 
-    setSlug(nextSlug);
+    const slugToPersist = draftSlug.includes("--draft-") ? draftSlug : nextSlug;
+    setSlug(slugToPersist);
+    draft.slug = slugToPersist;
 
     return draft;
   }
@@ -155,6 +158,10 @@ function NewPostFormFields({
 
     if (post?.id) {
       setDraftId(post.id);
+    }
+    if (post?.slug) {
+      setDraftSlug(post.slug);
+      setSlug(post.slug);
     }
 
     if (post?.coverImageUrl && post.coverImageUrl !== EMPTY_COVER_IMAGE_URL) {

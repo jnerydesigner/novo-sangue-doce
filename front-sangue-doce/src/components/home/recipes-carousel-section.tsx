@@ -62,9 +62,9 @@ export function RecipesCarouselSection({ recipes }: { recipes: Recipe[] }) {
           </div>
         </div>
 
-        <div ref={trackRef} className="-mx-5 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-4 [scrollbar-width:none] md:-mx-0 md:px-0 [&::-webkit-scrollbar]:hidden">
+        <div ref={trackRef} className="mx-0 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 [scrollbar-width:none] sm:gap-6 sm:px-0 md:-mx-0 md:px-0 [&::-webkit-scrollbar]:hidden">
           {recipes.map((recipe) => (
-            <div className="w-[84vw] max-w-[390px] shrink-0 snap-start sm:w-[360px] lg:w-[calc((100%_-_3rem)/3)] lg:max-w-none" data-recipe-card key={recipe.id}>
+            <div className="flex w-[84vw] max-w-[390px] shrink-0 snap-start sm:w-[360px] lg:w-[calc((100%_-_3rem)/3)] lg:max-w-none" data-recipe-card key={recipe.id}>
               <RecipeCard recipe={recipe} />
             </div>
           ))}

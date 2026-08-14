@@ -26,15 +26,20 @@ export function DashboardHeader({
         </h1>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         {action}
-        <DateTimeCard />
-        <UserMenu
-          actionLabel="Ver site"
-          dashboardHref="/"
-          sectionLabel="Site publico"
-          statusLabel="Sangue Doce"
-        />
+        <div className="order-last w-full sm:order-first sm:w-auto">
+          <DateTimeCard className="w-full sm:w-auto" />
+        </div>
+        <div className="order-first w-full sm:order-last sm:w-auto">
+          <UserMenu
+            className="w-full sm:w-auto"
+            actionLabel="Ver site"
+            dashboardHref="/"
+            sectionLabel="Site publico"
+            statusLabel="Sangue Doce"
+          />
+        </div>
       </div>
     </header>
   );

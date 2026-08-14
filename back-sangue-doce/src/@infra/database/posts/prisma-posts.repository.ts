@@ -17,6 +17,7 @@ import type {
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma.service";
+import { randomUUID } from "node:crypto";
 
 const postInclude = {
   author: {
@@ -93,10 +94,20 @@ export class PrismaPostsRepository implements PostRepository {
 
     try {
       const postWithRelations = await this.prisma.$transaction(async (tx) => {
+        const current = await tx.post.findUnique({ where: { id } });
+        if (!current) throw new PostRelationNotFoundError();
+
         await tx.post.update({
           where: { id },
           data: {
             ...payload,
+            ...(current.parentPostId
+              ? {
+                  slug: current.slug,
+                  title: current.title,
+                  publishedAt: null,
+                }
+              : {}),
             content: payload.content as Prisma.InputJsonValue,
           },
         });
@@ -159,11 +170,11 @@ export class PrismaPostsRepository implements PostRepository {
       this.prisma.post.findMany({
         include: postInclude,
         orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-        where: { status: "PUBLISHED" },
+        where: { status: "PUBLISHED", parentPostId: null },
         skip,
         take: params.limit,
       }),
-      this.prisma.post.count({ where: { status: "PUBLISHED" } }),
+      this.prisma.post.count({ where: { status: "PUBLISHED", parentPostId: null } }),
     ]);
     const totalPages = Math.max(1, Math.ceil(total / params.limit));
 
@@ -188,8 +199,9 @@ export class PrismaPostsRepository implements PostRepository {
         orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
         skip,
         take: params.limit,
+        where: { parentPostId: null },
       }),
-      this.prisma.post.count(),
+      this.prisma.post.count({ where: { parentPostId: null } }),
     ]);
     const totalPages = Math.max(1, Math.ceil(total / params.limit));
 
@@ -323,6 +335,115 @@ export class PrismaPostsRepository implements PostRepository {
     });
 
     return post ? this.toEntity(post) : null;
+  }
+
+  async findDraftForPost(postId: string): Promise<PostEntity | null> {
+    const draft = await this.prisma.post.findFirst({
+      where: { parentPostId: postId, status: "DRAFT" },
+      orderBy: { version: "desc" },
+      include: postInclude,
+    });
+
+    return draft ? this.toEntity(draft) : null;
+  }
+
+  async createDraftFromPost(postId: string): Promise<PostEntity> {
+    const draft = await this.prisma.$transaction(async (tx) => {
+      const original = await tx.post.findUnique({
+        where: { id: postId },
+        include: { tags: true },
+      });
+
+      if (!original) throw new PostRelationNotFoundError();
+
+      const existing = await tx.post.findFirst({
+        where: { parentPostId: postId, status: "DRAFT" },
+        include: postInclude,
+      });
+      if (existing) {
+        if (existing.slug.includes("--draft-")) {
+          return tx.post.update({
+            where: { id: existing.id },
+            data: { slug: existing.slug.replace("--draft-", "-draft-") },
+            include: postInclude,
+          });
+        }
+        return existing;
+      }
+
+      const created = await tx.post.create({
+        data: {
+          slug: `${original.slug}-draft-${randomUUID()}`,
+          title: original.title,
+          excerpt: original.excerpt,
+          standfirst: original.standfirst,
+          content: original.content as Prisma.InputJsonValue,
+          status: "DRAFT",
+          featured: original.featured,
+          readingMinutes: original.readingMinutes,
+          coverImageUrl: original.coverImageUrl,
+          coverImageAlt: original.coverImageAlt,
+          coverCaption: original.coverCaption,
+          verticalImageUrl: original.verticalImageUrl,
+          metaTitle: original.metaTitle,
+          metaDescription: original.metaDescription,
+          publishedAt: null,
+          authorId: original.authorId,
+          categoryId: original.categoryId,
+          parentPostId: original.id,
+          version: original.version + 1,
+          tags: { create: original.tags.map((tag) => ({ tagId: tag.tagId })) },
+        },
+        include: postInclude,
+      });
+
+      return created;
+    });
+
+    return this.toEntity(draft);
+  }
+
+  async publishDraft(draftId: string): Promise<PostEntity> {
+    const published = await this.prisma.$transaction(async (tx) => {
+      const draft = await tx.post.findUnique({ where: { id: draftId } });
+      if (!draft?.parentPostId) throw new PostRelationNotFoundError();
+
+      const original = await tx.post.update({
+        where: { id: draft.parentPostId },
+        data: {
+          excerpt: draft.excerpt,
+          standfirst: draft.standfirst,
+          content: draft.content as Prisma.InputJsonValue,
+          featured: draft.featured,
+          readingMinutes: draft.readingMinutes,
+          coverImageUrl: draft.coverImageUrl,
+          coverImageAlt: draft.coverImageAlt,
+          coverCaption: draft.coverCaption,
+          verticalImageUrl: draft.verticalImageUrl,
+          categoryId: draft.categoryId,
+          version: { increment: 1 },
+          status: "PUBLISHED",
+        },
+      });
+
+      await tx.postTagRelation.deleteMany({ where: { postId: original.id } });
+      const draftTags = await tx.postTagRelation.findMany({ where: { postId: draft.id } });
+      if (draftTags.length) {
+        await tx.postTagRelation.createMany({
+          data: draftTags.map((tag) => ({ postId: original.id, tagId: tag.tagId })),
+          skipDuplicates: true,
+        });
+      }
+      await tx.post.delete({ where: { id: draft.id } });
+      return tx.post.findUnique({ where: { id: original.id }, include: postInclude });
+    });
+
+    if (!published) throw new PostRelationNotFoundError();
+    return this.toEntity(published);
+  }
+
+  async deleteDraft(draftId: string): Promise<void> {
+    await this.prisma.post.delete({ where: { id: draftId } });
   }
 
   async findByAuthorId(authorId: string): Promise<PostEntity[]> {

@@ -37,6 +37,20 @@ export class PostsController {
     return this.postsService.update(id, updatePostDto);
   }
 
+  @Post(":id/draft")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  createDraft(@Param("id") id: string) {
+    return this.postsService.createDraft(id);
+  }
+
+  @Post(":id/publish-draft")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  publishDraft(@Param("id") id: string) {
+    return this.postsService.publishDraft(id);
+  }
+
   @Delete(":id")
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)

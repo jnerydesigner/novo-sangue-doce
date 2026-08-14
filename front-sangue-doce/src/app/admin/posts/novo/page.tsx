@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { redirect } from "next/navigation";
 import { requireAdmin } from "../../_lib/require-admin";
 import { AdminShell } from "../../admin-shell";
 import { NewPostForm } from "./new-post-form";
@@ -20,6 +21,11 @@ export default async function NewAdminPostPage({ searchParams }: NewAdminPostPag
     api.posts.tags(),
   ]);
   const post = id ? await api.posts.get(id, { accessToken }).catch(() => null) : null;
+
+  if (post?.status === "PUBLISHED") {
+    const draft = await api.posts.createDraft(post.id, { accessToken });
+    redirect(`/admin/posts/novo?id=${draft.id}`);
+  }
 
   return (
     <AdminShell

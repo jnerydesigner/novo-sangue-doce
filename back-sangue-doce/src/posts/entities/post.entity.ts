@@ -41,6 +41,8 @@ export class PostEntity {
 
   toPersistence(): PostPersistence {
     return {
+      parentPostId: this.props.parentPostId,
+      version: this.props.version,
       slug: this.props.slug,
       title: this.props.title,
       excerpt: this.props.excerpt,

@@ -290,7 +290,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
               </div>
             </div>
 
-            <div className="mt-6 overflow-x-auto print:overflow-visible">
+            <div className="mt-6 hidden overflow-x-auto print:overflow-visible lg:block">
               <table className="w-full min-w-[880px] border-collapse text-center text-[13px] print:min-w-0 print:text-[8.6px]">
                 <thead>
                   <tr className="border-y border-line bg-paper2">
@@ -336,6 +336,51 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <div className="mt-6 grid gap-3 lg:hidden">
+              {monthlyReport.days.map((day) => {
+                const entries = reportColumns.flatMap((column) => {
+                  const measurement = getMeasurementForColumn(day.measurements, column);
+                  if (!measurement) return [];
+
+                  return [{ column, measurement }];
+                });
+
+                return (
+                  <article className="rounded-lg border border-line bg-card p-4" key={`mobile-${day.date}`}>
+                    <h3 className="border-b border-line pb-3 font-semibold text-ink">
+                      {formatDate(day.date)}
+                    </h3>
+
+                    {entries.length > 0 ? (
+                      <div className="mt-3 grid grid-cols-2 gap-3">
+                        {entries.map(({ column, measurement }) => {
+                          const stage = getGlucoseStage(measurement.glucoseValueMgDl);
+
+                          return (
+                            <div className="min-w-0 rounded-lg bg-paper2 p-3" key={column.key}>
+                              <span className="block text-[11px] font-bold uppercase leading-tight text-muted">
+                                {column.label}
+                              </span>
+                              <span className="mt-2 inline-flex items-center gap-1.5 font-bold text-ink">
+                                <span
+                                  aria-hidden="true"
+                                  className="size-2 rounded-[2px]"
+                                  style={{ backgroundColor: stage.color }}
+                                />
+                                {measurement.glucoseValueMgDl} mg/dL
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="mt-3 text-sm text-muted">Nenhuma leitura registrada neste dia.</p>
+                    )}
+                  </article>
+                );
+              })}
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-4 sm:grid-cols-3 lg:grid-cols-6 print:grid-cols-6 print:gap-x-2 print:pt-3">

@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { LogoutButton } from "@/app/dashboard/components/logout-button";
 import { UserAvatar } from "@/app/dashboard/components/user-avatar";
 import type { AuthProfile } from "@/lib/api";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 type UserMenuProps = {
   actionLabel?: string;
@@ -16,6 +17,7 @@ type UserMenuProps = {
   sectionLabel?: string;
   statusLabel?: string;
   tone?: "light" | "solid";
+  className?: string;
 };
 
 export function UserMenu({
@@ -28,6 +30,7 @@ export function UserMenu({
   sectionLabel = "Area logada",
   statusLabel = "Sessao ativa",
   tone = "solid",
+  className,
 }: UserMenuProps) {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState<AuthProfile | null>(null);
@@ -86,7 +89,10 @@ export function UserMenu({
       <button
         aria-expanded={open}
         aria-haspopup="menu"
-        className={`inline-flex items-center gap-3 rounded-lg border px-3 py-2 text-[15px] font-semibold transition hover:-translate-y-px ${triggerClass}`}
+        className={twMerge(
+          `inline-flex items-center gap-3 rounded-lg border px-3 py-2 text-[15px] font-semibold transition hover:-translate-y-px ${triggerClass}`,
+          className,
+        )}
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
@@ -109,7 +115,9 @@ export function UserMenu({
             <div className="mt-2 flex items-center gap-3">
               <UserAvatar avatarUrl={displayAvatarUrl} name={displayName} />
               <div className="min-w-0">
-                <div className="truncate text-sm font-bold text-ink">{displayName}</div>
+                <div className="truncate text-sm font-bold text-ink">
+                  {displayName}
+                </div>
                 <div className="text-xs text-muted">{statusLabel}</div>
               </div>
             </div>

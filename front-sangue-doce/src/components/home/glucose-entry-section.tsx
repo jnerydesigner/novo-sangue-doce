@@ -187,7 +187,7 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
   }
 
   return (
-    <section className="border-y border-line bg-surface py-[clamp(58px,8vw,100px)]" id="glicose">
+    <section className="scroll-mt-[260px] border-y border-line bg-surface py-[clamp(58px,8vw,100px)] md:scroll-mt-28" id="glicose">
       <div className="wrap">
         <div className="grid gap-[clamp(30px,5vw,56px)] lg:grid-cols-[0.95fr_1.05fr]">
           <div>
@@ -200,31 +200,31 @@ export function GlucoseEntrySection({ isAuthenticated, recentReadings }: Glucose
               horario e contexto. A mesma base pode receber dose basal e ajustes medicos depois.
             </p>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              <div className="border-l border-lineStrong pl-4">
-                <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+            <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">
+              <div className="min-w-0 border-l border-lineStrong pl-2 sm:pl-4">
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-muted sm:text-[12px] sm:tracking-[0.14em]">
                   Ultima
                 </span>
-                <strong className="mt-1 block font-serif text-[2.35rem] font-medium leading-none text-ink">
+                <strong className="mt-1 block font-serif text-[1.8rem] font-medium leading-none text-ink sm:text-[2.35rem]">
                   {latestReading ? latestReading.value : "--"}
                 </strong>
-                <span className="text-sm text-muted">mg/dL</span>
+                <span className="text-xs text-muted sm:text-sm">mg/dL</span>
               </div>
-              <div className="border-l border-lineStrong pl-4">
-                <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+              <div className="min-w-0 border-l border-lineStrong pl-2 sm:pl-4">
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-muted sm:text-[12px] sm:tracking-[0.14em]">
                   Media
                 </span>
-                <strong className="mt-1 block font-serif text-[2.35rem] font-medium leading-none text-ink">
+                <strong className="mt-1 block font-serif text-[1.8rem] font-medium leading-none text-ink sm:text-[2.35rem]">
                   {average ?? "--"}
                 </strong>
-                <span className="text-sm text-muted">leituras de hoje</span>
+                <span className="text-xs text-muted sm:text-sm">leituras de hoje</span>
               </div>
-              <div className="border-l border-lineStrong pl-4">
-                <span className="block text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+              <div className="min-w-0 border-l border-lineStrong pl-2 sm:pl-4">
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.12em] text-muted sm:text-[12px] sm:tracking-[0.14em]">
                   Status
                 </span>
                 <span
-                  className={`mt-3 inline-flex rounded-full px-3 py-1 text-sm font-semibold ${latestState.className}`}
+                  className={`mt-3 inline-flex max-w-full rounded-full px-2 py-1 text-xs font-semibold sm:px-3 sm:text-sm ${latestState.className}`}
                 >
                   {latestState.label}
                 </span>

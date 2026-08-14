@@ -9,12 +9,18 @@ import { CloseIcon, MenuIcon } from "./icons";
 import { UserMenu } from "./user-menu";
 import { scrollToId } from "./utils";
 
+function getNavHref(href: string) {
+  return href.startsWith("#") ? `/${href}` : href;
+}
+
 type SiteHeaderProps = {
   isAuthenticated: boolean;
+  opaque?: boolean;
+  position?: "fixed" | "sticky";
   profile: AuthProfile | null;
 };
 
-export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
+export function SiteHeader({ isAuthenticated, opaque = false, position = "sticky", profile }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const dashboardHref = profile?.role === "ADMIN" ? "/admin" : "/dashboard";
 
@@ -27,17 +33,17 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[100] border-b border-line bg-bg shadow-sm">
-        <div className="wrap flex h-[76px] items-center justify-between gap-6">
+      <header className={`${position} top-0 z-[100] border-b border-line bg-bg shadow-sm`}>
+        <div className="wrap flex min-h-[76px] flex-wrap items-center justify-between gap-4 py-3 lg:gap-6">
           <div className="text-navy">
             <Brand />
           </div>
 
-          <nav className="ml-auto hidden items-center gap-[30px] md:flex" aria-label="Principal">
+          <nav className="ml-auto hidden items-center gap-6 xl:flex" aria-label="Principal">
             {navItems.map((item) => (
               <a
                 key={item.href}
-                href={item.href}
+                href={getNavHref(item.href)}
                 className="relative py-1 text-[15px] font-medium text-inkSoft transition after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:w-0 after:bg-spark after:transition-all hover:text-navy hover:after:w-full"
               >
                 {item.label}
@@ -72,23 +78,50 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
           )}
 
           <button
-            className="grid h-11 w-11 place-items-center text-ink md:hidden"
+            className="grid h-11 w-11 place-items-center text-ink xl:hidden"
             type="button"
-            aria-label="Abrir menu"
-            onClick={() => setMenuOpen(true)}
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setMenuOpen((open) => !open)}
           >
-            <MenuIcon />
+            {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
+
+          <div className="order-last grid w-full gap-3 md:hidden">
+            {profile ? (
+              <UserMenu
+                className="w-full"
+                avatarUrl={profile.avatarUrl}
+                dashboardHref={dashboardHref}
+                name={profile.name}
+                tone="solid"
+              />
+            ) : (
+              <Link
+                className="inline-flex w-full justify-center rounded-lg border border-lineStrong px-5 py-3 text-[15px] font-semibold text-navy"
+                href={isAuthenticated ? dashboardHref : "/login"}
+              >
+                Entrar
+              </Link>
+            )}
+            <button
+              className="btn btn-primary w-full justify-center"
+              onClick={() => scrollToId("news")}
+              type="button"
+            >
+              Receber boletim
+            </button>
+          </div>
         </div>
       </header>
 
       <div
-        className={`fixed inset-0 z-[99] flex flex-col justify-center bg-bg px-[clamp(20px,5vw,64px)] transition duration-300 md:hidden ${
-          menuOpen ? "visible translate-y-0" : "invisible -translate-y-full"
+        className={`fixed inset-y-0 right-0 z-[101] flex w-[min(86vw,380px)] flex-col justify-start overflow-y-auto border-l border-line bg-bg px-6 pb-8 pt-28 shadow-xl transition duration-300 xl:hidden ${
+          menuOpen ? "visible translate-x-0" : "invisible translate-x-full"
         }`}
       >
         <button
-          className="absolute right-[clamp(20px,5vw,64px)] top-6 grid h-11 w-11 place-items-center text-ink"
+          className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-lg border border-lineStrong text-ink"
           type="button"
           aria-label="Fechar menu"
           onClick={() => setMenuOpen(false)}
@@ -98,40 +131,13 @@ export function SiteHeader({ isAuthenticated, profile }: SiteHeaderProps) {
         {navItems.map((item) => (
           <a
             key={item.href}
-            href={item.href}
+            href={getNavHref(item.href)}
             className="border-b border-line py-3.5 font-serif text-[2.2rem] text-ink"
             onClick={() => setMenuOpen(false)}
           >
             {item.label}
           </a>
         ))}
-        <button
-          className="btn btn-primary mt-7 self-start px-7 py-4 text-base"
-          onClick={() => {
-            setMenuOpen(false);
-            scrollToId("news");
-          }}
-          type="button"
-        >
-          Receber boletim
-        </button>
-        {profile ? (
-          <div className="mt-3 self-start">
-            <UserMenu
-              avatarUrl={profile.avatarUrl}
-              dashboardHref={dashboardHref}
-              name={profile.name}
-            />
-          </div>
-        ) : (
-          <Link
-            className="mt-3 inline-flex self-start rounded-lg border border-lineStrong px-7 py-4 text-base font-semibold text-navy"
-            href={isAuthenticated ? dashboardHref : "/login"}
-            onClick={() => setMenuOpen(false)}
-          >
-            Entrar
-          </Link>
-        )}
       </div>
     </>
   );
