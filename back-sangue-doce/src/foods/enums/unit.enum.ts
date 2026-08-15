@@ -1,0 +1,10 @@
+export enum UnitEnum {
+  CUP = "CUP",
+  GRAM = "GRAM",
+  MILLILITER = "MILLILITER",
+  PORTION = "PORTION",
+  SLICE = "SLICE",
+  TABLESPOON = "TABLESPOON",
+  TEASPOON = "TEASPOON",
+  UNIT = "UNIT",
+}

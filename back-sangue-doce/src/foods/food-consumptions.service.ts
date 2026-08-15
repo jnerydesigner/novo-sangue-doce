@@ -1,5 +1,6 @@
 import { PrismaService } from "@infra/database/prisma.service";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { MealTypeEnum } from "./enums/meal-type.enum";
 
 type CreateConsumptionInput = {
   mealType: string;
@@ -65,7 +66,8 @@ export class FoodConsumptionsService {
 
   findAll(userId: string) {
     return this.prisma.foodConsumption.findMany({
-      where: { userId }, orderBy: { consumedAt: "desc" },
+      where: { userId },
+      orderBy: { consumedAt: "desc" },
       include: { items: { include: { food: { include: { images: true } } } } },
     });
   }
@@ -77,6 +79,19 @@ export class FoodConsumptionsService {
     end.setDate(end.getDate() + 1);
     return this.prisma.foodConsumption.findMany({
       where: { userId, consumedAt: { gte: start, lt: end } },
+      orderBy: { consumedAt: "asc" },
+      include: { items: { include: { food: { include: { images: true } } } } },
+    });
+  }
+
+  findTodayMeal(userId: string, meal: string) {
+    const mealType = MealTypeEnum[meal];
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 1);
+    return this.prisma.foodConsumption.findFirst({
+      where: { userId, consumedAt: { gte: start, lt: end }, mealType },
       orderBy: { consumedAt: "asc" },
       include: { items: { include: { food: { include: { images: true } } } } },
     });
