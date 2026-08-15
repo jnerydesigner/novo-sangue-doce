@@ -67,7 +67,7 @@ export default async function DashboardPage() {
       <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
         <DashboardSidebar showAdminItems={userData.role === "ADMIN"} />
 
-        <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
+        <section className="dashboard-shell-content min-w-0 overflow-x-hidden overflow-y-auto px-[clamp(18px,4vw,42px)] pb-6 lg:py-6">
           <DashboardHeader userName={userData.name} />
           <SummaryTiles tiles={dashboardSummaryTiles} />
 

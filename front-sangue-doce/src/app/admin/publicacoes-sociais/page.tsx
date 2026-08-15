@@ -17,12 +17,12 @@ export default async function SocialPublicationsPage() {
       userRole={profile.role}
     >
       <section className="grid gap-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="grid gap-3 sm:flex sm:items-end sm:justify-between">
           <p className="max-w-[65ch] text-[1.02rem] leading-relaxed text-inkSoft">
             Veja o andamento das geracoes, revise o resultado e retome rapidamente as que precisam
             de uma nova tentativa.
           </p>
-          <span className="text-sm font-semibold text-muted">
+          <span className="text-sm font-semibold text-muted sm:text-right">
             {publications.meta.total} {publications.meta.total === 1 ? "publicacao" : "publicacoes"}
           </span>
         </div>

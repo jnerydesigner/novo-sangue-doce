@@ -75,12 +75,12 @@ export function PublishPostButton({ post }: PublishPostButtonProps) {
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-end gap-2">
+    <div className="grid min-w-0 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
       {errorMessage ? (
         <span className="text-sm font-semibold text-tomato">{errorMessage}</span>
       ) : null}
       <button
-        className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         disabled={submitting}
         onClick={publishPost}
         type="button"

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { CreatePostPayload, Post, PostStatus } from "@/lib/api";
 import { formatPostDate } from "@/lib/posts";
 import { toPublicImagePath } from "@/lib/public-image-url";
@@ -63,19 +63,17 @@ export function PostsTable({ posts }: PostsTableProps) {
   const desktopPageSize = 5;
   const desktopPageCount = Math.max(1, Math.ceil(posts.length / desktopPageSize));
   const mobilePageCount = Math.max(1, Math.ceil(posts.length / mobilePageSize));
+  const currentDesktopPage = Math.min(desktopPage, desktopPageCount);
+  const currentMobilePage = Math.min(mobilePage, mobilePageCount);
   const desktopPosts = useMemo(
-    () => posts.slice((desktopPage - 1) * desktopPageSize, desktopPage * desktopPageSize),
-    [desktopPage, posts],
+    () =>
+      posts.slice((currentDesktopPage - 1) * desktopPageSize, currentDesktopPage * desktopPageSize),
+    [currentDesktopPage, posts],
   );
   const mobilePosts = useMemo(
-    () => posts.slice((mobilePage - 1) * mobilePageSize, mobilePage * mobilePageSize),
-    [mobilePage, posts],
+    () => posts.slice((currentMobilePage - 1) * mobilePageSize, currentMobilePage * mobilePageSize),
+    [currentMobilePage, posts],
   );
-
-  useEffect(() => {
-    setMobilePage((page) => Math.min(page, mobilePageCount));
-    setDesktopPage((page) => Math.min(page, desktopPageCount));
-  }, [desktopPageCount, mobilePageCount]);
 
   async function updateStatus(post: Post, status: PostStatus) {
     setBusyPostId(post.id);
@@ -284,7 +282,7 @@ export function PostsTable({ posts }: PostsTableProps) {
       {desktopPageCount > 1 ? (
         <Pagination
           className="hidden border-t border-line px-4 py-4 lg:flex"
-          page={desktopPage}
+          page={currentDesktopPage}
           pageCount={desktopPageCount}
           setPage={setDesktopPage}
         />
@@ -297,7 +295,10 @@ export function PostsTable({ posts }: PostsTableProps) {
           const rowBusy = busy || generating;
 
           return (
-            <article className="min-w-0 overflow-hidden rounded-lg border border-line bg-card p-4" key={post.id}>
+            <article
+              className="min-w-0 overflow-hidden rounded-lg border border-line bg-card p-4"
+              key={post.id}
+            >
               <div className="border-b border-line pb-4">
                 <h2 className="break-words font-serif text-xl font-medium leading-tight text-ink">
                   {post.title}
@@ -309,22 +310,30 @@ export function PostsTable({ posts }: PostsTableProps) {
                 <div className="flex items-center justify-between gap-4">
                   <dt className="font-bold text-muted">Status</dt>
                   <dd>
-                    <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${statusClasses[post.status]}`}>
+                    <span
+                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${statusClasses[post.status]}`}
+                    >
                       {statusLabels[post.status]}
                     </span>
                   </dd>
                 </div>
                 <div className="flex min-w-0 items-start justify-between gap-4">
                   <dt className="font-bold text-muted">Categoria</dt>
-                  <dd className="min-w-0 break-words text-right font-semibold text-inkSoft">{post.category.name}</dd>
+                  <dd className="min-w-0 break-words text-right font-semibold text-inkSoft">
+                    {post.category.name}
+                  </dd>
                 </div>
                 <div className="flex min-w-0 items-center justify-between gap-4">
                   <dt className="font-bold text-muted">Autor</dt>
-                  <dd className="min-w-0 break-words text-right text-inkSoft">{post.author.name}</dd>
+                  <dd className="min-w-0 break-words text-right text-inkSoft">
+                    {post.author.name}
+                  </dd>
                 </div>
                 <div className="flex min-w-0 items-center justify-between gap-4">
                   <dt className="font-bold text-muted">Atualizado</dt>
-                  <dd className="shrink-0 text-right text-muted">{formatPostDate(post.updatedAt)}</dd>
+                  <dd className="shrink-0 text-right text-muted">
+                    {formatPostDate(post.updatedAt)}
+                  </dd>
                 </div>
               </dl>
 
@@ -363,7 +372,9 @@ export function PostsTable({ posts }: PostsTableProps) {
                 <button
                   className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:opacity-50"
                   disabled={rowBusy}
-                  onClick={() => updateStatus(post, post.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED")}
+                  onClick={() =>
+                    updateStatus(post, post.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED")
+                  }
                   type="button"
                 >
                   {post.status === "PUBLISHED" ? "Rascunho" : "Publicar"}
@@ -371,7 +382,9 @@ export function PostsTable({ posts }: PostsTableProps) {
                 <button
                   className="w-full min-w-0 whitespace-normal break-words rounded-lg bg-tomato px-3 py-2 text-sm font-bold text-white transition hover:bg-[#a94735] disabled:opacity-50"
                   disabled={rowBusy}
-                  onClick={() => updateStatus(post, post.status === "ARCHIVED" ? "DRAFT" : "ARCHIVED")}
+                  onClick={() =>
+                    updateStatus(post, post.status === "ARCHIVED" ? "DRAFT" : "ARCHIVED")
+                  }
                   type="button"
                 >
                   {post.status === "ARCHIVED" ? "Restaurar" : "Arquivar"}
@@ -384,7 +397,7 @@ export function PostsTable({ posts }: PostsTableProps) {
         {mobilePageCount > 1 ? (
           <Pagination
             className="flex pt-2 lg:hidden"
-            page={mobilePage}
+            page={currentMobilePage}
             pageCount={mobilePageCount}
             setPage={setMobilePage}
           />
@@ -406,7 +419,10 @@ function Pagination({
   setPage: (page: number) => void;
 }) {
   return (
-    <nav aria-label="Paginação de matérias" className={`flex-wrap items-center justify-center gap-2 ${className}`}>
+    <nav
+      aria-label="Paginação de matérias"
+      className={`flex-wrap items-center justify-center gap-2 ${className}`}
+    >
       <button
         className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft disabled:cursor-not-allowed disabled:opacity-40"
         disabled={page === 1}

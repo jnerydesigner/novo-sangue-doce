@@ -221,11 +221,11 @@ export function PostContentEditor({
   }
 
   return (
-    <div className="md:col-span-2">
+    <div className="min-w-0 lg:col-span-2">
       <input name="conteudo" type="hidden" value={serializedContent} />
 
-      <div className="rounded-lg border border-line bg-paper">
-        <div className="flex flex-wrap items-center gap-1 border-b border-line bg-card px-3 py-2">
+      <div className="min-w-0 rounded-lg border border-line bg-paper">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(42px,1fr))] gap-1 border-b border-line bg-card px-3 py-2 sm:flex sm:flex-wrap sm:items-center">
           {blockOptions.map((option) => (
             <button
               className="h-9 min-w-9 rounded-md border border-lineStrong px-2 font-serif text-sm font-bold text-ink transition hover:bg-paper2"
@@ -239,16 +239,16 @@ export function PostContentEditor({
           ))}
         </div>
 
-        <div className="grid gap-3 p-3">
+        <div className="grid min-w-0 gap-3 p-2 sm:p-3">
           {blocks.map((block, index) => (
             <div className="grid gap-3" key={block.key}>
-              <article className="grid gap-3 rounded-lg border border-line bg-card p-3">
+              <article className="grid min-w-0 gap-3 rounded-lg border border-line bg-card p-3">
                 <div className="flex items-center justify-between gap-3">
                   <span className="grid h-8 min-w-8 place-items-center rounded-md bg-paper2 px-2 font-serif text-sm font-bold text-greenDeep">
                     {getBlockLabel(block)}
                   </span>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex shrink-0 items-center gap-1">
                     <button
                       className="grid h-8 w-8 place-items-center rounded-md border border-lineStrong text-sm font-bold text-inkSoft transition hover:bg-paper2 disabled:opacity-35"
                       disabled={index === 0}
@@ -314,7 +314,7 @@ function BlockConnector({ insertBlock }: { insertBlock: (block: PostContentBlock
 
       {open ? (
         <div
-          className="absolute top-10 z-20 flex flex-wrap justify-center gap-1 rounded-lg border border-line bg-card p-2 shadow-editorial"
+          className="absolute left-1/2 top-10 z-20 grid w-[min(88vw,360px)] -translate-x-1/2 grid-cols-[repeat(auto-fit,minmax(42px,1fr))] gap-1 rounded-lg border border-line bg-card p-2 shadow-editorial sm:flex sm:w-auto sm:flex-wrap sm:justify-center"
           role="menu"
         >
           {blockOptions.map((option) => (
@@ -385,7 +385,7 @@ function BlockFields({
             src={imageUrl}
           />
         ) : null}
-        <label className="inline-flex w-fit cursor-pointer items-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2">
+        <label className="inline-flex w-full cursor-pointer items-center justify-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2 sm:w-fit">
           {uploading ? "Enviando..." : "Escolher imagem"}
           <input
             accept="image/png,image/jpeg,image/webp"
@@ -435,7 +435,7 @@ function BlockFields({
 
   if (block.type === "link") {
     return (
-      <div className="grid gap-2 md:grid-cols-2">
+      <div className="grid min-w-0 gap-2 lg:grid-cols-2">
         <input
           className={fieldClassName}
           onChange={(event) => updateBlock(block.key, { label: event.target.value })}
@@ -451,7 +451,7 @@ function BlockFields({
           value={block.text}
         />
         <input
-          className={`${fieldClassName} md:col-span-2`}
+          className={`${fieldClassName} lg:col-span-2`}
           inputMode="url"
           onChange={(event) => updateBlock(block.key, { href: event.target.value })}
           placeholder="https://exemplo.com.br/post-original"

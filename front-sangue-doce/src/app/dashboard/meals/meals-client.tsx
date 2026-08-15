@@ -21,7 +21,7 @@ export function MealsClient({
     <main className="dashboard-shell bg-[#f3f8fd] text-[#102a4a]">
       <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
         <DashboardSidebar showAdminItems={showAdminItems} />
-        <section className="min-w-0 overflow-x-hidden overflow-y-auto px-4 py-6 sm:px-8 lg:px-10">
+        <section className="dashboard-shell-content min-w-0 overflow-x-hidden overflow-y-auto px-4 pb-6 sm:px-8 lg:px-10 lg:py-6">
           <DashboardHeader
             subtitle="Registre os alimentos que você consumiu e acompanhe os nutrientes."
             title="Nova refeição"
@@ -36,9 +36,8 @@ export function MealsClient({
                 <AddedFoodsCard />
                 <FoodSearchCard />
                 <Alert type="info">
-                  Os valores nutricionais são calculados com base na TACO
-                  (Tabela Brasileira de Composição de Alimentos) por 100g da
-                  parte comestível.
+                  Os valores nutricionais são calculados com base na TACO (Tabela Brasileira de
+                  Composição de Alimentos) por 100g da parte comestível.
                 </Alert>
               </section>
               <aside className="mt-4">

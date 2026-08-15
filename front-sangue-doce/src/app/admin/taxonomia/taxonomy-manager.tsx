@@ -156,9 +156,9 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
   return (
     <>
       <section className="grid gap-5 xl:grid-cols-2">
-        <div className="rounded-lg border border-line bg-card">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
-            <div>
+        <div className="min-w-0 rounded-lg border border-line bg-card">
+          <div className="grid gap-3 border-b border-line px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-5">
+            <div className="min-w-0">
               <h2 className="font-serif text-2xl font-medium tracking-normal text-ink">
                 Categorias
               </h2>
@@ -167,7 +167,7 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
               </p>
             </div>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary w-full sm:w-auto"
               onClick={() => openModal({ mode: "create", type: "category" })}
               type="button"
             >
@@ -175,7 +175,48 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
             </button>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="grid gap-3 p-3 lg:hidden">
+            {categories.map((category) => (
+              <article className="rounded-lg border border-line bg-paper p-3" key={category.id}>
+                <div className="grid gap-3">
+                  <div className="min-w-0">
+                    <h3 className="break-words text-base font-bold leading-snug text-ink">
+                      {category.name}
+                    </h3>
+                    <p className="mt-1 break-words text-sm text-inkSoft">{category.slug}</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-inkSoft">
+                    <span
+                      aria-hidden="true"
+                      className={`size-3 rounded-full ${
+                        category.color === "GREEN"
+                          ? "bg-green"
+                          : category.color === "TOMATO"
+                            ? "bg-tomato"
+                            : "bg-azure"
+                      }`}
+                    />
+                    {colorLabel[category.color]}
+                  </div>
+                  <button
+                    className="w-full rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2"
+                    onClick={() =>
+                      openModal({
+                        item: { ...category, type: "category" },
+                        mode: "edit",
+                        type: "category",
+                      })
+                    }
+                    type="button"
+                  >
+                    Editar
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="hidden overflow-x-auto lg:block">
             <table className="w-full min-w-[520px] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-line bg-paper2 text-[12px] uppercase tracking-[0.08em] text-muted">
@@ -213,14 +254,14 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
           </div>
         </div>
 
-        <div className="rounded-lg border border-line bg-card">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
-            <div>
+        <div className="min-w-0 rounded-lg border border-line bg-card">
+          <div className="grid gap-3 border-b border-line px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-5">
+            <div className="min-w-0">
               <h2 className="font-serif text-2xl font-medium tracking-normal text-ink">Tags</h2>
               <p className="mt-1 text-sm text-inkSoft">{tags.length} tags cadastradas</p>
             </div>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary w-full sm:w-auto"
               onClick={() => openModal({ mode: "create", type: "tag" })}
               type="button"
             >
@@ -228,7 +269,35 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
             </button>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="grid gap-3 p-3 lg:hidden">
+            {tags.map((tag) => (
+              <article className="rounded-lg border border-line bg-paper p-3" key={tag.id}>
+                <div className="grid gap-3">
+                  <div className="min-w-0">
+                    <h3 className="break-words text-base font-bold leading-snug text-ink">
+                      {tag.name}
+                    </h3>
+                    <p className="mt-1 break-words text-sm text-inkSoft">{tag.slug}</p>
+                  </div>
+                  <button
+                    className="w-full rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2"
+                    onClick={() =>
+                      openModal({
+                        item: { ...tag, type: "tag" },
+                        mode: "edit",
+                        type: "tag",
+                      })
+                    }
+                    type="button"
+                  >
+                    Editar
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="hidden overflow-x-auto lg:block">
             <table className="w-full min-w-[420px] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-line bg-paper2 text-[12px] uppercase tracking-[0.08em] text-muted">
@@ -268,15 +337,15 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
       {modalState ? (
         <div
           aria-modal="true"
-          className="fixed inset-0 z-50 grid place-items-center bg-ink/35 px-4 py-6"
+          className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-ink/35 px-4 py-6"
           role="dialog"
         >
           <form
-            className="w-full max-w-xl rounded-lg border border-line bg-card p-5 shadow-editorial"
+            className="w-full max-w-xl rounded-lg border border-line bg-card p-4 shadow-editorial sm:p-5"
             onSubmit={submitForm}
           >
-            <div className="flex items-start justify-between gap-4">
-              <div>
+            <div className="grid gap-4 sm:flex sm:items-start sm:justify-between">
+              <div className="min-w-0">
                 <span className="eyebrow">
                   {modalState.type === "category" ? "Categoria" : "Tag"}
                 </span>
@@ -286,7 +355,7 @@ export function TaxonomyManager({ categories, tags }: TaxonomyManagerProps) {
                 </h2>
               </div>
               <button
-                className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-inkSoft transition hover:bg-paper2 hover:text-ink"
+                className="w-full rounded-lg border border-lineStrong px-3 py-2 text-sm font-bold text-inkSoft transition hover:bg-paper2 hover:text-ink sm:w-auto"
                 onClick={closeModal}
                 type="button"
               >

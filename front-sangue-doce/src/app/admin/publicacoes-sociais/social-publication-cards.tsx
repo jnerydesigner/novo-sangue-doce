@@ -505,8 +505,8 @@ export function SocialPublicationCards({ initialData }: Props) {
 
       {publishedPublications.length ? (
         <section className="mb-6" aria-labelledby="published-publications-title">
-          <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
-            <div>
+          <div className="mb-3 grid gap-2 sm:flex sm:items-end sm:justify-between">
+            <div className="min-w-0">
               <h2 className="text-lg font-bold text-ink" id="published-publications-title">
                 Publicadas nas redes
               </h2>
@@ -514,13 +514,183 @@ export function SocialPublicationCards({ initialData }: Props) {
                 Conteúdos com publicação confirmada pela rede social.
               </p>
             </div>
-            <span className="text-sm font-semibold text-muted">
+            <span className="text-sm font-semibold text-muted sm:text-right">
               {publishedPublications.length}{" "}
               {publishedPublications.length === 1 ? "publicação" : "publicações"}
             </span>
           </div>
 
-          <div className="overflow-hidden rounded-lg border border-line bg-card">
+          <div className="grid gap-3 lg:hidden">
+            {publishedPublications.map((publication) => (
+              <article
+                className="min-w-0 overflow-hidden rounded-lg border border-line bg-card"
+                key={publication.id}
+              >
+                <div className="grid grid-cols-[72px_minmax(0,1fr)] gap-3 border-b border-line p-3">
+                  <div className="relative size-[72px] overflow-hidden rounded-lg bg-paper2">
+                    {publication.generatedImageUrl ? (
+                      <Image
+                        alt=""
+                        className="object-cover"
+                        fill
+                        sizes="72px"
+                        src={publication.generatedImageUrl}
+                        unoptimized
+                      />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="line-clamp-2 break-words font-semibold leading-snug text-ink">
+                      {publication.generatedShortTitle ?? "Publicação social"}
+                    </p>
+                    <p className="mt-1 text-xs text-muted">{formatDate(publication.completedAt)}</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 p-3">
+                  <p className="line-clamp-4 break-words text-sm leading-relaxed text-inkSoft">
+                    {publication.generatedContent ?? "Sem descrição"}
+                  </p>
+
+                  <div>
+                    <p className="mb-2 text-xs font-bold uppercase tracking-[0.06em] text-muted">
+                      Publicada em
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {socialNetworkOptions
+                        .filter((network) => publication.publicationResults?.[network.value])
+                        .map((network) => {
+                          const isSupported = automaticPublishNetworks.includes(network.value);
+                          const isBusy = busyId === `${publication.id}:${network.value}`;
+
+                          return (
+                            <button
+                              aria-label={`Reenviar para ${network.label}`}
+                              className="rounded-lg transition hover:-translate-y-0.5 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-green/30 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                              disabled={!isSupported || isBusy}
+                              key={network.value}
+                              onClick={() => publishToNetwork(publication, network.value)}
+                              title={
+                                isSupported
+                                  ? `Reenviar para ${network.label}`
+                                  : `${network.label} ainda não tem publicação automática`
+                              }
+                              type="button"
+                            >
+                              {isBusy ? (
+                                <span className="grid size-9 place-items-center rounded-lg bg-ink text-xs font-bold text-white">
+                                  ...
+                                </span>
+                              ) : (
+                                <SocialNetworkIcon network={network.value} />
+                              )}
+                            </button>
+                          );
+                        })}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2 border-t border-line pt-3">
+                    <button
+                      className="inline-flex w-full items-center justify-center rounded-lg bg-green px-3 py-2 text-sm font-bold text-white transition hover:bg-greenDeep"
+                      onClick={() => startEditing(publication)}
+                      type="button"
+                    >
+                      Editar e reenviar
+                    </button>
+                    <Link
+                      className="inline-flex w-full items-center justify-center rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                      href={`/admin/posts/novo?id=${publication.postId}`}
+                    >
+                      Ver matéria
+                    </Link>
+                  </div>
+
+                  {editingId === publication.id ? (
+                    <div className="grid gap-4 border-t border-line pt-3">
+                      <label
+                        className="grid gap-2 text-sm font-bold text-ink"
+                        htmlFor={`published-description-mobile-${publication.id}`}
+                      >
+                        Descrição da publicação
+                        <textarea
+                          className="min-h-40 w-full resize-y rounded-lg border border-lineStrong bg-card px-3 py-2.5 text-[15px] font-normal leading-relaxed text-ink outline-none transition focus:border-green focus:ring-2 focus:ring-green/20"
+                          id={`published-description-mobile-${publication.id}`}
+                          maxLength={5000}
+                          onChange={(event) => setDescription(event.target.value)}
+                          value={description}
+                        />
+                      </label>
+                      <fieldset>
+                        <legend className="text-sm font-bold text-ink">
+                          Publicar em <span className="font-normal text-muted">(opcional)</span>
+                        </legend>
+                        <div className="mt-2 grid gap-2 sm:flex sm:flex-wrap">
+                          {socialNetworkOptions.map((network) => (
+                            <label
+                              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-lineStrong bg-card px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 has-[:checked]:border-green has-[:checked]:bg-green/10 has-[:checked]:text-greenDeep"
+                              key={network.value}
+                            >
+                              <input
+                                checked={socialNetworks.includes(network.value)}
+                                className="size-4 accent-green"
+                                onChange={() => toggleNetwork(network.value)}
+                                type="checkbox"
+                              />
+                              {network.label}
+                            </label>
+                          ))}
+                        </div>
+                      </fieldset>
+                      <div className="grid gap-2">
+                        <button
+                          className="w-full rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50"
+                          disabled={busyId === publication.id}
+                          onClick={() => saveReview(publication, "save")}
+                          type="button"
+                        >
+                          {busyId === publication.id ? "Salvando..." : "Salvar revisão"}
+                        </button>
+                        {socialNetworks.some((network) =>
+                          automaticPublishNetworks.includes(network),
+                        ) ? (
+                          <button
+                            className="w-full rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                            disabled={busyId === publication.id}
+                            onClick={() => saveReview(publication, "publish")}
+                            type="button"
+                          >
+                            {busyId === publication.id
+                              ? "Salvando e reenviando..."
+                              : "Salvar e reenviar"}
+                          </button>
+                        ) : null}
+                        <button
+                          className="w-full rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50"
+                          disabled={busyId === publication.id}
+                          onClick={() => saveReview(publication, "schedule")}
+                          type="button"
+                        >
+                          {busyId === publication.id
+                            ? "Salvando e enfileirando..."
+                            : "Salvar e colocar na fila diária"}
+                        </button>
+                        <button
+                          className="w-full rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                          onClick={() => setEditingId(null)}
+                          type="button"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="hidden overflow-hidden rounded-lg border border-line bg-card lg:block">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] border-collapse text-left">
                 <thead className="bg-paper2 text-xs font-bold uppercase tracking-[0.06em] text-muted">
@@ -640,7 +810,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                                   Publicar em{" "}
                                   <span className="font-normal text-muted">(opcional)</span>
                                 </legend>
-                                <div className="mt-2 flex flex-wrap gap-2">
+                                <div className="mt-2 grid gap-2 sm:flex sm:flex-wrap">
                                   {socialNetworkOptions.map((network) => (
                                     <label
                                       className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-lineStrong bg-card px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 has-[:checked]:border-green has-[:checked]:bg-green/10 has-[:checked]:text-greenDeep"
@@ -657,9 +827,9 @@ export function SocialPublicationCards({ initialData }: Props) {
                                   ))}
                                 </div>
                               </fieldset>
-                              <div className="flex flex-wrap gap-2">
+                              <div className="grid gap-2 sm:flex sm:flex-wrap">
                                 <button
-                                  className="rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50"
+                                  className="w-full rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                                   disabled={busyId === publication.id}
                                   onClick={() => saveReview(publication, "save")}
                                   type="button"
@@ -670,7 +840,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                                   automaticPublishNetworks.includes(network),
                                 ) ? (
                                   <button
-                                    className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="w-full rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                                     disabled={busyId === publication.id}
                                     onClick={() => saveReview(publication, "publish")}
                                     type="button"
@@ -681,7 +851,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                                   </button>
                                 ) : null}
                                 <button
-                                  className="rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50"
+                                  className="w-full rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                                   disabled={busyId === publication.id}
                                   onClick={() => saveReview(publication, "schedule")}
                                   type="button"
@@ -691,7 +861,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                                     : "Salvar e colocar na fila diária"}
                                 </button>
                                 <button
-                                  className="rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                                  className="w-full rounded-lg border border-lineStrong bg-card px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 sm:w-auto"
                                   onClick={() => setEditingId(null)}
                                   type="button"
                                 >
@@ -770,7 +940,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                         <legend className="text-sm font-bold text-ink">
                           Publicar em <span className="font-normal text-muted">(opcional)</span>
                         </legend>
-                        <div className="mt-2 flex flex-wrap gap-2">
+                        <div className="mt-2 grid gap-2 sm:flex sm:flex-wrap">
                           {socialNetworkOptions.map((network) => (
                             <label
                               className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 has-[:checked]:border-green has-[:checked]:bg-green/10 has-[:checked]:text-greenDeep"
@@ -787,9 +957,9 @@ export function SocialPublicationCards({ initialData }: Props) {
                           ))}
                         </div>
                       </fieldset>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid gap-2 sm:flex sm:flex-wrap">
                         <button
-                          className="rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="w-full rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                           disabled={busyId === publication.id}
                           onClick={() => saveReview(publication, "save")}
                           type="button"
@@ -800,7 +970,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                           automaticPublishNetworks.includes(network),
                         ) ? (
                           <button
-                            className="rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50"
+                            className="w-full rounded-lg bg-green px-4 py-2 text-sm font-bold text-white transition hover:bg-greenDeep disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                             disabled={busyId === publication.id}
                             onClick={() => saveReview(publication, "publish")}
                             type="button"
@@ -811,7 +981,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                           </button>
                         ) : null}
                         <button
-                          className="rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50"
+                          className="w-full rounded-lg bg-ink px-4 py-2 text-sm font-bold text-white transition hover:bg-navy disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                           disabled={busyId === publication.id}
                           onClick={() => saveReview(publication, "schedule")}
                           type="button"
@@ -821,7 +991,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                             : "Salvar e colocar na fila diária"}
                         </button>
                         <button
-                          className="rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
+                          className="w-full rounded-lg border border-lineStrong px-4 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2 sm:w-auto"
                           onClick={() => setEditingId(null)}
                           type="button"
                         >
@@ -890,10 +1060,10 @@ export function SocialPublicationCards({ initialData }: Props) {
                     </div>
                   </dl>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap">
                     {publication.status === "COMPLETED" && editingId !== publication.id ? (
                       <button
-                        className="rounded-lg bg-green px-3 py-2 text-sm font-bold text-white transition hover:bg-greenDeep"
+                        className="w-full rounded-lg bg-green px-3 py-2 text-sm font-bold text-white transition hover:bg-greenDeep sm:w-auto"
                         onClick={() => startEditing(publication)}
                         type="button"
                       >
@@ -902,7 +1072,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                     ) : null}
                     {publication.generatedContent ? (
                       <button
-                        className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft hover:bg-paper2"
+                        className="w-full rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft hover:bg-paper2 sm:w-auto"
                         onClick={() => copyText(publication)}
                         type="button"
                       >
@@ -911,7 +1081,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                     ) : null}
                     {publication.status === "FAILED" ? (
                       <button
-                        className="rounded-lg bg-tomato px-3 py-2 text-sm font-bold text-white disabled:opacity-50"
+                        className="w-full rounded-lg bg-tomato px-3 py-2 text-sm font-bold text-white disabled:opacity-50 sm:w-auto"
                         disabled={busyId === publication.id}
                         onClick={() => retry(publication.id)}
                         type="button"
@@ -920,7 +1090,7 @@ export function SocialPublicationCards({ initialData }: Props) {
                       </button>
                     ) : null}
                     <Link
-                      className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft hover:bg-paper2"
+                      className="inline-flex w-full items-center justify-center rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft hover:bg-paper2 sm:w-auto"
                       href={`/admin/posts/novo?id=${publication.postId}`}
                     >
                       Ver materia

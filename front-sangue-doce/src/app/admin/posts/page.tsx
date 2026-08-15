@@ -21,13 +21,13 @@ export default async function AdminPostsPage() {
       userRole={profile.role}
     >
       <section className="grid gap-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="grid gap-3 sm:flex sm:items-center sm:justify-between">
           <p className="max-w-[64ch] text-[1.02rem] leading-relaxed text-inkSoft">
             Acompanhe o que esta publicado, revise rascunhos e tire materias do ar sem sair do
             painel.
           </p>
           <Link
-            className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep"
+            className="inline-flex w-full items-center justify-center rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep sm:w-auto"
             href="/admin/posts/novo"
           >
             Nova materia

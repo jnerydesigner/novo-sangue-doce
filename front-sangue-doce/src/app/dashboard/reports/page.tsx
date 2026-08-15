@@ -155,7 +155,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
           <DashboardSidebar showAdminItems={showAdminItems} />
         </div>
 
-        <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6 print:p-0">
+        <section className="dashboard-shell-content min-w-0 overflow-x-hidden overflow-y-auto px-[clamp(18px,4vw,42px)] pb-6 lg:py-6 print:p-0">
           <div className="print:hidden">
             <DashboardHeader
               subtitle="Essa e uma area de atualizacao de dados."
@@ -348,7 +348,10 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 });
 
                 return (
-                  <article className="rounded-lg border border-line bg-card p-4" key={`mobile-${day.date}`}>
+                  <article
+                    className="rounded-lg border border-line bg-card p-4"
+                    key={`mobile-${day.date}`}
+                  >
                     <h3 className="border-b border-line pb-3 font-semibold text-ink">
                       {formatDate(day.date)}
                     </h3>
@@ -376,7 +379,9 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                         })}
                       </div>
                     ) : (
-                      <p className="mt-3 text-sm text-muted">Nenhuma leitura registrada neste dia.</p>
+                      <p className="mt-3 text-sm text-muted">
+                        Nenhuma leitura registrada neste dia.
+                      </p>
                     )}
                   </article>
                 );

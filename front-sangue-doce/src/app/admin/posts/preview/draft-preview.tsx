@@ -54,23 +54,25 @@ export function DraftPreview({ post }: DraftPreviewProps) {
 
   return (
     <article className="overflow-hidden rounded-lg border border-line bg-paper">
-      <div className="border-b border-line bg-card px-5 py-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
+      <div className="border-b border-line bg-card px-4 py-4 sm:px-5">
+        <div className="grid gap-3 lg:flex lg:items-center lg:justify-between">
+          <div className="min-w-0">
             <span
               className={`rounded-full border px-3 py-1 text-[11.5px] font-bold uppercase tracking-[0.07em] ${status.className}`}
             >
               {status.label}
             </span>
-            <span className="ml-3 text-sm text-muted">
+            <span className="mt-2 block text-sm text-muted sm:ml-3 sm:mt-0 sm:inline">
               Salvo em {formatPostDate(post.updatedAt)}
             </span>
-            <span className="ml-3 text-sm font-semibold text-inkSoft">/{post.slug}</span>
+            <span className="mt-1 block break-words text-sm font-semibold text-inkSoft sm:ml-3 sm:mt-0 sm:inline">
+              /{post.slug}
+            </span>
           </div>
-          <div className="flex flex-wrap items-center justify-end gap-2">
+          <div className="grid gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
             <PublishPostButton post={post} />
             <Link
-              className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
+              className="inline-flex w-full items-center justify-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 sm:w-auto"
               href={`/admin/posts/novo?id=${post.id}`}
             >
               Editar

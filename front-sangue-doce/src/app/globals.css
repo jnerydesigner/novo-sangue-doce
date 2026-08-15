@@ -53,6 +53,17 @@ body {
     @apply min-w-0 overflow-x-hidden overflow-y-auto;
   }
 
+  .dashboard-shell-content {
+    padding-top: 5.25rem !important;
+  }
+
+  @media (min-width: 1024px) {
+    .dashboard-shell-content {
+      padding-top: 1.5rem !important;
+      padding-bottom: 1.5rem !important;
+    }
+  }
+
   .wrap {
     @apply mx-auto max-w-page px-[clamp(20px,5vw,64px)];
   }

@@ -12,15 +12,15 @@ export function PostTagsField({
   tags,
 }: PostTagsFieldProps) {
   return (
-    <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
+    <div className="grid min-w-0 gap-2 text-sm font-bold text-inkSoft lg:col-span-2">
       Tags
-      <div className="flex flex-wrap gap-2 rounded-lg border border-line bg-paper p-3">
+      <div className="flex min-w-0 flex-wrap gap-2 rounded-lg border border-line bg-paper p-3">
         {tags.map((tag) => {
           const checked = selectedTagIds.includes(tag.id);
 
           return (
             <label
-              className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+              className={`min-w-0 cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
                 checked
                   ? "border-green/30 bg-green/10 text-greenDeep"
                   : "border-lineStrong text-inkSoft"
@@ -41,7 +41,7 @@ export function PostTagsField({
                 type="checkbox"
                 value={tag.id}
               />
-              {tag.name}
+              <span className="break-words">{tag.name}</span>
             </label>
           );
         })}

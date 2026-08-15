@@ -344,7 +344,7 @@ function NewPostFormFields({
 
   return (
     <form
-      className="grid gap-5 rounded-lg border border-line bg-card p-5 md:grid-cols-2"
+      className="grid min-w-0 gap-5 rounded-lg border border-line bg-card p-4 sm:p-5 lg:grid-cols-2"
       onSubmit={handleSubmit}
       ref={formRef}
     >
@@ -407,7 +407,7 @@ function NewPostFormFields({
           value={readingMinutes || 1}
         />
       </label>
-      <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
+      <div className="grid min-w-0 gap-2 text-sm font-bold text-inkSoft lg:col-span-2">
         <CoverImageField
           altText={coverImageAlt}
           fileName={coverFileName}
@@ -425,7 +425,7 @@ function NewPostFormFields({
         selectedTagIds={selectedTagIds}
         tags={tags}
       />
-      <div className="grid gap-2 text-sm font-bold text-inkSoft md:col-span-2">
+      <div className="grid min-w-0 gap-2 text-sm font-bold text-inkSoft lg:col-span-2">
         <span>Conteudo</span>
         <PostContentEditor
           initialContent={initialDraft?.content}
@@ -433,9 +433,9 @@ function NewPostFormFields({
           onUploadImage={uploadPostContentImage}
         />
       </div>
-      <div className="flex flex-wrap items-center justify-end gap-3 md:col-span-2">
+      <div className="grid min-w-0 gap-3 border-t border-line pt-4 sm:grid-cols-2 lg:col-span-2 lg:flex lg:flex-wrap lg:items-center lg:justify-end lg:border-t-0 lg:pt-0">
         {savedAt && (
-          <span className="mr-auto text-sm text-inkSoft">
+          <span className="min-w-0 text-sm text-inkSoft sm:col-span-2 lg:mr-auto">
             Rascunho salvo as{" "}
             {new Date(savedAt).toLocaleTimeString("pt-BR", {
               hour: "2-digit",
@@ -445,7 +445,7 @@ function NewPostFormFields({
         )}
         {submitMessage ? (
           <span
-            className={`mr-auto text-sm font-semibold ${
+            className={`min-w-0 text-sm font-semibold sm:col-span-2 lg:mr-auto ${
               submitMessage.tone === "error" ? "text-tomato" : "text-greenDeep"
             }`}
           >
@@ -453,7 +453,7 @@ function NewPostFormFields({
           </span>
         ) : null}
         <button
-          className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
+          className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 lg:w-auto"
           disabled={submittingAction !== null || previewing}
           onClick={(event) => handlePreview(event.currentTarget.form)}
           type="button"
@@ -461,20 +461,20 @@ function NewPostFormFields({
           {previewing ? previewingButtonText : previewButtonText}
         </button>
         <Link
-          className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2"
+          className="inline-flex w-full items-center justify-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 lg:w-auto"
           href="/admin"
         >
           Cancelar
         </Link>
         <button
-          className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep"
+          className="w-full rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep lg:w-auto"
           disabled={submittingAction !== null || previewing}
           type="submit"
         >
           {submittingAction === "DRAFT" ? "Salvando..." : "Salvar rascunho"}
         </button>
         <button
-          className="rounded-lg bg-tomato px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-[#a94735]"
+          className="w-full rounded-lg bg-tomato px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-[#a94735] lg:w-auto"
           disabled={submittingAction !== null || previewing}
           onClick={(event) => {
             event.preventDefault();

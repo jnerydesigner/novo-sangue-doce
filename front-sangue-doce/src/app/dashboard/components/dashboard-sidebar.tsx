@@ -1,9 +1,9 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { type ReactNode, useState } from "react";
 import { Brand } from "@/components/home/brand";
 import {
   adminSidebarGroups,
@@ -44,10 +44,6 @@ export function SidebarNav({ activeHref, ariaLabel, groups, onNavigate }: Sideba
   const [openGroupLabel, setOpenGroupLabel] = useState<string | undefined>(
     () => activeGroupLabel ?? firstGroupLabel,
   );
-
-  useEffect(() => {
-    setOpenGroupLabel(activeGroupLabel ?? firstGroupLabel);
-  }, [activeGroupLabel, firstGroupLabel]);
 
   return (
     <nav aria-label={ariaLabel}>
@@ -127,29 +123,30 @@ export function DashboardSidebar({
 
   return (
     <>
-      <MobileSidebar
-        activeHref={pathname}
-        ariaLabel={navLabel}
-        groups={sidebarGroups}
-      />
+      <MobileSidebar activeHref={pathname} ariaLabel={navLabel} groups={sidebarGroups} />
 
       <aside className="hidden border-r border-line bg-card px-5 py-7 lg:flex lg:flex-col">
-      <div className="mb-8 px-2 text-greenDeep">
-        <Brand />
-      </div>
-
-      <SidebarNav activeHref={pathname} ariaLabel={navLabel} groups={sidebarGroups} />
-
-      {footer ?? (
-        <div className="mt-auto rounded-lg border border-line bg-paper p-4">
-          <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
-            Proxima etapa
-          </span>
-          <p className="mt-2 text-sm text-inkSoft">
-            Conectar leituras ao banco e liberar filtros por periodo.
-          </p>
+        <div className="mb-8 px-2 text-greenDeep">
+          <Brand />
         </div>
-      )}
+
+        <SidebarNav
+          activeHref={pathname}
+          ariaLabel={navLabel}
+          groups={sidebarGroups}
+          key={pathname}
+        />
+
+        {footer ?? (
+          <div className="mt-auto rounded-lg border border-line bg-paper p-4">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+              Proxima etapa
+            </span>
+            <p className="mt-2 text-sm text-inkSoft">
+              Conectar leituras ao banco e liberar filtros por periodo.
+            </p>
+          </div>
+        )}
       </aside>
     </>
   );
@@ -159,7 +156,7 @@ function MobileSidebar({ activeHref, ariaLabel, groups }: SidebarNavProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="lg:hidden">
+    <div className="contents lg:hidden">
       <button
         aria-expanded={isOpen}
         aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
@@ -167,7 +164,11 @@ function MobileSidebar({ activeHref, ariaLabel, groups }: SidebarNavProps) {
         onClick={() => setIsOpen((open) => !open)}
         type="button"
       >
-        {isOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
+        {isOpen ? (
+          <X aria-hidden="true" className="h-5 w-5" />
+        ) : (
+          <Menu aria-hidden="true" className="h-5 w-5" />
+        )}
       </button>
 
       {isOpen ? (
@@ -192,6 +193,7 @@ function MobileSidebar({ activeHref, ariaLabel, groups }: SidebarNavProps) {
           activeHref={activeHref}
           ariaLabel={ariaLabel}
           groups={groups}
+          key={activeHref}
           onNavigate={() => setIsOpen(false)}
         />
       </aside>

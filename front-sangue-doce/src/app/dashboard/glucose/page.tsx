@@ -10,17 +10,19 @@ export const dynamic = "force-dynamic";
 
 export default async function GlucosePage() {
   const { accessToken, profile } = await requireDashboardUser();
-  const recentReadings = await api.measurements.today({
-    accessToken,
-    timeZone: "America/Manaus",
-  }).catch(() => []);
+  const recentReadings = await api.measurements
+    .today({
+      accessToken,
+      timeZone: "America/Manaus",
+    })
+    .catch(() => []);
 
   return (
     <main className="dashboard-shell bg-paper text-ink">
       <div className="dashboard-grid lg:grid-cols-[248px_1fr]">
         <DashboardSidebar showAdminItems={profile.role === "ADMIN"} />
 
-        <section className="min-w-0 px-[clamp(18px,4vw,42px)] py-6">
+        <section className="dashboard-shell-content min-w-0 overflow-x-hidden overflow-y-auto px-[clamp(18px,4vw,42px)] pb-6 lg:py-6">
           <DashboardHeader
             subtitle="Area para atualizar e acompanhar suas leituras."
             title="Glicemia"

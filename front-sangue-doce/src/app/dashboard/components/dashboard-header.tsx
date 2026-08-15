@@ -4,20 +4,24 @@ import { DateTimeCard } from "./date-time-card";
 
 type DashboardHeaderProps = {
   action?: React.ReactNode;
+  avatarUrl?: string;
   subtitle?: string;
   title?: string;
+  userMenuDashboardHref?: string;
   userName: string;
 };
 
 export function DashboardHeader({
   action,
+  avatarUrl,
   subtitle,
   title = "Resumo de hoje",
+  userMenuDashboardHref = "/",
   userName,
 }: DashboardHeaderProps) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
-      <div>
+      <div className="min-w-0">
         <span className="text-sm font-semibold text-muted">
           {subtitle ?? `Bom dia, ${userName}!`}
         </span>
@@ -35,7 +39,9 @@ export function DashboardHeader({
           <UserMenu
             className="w-full sm:w-auto"
             actionLabel="Ver site"
-            dashboardHref="/"
+            avatarUrl={avatarUrl}
+            dashboardHref={userMenuDashboardHref}
+            name={userName}
             sectionLabel="Site publico"
             statusLabel="Sangue Doce"
           />

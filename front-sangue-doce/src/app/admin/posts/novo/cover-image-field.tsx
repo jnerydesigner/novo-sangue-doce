@@ -40,11 +40,11 @@ export function CoverImageField({
   }
 
   return (
-    <section className="rounded-lg border border-line bg-paper p-4">
-      <div className="grid gap-4 lg:grid-cols-[240px_1fr]">
+    <section className="min-w-0 rounded-lg border border-line bg-paper p-3 sm:p-4">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[240px_1fr]">
         <div
           aria-label={imageUrl ? "Previa da imagem de capa" : "Sem imagem"}
-          className="grid min-h-[150px] place-items-center overflow-hidden rounded-lg border border-lineStrong bg-card bg-cover bg-center text-sm font-bold uppercase tracking-[0.12em] text-muted"
+          className="grid aspect-[16/10] min-h-[150px] place-items-center overflow-hidden rounded-lg border border-lineStrong bg-card bg-cover bg-center text-sm font-bold uppercase tracking-[0.12em] text-muted lg:aspect-auto"
           role="img"
           style={resolvedImageUrl ? { backgroundImage: `url(${resolvedImageUrl})` } : undefined}
         >
@@ -65,9 +65,9 @@ export function CoverImageField({
                 <p className="mt-2 truncate text-sm font-semibold text-greenDeep">{fileName}</p>
               ) : null}
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap">
                 <label
-                  className="inline-flex cursor-pointer items-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2"
+                  className="inline-flex w-full cursor-pointer items-center justify-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-greenDeep transition hover:-translate-y-px hover:bg-paper2 sm:w-auto"
                   htmlFor={inputId}
                 >
                   Escolher imagem
@@ -82,7 +82,7 @@ export function CoverImageField({
 
                 {imageUrl ? (
                   <button
-                    className="rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 hover:text-ink"
+                    className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-bold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 hover:text-ink sm:w-auto"
                     onClick={onRemoveImage}
                     type="button"
                   >
