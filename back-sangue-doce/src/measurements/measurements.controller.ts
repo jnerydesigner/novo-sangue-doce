@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -17,6 +18,7 @@ import {
 import type { Response } from "express";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
 import type { UpdateMeasurementDto } from "./dto/update-measurement.dto";
+import type { Measurement } from "./dto/smart-measurement-response.dto";
 import { MeasurementReportPdfService } from "./measurement-report-pdf.service";
 import {
   MeasurementsService,
@@ -198,10 +200,17 @@ export class MeasurementsController {
   @UseGuards(AuthGuard)
   uploadImageMeasurementToSmart(
     @UploadedFiles() files: MeasurementUploadFiles | undefined,
+    @Headers("content-type") contentType: string | undefined,
     @Request() req: AuthenticatedRequest,
-  ): Promise<PublicMeasurement> {
+  ): Promise<Measurement> {
     const file = files?.image?.[0] ?? files?.file?.[0];
+    const fileFields = Object.entries(files ?? {})
+      .filter(([, values]) => values?.length)
+      .map(([field]) => field);
 
-    return this.measurementsService.createFromSmartImage(req, file);
+    return this.measurementsService.createFromSmartImage(req, file, {
+      contentType,
+      fileFields,
+    });
   }
 }

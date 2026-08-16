@@ -3,7 +3,7 @@ import { AuthService } from "@app/auth/auth.service";
 import type { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
 import { UsersService } from "@app/users/users.service";
 import { PrismaService } from "@infra/database/prisma.service";
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { $Enums, Prisma } from "@prisma/client";
 import type { ZodType } from "zod";
 import {
@@ -11,6 +11,7 @@ import {
   type CreateMeasurementInput,
   createMeasurementInputSchema,
 } from "./dto/create-measurement.dto";
+import type { Measurement } from "./dto/smart-measurement-response.dto";
 import { MeasurementSmartService } from "./measurement-smart.service";
 import {
   classifyMeasurementMoment,
@@ -69,6 +70,8 @@ export type MonthlyMeasurementReport = {
 
 @Injectable()
 export class MeasurementsService {
+  private readonly logger = new Logger(MeasurementsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UsersService,
@@ -178,19 +181,29 @@ export class MeasurementsService {
   async createFromSmartImage(
     userRequest: AuthenticatedRequest,
     file?: UploadedImageFile,
-  ): Promise<PublicMeasurement> {
+    uploadContext?: { contentType?: string; fileFields?: string[] },
+  ): Promise<Measurement> {
+    this.logger.log(
+      `Recebendo imagem para diagnostico Smart. contentType=${uploadContext?.contentType ?? "ausente"} fileFields=${uploadContext?.fileFields?.join(",") || "nenhum"} hasFile=${Boolean(file)}`,
+    );
+
     if (!file) {
-      throw new BadRequestException('Envie a imagem no campo "image" usando multipart/form-data.');
+      const fileFields = uploadContext?.fileFields?.length
+        ? uploadContext.fileFields.join(", ")
+        : "nenhum";
+      const contentType = uploadContext?.contentType || "ausente";
+
+      throw new BadRequestException(
+        `Envie a imagem no campo "image" ou "file" usando multipart/form-data. Content-Type recebido: ${contentType}. Campos de arquivo recebidos: ${fileFields}.`,
+      );
     }
 
     const decodedMeasurement = await this.measurementSmartService.sendImageToDecodedSmart(file);
+    this.logger.log(
+      `Modo diagnostico ativo: medicao decodificada pelo Smart, sem persistencia. measurement=${JSON.stringify(decodedMeasurement)}`,
+    );
 
-    return this.create(userRequest, {
-      measuredAt: decodedMeasurement.measuredAt,
-      glucoseValueMgDl: decodedMeasurement.glucoseValueMgDl,
-      source: decodedMeasurement.source,
-      timeZone: decodedMeasurement.timeZone,
-    });
+    return decodedMeasurement;
   }
 
   async update(

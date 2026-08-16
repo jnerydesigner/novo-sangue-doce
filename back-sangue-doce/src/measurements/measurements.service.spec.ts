@@ -2,7 +2,6 @@ import type { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.t
 import { BadRequestException } from "@nestjs/common";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Measurement } from "./dto/smart-measurement-response.dto";
-import type { PublicMeasurement } from "./measurements.service";
 import { MeasurementsService } from "./measurements.service";
 
 describe("MeasurementsService smart image ingestion", () => {
@@ -20,7 +19,7 @@ describe("MeasurementsService smart image ingestion", () => {
     );
   });
 
-  it("decodes the image through smart service and persists through create", async () => {
+  it("decodes the image through smart service without persisting in diagnostic mode", async () => {
     const file: UploadedImageFile = {
       buffer: Buffer.from("fake-image"),
       mimetype: "image/png",
@@ -35,38 +34,23 @@ describe("MeasurementsService smart image ingestion", () => {
       noteType: "AFTER_LUNCH",
       timeZone: "America/Manaus",
     };
-    const publicMeasurement: PublicMeasurement = {
-      id: "992d35f0-02c6-44ec-aa72-0d26c3148bd4",
-      userId: "4f3069fb-7d80-45b1-a2b4-dc2d3dbec84d",
-      measuredAt: new Date("2026-08-16T13:50:00.000Z"),
-      glucoseValueMgDl: 121,
-      readingContext: "AFTER_MEAL",
-      source: "SENSOR",
-      noteType: "AFTER_LUNCH",
-      noteLabel: "Depois do almoco",
-      createdAt: new Date("2026-08-16T14:00:00.000Z"),
-      updatedAt: new Date("2026-08-16T14:00:00.000Z"),
-    };
-
     measurementSmartService.sendImageToDecodedSmart.mockResolvedValue(decodedMeasurement);
-    const createSpy = vi.spyOn(service, "create").mockResolvedValue(publicMeasurement);
+    const createSpy = vi.spyOn(service, "create");
 
     await expect(service.createFromSmartImage(request as never, file)).resolves.toBe(
-      publicMeasurement,
+      decodedMeasurement,
     );
     expect(measurementSmartService.sendImageToDecodedSmart).toHaveBeenCalledWith(file);
-    expect(createSpy).toHaveBeenCalledWith(request, {
-      measuredAt: "2026-08-16T13:50:00-04:00",
-      glucoseValueMgDl: 121,
-      source: "SENSOR",
-      timeZone: "America/Manaus",
-    });
+    expect(createSpy).not.toHaveBeenCalled();
   });
 
   it("rejects requests without image file", async () => {
-    await expect(service.createFromSmartImage({} as never, undefined)).rejects.toBeInstanceOf(
-      BadRequestException,
-    );
+    await expect(
+      service.createFromSmartImage({} as never, undefined, {
+        contentType: "application/json",
+        fileFields: [],
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
     expect(measurementSmartService.sendImageToDecodedSmart).not.toHaveBeenCalled();
   });
 });

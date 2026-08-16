@@ -10,8 +10,11 @@ describe("MeasurementsController", () => {
     const request = { user: { sub: "4f3069fb-7d80-45b1-a2b4-dc2d3dbec84d" } };
 
     await expect(
-      controller.uploadImageMeasurementToSmart(undefined, request as never),
+      controller.uploadImageMeasurementToSmart(undefined, "application/json", request as never),
     ).resolves.toEqual({ id: "measurement-id" });
-    expect(measurementsService.createFromSmartImage).toHaveBeenCalledWith(request, undefined);
+    expect(measurementsService.createFromSmartImage).toHaveBeenCalledWith(request, undefined, {
+      contentType: "application/json",
+      fileFields: [],
+    });
   });
 });
