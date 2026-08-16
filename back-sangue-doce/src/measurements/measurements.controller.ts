@@ -197,10 +197,10 @@ export class MeasurementsController {
   )
   @UseGuards(AuthGuard)
   uploadImageMeasurementToSmart(
-    @UploadedFiles() files: MeasurementUploadFiles,
+    @UploadedFiles() files: MeasurementUploadFiles | undefined,
     @Request() req: AuthenticatedRequest,
   ): Promise<PublicMeasurement> {
-    const file = files.image?.[0] ?? files.file?.[0];
+    const file = files?.image?.[0] ?? files?.file?.[0];
 
     return this.measurementsService.createFromSmartImage(req, file);
   }
