@@ -12,7 +12,7 @@ import {
   UseGuards,
   Delete,
   UseInterceptors,
-  UploadedFile,
+  UploadedFiles,
 } from "@nestjs/common";
 import type { Response } from "express";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
@@ -23,8 +23,13 @@ import {
   type MonthlyMeasurementReport,
   type PublicMeasurement,
 } from "./measurements.service";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
+
+type MeasurementUploadFiles = {
+  image?: UploadedImageFile[];
+  file?: UploadedImageFile[];
+};
 
 @Controller("measurements")
 export class MeasurementsController {
@@ -178,17 +183,25 @@ export class MeasurementsController {
 
   @Post("upload/image/measurement")
   @UseInterceptors(
-    FileInterceptor("image", {
-      limits: {
-        fileSize: 5 * 1024 * 1024,
+    FileFieldsInterceptor(
+      [
+        { name: "image", maxCount: 1 },
+        { name: "file", maxCount: 1 },
+      ],
+      {
+        limits: {
+          fileSize: 5 * 1024 * 1024,
+        },
       },
-    }),
+    ),
   )
   @UseGuards(AuthGuard)
   uploadImageMeasurementToSmart(
-    @UploadedFile() file: UploadedImageFile | undefined,
+    @UploadedFiles() files: MeasurementUploadFiles,
     @Request() req: AuthenticatedRequest,
   ): Promise<PublicMeasurement> {
+    const file = files.image?.[0] ?? files.file?.[0];
+
     return this.measurementsService.createFromSmartImage(req, file);
   }
 }
