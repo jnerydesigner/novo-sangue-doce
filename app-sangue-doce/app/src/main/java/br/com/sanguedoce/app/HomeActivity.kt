@@ -106,7 +106,7 @@ class HomeActivity : ComponentActivity() {
                         startActivity(Intent(this@HomeActivity, AddReadingActivity::class.java))
                     },
                     onContentClick = {
-                        // Add navigation when the content screen is available.
+                        startActivity(Intent(this@HomeActivity, MealsActivity::class.java))
                     },
                     onProfileClick = {
                         // Add navigation when the profile screen is available.

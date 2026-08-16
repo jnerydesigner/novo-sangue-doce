@@ -212,7 +212,12 @@ export class MeasurementsService {
       `Smart decodificou medicao para persistencia. measurement=${JSON.stringify(decodedMeasurement)}`,
     );
 
-    return this.create(userRequest, decodedMeasurement);
+    const persistedMeasurement = await this.create(userRequest, decodedMeasurement);
+    this.logger.log(
+      `Medicao persistida a partir do Smart. id=${persistedMeasurement.id} userId=${persistedMeasurement.userId} measuredAt=${persistedMeasurement.measuredAt.toISOString()} glucoseValueMgDl=${persistedMeasurement.glucoseValueMgDl} noteType=${persistedMeasurement.noteType ?? "ausente"}`,
+    );
+
+    return persistedMeasurement;
   }
 
   async update(

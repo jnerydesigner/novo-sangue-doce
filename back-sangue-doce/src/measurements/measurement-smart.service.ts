@@ -1,6 +1,7 @@
 import { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
 import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger, ServiceUnavailableException } from "@nestjs/common";
+import { AxiosError } from "axios";
 import { firstValueFrom } from "rxjs";
 import { type Measurement, SmartMeasurementResponseDto } from "./dto/smart-measurement-response.dto";
 
@@ -21,14 +22,29 @@ export class MeasurementSmartService {
     this.logger.log(
       `Enviando imagem para Smart. url=${smartUrl}/v1/measurements/read-image mimetype=${file.mimetype} size=${file.size}`,
     );
-    const { data } = await firstValueFrom(
-      this.httpService.post<SmartMeasurementResponseDto>(
-        `${smartUrl}/v1/measurements/read-image`,
-        form,
-      ),
-    );
+    let data: SmartMeasurementResponseDto;
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post<SmartMeasurementResponseDto>(
+          `${smartUrl}/v1/measurements/read-image`,
+          form,
+        ),
+      );
+      data = response.data;
+    } catch (error) {
+      const errorDetails = this.describeSmartError(error);
+      this.logger.error(`Erro ao chamar Smart. ${errorDetails}`);
+      throw new ServiceUnavailableException({
+        message: "Smart nao conseguiu processar a imagem.",
+        details: errorDetails,
+      });
+    }
 
     if (!data.ok || !data.measurement) {
+      this.logger.warn(
+        `Smart nao decodificou medicao. warnings=${JSON.stringify(data.warnings)} evidence=${JSON.stringify(data.evidence)}`,
+      );
       throw new ServiceUnavailableException({
         message: "Smart nao conseguiu decodificar a imagem.",
         warnings: data.warnings,
@@ -39,5 +55,17 @@ export class MeasurementSmartService {
     this.logger.log(`Smart decodificou medicao: ${JSON.stringify(data.measurement)}`);
 
     return data.measurement;
+  }
+
+  private describeSmartError(error: unknown): string {
+    if (error instanceof AxiosError) {
+      return `status=${error.response?.status ?? "sem-status"} code=${error.code ?? "sem-code"} message=${error.message} data=${JSON.stringify(error.response?.data)}`;
+    }
+
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return JSON.stringify(error);
   }
 }

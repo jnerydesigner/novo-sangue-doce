@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -32,6 +33,9 @@ class OcrDependencyError(RuntimeError):
     pass
 
 
+logger = logging.getLogger(__name__)
+
+
 async def extract_measurement_from_upload(
     file: UploadFile,
     *,
@@ -40,8 +44,16 @@ async def extract_measurement_from_upload(
 ) -> MeasurementImageResponse:
     suffix = Path(file.filename or "measurement-image").suffix or ".jpg"
     with NamedTemporaryFile(suffix=suffix, delete=True) as temp:
-        temp.write(await file.read())
+        contents = await file.read()
+        temp.write(contents)
         temp.flush()
+        logger.info(
+            "Upload salvo temporariamente para OCR. filename=%s content_type=%s bytes=%s temp_suffix=%s",
+            file.filename,
+            file.content_type,
+            len(contents),
+            suffix,
+        )
         return extract_measurement_from_path(
             Path(temp.name),
             original_filename=file.filename or "",
@@ -57,10 +69,22 @@ def extract_measurement_from_path(
     time_zone: str,
     sent_at: str | None,
 ) -> MeasurementImageResponse:
+    logger.info(
+        "Iniciando OCR da imagem. path=%s original_filename=%s time_zone=%s sent_at=%s",
+        path,
+        original_filename,
+        time_zone,
+        sent_at,
+    )
     text = ocr(path)
+    logger.info("OCR geral concluido. chars=%s preview=%s", len(text), preview_text(text))
     basic = extract_basic_evidence(text)
-    digits_reading = extract_digits_reading(ocr_digits_reading(path))
-    card_reading = extract_reading_from_card(ocr_current_card(path), text)
+    digits_text = ocr_digits_reading(path)
+    logger.info("OCR area de digitos concluido. chars=%s preview=%s", len(digits_text), preview_text(digits_text))
+    digits_reading = extract_digits_reading(digits_text)
+    card_text = ocr_current_card(path)
+    logger.info("OCR card atual concluido. chars=%s preview=%s", len(card_text), preview_text(card_text))
+    card_reading = extract_reading_from_card(card_text, text)
     current_reading = digits_reading or card_reading or basic["currentReadingMgDl"]
     estimated_time, confidence = estimate_time_from_chart(path, basic["foundTimes"])
     filename_timestamp = timestamp_from_filename(original_filename)
@@ -86,6 +110,22 @@ def extract_measurement_from_path(
     elif not 40 <= current_reading <= 450:
         warnings.append("Leitura identificada fora do intervalo aceito pelo backend.")
 
+    logger.info(
+        "Evidencias extraidas. current_reading=%s digits_reading=%s card_reading=%s basic_current=%s date=%s found_times=%s found_readings=%s estimated_time=%s confidence=%s filename_timestamp=%s measured_at=%s warnings=%s",
+        current_reading,
+        digits_reading,
+        card_reading,
+        basic["currentReadingMgDl"],
+        basic["date"],
+        basic["foundTimes"],
+        basic["foundReadingsMgDl"],
+        estimated_time,
+        confidence,
+        filename_timestamp,
+        measured_at,
+        warnings,
+    )
+
     measurement = None
     if measured_at and current_reading and 40 <= current_reading <= 450:
         moment = classify_measurement_moment(measured_at, time_zone)
@@ -98,7 +138,14 @@ def extract_measurement_from_path(
             timeZone=time_zone,
         )
 
-    return MeasurementImageResponse(ok=measurement is not None, measurement=measurement, evidence=evidence, warnings=warnings)
+    response = MeasurementImageResponse(ok=measurement is not None, measurement=measurement, evidence=evidence, warnings=warnings)
+    logger.info(
+        "Resposta OCR montada. ok=%s measurement=%s warnings=%s",
+        response.ok,
+        response.measurement.model_dump() if response.measurement else None,
+        response.warnings,
+    )
+    return response
 
 
 def ensure_tesseract_available() -> None:
@@ -213,3 +260,10 @@ def parse_time_to_minutes(value: str) -> int | None:
     if not (0 <= hour <= 23 and 0 <= minute <= 59):
         return None
     return hour * 60 + minute
+
+
+def preview_text(value: str, limit: int = 180) -> str:
+    clean = " ".join(value.split())
+    if len(clean) <= limit:
+        return clean
+    return f"{clean[:limit]}..."

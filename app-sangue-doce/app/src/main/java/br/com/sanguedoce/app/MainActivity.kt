@@ -75,6 +75,10 @@ class MainActivity : ComponentActivity() {
                         onAddClick = {
                             startActivity(Intent(this@MainActivity, AddReadingActivity::class.java))
                         },
+                        onContentClick = {
+                            startActivity(Intent(this@MainActivity, MealsActivity::class.java))
+                            finish()
+                        },
                         onLogoutClick = {
                             AuthSession.signOut(this@MainActivity)
                             RetrofitClient.clearToken()

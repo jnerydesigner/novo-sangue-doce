@@ -49,6 +49,12 @@ import br.com.sanguedoce.app.ui.SangueDoceBorderColor
 import br.com.sanguedoce.app.ui.SangueDoceMutedText
 import br.com.sanguedoce.app.ui.SangueDocePrimary
 
+private val BottomBarHeight = 144.dp
+private val BottomBarSurfaceHeight = 76.dp
+private val BottomBarBottomPadding = 18.dp
+private val BottomBarNotchRadius = 36.dp
+private val BloodButtonOffsetY = (-20).dp
+
 @Composable
 fun SangueDoceBottomBar(
     selectedItem: String,
@@ -65,20 +71,20 @@ fun SangueDoceBottomBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp)
+            .height(BottomBarHeight)
             .background(Color.Transparent)
             .navigationBarsPadding()
-            .padding(bottom = 18.dp)
+            .padding(bottom = BottomBarBottomPadding)
     ) {
         Canvas(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(horizontal = barHorizontalMargin)
-                .height(76.dp)
+                .height(BottomBarSurfaceHeight)
         ) {
             val top = 10.dp.toPx()
-            val notchRadius = 40.dp.toPx()
+            val notchRadius = BottomBarNotchRadius.toPx()
             val centerX = size.width / 2f
             val path = Path().apply {
                 moveTo(0f, top)
@@ -154,7 +160,7 @@ fun SangueDoceBottomBar(
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = 92.dp)
+                .offset(y = BloodButtonOffsetY)
                 .size(70.dp)
                 .clip(CircleShape)
                 .background(Color.White)

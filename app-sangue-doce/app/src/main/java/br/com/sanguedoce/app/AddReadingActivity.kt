@@ -1,10 +1,14 @@
 package br.com.sanguedoce.app
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -43,17 +48,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import br.com.sanguedoce.app.constants.MeasurementNoteType
 import br.com.sanguedoce.app.service.SaveReadingService
+import br.com.sanguedoce.app.service.UploadReadingImageService
 import br.com.sanguedoce.app.ui.componentes.SangueDoceButton
 import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import retrofit2.HttpException
 
 private val ScreenBackground = Color(0xFFF4F7FA)
 private val Ink = Color(0xFF1D2D44)
 private val MutedText = Color(0xFF5D6B7A)
+private const val AddReadingLogTag = "AddReadingActivity"
 
 class AddReadingActivity : ComponentActivity() {
 
@@ -92,6 +96,10 @@ class AddReadingActivity : ComponentActivity() {
                         startActivity(Intent(this@AddReadingActivity, MainActivity::class.java))
                         finish()
                     },
+                    onContentClick = {
+                        startActivity(Intent(this@AddReadingActivity, MealsActivity::class.java))
+                        finish()
+                    },
                     onBloodClick = {
                         // Already on the new measurement screen.
                     },
@@ -101,6 +109,12 @@ class AddReadingActivity : ComponentActivity() {
                             noteType = noteType,
                             editMode = editMode,
                             measurementId = measurementId,
+                            onFinished = onFinished
+                        )
+                    },
+                    onUploadReadingImage = { imageUri, onFinished ->
+                        uploadReadingImage(
+                            imageUri = imageUri,
                             onFinished = onFinished
                         )
                     }
@@ -142,6 +156,7 @@ class AddReadingActivity : ComponentActivity() {
 
                 finish()
             } catch (exception: Exception) {
+                Log.e(AddReadingLogTag, "Erro ao salvar medicao manual", exception)
                 Toast.makeText(
                     this@AddReadingActivity,
                     "Erro ao salvar a medição",
@@ -152,6 +167,49 @@ class AddReadingActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun uploadReadingImage(
+        imageUri: Uri,
+        onFinished: () -> Unit
+    ) {
+        lifecycleScope.launch {
+            try {
+                val measurement = UploadReadingImageService(this@AddReadingActivity).execute(imageUri)
+                Log.i(
+                    AddReadingLogTag,
+                    "Medição importada pelo print. id=${measurement.id} measuredAt=${measurement.measuredAt} glucoseValueMgDl=${measurement.glucoseValueMgDl} noteType=${measurement.noteType}"
+                )
+
+                Toast.makeText(
+                    this@AddReadingActivity,
+                    "Medição importada com sucesso",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                startActivity(Intent(this@AddReadingActivity, MainActivity::class.java))
+                finish()
+            } catch (exception: Exception) {
+                Log.e(AddReadingLogTag, "Erro ao importar medicao pelo print", exception)
+                val message = exception.toUploadErrorMessage()
+                Toast.makeText(
+                    this@AddReadingActivity,
+                    message,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                onFinished()
+            }
+        }
+    }
+}
+
+private fun Exception.toUploadErrorMessage(): String {
+    if (this is HttpException) {
+        val errorBody = response()?.errorBody()?.string()
+        return "Erro ao importar print (${code()}): ${errorBody ?: message()}"
+    }
+
+    return "Erro ao importar print: ${message ?: "falha desconhecida"}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -163,16 +221,22 @@ private fun AddReadingScreen(
     onBackClick: () -> Unit,
     onHomeClick: () -> Unit,
     onMeasurementsClick: () -> Unit,
+    onContentClick: () -> Unit,
     onBloodClick: () -> Unit,
     onSaveReading: (
         value: Int,
         noteType: MeasurementNoteType,
+        onFinished: () -> Unit
+    ) -> Unit,
+    onUploadReadingImage: (
+        imageUri: Uri,
         onFinished: () -> Unit
     ) -> Unit
 ) {
     var value by remember { mutableStateOf(initialValue) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isSaving by remember { mutableStateOf(false) }
+    var isUploadingImage by remember { mutableStateOf(false) }
 
     var selectedNoteType by remember {
         mutableStateOf(initialNoteType)
@@ -180,6 +244,17 @@ private fun AddReadingScreen(
 
     var noteTypeExpanded by remember {
         mutableStateOf(false)
+    }
+    val isBusy = isSaving || isUploadingImage
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { imageUri ->
+        if (imageUri != null) {
+            isUploadingImage = true
+            onUploadReadingImage(imageUri) {
+                isUploadingImage = false
+            }
+        }
     }
 
     Scaffold(
@@ -198,7 +273,7 @@ private fun AddReadingScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = onBackClick,
-                        enabled = !isSaving
+                        enabled = !isBusy
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -217,9 +292,7 @@ private fun AddReadingScreen(
                 selectedItem = "measurements",
                 onHomeClick = onHomeClick,
                 onMeasurementsClick = onMeasurementsClick,
-                onContentClick = {
-                    // Add navigation when the content screen is available.
-                },
+                onContentClick = onContentClick,
                 onProfileClick = {
                     // Add navigation when the profile screen is available.
                 },
@@ -263,13 +336,13 @@ private fun AddReadingScreen(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
                 ),
-                enabled = !isSaving
+                enabled = !isBusy
             )
 
             ExposedDropdownMenuBox(
                 expanded = noteTypeExpanded,
                 onExpandedChange = {
-                    if (!isSaving) {
+                    if (!isBusy) {
                         noteTypeExpanded = !noteTypeExpanded
                     }
                 }
@@ -280,11 +353,11 @@ private fun AddReadingScreen(
                     modifier = Modifier
                         .menuAnchor(
                             type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
-                            enabled = !isSaving
+                            enabled = !isBusy
                         )
                         .fillMaxWidth(),
                     readOnly = true,
-                    enabled = !isSaving,
+                    enabled = !isBusy,
                     label = {
                         Text("Contexto da medição")
                     },
@@ -333,7 +406,7 @@ private fun AddReadingScreen(
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !isSaving
+                enabled = !isBusy
             ) {
                 if (isSaving) {
                     CircularProgressIndicator(
@@ -341,7 +414,25 @@ private fun AddReadingScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                Text(if (editMode) "Atualizar medição" else "Salvar medição")
+                    Text(if (editMode) "Atualizar medição" else "Salvar medição")
+                }
+            }
+
+            if (!editMode) {
+                OutlinedButton(
+                    onClick = {
+                        imagePickerLauncher.launch("image/*")
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isBusy
+                ) {
+                    if (isUploadingImage) {
+                        CircularProgressIndicator(
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text("Importar medição por print")
+                    }
                 }
             }
 

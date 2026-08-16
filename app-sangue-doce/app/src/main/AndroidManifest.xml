@@ -29,6 +29,7 @@
 
         <activity android:name=".HomeActivity" android:exported="false" />
         <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".MealsActivity" android:exported="false" />
         <activity android:name=".AddReadingActivity" android:exported="false" android:label="Nova Medição" />
 
     </application>

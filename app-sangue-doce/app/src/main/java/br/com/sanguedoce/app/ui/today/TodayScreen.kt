@@ -65,6 +65,7 @@ fun TodayRoute(
     onRetry: () -> Unit,
     onHomeClick: () -> Unit,
     onAddClick: () -> Unit,
+    onContentClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onEditClick: (TodayResponse) -> Unit,
     onDeleteClick: (TodayResponse) -> Unit
@@ -79,6 +80,7 @@ fun TodayRoute(
                 onRefresh = onRetry,
                 onHomeClick = onHomeClick,
                 onAddClick = onAddClick,
+                onContentClick = onContentClick,
                 onLogoutClick = onLogoutClick,
                 onEditClick = onEditClick,
                 onDeleteClick = onDeleteClick
@@ -102,6 +104,7 @@ private fun TodayScreen(
     onRefresh: () -> Unit,
     onHomeClick: () -> Unit,
     onAddClick: () -> Unit,
+    onContentClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onEditClick: (TodayResponse) -> Unit,
     onDeleteClick: (TodayResponse) -> Unit
@@ -171,9 +174,7 @@ private fun TodayScreen(
                     onMeasurementsClick = {
                         // Already on the measurements screen.
                     },
-                    onContentClick = {
-                        // Add navigation when the content screen is available.
-                    },
+                    onContentClick = onContentClick,
                     onProfileClick = {
                         // Add navigation when the profile screen is available.
                     },
@@ -194,7 +195,7 @@ private fun TodayScreen(
                         start = 16.dp,
                         top = 12.dp,
                         end = 16.dp,
-                        bottom = 100.dp
+                        bottom = 24.dp
                     ),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
