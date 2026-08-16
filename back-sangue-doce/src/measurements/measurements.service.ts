@@ -11,7 +11,6 @@ import {
   type CreateMeasurementInput,
   createMeasurementInputSchema,
 } from "./dto/create-measurement.dto";
-import type { Measurement } from "./dto/smart-measurement-response.dto";
 import { MeasurementSmartService } from "./measurement-smart.service";
 import {
   classifyMeasurementMoment,
@@ -181,10 +180,20 @@ export class MeasurementsService {
   async createFromSmartImage(
     userRequest: AuthenticatedRequest,
     file?: UploadedImageFile,
-    uploadContext?: { contentType?: string; fileFields?: string[] },
-  ): Promise<Measurement> {
+    uploadContext?: {
+      contentLength?: string;
+      contentType?: string;
+      fileFields?: string[];
+      headerKeys?: string[];
+      host?: string;
+      transferEncoding?: string;
+      userAgent?: string;
+      xForwardedFor?: string;
+      xForwardedProto?: string;
+    },
+  ): Promise<PublicMeasurement> {
     this.logger.log(
-      `Recebendo imagem para diagnostico Smart. contentType=${uploadContext?.contentType ?? "ausente"} fileFields=${uploadContext?.fileFields?.join(",") || "nenhum"} hasFile=${Boolean(file)}`,
+      `Recebendo imagem para diagnostico Smart. contentType=${uploadContext?.contentType ?? "ausente"} contentLength=${uploadContext?.contentLength ?? "ausente"} transferEncoding=${uploadContext?.transferEncoding ?? "ausente"} host=${uploadContext?.host ?? "ausente"} xForwardedProto=${uploadContext?.xForwardedProto ?? "ausente"} xForwardedFor=${uploadContext?.xForwardedFor ?? "ausente"} userAgent=${uploadContext?.userAgent ?? "ausente"} headerKeys=${uploadContext?.headerKeys?.join(",") || "nenhum"} fileFields=${uploadContext?.fileFields?.join(",") || "nenhum"} hasFile=${Boolean(file)}`,
     );
 
     if (!file) {
@@ -200,10 +209,10 @@ export class MeasurementsService {
 
     const decodedMeasurement = await this.measurementSmartService.sendImageToDecodedSmart(file);
     this.logger.log(
-      `Modo diagnostico ativo: medicao decodificada pelo Smart, sem persistencia. measurement=${JSON.stringify(decodedMeasurement)}`,
+      `Smart decodificou medicao para persistencia. measurement=${JSON.stringify(decodedMeasurement)}`,
     );
 
-    return decodedMeasurement;
+    return this.create(userRequest, decodedMeasurement);
   }
 
   async update(

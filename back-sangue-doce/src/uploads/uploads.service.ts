@@ -9,6 +9,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -24,8 +25,44 @@ const DEFAULT_BUCKET = "sangue-doce";
 const DEFAULT_PUBLIC_PREFIX = "public";
 const DEFAULT_REGION = "us-east-1";
 
+type UploadImageDiagnosticContext = {
+  contentLength?: string;
+  contentType?: string;
+  headerKeys?: string[];
+  host?: string;
+  transferEncoding?: string;
+  userAgent?: string;
+  xForwardedFor?: string;
+  xForwardedProto?: string;
+};
+
+type UploadImageDiagnosticResponse = {
+  ok: boolean;
+  received: {
+    bufferBytes?: number;
+    contentLength?: string;
+    contentType?: string;
+    fieldName?: string;
+    headerKeys: string[];
+    host?: string;
+    mimetype?: string;
+    originalName?: string;
+    size?: number;
+    transferEncoding?: string;
+    userAgent?: string;
+    xForwardedFor?: string;
+    xForwardedProto?: string;
+  };
+};
+
+type UploadedImageDiagnosticFile = UploadedImageFile & {
+  fieldname?: string;
+  originalname?: string;
+};
+
 @Injectable()
 export class UploadsService {
+  private readonly logger = new Logger(UploadsService.name);
   private readonly bucket: string;
   private readonly publicPath: string;
   private readonly publicPrefix: string;
@@ -47,6 +84,43 @@ export class UploadsService {
     this.publicPath =
       configService.get<string>("MINIO_PUBLIC_PATH") ?? `/${this.bucket}/${this.publicPrefix}`;
     this.region = configService.get<string>("MINIO_REGION") ?? DEFAULT_REGION;
+  }
+
+  logReceivedImageDiagnostic(
+    userId: string,
+    file: UploadedImageFile | undefined,
+    context: UploadImageDiagnosticContext,
+  ): UploadImageDiagnosticResponse {
+    const diagnosticFile = file as UploadedImageDiagnosticFile | undefined;
+
+    this.logger.log(
+      `Diagnostico upload image recebido. userId=${userId} contentType=${context.contentType ?? "ausente"} contentLength=${context.contentLength ?? "ausente"} transferEncoding=${context.transferEncoding ?? "ausente"} host=${context.host ?? "ausente"} xForwardedProto=${context.xForwardedProto ?? "ausente"} xForwardedFor=${context.xForwardedFor ?? "ausente"} userAgent=${context.userAgent ?? "ausente"} headerKeys=${context.headerKeys?.join(",") || "nenhum"} hasFile=${Boolean(file)} fieldName=${diagnosticFile?.fieldname ?? "ausente"} originalName=${diagnosticFile?.originalname ?? "ausente"} mimetype=${file?.mimetype ?? "ausente"} size=${file?.size ?? "ausente"} bufferBytes=${file?.buffer?.length ?? "ausente"}`,
+    );
+
+    if (!file) {
+      throw new BadRequestException(
+        `Envie a imagem no campo "image" usando multipart/form-data. Content-Type recebido: ${context.contentType ?? "ausente"}.`,
+      );
+    }
+
+    return {
+      ok: true,
+      received: {
+        bufferBytes: file.buffer.length,
+        contentLength: context.contentLength,
+        contentType: context.contentType,
+        fieldName: diagnosticFile?.fieldname,
+        headerKeys: context.headerKeys ?? [],
+        host: context.host,
+        mimetype: file.mimetype,
+        originalName: diagnosticFile?.originalname,
+        size: file.size,
+        transferEncoding: context.transferEncoding,
+        userAgent: context.userAgent,
+        xForwardedFor: context.xForwardedFor,
+        xForwardedProto: context.xForwardedProto,
+      },
+    };
   }
 
   async uploadUserAvatar(

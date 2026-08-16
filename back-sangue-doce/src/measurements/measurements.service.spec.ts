@@ -19,7 +19,7 @@ describe("MeasurementsService smart image ingestion", () => {
     );
   });
 
-  it("decodes the image through smart service without persisting in diagnostic mode", async () => {
+  it("decodes the image through smart service and persists through the main service flow", async () => {
     const file: UploadedImageFile = {
       buffer: Buffer.from("fake-image"),
       mimetype: "image/png",
@@ -34,14 +34,26 @@ describe("MeasurementsService smart image ingestion", () => {
       noteType: "AFTER_LUNCH",
       timeZone: "America/Manaus",
     };
+    const persistedMeasurement = {
+      id: "measurement-id",
+      userId: request.user.sub,
+      measuredAt: new Date("2026-08-16T17:50:00.000Z"),
+      glucoseValueMgDl: 121,
+      readingContext: "AFTER_MEAL",
+      source: "SENSOR",
+      noteType: "AFTER_LUNCH",
+      noteLabel: "Apos o almoco",
+      createdAt: new Date("2026-08-16T17:51:00.000Z"),
+      updatedAt: new Date("2026-08-16T17:51:00.000Z"),
+    };
     measurementSmartService.sendImageToDecodedSmart.mockResolvedValue(decodedMeasurement);
-    const createSpy = vi.spyOn(service, "create");
+    const createSpy = vi.spyOn(service, "create").mockResolvedValue(persistedMeasurement);
 
     await expect(service.createFromSmartImage(request as never, file)).resolves.toBe(
-      decodedMeasurement,
+      persistedMeasurement,
     );
     expect(measurementSmartService.sendImageToDecodedSmart).toHaveBeenCalledWith(file);
-    expect(createSpy).not.toHaveBeenCalled();
+    expect(createSpy).toHaveBeenCalledWith(request, decodedMeasurement);
   });
 
   it("rejects requests without image file", async () => {

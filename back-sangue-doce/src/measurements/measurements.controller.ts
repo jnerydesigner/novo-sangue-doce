@@ -18,7 +18,6 @@ import {
 import type { Response } from "express";
 import type { CreateMeasurementDto } from "./dto/create-measurement.dto";
 import type { UpdateMeasurementDto } from "./dto/update-measurement.dto";
-import type { Measurement } from "./dto/smart-measurement-response.dto";
 import { MeasurementReportPdfService } from "./measurement-report-pdf.service";
 import {
   MeasurementsService,
@@ -200,17 +199,32 @@ export class MeasurementsController {
   @UseGuards(AuthGuard)
   uploadImageMeasurementToSmart(
     @UploadedFiles() files: MeasurementUploadFiles | undefined,
-    @Headers("content-type") contentType: string | undefined,
+    @Headers() headers: Record<string, string | string[] | undefined>,
     @Request() req: AuthenticatedRequest,
-  ): Promise<Measurement> {
+  ): Promise<PublicMeasurement> {
     const file = files?.image?.[0] ?? files?.file?.[0];
     const fileFields = Object.entries(files ?? {})
       .filter(([, values]) => values?.length)
       .map(([field]) => field);
 
     return this.measurementsService.createFromSmartImage(req, file, {
-      contentType,
+      contentLength: this.getHeader(headers, "content-length"),
+      contentType: this.getHeader(headers, "content-type"),
       fileFields,
+      headerKeys: Object.keys(headers).filter((header) => header.toLowerCase() !== "authorization"),
+      host: this.getHeader(headers, "host"),
+      transferEncoding: this.getHeader(headers, "transfer-encoding"),
+      userAgent: this.getHeader(headers, "user-agent"),
+      xForwardedFor: this.getHeader(headers, "x-forwarded-for"),
+      xForwardedProto: this.getHeader(headers, "x-forwarded-proto"),
     });
+  }
+
+  private getHeader(
+    headers: Record<string, string | string[] | undefined>,
+    name: string,
+  ): string | undefined {
+    const value = headers[name] ?? headers[name.toLowerCase()];
+    return Array.isArray(value) ? value.join(",") : value;
   }
 }
