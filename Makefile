@@ -1,16 +1,27 @@
 SHELL := /bin/sh
 
+ifneq (,$(wildcard .env))
+include .env
+export
+endif
+
 FRONT_DIR := front-sangue-doce
 BACK_DIR := back-sangue-doce
-FRONT_PORT := 3010
-BACK_PORT := 3011
+SMART_DIR := smart-sangue-doce
+FRONT_PORT ?= 3010
+BACK_PORT ?= 3011
+SERVER_PORT ?= $(BACK_PORT)
+SMART_PORT ?= 8040
 API_URL := http://localhost:$(BACK_PORT)
+SMART_URL := http://localhost:$(SMART_PORT)
 
-.PHONY: help install install-frontend install-backend infra-up infra-wait-postgres infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend start stop restart build build-frontend build-backend lint lint-frontend lint-backend biome biome-frontend biome-backend biome-fix biome-fix-frontend biome-fix-backend format format-frontend format-backend check clean
+.PHONY: help install install-frontend install-backend install-smart install-smart-ocr infra-up infra-wait-postgres infra-down prisma-deploy prisma-generate prisma-migrate prisma-seed dev dev-frontend dev-backend dev-smart start stop restart build build-frontend build-backend build-smart lint lint-frontend lint-backend test-smart biome biome-frontend biome-backend biome-fix biome-fix-frontend biome-fix-backend format format-frontend format-backend check clean
 
 help:
 	@printf "Comandos disponiveis na raiz:\\n"
 	@printf "  make install    Instala dependencias do backend e frontend\\n"
+	@printf "  make install-smart Instala dependencias do smart-sangue-doce\\n"
+	@printf "  make install-smart-ocr Instala Tesseract para OCR local\\n"
 	@printf "  make infra-up   Sobe o PostgreSQL com Docker Compose\\n"
 	@printf "  make infra-down Para o PostgreSQL\\n"
 	@printf "  make prisma-deploy   Aplica migrations Prisma em ambiente preparado\\n"
@@ -20,6 +31,7 @@ help:
 	@printf "  make dev        Sobe PostgreSQL, backend e frontend\\n"
 	@printf "  make dev-backend   Inicia o backend Nest em modo watch\\n"
 	@printf "  make dev-frontend  Inicia o frontend Next em modo dev\\n"
+	@printf "  make dev-smart     Inicia o smart-sangue-doce FastAPI em modo reload\\n"
 	@printf "  make start      Alias para make dev\\n"
 	@printf "  make stop       Para o frontend registrado e processos na porta do backend\\n"
 	@printf "  make restart    Reinicia backend e frontend\\n"
@@ -39,6 +51,14 @@ install-frontend:
 install-backend:
 	cd $(BACK_DIR) && yarn install
 	$(MAKE) prisma-generate
+
+install-smart:
+	cd $(SMART_DIR) && python3 -m venv .venv
+	cd $(SMART_DIR) && . .venv/bin/activate && pip install -r requirements-dev.txt
+
+install-smart-ocr:
+	sudo apt update
+	sudo apt install -y tesseract-ocr tesseract-ocr-por
 
 infra-up:
 	docker compose up -d --remove-orphans postgres
@@ -107,6 +127,10 @@ dev-frontend:
 dev-backend:
 	cd $(BACK_DIR) && SERVER_PORT=$(BACK_PORT) yarn nest start --watch --preserveWatchOutput
 
+dev-smart:
+	@printf "Smart API: $(SMART_URL)\\n"
+	cd $(SMART_DIR) && . .venv/bin/activate && uvicorn app.main:app --reload --port $(SMART_PORT)
+
 start:
 	$(MAKE) dev
 
@@ -137,6 +161,9 @@ build-backend:
 	$(MAKE) prisma-generate
 	cd $(BACK_DIR) && yarn build
 
+build-smart:
+	cd $(SMART_DIR) && . .venv/bin/activate && python -m compileall app tests
+
 lint: lint-backend lint-frontend
 
 lint-frontend:
@@ -144,6 +171,9 @@ lint-frontend:
 
 lint-backend:
 	cd $(BACK_DIR) && yarn lint
+
+test-smart:
+	cd $(SMART_DIR) && . .venv/bin/activate && python -m pytest
 
 biome: biome-backend biome-frontend
 

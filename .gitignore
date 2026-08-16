@@ -48,6 +48,9 @@ lerna-debug.log*
 # Runtime and cache files
 .cache/
 .turbo/
+.pytest_cache/
+__pycache__/
+**/__pycache__/
 .docker/
 .temp/
 .tmp/
@@ -101,4 +104,5 @@ ia/
 /.impeccable
 .local-skills/
 
-/nutrition-facts-label/.venv
+.venv/
+**/.venv/

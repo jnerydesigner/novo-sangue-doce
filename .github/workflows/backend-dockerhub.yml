@@ -12,12 +12,14 @@ on:
     paths:
       - "back-sangue-doce/**"
       - "recipe-importer/**"
+      - "smart-sangue-doce/**"
       - "docker-compose.portainer.yaml"
       - ".github/workflows/backend-dockerhub.yml"
   pull_request:
     paths:
       - "back-sangue-doce/**"
       - "recipe-importer/**"
+      - "smart-sangue-doce/**"
       - "docker-compose.portainer.yaml"
       - ".github/workflows/backend-dockerhub.yml"
   workflow_dispatch:
@@ -25,6 +27,7 @@ on:
 env:
   IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-backend
   RECIPE_IMPORTER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-recipe-importer
+  SMART_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/sangue-doce-smart
 
 jobs:
   build:
@@ -63,6 +66,17 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
 
+      - name: Smart Docker metadata
+        id: smart-meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.SMART_IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix=sha-
+            type=ref,event=branch
+            type=ref,event=tag
+
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
@@ -91,6 +105,17 @@ jobs:
           labels: ${{ steps.recipe-importer-meta.outputs.labels }}
           cache-from: type=gha,scope=recipe-importer
           cache-to: type=gha,mode=max,scope=recipe-importer
+
+      - name: Build and push smart service
+        uses: docker/build-push-action@v7
+        with:
+          context: ./smart-sangue-doce
+          file: ./smart-sangue-doce/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.smart-meta.outputs.tags }}
+          labels: ${{ steps.smart-meta.outputs.labels }}
+          cache-from: type=gha,scope=smart
+          cache-to: type=gha,mode=max,scope=smart
 
   deploy:
     name: Deploy backend image to VPS
@@ -174,9 +199,10 @@ jobs:
           test -r "$ENV_FILE"
           docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml config >/dev/null
 
-          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml pull backend frontend recipe-importer
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml pull backend frontend recipe-importer smart
           docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d postgres minio redis
           docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml run --rm migrate
           docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d --force-recreate --wait recipe-importer
+          docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d --force-recreate --wait smart
           docker compose --env-file "$ENV_FILE" -f docker-compose.portainer.yaml up -d --force-recreate backend frontend
           docker image prune -f

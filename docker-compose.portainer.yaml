@@ -1,4 +1,25 @@
 services:
+  smart:
+    image: ${SMART_IMAGE:-jandernery/sangue-doce-smart:latest}
+    container_name: sangue-doce-smart
+    restart: unless-stopped
+    networks:
+      - sangue_doce_internal
+    expose:
+      - "8040"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8040/health', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   recipe-importer:
     image: ${RECIPE_IMPORTER_IMAGE:-jandernery/sangue-doce-recipe-importer:latest}
     container_name: sangue-doce-recipe-importer
@@ -169,6 +190,8 @@ services:
       AWS_S3_BUCKET: ${AWS_S3_BUCKET:-sangue-doce}
       # Endereco interno fixo da rede Docker. Nao usar localhost nem a porta antiga 8000.
       RECIPE_IMPORTER_URL: http://recipe-importer:8030
+      # Endereco interno fixo da rede Docker para OCR/IA de medicoes.
+      SMART_URL: http://smart:8040
     depends_on:
       postgres:
         condition: service_healthy
@@ -181,6 +204,8 @@ services:
       redis:
         condition: service_healthy
       recipe-importer:
+        condition: service_healthy
+      smart:
         condition: service_healthy
     networks:
       - sangue_doce_internal

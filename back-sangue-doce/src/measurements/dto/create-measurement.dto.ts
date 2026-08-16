@@ -14,6 +14,7 @@ export const createMeasurementSchema = z.object({
     })
     .optional(),
   measuredAt: z.iso.datetime({
+    offset: true,
     local: true,
     message: "Measurement date must be a valid ISO datetime.",
   }),

@@ -1,4 +1,12 @@
 services:
+  # smart:
+  #   build:
+  #     context: ./smart-sangue-doce
+  #   container_name: sangue-doce-smart
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${SMART_PORT:-8040}:8040"
+
   # recipe-importer:
   #   build:
   #     context: ./recipe-importer

@@ -1,5 +1,6 @@
 import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import { AuthService } from "@app/auth/auth.service";
+import type { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
 import { UsersService } from "@app/users/users.service";
 import { PrismaService } from "@infra/database/prisma.service";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
@@ -10,6 +11,7 @@ import {
   type CreateMeasurementInput,
   createMeasurementInputSchema,
 } from "./dto/create-measurement.dto";
+import { MeasurementSmartService } from "./measurement-smart.service";
 import {
   classifyMeasurementMoment,
   MEASUREMENT_NOTE_LABELS,
@@ -71,6 +73,7 @@ export class MeasurementsService {
     private readonly prisma: PrismaService,
     private readonly userService: UsersService,
     private readonly authService: AuthService,
+    private readonly measurementSmartService: MeasurementSmartService,
   ) {}
 
   async create(
@@ -170,6 +173,24 @@ export class MeasurementsService {
 
       throw error;
     }
+  }
+
+  async createFromSmartImage(
+    userRequest: AuthenticatedRequest,
+    file?: UploadedImageFile,
+  ): Promise<PublicMeasurement> {
+    if (!file) {
+      throw new BadRequestException('Envie a imagem no campo "image" usando multipart/form-data.');
+    }
+
+    const decodedMeasurement = await this.measurementSmartService.sendImageToDecodedSmart(file);
+
+    return this.create(userRequest, {
+      measuredAt: decodedMeasurement.measuredAt,
+      glucoseValueMgDl: decodedMeasurement.glucoseValueMgDl,
+      source: decodedMeasurement.source,
+      timeZone: decodedMeasurement.timeZone,
+    });
   }
 
   async update(

@@ -58,7 +58,7 @@ import { UsersModule } from "./users/users.module";
     NewsletterModule,
     UploadsModule,
     SocialPublicationsModule,
-    FoodsModule
+    FoodsModule,
   ],
   controllers: [],
   providers: [
