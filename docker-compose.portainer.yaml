@@ -183,6 +183,7 @@ services:
       MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-http://minio:9000}
       MINIO_PUBLIC_PATH: ${MINIO_PUBLIC_PATH:-/sangue-doce/public}
       RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM: ${RESEND_FROM:-Sangue Doce <no-reply@sanguedoce.com.br>}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: ${AWS_REGION:-us-east-1}

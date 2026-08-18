@@ -48,9 +48,9 @@ function getErrorMessage(error: unknown) {
   }
 }
 
-export function SignupForm() {
+export function SignupForm({ initialEmail = "", invited = false }: { initialEmail?: string; invited?: boolean }) {
   const router = useRouter();
-  const [formState, setFormState] = useState<FormState>(initialFormState);
+  const [formState, setFormState] = useState<FormState>({ ...initialFormState, email: initialEmail });
   const [errorMessage, setErrorMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -117,6 +117,7 @@ export function SignupForm() {
           onChange={(event) => updateField("email", event.target.value)}
           placeholder="voce@exemplo.com"
           required
+          readOnly={invited}
           type="email"
           value={formState.email}
         />

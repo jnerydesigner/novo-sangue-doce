@@ -15,6 +15,7 @@ import { FoodsModule } from "./foods/foods.module";
 import { HealthModule } from "./health/health.module";
 import { ImageModule } from "./image/image.module";
 import { InstitutionalPublicationsModule } from "./institutional-publications/institutional-publications.module";
+import { InvitesModule } from "./invites/invites.module";
 import { MeasurementsModule } from "./measurements/measurements.module";
 import { NewsletterModule } from "./newsletter/newsletter.module";
 import { PostBannerModule } from "./post-banners/post-banner.module";
@@ -27,6 +28,7 @@ import { UsersModule } from "./users/users.module";
 @Global()
 @Module({
   imports: [
+    InvitesModule,
     ConfigModule.forRoot({
       envFilePath: ".env",
       isGlobal: true,

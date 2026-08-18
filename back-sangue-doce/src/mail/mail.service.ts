@@ -1,8 +1,8 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import handlebars from "handlebars";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { type CreateEmailResponse, Resend } from "resend";
 import { AppLogger } from "src/@shared/logger/app-logger.provider";
 import { SystemEmailParams } from "./types/system-email-params.type";
@@ -29,7 +29,7 @@ export class MailService {
     const from =
       this.configService.get<string>("RESEND_FROM") ??
       this.configService.get<string>("MAILER_FROM") ??
-      "Sangue Doce <onboarding@resend.dev>";
+      "Sangue Doce <jander.webmaster@gmail.com>";
 
     const html = this.systemEmailTemplate({
       actionLabel: params.actionLabel ?? "Acessar Sangue Doce",

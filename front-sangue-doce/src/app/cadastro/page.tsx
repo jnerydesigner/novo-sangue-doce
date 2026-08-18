@@ -12,8 +12,11 @@ export const metadata: Metadata = {
 // Reative quando as regras de limite de novos cadastros estiverem prontas.
 const SIGNUP_ENABLED = false;
 
-export default function SignupPage() {
-  if (!SIGNUP_ENABLED) {
+type SignupPageProps = { searchParams: Promise<{ email?: string }> };
+
+export default async function SignupPage({ searchParams }: SignupPageProps) {
+  const { email } = await searchParams;
+  if (!SIGNUP_ENABLED && !email) {
     redirect("/login");
   }
 
@@ -43,7 +46,7 @@ export default function SignupPage() {
             Seus dados iniciais liberam o painel de acompanhamento.
           </p>
 
-          <SignupForm />
+          <SignupForm initialEmail={email ?? ""} invited={Boolean(email)} />
         </div>
       </section>
     </main>
