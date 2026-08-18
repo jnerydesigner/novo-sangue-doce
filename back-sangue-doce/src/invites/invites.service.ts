@@ -2,6 +2,7 @@ import { PrismaService } from "@app/@infra/database/prisma.service";
 import { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   Logger,
   NotFoundException,
@@ -27,6 +28,28 @@ export class InvitesService {
 
     const email = guestEmail.trim().toLowerCase();
     const rawToken = randomBytes(32).toString("hex");
+
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
+      select: { id: true },
+    });
+
+    if (existingUser) {
+      throw new ConflictException("Este e-mail já possui uma conta.");
+    }
+
+    const existingInvite = await this.prisma.invite.findFirst({
+      where: {
+        email,
+        status: "PENDING",
+        expiresAt: { gt: new Date() },
+      },
+      select: { id: true },
+    });
+
+    if (existingInvite) {
+      throw new ConflictException("Já existe um convite pendente para este e-mail.");
+    }
 
     await this.prisma.invite.create({
       data: {
