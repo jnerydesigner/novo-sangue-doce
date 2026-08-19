@@ -41,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -122,6 +123,7 @@ class ProfileActivity : ComponentActivity() {
                     ProfileScreen(
                         profileState = profileState,
                         onRetry = ::loadProfile,
+                        onRefresh = ::loadProfile,
                         onHomeClick = {
                             startActivity(Intent(this@ProfileActivity, HomeActivity::class.java))
                             finish()
@@ -175,6 +177,7 @@ class ProfileActivity : ComponentActivity() {
 private fun ProfileScreen(
     profileState: ProfileUiState,
     onRetry: () -> Unit,
+    onRefresh: () -> Unit,
     onHomeClick: () -> Unit,
     onMeasurementsClick: () -> Unit,
     onContentClick: () -> Unit,
@@ -212,19 +215,16 @@ private fun ProfileScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(SangueDoceBackground),
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 12.dp,
-                end = 16.dp,
-                bottom = 24.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+        PullToRefreshBox(
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            isRefreshing = profileState is ProfileUiState.Loading,
+            onRefresh = onRefresh
         ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().background(SangueDoceBackground),
+                contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
             item {
                 when (profileState) {
                     ProfileUiState.Loading -> LoadingProfileCard()
@@ -257,6 +257,7 @@ private fun ProfileScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Sair")
                 }
+            }
             }
         }
     }
