@@ -85,7 +85,11 @@ def extract_measurement_from_path(
     card_text = ocr_current_card(path)
     logger.info("OCR card atual concluido. chars=%s preview=%s", len(card_text), preview_text(card_text))
     card_reading = extract_reading_from_card(card_text, text)
-    current_reading = digits_reading or card_reading or basic["currentReadingMgDl"]
+    current_reading = first_valid_reading(
+        digits_reading,
+        card_reading,
+        basic["currentReadingMgDl"],
+    )
     estimated_time, confidence = estimate_time_from_chart(path, basic["foundTimes"])
     filename_timestamp = timestamp_from_filename(original_filename)
     measured_at, warnings = build_measured_at(
@@ -183,7 +187,7 @@ def ocr_current_card(path: Path) -> str:
 def ocr_digits_reading(path: Path) -> str:
     image = Image.open(path).convert("L")
     width, height = image.size
-    image = image.crop((int(width * 0.27), int(height * 0.135), int(width * 0.56), int(height * 0.22)))
+    image = image.crop((int(width * 0.24), int(height * 0.12), int(width * 0.62), int(height * 0.235)))
     image = image.resize((image.width * 4, image.height * 4))
     image = ImageOps.autocontrast(image)
     image = image.point(lambda pixel: 0 if pixel < 150 else 255)
@@ -260,6 +264,11 @@ def parse_time_to_minutes(value: str) -> int | None:
     if not (0 <= hour <= 23 and 0 <= minute <= 59):
         return None
     return hour * 60 + minute
+
+
+def first_valid_reading(*readings: int | None) -> int | None:
+    fallback = next((reading for reading in readings if reading is not None), None)
+    return next((reading for reading in readings if reading is not None and 40 <= reading <= 450), fallback)
 
 
 def preview_text(value: str, limit: int = 180) -> str:

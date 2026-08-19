@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -106,11 +107,17 @@ fun ReadingsScreen(
 private fun ReadingCard(
     reading: ReadingUi
 ) {
+    val classificationColor = glucoseClassificationColor(reading.glucose)
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = classificationColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
@@ -131,7 +138,7 @@ private fun ReadingCard(
             Text(
                 text = "${reading.glucose} mg/dL",
                 modifier = Modifier.padding(top = 6.dp),
-                color = glucoseColor(reading.glucose),
+                color = classificationColor,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -143,14 +150,5 @@ private fun ReadingCard(
                 fontSize = 14.sp
             )
         }
-    }
-}
-
-private fun glucoseColor(value: Int): Color {
-    return when {
-        value < 80 -> Color(0xFFD63031)
-        value <= 120 -> Color(0xFF00B894)
-        value <= 180 -> Color(0xFFF39C12)
-        else -> Color(0xFFD63031)
     }
 }

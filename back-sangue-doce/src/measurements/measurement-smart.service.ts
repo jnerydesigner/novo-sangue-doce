@@ -15,7 +15,7 @@ export class MeasurementSmartService {
     const form = new FormData();
     const imageBytes = new Uint8Array(file.buffer);
     const blob = new Blob([imageBytes], { type: file.mimetype });
-    form.append("file", blob, "measurement.png");
+    form.append("file", blob, file.originalname || this.getFallbackFilename(file.mimetype));
     form.append("time_zone", "America/Manaus");
     form.append("sent_at", new Date().toISOString());
     const smartUrl = process.env.SMART_URL ?? "http://localhost:8040";
@@ -67,5 +67,11 @@ export class MeasurementSmartService {
     }
 
     return JSON.stringify(error);
+  }
+
+  private getFallbackFilename(mimetype: string): string {
+    if (mimetype === "image/png") return "measurement.png";
+    if (mimetype === "image/webp") return "measurement.webp";
+    return "measurement.jpg";
   }
 }

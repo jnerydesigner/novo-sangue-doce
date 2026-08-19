@@ -18,25 +18,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,11 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.sanguedoce.app.component.AppDrawer
 import br.com.sanguedoce.app.model.TodayResponse
 import br.com.sanguedoce.app.ui.SangueDocePrimary
+import br.com.sanguedoce.app.ui.glucoseClassificationColor
 import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -66,7 +60,7 @@ fun TodayRoute(
     onHomeClick: () -> Unit,
     onAddClick: () -> Unit,
     onContentClick: () -> Unit,
-    onLogoutClick: () -> Unit,
+    onProfileClick: () -> Unit,
     onEditClick: (TodayResponse) -> Unit,
     onDeleteClick: (TodayResponse) -> Unit
 ) {
@@ -81,7 +75,7 @@ fun TodayRoute(
                 onHomeClick = onHomeClick,
                 onAddClick = onAddClick,
                 onContentClick = onContentClick,
-                onLogoutClick = onLogoutClick,
+                onProfileClick = onProfileClick,
                 onEditClick = onEditClick,
                 onDeleteClick = onDeleteClick
             )
@@ -105,131 +99,98 @@ private fun TodayScreen(
     onHomeClick: () -> Unit,
     onAddClick: () -> Unit,
     onContentClick: () -> Unit,
-    onLogoutClick: () -> Unit,
+    onProfileClick: () -> Unit,
     onEditClick: (TodayResponse) -> Unit,
     onDeleteClick: (TodayResponse) -> Unit
 ) {
     val currentDate = remember { currentDisplayDate() }
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            AppDrawer(
-                selectedItem = "home",
-                onItemClick = {
-                    scope.launch {
-                        drawerState.close()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = ScreenBackground,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(
+                            text = "Leituras de hoje",
+                            color = Ink,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        Text(
+                            text = currentDate,
+                            color = MutedText,
+                            fontSize = 14.sp
+                        )
                     }
                 },
-                onLogoutClick = onLogoutClick
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = ScreenBackground
+                )
+            )
+        },
+        bottomBar = {
+            SangueDoceBottomBar(
+                selectedItem = "measurements",
+                onHomeClick = onHomeClick,
+                onMeasurementsClick = {
+                    // Already on the measurements screen.
+                },
+                onContentClick = onContentClick,
+                onProfileClick = onProfileClick,
+                onBloodClick = onAddClick
             )
         }
-    ) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            containerColor = ScreenBackground,
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Column {
-                            Text(
-                                text = "Leituras de hoje",
-                                color = Ink,
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text(
-                                text = currentDate,
-                                color = MutedText,
-                                fontSize = 14.sp
-                            )
-                        }
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                scope.launch {
-                                    drawerState.open()
-                                }
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Menu"
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = ScreenBackground
-                    )
-                )
-            },
-            bottomBar = {
-                SangueDoceBottomBar(
-                    selectedItem = "measurements",
-                    onHomeClick = onHomeClick,
-                    onMeasurementsClick = {
-                        // Already on the measurements screen.
-                    },
-                    onContentClick = onContentClick,
-                    onProfileClick = {
-                        // Add navigation when the profile screen is available.
-                    },
-                    onBloodClick = onAddClick
-                )
-            }
-        ) { innerPadding ->
-            PullToRefreshBox(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                isRefreshing = isRefreshing,
-                onRefresh = onRefresh
+    ) { innerPadding ->
+        PullToRefreshBox(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    top = 12.dp,
+                    end = 16.dp,
+                    bottom = 24.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(
-                        start = 16.dp,
-                        top = 12.dp,
-                        end = 16.dp,
-                        bottom = 24.dp
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    if (readings.isEmpty()) {
-                        item {
-                            EmptyContent(
-                                modifier = Modifier.fillParentMaxSize(),
-                                onAddClick = onAddClick
-                            )
-                        }
-                    } else {
-                        item {
-                            Text(
-                                text = readingCountLabel(readings.size),
-                                modifier = Modifier.padding(
-                                    start = 4.dp,
-                                    bottom = 2.dp
-                                ),
-                                color = MutedText,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
+                if (readings.isEmpty()) {
+                    item {
+                        EmptyContent(
+                            modifier = Modifier.fillParentMaxSize(),
+                            onAddClick = onAddClick
+                        )
+                    }
+                } else {
+                    item {
+                        Text(
+                            text = readingCountLabel(readings.size),
+                            modifier = Modifier.padding(
+                                start = 4.dp,
+                                bottom = 2.dp
+                            ),
+                            color = MutedText,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
 
-                        items(
-                            items = readings,
-                            key = { reading -> reading.id }
-                        ) { reading ->
-                            TodayCard(
-                                reading = reading,
-                                onEditClick = onEditClick,
-                                onDeleteClick = onDeleteClick
-                            )
-                        }
+                    items(
+                        items = readings,
+                        key = { reading -> reading.id }
+                    ) { reading ->
+                        TodayCard(
+                            reading = reading,
+                            onEditClick = onEditClick,
+                            onDeleteClick = onDeleteClick
+                        )
                     }
                 }
             }
@@ -243,6 +204,8 @@ private fun TodayCard(
     onEditClick: (TodayResponse) -> Unit,
     onDeleteClick: (TodayResponse) -> Unit
 ) {
+    val classificationColor = glucoseClassificationColor(reading.glucoseValueMgDl)
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
@@ -251,8 +214,7 @@ private fun TodayCard(
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = SangueDocePrimary
-
+            color = classificationColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
@@ -287,7 +249,7 @@ private fun TodayCard(
                 Text(
                     text = "${reading.glucoseValueMgDl} mg/dL",
                     modifier = Modifier.padding(start = 16.dp),
-                    color = glucoseColor(reading.glucoseValueMgDl),
+                    color = classificationColor,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -390,15 +352,6 @@ private fun ErrorContent(
         ) {
             Text("Tentar novamente")
         }
-    }
-}
-
-private fun glucoseColor(value: Int): Color {
-    return when {
-        value < 80 -> Color(0xFFC62828)
-        value <= 120 -> Color(0xFF00875A)
-        value <= 180 -> Color(0xFFB26A00)
-        else -> Color(0xFFC62828)
     }
 }
 

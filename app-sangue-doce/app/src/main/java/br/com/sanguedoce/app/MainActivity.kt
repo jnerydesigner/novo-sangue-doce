@@ -8,18 +8,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsTopHeight
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.sanguedoce.app.api.RetrofitClient
 import br.com.sanguedoce.app.repository.TodayRepository
+import br.com.sanguedoce.app.ui.SangueDoceStatusBarScrim
+import br.com.sanguedoce.app.ui.configureSangueDoceSystemBars
 import br.com.sanguedoce.app.ui.today.TodayRoute
 import br.com.sanguedoce.app.ui.today.TodayViewModel
 import br.com.sanguedoce.app.ui.today.TodayViewModelFactory
@@ -44,6 +41,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configureSangueDoceSystemBars()
 
         val token = AuthSession.getToken(this)
 
@@ -79,10 +77,8 @@ class MainActivity : ComponentActivity() {
                             startActivity(Intent(this@MainActivity, MealsActivity::class.java))
                             finish()
                         },
-                        onLogoutClick = {
-                            AuthSession.signOut(this@MainActivity)
-                            RetrofitClient.clearToken()
-                            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                        onProfileClick = {
+                            startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
                             finish()
                         },
                         onEditClick = { reading ->
@@ -113,14 +109,8 @@ class MainActivity : ComponentActivity() {
                         }
                     )
 
-                    // Android 15+ draws edge-to-edge and ignores statusBarColor.
-                    // This scrim keeps the system-information area visually distinct.
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .fillMaxWidth()
-                            .background(Color(0xFF102746))
-                            .windowInsetsTopHeight(WindowInsets.systemBars)
+                    SangueDoceStatusBarScrim(
+                        modifier = Modifier.align(Alignment.TopCenter)
                     )
                 }
             }

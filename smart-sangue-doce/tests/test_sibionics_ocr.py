@@ -49,3 +49,7 @@ def test_estimate_time_from_axis_fraction_falls_back_when_axis_is_missing():
 
     assert estimated_time == "12:30"
     assert confidence == "baixa"
+
+
+def test_first_valid_reading_ignores_invalid_digits_when_card_is_valid():
+    assert sibionics_ocr.first_valid_reading(15, 169, 169) == 169

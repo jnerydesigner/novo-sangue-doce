@@ -58,7 +58,9 @@ import br.com.sanguedoce.app.ui.SangueDoceCard
 import br.com.sanguedoce.app.ui.SangueDoceInk
 import br.com.sanguedoce.app.ui.SangueDoceMutedText
 import br.com.sanguedoce.app.ui.SangueDocePrimary
+import br.com.sanguedoce.app.ui.SangueDoceStatusBarScrim
 import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
+import br.com.sanguedoce.app.ui.configureSangueDoceSystemBars
 import br.com.sanguedoce.app.ui.home.HomeUiState
 import br.com.sanguedoce.app.ui.home.HomeViewModel
 import br.com.sanguedoce.app.ui.home.HomeViewModelFactory
@@ -73,6 +75,7 @@ class HomeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configureSangueDoceSystemBars()
 
         val token = AuthSession.getToken(this)
 
@@ -93,25 +96,32 @@ class HomeActivity : ComponentActivity() {
                     .uiState
                     .collectAsStateWithLifecycle()
 
-                HomeRoute(
-                    uiState = uiState,
-                    onRetry = viewModel::loadHome,
-                    onHomeClick = {
-                        // Already on the home screen.
-                    },
-                    onMeasurementsClick = {
-                        startActivity(Intent(this@HomeActivity, MainActivity::class.java))
-                    },
-                    onBloodClick = {
-                        startActivity(Intent(this@HomeActivity, AddReadingActivity::class.java))
-                    },
-                    onContentClick = {
-                        startActivity(Intent(this@HomeActivity, MealsActivity::class.java))
-                    },
-                    onProfileClick = {
-                        // Add navigation when the profile screen is available.
-                    }
-                )
+                Box {
+                    HomeRoute(
+                        uiState = uiState,
+                        onRetry = viewModel::loadHome,
+                        onHomeClick = {
+                            // Already on the home screen.
+                        },
+                        onMeasurementsClick = {
+                            startActivity(Intent(this@HomeActivity, MainActivity::class.java))
+                        },
+                        onBloodClick = {
+                            startActivity(Intent(this@HomeActivity, AddReadingActivity::class.java))
+                        },
+                        onContentClick = {
+                            startActivity(Intent(this@HomeActivity, MealsActivity::class.java))
+                        },
+                        onProfileClick = {
+                            startActivity(Intent(this@HomeActivity, ProfileActivity::class.java))
+                            finish()
+                        }
+                    )
+
+                    SangueDoceStatusBarScrim(
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
             }
         }
     }
@@ -569,7 +579,7 @@ private fun HomeScreenPreview() {
                         title = "Glicemia",
                         value = "125 mg/dL",
                         status = "Normal",
-                        tone = "success"
+                        tone = "#2D935B"
                     )
                 )
             ),

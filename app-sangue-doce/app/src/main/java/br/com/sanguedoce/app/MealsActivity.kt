@@ -76,7 +76,9 @@ import br.com.sanguedoce.app.ui.SangueDoceCard
 import br.com.sanguedoce.app.ui.SangueDoceInk
 import br.com.sanguedoce.app.ui.SangueDoceMutedText
 import br.com.sanguedoce.app.ui.SangueDocePrimary
+import br.com.sanguedoce.app.ui.SangueDoceStatusBarScrim
 import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
+import br.com.sanguedoce.app.ui.configureSangueDoceSystemBars
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -126,6 +128,7 @@ private enum class MealsDestination {
 class MealsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configureSangueDoceSystemBars()
 
         val token = AuthSession.getToken(this)
 
@@ -194,146 +197,153 @@ class MealsActivity : ComponentActivity() {
                     }
                 }
 
-                MealsScreen(
-                    uiState = uiState,
-                    destination = destination,
-                    onRetry = {
-                        reloadKey += 1
-                    },
-                    onOpenDetail = { consumption ->
-                        uiState = (uiState as? FoodConsumptionUiState.Success)?.copy(
-                            selectedConsumption = consumption,
-                            isLoadingDetail = true
-                        ) ?: uiState
-                        selectedMealType = consumption.mealType
-                        detailLoadRequest += 1
-                        destination = MealsDestination.Detail
-                    },
-                    onCreateMeal = {
-                        destination = MealsDestination.Create
-                    },
-                    onBackToOverview = {
-                        destination = MealsDestination.Overview
-                        selectedMealType = null
-                    },
-                    draftMealType = draftMealType,
-                    draftNotes = draftNotes,
-                    draftFoodSearch = draftFoodSearch,
-                    foodResults = foodResults,
-                    draftItems = draftItems,
-                    searchingFoods = searchingFoods,
-                    savingMeal = savingMeal,
-                    onDraftMealTypeChange = { draftMealType = it },
-                    onDraftNotesChange = { draftNotes = it },
-                    onDraftFoodSearchChange = { draftFoodSearch = it },
-                    onSearchFoods = {
-                        val search = draftFoodSearch.trim()
-                        if (search.length < 3 || searchingFoods) {
-                            return@MealsScreen
-                        }
-
-                        scope.launch {
-                            searchingFoods = true
-                            try {
-                                foodResults = RetrofitClient.api.searchFoods(search)
-                            } catch (error: Exception) {
-                                Toast.makeText(
-                                    this@MealsActivity,
-                                    "Nao foi possivel buscar alimentos.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } finally {
-                                searchingFoods = false
+                Box {
+                    MealsScreen(
+                        uiState = uiState,
+                        destination = destination,
+                        onRetry = {
+                            reloadKey += 1
+                        },
+                        onOpenDetail = { consumption ->
+                            uiState = (uiState as? FoodConsumptionUiState.Success)?.copy(
+                                selectedConsumption = consumption,
+                                isLoadingDetail = true
+                            ) ?: uiState
+                            selectedMealType = consumption.mealType
+                            detailLoadRequest += 1
+                            destination = MealsDestination.Detail
+                        },
+                        onCreateMeal = {
+                            destination = MealsDestination.Create
+                        },
+                        onBackToOverview = {
+                            destination = MealsDestination.Overview
+                            selectedMealType = null
+                        },
+                        draftMealType = draftMealType,
+                        draftNotes = draftNotes,
+                        draftFoodSearch = draftFoodSearch,
+                        foodResults = foodResults,
+                        draftItems = draftItems,
+                        searchingFoods = searchingFoods,
+                        savingMeal = savingMeal,
+                        onDraftMealTypeChange = { draftMealType = it },
+                        onDraftNotesChange = { draftNotes = it },
+                        onDraftFoodSearchChange = { draftFoodSearch = it },
+                        onSearchFoods = {
+                            val search = draftFoodSearch.trim()
+                            if (search.length < 3 || searchingFoods) {
+                                return@MealsScreen
                             }
-                        }
-                    },
-                    onAddDraftFood = { food ->
-                        draftItems = draftItems + DraftFoodItem(food = food)
-                        draftFoodSearch = ""
-                        foodResults = emptyList()
-                    },
-                    onUpdateDraftFood = { index, item ->
-                        draftItems = draftItems.mapIndexed { currentIndex, currentItem ->
-                            if (currentIndex == index) item else currentItem
-                        }
-                    },
-                    onRemoveDraftFood = { index ->
-                        draftItems = draftItems.filterIndexed { currentIndex, _ -> currentIndex != index }
-                    },
-                    onSaveDraftMeal = {
-                        if (draftItems.isEmpty() || savingMeal) {
-                            return@MealsScreen
-                        }
 
-                        scope.launch {
-                            savingMeal = true
-                            try {
-                                val savedMeal = RetrofitClient.api.createFoodConsumption(
-                                    SaveFoodConsumptionRequest(
-                                        mealType = draftMealType,
-                                        notes = draftNotes.trim().takeIf { it.isNotEmpty() },
-                                        items = draftItems.map { item ->
-                                            SaveFoodConsumptionItemRequest(
-                                                foodId = item.food.id,
-                                                quantity = parseDouble(item.quantity, 100.0),
-                                                unit = item.unit,
-                                                weightG = parseDouble(item.weightG, 100.0)
-                                            )
-                                        }
-                                    )
-                                )
-
-                                uiState = when (val currentState = uiState) {
-                                    is FoodConsumptionUiState.Success -> currentState.copy(
-                                        consumptions = currentState.consumptions
-                                            .filterNot { it.id == savedMeal.id } + savedMeal,
-                                        selectedConsumption = savedMeal
-                                    )
-                                    else -> FoodConsumptionUiState.Success(
-                                        consumptions = listOf(savedMeal),
-                                        selectedConsumption = savedMeal
-                                    )
+                            scope.launch {
+                                searchingFoods = true
+                                try {
+                                    foodResults = RetrofitClient.api.searchFoods(search)
+                                } catch (error: Exception) {
+                                    Toast.makeText(
+                                        this@MealsActivity,
+                                        "Nao foi possivel buscar alimentos.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } finally {
+                                    searchingFoods = false
                                 }
-
-                                draftMealType = "LUNCH"
-                                draftNotes = ""
-                                draftFoodSearch = ""
-                                foodResults = emptyList()
-                                draftItems = emptyList()
-                                selectedMealType = savedMeal.mealType
-                                destination = MealsDestination.Detail
-
-                                Toast.makeText(
-                                    this@MealsActivity,
-                                    "Refeicao salva.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } catch (error: Exception) {
-                                Toast.makeText(
-                                    this@MealsActivity,
-                                    "Nao foi possivel salvar a refeicao.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } finally {
-                                savingMeal = false
                             }
+                        },
+                        onAddDraftFood = { food ->
+                            draftItems = draftItems + DraftFoodItem(food = food)
+                            draftFoodSearch = ""
+                            foodResults = emptyList()
+                        },
+                        onUpdateDraftFood = { index, item ->
+                            draftItems = draftItems.mapIndexed { currentIndex, currentItem ->
+                                if (currentIndex == index) item else currentItem
+                            }
+                        },
+                        onRemoveDraftFood = { index ->
+                            draftItems = draftItems.filterIndexed { currentIndex, _ -> currentIndex != index }
+                        },
+                        onSaveDraftMeal = {
+                            if (draftItems.isEmpty() || savingMeal) {
+                                return@MealsScreen
+                            }
+
+                            scope.launch {
+                                savingMeal = true
+                                try {
+                                    val savedMeal = RetrofitClient.api.createFoodConsumption(
+                                        SaveFoodConsumptionRequest(
+                                            mealType = draftMealType,
+                                            notes = draftNotes.trim().takeIf { it.isNotEmpty() },
+                                            items = draftItems.map { item ->
+                                                SaveFoodConsumptionItemRequest(
+                                                    foodId = item.food.id,
+                                                    quantity = parseDouble(item.quantity, 100.0),
+                                                    unit = item.unit,
+                                                    weightG = parseDouble(item.weightG, 100.0)
+                                                )
+                                            }
+                                        )
+                                    )
+
+                                    uiState = when (val currentState = uiState) {
+                                        is FoodConsumptionUiState.Success -> currentState.copy(
+                                            consumptions = currentState.consumptions
+                                                .filterNot { it.id == savedMeal.id } + savedMeal,
+                                            selectedConsumption = savedMeal
+                                        )
+                                        else -> FoodConsumptionUiState.Success(
+                                            consumptions = listOf(savedMeal),
+                                            selectedConsumption = savedMeal
+                                        )
+                                    }
+
+                                    draftMealType = "LUNCH"
+                                    draftNotes = ""
+                                    draftFoodSearch = ""
+                                    foodResults = emptyList()
+                                    draftItems = emptyList()
+                                    selectedMealType = savedMeal.mealType
+                                    destination = MealsDestination.Detail
+
+                                    Toast.makeText(
+                                        this@MealsActivity,
+                                        "Refeicao salva.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } catch (error: Exception) {
+                                    Toast.makeText(
+                                        this@MealsActivity,
+                                        "Nao foi possivel salvar a refeicao.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } finally {
+                                    savingMeal = false
+                                }
+                            }
+                        },
+                        onHomeClick = {
+                            startActivity(Intent(this@MealsActivity, HomeActivity::class.java))
+                            finish()
+                        },
+                        onMeasurementsClick = {
+                            startActivity(Intent(this@MealsActivity, MainActivity::class.java))
+                            finish()
+                        },
+                        onBloodClick = {
+                            startActivity(Intent(this@MealsActivity, AddReadingActivity::class.java))
+                        },
+                        onProfileClick = {
+                            startActivity(Intent(this@MealsActivity, ProfileActivity::class.java))
+                            finish()
                         }
-                    },
-                    onHomeClick = {
-                        startActivity(Intent(this@MealsActivity, HomeActivity::class.java))
-                        finish()
-                    },
-                    onMeasurementsClick = {
-                        startActivity(Intent(this@MealsActivity, MainActivity::class.java))
-                        finish()
-                    },
-                    onBloodClick = {
-                        startActivity(Intent(this@MealsActivity, AddReadingActivity::class.java))
-                    },
-                    onProfileClick = {
-                        // Add navigation when the profile screen is available.
-                    }
-                )
+                    )
+
+                    SangueDoceStatusBarScrim(
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
             }
         }
     }

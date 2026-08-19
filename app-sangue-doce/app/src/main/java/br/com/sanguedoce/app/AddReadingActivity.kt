@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -49,8 +51,10 @@ import androidx.lifecycle.lifecycleScope
 import br.com.sanguedoce.app.constants.MeasurementNoteType
 import br.com.sanguedoce.app.service.SaveReadingService
 import br.com.sanguedoce.app.service.UploadReadingImageService
+import br.com.sanguedoce.app.ui.SangueDoceStatusBarScrim
 import br.com.sanguedoce.app.ui.componentes.SangueDoceButton
 import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
+import br.com.sanguedoce.app.ui.configureSangueDoceSystemBars
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -70,6 +74,7 @@ class AddReadingActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configureSangueDoceSystemBars()
 
         val editMode = intent.getBooleanExtra(EXTRA_EDIT_MODE, false)
         val measurementId = intent.getStringExtra(EXTRA_MEASUREMENT_ID)
@@ -83,42 +88,52 @@ class AddReadingActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                AddReadingScreen(
-                    editMode = editMode,
-                    initialValue = initialValue,
-                    initialNoteType = initialNoteType,
-                    onBackClick = ::finish,
-                    onHomeClick = {
-                        startActivity(Intent(this@AddReadingActivity, HomeActivity::class.java))
-                        finish()
-                    },
-                    onMeasurementsClick = {
-                        startActivity(Intent(this@AddReadingActivity, MainActivity::class.java))
-                        finish()
-                    },
-                    onContentClick = {
-                        startActivity(Intent(this@AddReadingActivity, MealsActivity::class.java))
-                        finish()
-                    },
-                    onBloodClick = {
-                        // Already on the new measurement screen.
-                    },
-                    onSaveReading = { value, noteType, onFinished ->
-                        saveReading(
-                            value = value,
-                            noteType = noteType,
-                            editMode = editMode,
-                            measurementId = measurementId,
-                            onFinished = onFinished
-                        )
-                    },
-                    onUploadReadingImage = { imageUri, onFinished ->
-                        uploadReadingImage(
-                            imageUri = imageUri,
-                            onFinished = onFinished
-                        )
-                    }
-                )
+                Box {
+                    AddReadingScreen(
+                        editMode = editMode,
+                        initialValue = initialValue,
+                        initialNoteType = initialNoteType,
+                        onBackClick = ::finish,
+                        onHomeClick = {
+                            startActivity(Intent(this@AddReadingActivity, HomeActivity::class.java))
+                            finish()
+                        },
+                        onMeasurementsClick = {
+                            startActivity(Intent(this@AddReadingActivity, MainActivity::class.java))
+                            finish()
+                        },
+                        onContentClick = {
+                            startActivity(Intent(this@AddReadingActivity, MealsActivity::class.java))
+                            finish()
+                        },
+                        onProfileClick = {
+                            startActivity(Intent(this@AddReadingActivity, ProfileActivity::class.java))
+                            finish()
+                        },
+                        onBloodClick = {
+                            // Already on the new measurement screen.
+                        },
+                        onSaveReading = { value, noteType, onFinished ->
+                            saveReading(
+                                value = value,
+                                noteType = noteType,
+                                editMode = editMode,
+                                measurementId = measurementId,
+                                onFinished = onFinished
+                            )
+                        },
+                        onUploadReadingImage = { imageUri, onFinished ->
+                            uploadReadingImage(
+                                imageUri = imageUri,
+                                onFinished = onFinished
+                            )
+                        }
+                    )
+
+                    SangueDoceStatusBarScrim(
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
+                }
             }
         }
     }
@@ -222,6 +237,7 @@ private fun AddReadingScreen(
     onHomeClick: () -> Unit,
     onMeasurementsClick: () -> Unit,
     onContentClick: () -> Unit,
+    onProfileClick: () -> Unit,
     onBloodClick: () -> Unit,
     onSaveReading: (
         value: Int,
@@ -293,9 +309,7 @@ private fun AddReadingScreen(
                 onHomeClick = onHomeClick,
                 onMeasurementsClick = onMeasurementsClick,
                 onContentClick = onContentClick,
-                onProfileClick = {
-                    // Add navigation when the profile screen is available.
-                },
+                onProfileClick = onProfileClick,
                 onBloodClick = onBloodClick
             )
         }
