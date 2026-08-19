@@ -1,7 +1,10 @@
 package br.com.sanguedoce.app
 
 import android.content.Intent
+import retrofit2.HttpException
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -25,6 +28,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,6 +39,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -53,8 +59,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import br.com.sanguedoce.app.api.RetrofitClient
 import br.com.sanguedoce.app.model.ProfileResponse
+import br.com.sanguedoce.app.model.CreateInviteRequest
+import br.com.sanguedoce.app.model.InviteResponse
 import br.com.sanguedoce.app.ui.ProfileUiState
 import br.com.sanguedoce.app.ui.SangueDoceBackground
 import br.com.sanguedoce.app.ui.SangueDoceCard
@@ -65,7 +74,9 @@ import br.com.sanguedoce.app.ui.SangueDoceStatusBarScrim
 import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
 import br.com.sanguedoce.app.ui.configureSangueDoceSystemBars
 import coil3.compose.AsyncImage
+import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 private const val S3_BASE_URL = "https://sangue-doce.s3.us-east-1.amazonaws.com"
 
@@ -124,7 +135,12 @@ class ProfileActivity : ComponentActivity() {
                             finish()
                         },
                         onBloodClick = {
-                            startActivity(Intent(this@ProfileActivity, AddReadingActivity::class.java))
+                            startActivity(
+                                Intent(
+                                    this@ProfileActivity,
+                                    AddReadingActivity::class.java
+                                )
+                            )
                         },
                         onLogoutClick = {
                             AuthSession.signOut(this@ProfileActivity)
@@ -216,8 +232,13 @@ private fun ProfileScreen(
                         message = profileState.message,
                         onRetry = onRetry
                     )
+
                     is ProfileUiState.Success -> ProfileSummaryCard(profileState.profile)
                 }
+            }
+
+            if (profileState is ProfileUiState.Success && profileState.profile.role == "ADMIN") {
+                item { AdminInvitesCard() }
             }
 
             item {
@@ -357,6 +378,154 @@ private fun ProfileInfoRow(
             overflow = TextOverflow.Ellipsis
         )
     }
+}
+
+@Composable
+private fun AdminInvitesCard() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var invites by remember { mutableStateOf<List<InviteResponse>>(emptyList()) }
+    var email by remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(true) }
+    var sending by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf<String?>(null) }
+
+    fun loadInvites() {
+        scope.launch {
+            loading = true
+            invites = runCatching { RetrofitClient.api.getInvites() }.getOrDefault(emptyList())
+            loading = false
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            invites = runCatching { RetrofitClient.api.getInvites() }.getOrDefault(invites)
+            loading = false
+            delay(10_000)
+        }
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(containerColor = SangueDoceCard),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Person, contentDescription = null, tint = SangueDocePrimary)
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    "Convites",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SangueDoceInk
+                )
+            }
+            Text("Envie e acompanhe convites de novos usuários.", color = SangueDoceMutedText)
+            Button(
+                onClick = { email = ""; message = null; showDialog = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Enviar convite")
+            }
+            if (loading) CircularProgressIndicator(modifier = Modifier.size(22.dp))
+            else if (invites.isEmpty()) Text(
+                "Nenhum convite pendente.",
+                color = SangueDoceMutedText
+            )
+            else invites.forEach { invite ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        invite.email ?: "E-mail não informado",
+                        modifier = Modifier.weight(1f),
+                        color = SangueDoceInk,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    TextButton(onClick = {
+                        scope.launch {
+                            runCatching { RetrofitClient.api.resendInvite(invite.id) }.onSuccess { updated ->
+                                invites =
+                                    invites.map { if (it.id == updated.id) updated else it }; message =
+                                "Convite reenviado."; Toast.makeText(
+                                context,
+                                "Convite reenviado.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            }.onFailure { error ->
+                                val detail =
+                                    error.message ?: "Não foi possível reenviar."; message =
+                                detail; Toast.makeText(context, detail, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }) { Text("Reenviar") }
+                }
+            }
+            message?.let { Text(it, color = SangueDocePrimary, fontWeight = FontWeight.SemiBold) }
+        }
+    }
+
+    if (showDialog) AlertDialog(
+        onDismissRequest = { if (!sending) showDialog = false },
+        title = { Text("Enviar convite") },
+        text = {
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("E-mail") },
+                singleLine = true
+            )
+        },
+        confirmButton = {
+            TextButton(
+                enabled = email.contains("@") && !sending,
+                onClick = {
+                    scope.launch {
+                        sending = true; runCatching {
+                        try {
+                            RetrofitClient.api.createInvite(
+                                CreateInviteRequest(email.trim())
+                            )
+                        } catch (error: Exception){
+                            Log.e("INVITE_ERROR", "Falha ao enviar convite", error)
+                            if (error is HttpException) {
+                                Log.e(
+                                    "INVITE_ERROR",
+                                    "HTTP ${error.code()}: ${error.response()?.errorBody()?.string()}"
+                                )
+                            }
+
+                            if (error is JsonSyntaxException) {
+                                Log.e("INVITE_ERROR", "Resposta não corresponde ao JSON esperado", error)
+                            }
+                        }
+                    }.onSuccess {
+                        showDialog = false; message = "Convite enviado."; Toast.makeText(
+                        context,
+                        "Convite enviado com sucesso.",
+                        Toast.LENGTH_SHORT
+                    ).show(); loadInvites()
+                    }.onFailure { error ->
+                        val detail =
+                            error.message ?: "Não foi possível enviar o convite."; message =
+                        detail; Toast.makeText(context, detail, Toast.LENGTH_LONG).show()
+                    }; sending = false
+                    }
+                }) { Text(if (sending) "Enviando..." else "Enviar") }
+        },
+        dismissButton = {
+            TextButton(
+                enabled = !sending,
+                onClick = { showDialog = false }) { Text("Cancelar") }
+        }
+    )
 }
 
 @Composable

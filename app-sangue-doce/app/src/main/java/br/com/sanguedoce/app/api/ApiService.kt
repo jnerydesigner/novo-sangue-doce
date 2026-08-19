@@ -4,6 +4,9 @@ import br.com.sanguedoce.app.model.CreateMeasurementRequest
 import br.com.sanguedoce.app.model.LoginRequest
 import br.com.sanguedoce.app.model.LoginResponse
 import br.com.sanguedoce.app.model.ProfileResponse
+import br.com.sanguedoce.app.model.CreateInviteRequest
+import br.com.sanguedoce.app.model.InviteResponse
+import br.com.sanguedoce.app.model.InviteSendResponse
 import br.com.sanguedoce.app.model.TodayResponse
 import br.com.sanguedoce.app.model.consumptions.FoodConsumptions
 import br.com.sanguedoce.app.model.consumptions.FoodSearchResult
@@ -32,6 +35,15 @@ interface ApiService {
 
     @GET("auth/profile")
     suspend fun getProfile(): ProfileResponse
+
+    @GET("invites")
+    suspend fun getInvites(): List<InviteResponse>
+
+    @POST("invites")
+    suspend fun createInvite(@Body request: CreateInviteRequest): InviteSendResponse
+
+    @POST("invites/{id}/resend")
+    suspend fun resendInvite(@Path("id") id: String): InviteResponse
 
     @GET("measurements/today")
     suspend fun getMeasurementsToday(

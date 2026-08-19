@@ -78,7 +78,11 @@ export class InvitesService {
     });
 
     this.logger.log(`Convite enviado para ${email}`);
-    return link;
+    return {
+      message: "Convite enviado com sucesso.",
+      email,
+      link,
+    };
   }
 
   async acceptInvite(userRequest: AuthenticatedRequest, rawToken: string) {
