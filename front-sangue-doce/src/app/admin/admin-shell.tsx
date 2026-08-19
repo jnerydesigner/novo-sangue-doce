@@ -11,6 +11,7 @@ type AdminShellProps = {
     | "institutional-publications"
     | "taxonomy"
     | "users"
+    | "invites"
     | "authors";
   children: React.ReactNode;
   subtitle?: string;
@@ -48,6 +49,10 @@ const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: s
   users: {
     title: "Usuarios",
     subtitle: "Contas cadastradas e papeis de acesso.",
+  },
+  invites: {
+    title: "Convites",
+    subtitle: "Convites pendentes e reenvio de acesso.",
   },
   authors: {
     title: "Autores",

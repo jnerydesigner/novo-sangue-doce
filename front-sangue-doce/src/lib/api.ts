@@ -18,6 +18,7 @@ export type User = {
   createdAt: string;
   updatedAt: string;
 };
+export type PendingInvite = { id: string; email: string | null; expiresAt: string; createdAt: string };
 
 export type CreateUserPayload = {
   name: string;
@@ -570,6 +571,10 @@ export const api = {
           Authorization: `Bearer ${params.accessToken}`,
         },
       }),
+  },
+  invites: {
+    list: (params: AuthenticatedApiParams) => apiFetch<PendingInvite[]>("/invites", { headers: { Authorization: `Bearer ${params.accessToken}` } }),
+    resend: (id: string, params: AuthenticatedApiParams) => apiFetch<PendingInvite>(`/invites/${id}/resend`, { method: "POST", headers: { Authorization: `Bearer ${params.accessToken}` } }),
   },
   measurements: {
     create: (payload: CreateMeasurementPayload, params: AuthenticatedApiParams) =>

@@ -1,6 +1,7 @@
 import { randomBytes, scrypt as scryptCallback } from "node:crypto";
 import { promisify } from "node:util";
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
+import { PrismaService } from "@app/@infra/database/prisma.service";
 import type { PublicUserType } from "@shared/types/user-public.type";
 import { type CreateUserDto, createUserSchema } from "./dto/create-user.dto";
 import { UserEntity } from "./entities/user.entity";
@@ -11,7 +12,10 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly prisma: PrismaService,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<PublicUserType> {
     const payload = this.parseCreateUser(createUserDto);
@@ -27,8 +31,18 @@ export class UsersService {
 
     try {
       const user = await this.userRepository.create(userEntity);
+      const publicUser = user.toPublic();
 
-      return user.toPublic();
+      await this.prisma.invite.updateMany({
+        where: { email: publicUser.email.toLowerCase(), status: "PENDING" },
+        data: {
+          acceptedById: publicUser.id,
+          acceptedAt: new Date(),
+          status: "ACCEPTED",
+        },
+      });
+
+      return publicUser;
     } catch (error) {
       if (error instanceof UserEmailAlreadyExistsError) {
         throw new ConflictException("E-mail already registered.");

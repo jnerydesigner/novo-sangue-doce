@@ -14,6 +14,7 @@ import {
   Share2,
   Tags,
   Users,
+  Mail,
   Utensils,
 } from "lucide-react";
 
@@ -49,6 +50,7 @@ export const adminSidebarItems: SidebarItem[] = [
   { href: "/admin/publicacoes-institucionais", icon: Landmark, label: "Institucional" },
   { href: "/admin/taxonomia", icon: Tags, label: "Tags e Categorias" },
   { href: "/admin/usuarios", icon: Users, label: "Usuarios" },
+  { href: "/admin/convites", icon: Mail, label: "Convites" },
   { href: "/admin/autores", icon: PenTool, label: "Autores" },
 ];
 
@@ -73,7 +75,7 @@ export const adminSidebarGroups: SidebarGroup[] = [
   },
   {
     label: "Organizacao",
-    items: adminSidebarItems.slice(5, 8),
+    items: adminSidebarItems.slice(5, 9),
   },
 ];
 

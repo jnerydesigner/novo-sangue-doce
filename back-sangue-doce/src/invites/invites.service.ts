@@ -166,6 +166,43 @@ export class InvitesService {
     return { email: invite.email };
   }
 
+  async listPending() {
+    return this.prisma.invite.findMany({
+      where: { status: "PENDING", expiresAt: { gt: new Date() } },
+      select: { id: true, email: true, expiresAt: true, createdAt: true },
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  async resend(id: string) {
+    const invite = await this.prisma.invite.findUnique({ where: { id } });
+    if (!invite || invite.status !== "PENDING") {
+      throw new NotFoundException("Convite pendente não encontrado.");
+    }
+    if (!invite.email) throw new BadRequestException("Este convite não possui e-mail.");
+
+    const rawToken = randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await this.prisma.invite.update({
+      where: { id },
+      data: { tokenHash: this.createHashToken(rawToken), expiresAt },
+    });
+
+    const baseUrl = this.configService.get<string>("FRONTEND_URL") ?? "http://localhost:3010";
+    const link = `${baseUrl.replace(/\/$/, "")}/convite/${rawToken}`;
+    await this.mailService.sendSystemEmail({
+      to: invite.email,
+      subject: "Reenvio do seu convite para o Sangue Doce",
+      title: "Seu convite está esperando por você",
+      intro: "Estamos reenviando seu convite para participar do Sangue Doce.",
+      body: "Clique no botão abaixo para criar sua conta. Este link é válido por 7 dias.",
+      actionLabel: "Criar minha conta",
+      actionUrl: link,
+    });
+
+    return { id, email: invite.email, expiresAt };
+  }
+
   private createHashToken(rawToken: string) {
     return createHash("sha256").update(rawToken).digest("hex");
   }

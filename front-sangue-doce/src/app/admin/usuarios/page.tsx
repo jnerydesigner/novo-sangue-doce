@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminUsersPage() {
   const { accessToken, profile } = await requireAdmin();
-  const users = await api.users.list({ accessToken });
+  const [users, invites] = await Promise.all([api.users.list({ accessToken }), api.invites.list({ accessToken })]);
 
   return (
     <AdminShell
@@ -17,7 +17,7 @@ export default async function AdminUsersPage() {
       userRole={profile.role}
     >
       <section className="grid gap-5">
-        <UsersList initialUsers={users} />
+        <UsersList initialUsers={users} initialInvites={invites} showInvites={false} />
       </section>
     </AdminShell>
   );
