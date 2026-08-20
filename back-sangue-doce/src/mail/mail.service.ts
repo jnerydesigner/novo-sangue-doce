@@ -63,6 +63,11 @@ export class MailService {
     this.logger.log(JSON.stringify(data, null, 2), "MailService.sendSystemEmail");
 
     if (error) {
+      this.logger.error(
+        `Resend rejeitou o envio do e-mail: ${error.message}`,
+        JSON.stringify(error),
+        "MailService.sendSystemEmail",
+      );
       throw new InternalServerErrorException(error.message);
     }
 
