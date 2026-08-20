@@ -11,12 +11,14 @@ import { SystemEmailParams } from "./types/system-email-params.type";
 export class MailService {
   private readonly systemEmailTemplate: HandlebarsTemplateDelegate;
   private readonly logoUrl: string = `https://sangue-doce.s3.us-east-1.amazonaws.com/sangue-doce-logo-small.png`;
-  private readonly logger: AppLogger = new AppLogger();
+  private readonly logger: AppLogger;
 
   constructor(
     private readonly resend: Resend,
     private readonly configService: ConfigService,
+    appLogger: AppLogger,
   ) {
+    this.logger = appLogger;
     const templatePath = join(__dirname, "templates", "system-email.hbs");
     this.systemEmailTemplate = handlebars.compile(readFileSync(templatePath, "utf8"), {
       strict: true,

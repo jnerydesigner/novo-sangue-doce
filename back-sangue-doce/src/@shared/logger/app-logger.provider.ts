@@ -1,9 +1,11 @@
-import { Injectable, Logger, type LoggerService, Scope } from "@nestjs/common";
+import { Injectable, type LoggerService, Scope } from "@nestjs/common";
+import { Logger as PinoLogger } from "nestjs-pino";
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class AppLogger implements LoggerService {
   private context = "SangueDoce";
-  private readonly logger = new Logger();
+
+  constructor(private readonly logger: PinoLogger) {}
 
   setContext(context: string) {
     this.context = context;
@@ -14,7 +16,7 @@ export class AppLogger implements LoggerService {
   }
 
   error(message: string, trace?: string, context?: string) {
-    this.logger.error(message, trace, context ?? this.context);
+    this.logger.error({ err: trace }, message, context ?? this.context);
   }
 
   warn(message: string, context?: string) {

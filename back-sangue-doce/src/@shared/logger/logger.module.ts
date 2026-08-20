@@ -21,6 +21,19 @@ type PinoSerializedResponse = {
     PinoLoggerModule.forRoot({
       pinoHttp: {
         level: process.env.LOG_LEVEL || "info",
+        transport:
+          process.env.NODE_ENV === "production"
+            ? undefined
+            : {
+                target: "pino-pretty",
+                options: {
+                  colorize: true,
+                  translateTime: "SYS:standard",
+                  singleLine: true,
+                  messageFormat: "[{context}] {msg}",
+                  ignore: "pid,hostname,context,service,environment,req,res,responseTime",
+                },
+              },
         genReqId: (request) => {
           const requestId = request.headers["x-request-id"];
 
@@ -40,6 +53,11 @@ type PinoSerializedResponse = {
           service: "sangue-doce-api",
           environment: process.env.NODE_ENV ?? "development",
         }),
+        customAttributeKeys: {
+          req: "req",
+          res: "res",
+          responseTime: "responseTime",
+        },
         serializers: {
           req(request: PinoSerializedRequest) {
             return {
