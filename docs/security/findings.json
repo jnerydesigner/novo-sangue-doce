@@ -1,0 +1,19 @@
+[
+  {
+    "verdict": "confirmed",
+    "title": "Unauthenticated endpoint triggers global food-image processing",
+    "description": "POST /foods/images/process-all is reachable without authentication and enqueues one processing job for every food record. An unauthenticated attacker can repeat the request to consume Redis and worker capacity, causing resource exhaustion and potentially service degradation.",
+    "root_cause": "FoodsController.processAllImages in src/foods/foods.controller.ts does not enforce authentication and administrative authorization, allowing unauthenticated callers to enqueue global processing work.",
+    "intended_behavior": "Global image processing is an administrative maintenance operation and should only be started by an authorized administrator, with protection against duplicate or repeated jobs.",
+    "trace": [
+      {"kind":"entrypoint","file":"back-sangue-doce/src/foods/foods.controller.ts","line":39,"scope":"processAllImages","description":"Exposes POST foods/images/process-all without a route guard."},
+      {"kind":"propagation","file":"back-sangue-doce/src/foods/foods.service.ts","line":47,"scope":"queueImagesForAllFoods","description":"Lists all foods and iterates over the complete dataset."},
+      {"kind":"sink","file":"back-sangue-doce/src/foods/foods-images.queue.ts","line":11,"scope":"add","description":"Adds a processing job to the BullMQ queue for each food."}
+    ],
+    "conditions": [],
+    "execution": {"attacker_perspective":"Unauthenticated internet client able to reach the backend.","payloads":["POST /foods/images/process-all"],"instructions":["Send the POST request repeatedly without an Authorization header."],"expected_result":"The API accepts the request and enqueues jobs for all food records."},
+    "remediation": {"strategy":"Require AuthGuard and Role.ADMIN on the endpoint, then add queue deduplication and rate/cooldown controls.","code_changes":[{"file_name":"back-sangue-doce/src/foods/foods.controller.ts","fixed_code":"@UseGuards(AuthGuard, RolesGuard)\n@Roles(Role.ADMIN)\n@Post('images/process-all')"}]},
+    "severity": {"likelihood":{"score":"high","reason":"The route is directly reachable without credentials and can be called repeatedly."},"impact":{"score":"high","reason":"It can enqueue work proportional to the entire food dataset and consume shared queue and worker resources."},"overall_severity":"high"},
+    "confidence": {"score":"high","reason":"The route, missing guards, dataset loop, and queue sink are directly visible in source."}
+  }
+]

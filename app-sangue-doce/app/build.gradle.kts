@@ -105,3 +105,16 @@ dependencies {
 
 
 }
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.forEach { output ->
+            val versionName =
+                output.versionName.orNull ?: "0.0.0"
+
+            output.outputFileName.set(
+                "sangue-doce-v${versionName}-${variant.name}.apk"
+            )
+        }
+    }
+}

@@ -1,4 +1,7 @@
 import { AuthGuard } from '@app/@infra/guard/auth.guard';
+import { RolesGuard } from '@app/@infra/guard/roles.guard';
+import { Roles } from '@app/auth/decorators/roles.decorator';
+import { Role } from '@app/auth/enums/role.enum';
 import type { UploadedImageFile } from '@app/uploads/types/uploaded-image-file.type';
 import { Body, Controller, Get, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -37,6 +40,8 @@ export class FoodsController {
     }
 
     @Post('images/process-all')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     async processAllImages() {
         return this.foodsService.queueImagesForAllFoods();
     }
