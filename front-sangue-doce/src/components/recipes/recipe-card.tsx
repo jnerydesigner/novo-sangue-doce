@@ -7,7 +7,7 @@ import { totalRecipeMinutes } from "@/lib/recipes";
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
     <article className="group h-full overflow-hidden rounded-xl bg-surface shadow-editorial">
-      <Link className="flex h-full flex-col" href={`/receitas/${recipe.slug}`}>
+      <Link className="flex h-full flex-col" href={`/recipes/${recipe.slug}`}>
         <div className="relative aspect-[4/3] overflow-hidden bg-subtle">
           <Image
             alt={recipe.coverImageAlt ?? recipe.title}

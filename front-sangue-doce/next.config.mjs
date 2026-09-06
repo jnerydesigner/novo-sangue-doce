@@ -11,6 +11,42 @@ const s3Url = new URL(s3PublicUrl);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      { source: "/materias", destination: "/articles", permanent: true },
+      { source: "/materias/:slug", destination: "/articles/:slug", permanent: true },
+      { source: "/receitas", destination: "/recipes", permanent: true },
+      { source: "/receitas/:slug", destination: "/recipes/:slug", permanent: true },
+      { source: "/autores/:slug", destination: "/authors/:slug", permanent: true },
+      { source: "/cadastro", destination: "/signup", permanent: true },
+      { source: "/contato", destination: "/contact", permanent: true },
+      { source: "/convite/:token", destination: "/invite/:token", permanent: true },
+      { source: "/guias/antes-da-consulta", destination: "/guides/before-appointment", permanent: true },
+      { source: "/guias/depois-do-exercicio", destination: "/guides/after-exercise", permanent: true },
+      { source: "/guias/no-mercado", destination: "/guides/at-the-market", permanent: true },
+      { source: "/sobre", destination: "/about", permanent: true },
+      { source: "/privacidade", destination: "/privacy", permanent: true },
+      { source: "/termos-de-servico", destination: "/terms-of-service", permanent: true },
+      { source: "/exclusao-de-dados", destination: "/data-deletion", permanent: true },
+      { source: "/admin/autores", destination: "/admin/authors", permanent: true },
+      { source: "/admin/convites", destination: "/admin/invites", permanent: true },
+      { source: "/admin/receitas", destination: "/admin/recipes", permanent: true },
+      { source: "/admin/receitas/nova", destination: "/admin/recipes/new", permanent: true },
+      {
+        source: "/admin/publicacoes-sociais",
+        destination: "/admin/social-publications",
+        permanent: true,
+      },
+      {
+        source: "/admin/publicacoes-institucionais",
+        destination: "/admin/institutional-publications",
+        permanent: true,
+      },
+      { source: "/admin/taxonomia", destination: "/admin/taxonomy", permanent: true },
+      { source: "/admin/usuarios", destination: "/admin/users", permanent: true },
+      { source: "/admin/posts/novo", destination: "/admin/posts/new", permanent: true },
+    ];
+  },
   images: {
     dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
     unoptimized: process.env.NEXT_IMAGE_UNOPTIMIZED === "true",

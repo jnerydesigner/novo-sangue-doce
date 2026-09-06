@@ -40,7 +40,7 @@ export function DraftPreview({ post }: DraftPreviewProps) {
         </p>
         <Link
           className="mt-5 inline-flex rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep"
-          href="/admin/posts/novo"
+          href="/admin/posts/new"
         >
           Criar materia
         </Link>
@@ -73,7 +73,7 @@ export function DraftPreview({ post }: DraftPreviewProps) {
             <PublishPostButton post={post} />
             <Link
               className="inline-flex w-full items-center justify-center rounded-lg border border-lineStrong px-4 py-2.5 text-sm font-semibold text-inkSoft transition hover:-translate-y-px hover:bg-paper2 sm:w-auto"
-              href={`/admin/posts/novo?id=${post.id}`}
+              href={`/admin/posts/new?id=${post.id}`}
             >
               Editar
             </Link>

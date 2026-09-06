@@ -51,7 +51,7 @@ export function buildArticleJsonLd(post: Post) {
         },
         mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": `${SITE_URL}/materias/${post.slug}`,
+          "@id": `${SITE_URL}/articles/${post.slug}`,
         },
       },
       {
@@ -62,13 +62,13 @@ export function buildArticleJsonLd(post: Post) {
             "@type": "ListItem",
             position: 2,
             name: "Matérias",
-            item: `${SITE_URL}/materias`,
+            item: `${SITE_URL}/articles`,
           },
           {
             "@type": "ListItem",
             position: 3,
             name: post.title,
-            item: `${SITE_URL}/materias/${post.slug}`,
+            item: `${SITE_URL}/articles/${post.slug}`,
           },
         ],
       },

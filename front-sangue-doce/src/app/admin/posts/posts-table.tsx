@@ -212,7 +212,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                     <div className="flex flex-wrap justify-end gap-2">
                       <Link
                         className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                        href={`/admin/posts/novo?id=${post.id}`}
+                        href={`/admin/posts/new?id=${post.id}`}
                       >
                         Editar
                       </Link>
@@ -220,7 +220,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                         <>
                           <Link
                             className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                            href={`/materias/${post.slug}`}
+                            href={`/articles/${post.slug}`}
                           >
                             Ver site
                           </Link>
@@ -340,7 +340,7 @@ export function PostsTable({ posts }: PostsTableProps) {
               <div className="grid min-w-0 gap-2 border-t border-line pt-4 sm:grid-cols-2">
                 <Link
                   className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-center text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                  href={`/admin/posts/novo?id=${post.id}`}
+                  href={`/admin/posts/new?id=${post.id}`}
                 >
                   Editar
                 </Link>
@@ -348,7 +348,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                   <>
                     <Link
                       className="w-full min-w-0 whitespace-normal break-words rounded-lg border border-lineStrong px-3 py-2 text-center text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                      href={`/materias/${post.slug}`}
+                      href={`/articles/${post.slug}`}
                     >
                       Ver site
                     </Link>

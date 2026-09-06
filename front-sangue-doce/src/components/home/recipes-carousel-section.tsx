@@ -31,7 +31,7 @@ export function RecipesCarouselSection({ recipes }: { recipes: Recipe[] }) {
               Em breve, pratos com porções, preparo claro e informações nutricionais para ajudar nas escolhas do dia a dia.
             </p>
           </div>
-          <Link className="inline-flex shrink-0 items-center justify-center rounded-lg border border-lineStrong px-5 py-3 text-sm font-bold text-navy transition hover:bg-subtle" href="/materias">
+          <Link className="inline-flex shrink-0 items-center justify-center rounded-lg border border-lineStrong px-5 py-3 text-sm font-bold text-navy transition hover:bg-subtle" href="/articles">
             Enquanto isso, veja as matérias
           </Link>
         </div>
@@ -71,7 +71,7 @@ export function RecipesCarouselSection({ recipes }: { recipes: Recipe[] }) {
           <div className="flex min-h-[420px] w-[72vw] max-w-[310px] shrink-0 snap-start flex-col justify-end rounded-xl bg-navy p-6 text-white sm:w-[280px]">
             <p className="text-sm font-semibold text-spark">Continue explorando</p>
             <h3 className="mt-3 text-balance font-serif text-2xl font-medium leading-tight">Encontre uma receita para o próximo preparo</h3>
-            <Link className="mt-6 inline-flex w-fit items-center rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-navy transition hover:bg-spark" href="/receitas">
+            <Link className="mt-6 inline-flex w-fit items-center rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-navy transition hover:bg-spark" href="/recipes">
               Ver todas as receitas
             </Link>
           </div>

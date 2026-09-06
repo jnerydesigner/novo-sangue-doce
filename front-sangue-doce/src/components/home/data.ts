@@ -1,8 +1,8 @@
 export const navItems = [
-  { label: "Materias", href: "/materias" },
-  { label: "Receitas", href: "/receitas" },
+  { label: "Materias", href: "/articles" },
+  { label: "Receitas", href: "/recipes" },
   { label: "Glicose", href: "#glicose" },
-  { label: "Guias", href: "#guias" },
+  { label: "Guias", href: "#guides" },
   { label: "Rotina", href: "#rotina" },
 ];
 
@@ -12,20 +12,20 @@ export const guides = [
     title: "Antes da consulta",
     copy: "O que anotar, quais perguntas levar e como chegar preparado para uma conversa que rende.",
     color: "text-energy",
-    href: "/guias/antes-da-consulta",
+    href: "/guides/before-appointment",
   },
   {
     number: "02",
     title: "No mercado",
     copy: "Como ler rotulos sem estresse e montar uma cesta que ajuda a estabilizar a glicemia.",
     color: "text-azure",
-    href: "/guias/no-mercado",
+    href: "/guides/at-the-market",
   },
   {
     number: "03",
     title: "Depois do exercicio",
     copy: "Reposicao, hidratacao e sinais de atencao para fechar o treino com seguranca.",
     color: "text-spark",
-    href: "/guias/depois-do-exercicio",
+    href: "/guides/after-exercise",
   },
 ];

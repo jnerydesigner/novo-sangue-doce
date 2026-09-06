@@ -16,18 +16,18 @@ export function SiteFooter() {
           <FooterColumn
             title="Editorias"
             links={[
-              { label: "Cuidado diario", href: "/materias" },
-              { label: "Alimentacao", href: "/materias" },
-              { label: "Prevencao", href: "/materias" },
-              { label: "Exercicio", href: "/materias" },
+              { label: "Cuidado diario", href: "/articles" },
+              { label: "Alimentacao", href: "/articles" },
+              { label: "Prevencao", href: "/articles" },
+              { label: "Exercicio", href: "/articles" },
             ]}
           />
           <FooterColumn
             title="Secoes"
             links={[
-              { label: "Materias", href: "/materias" },
-              { label: "Receitas", href: "/receitas" },
-              { label: "Guias", href: "/#guias" },
+              { label: "Materias", href: "/articles" },
+              { label: "Receitas", href: "/recipes" },
+              { label: "Guias", href: "/#guides" },
               { label: "Rotina", href: "/#rotina" },
               { label: "Boletim", href: "/#news" },
             ]}
@@ -35,12 +35,12 @@ export function SiteFooter() {
           <FooterColumn
             title="Sobre"
             links={[
-              { label: "Quem somos", href: "/sobre" },
-              // { label: "Conselho editorial", href: "/sobre" },
-              { label: "Contato", href: "/contato" },
-              { label: "Privacidade", href: "/privacidade" },
-              { label: "Termos de serviço", href: "/termos-de-servico" },
-              { label: "Exclusão de dados", href: "/exclusao-de-dados" },
+              { label: "Quem somos", href: "/about" },
+              // { label: "Conselho editorial", href: "/about" },
+              { label: "Contato", href: "/contact" },
+              { label: "Privacidade", href: "/privacy" },
+              { label: "Termos de serviço", href: "/terms-of-service" },
+              { label: "Exclusão de dados", href: "/data-deletion" },
             ]}
           />
         </div>

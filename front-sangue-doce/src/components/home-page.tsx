@@ -1,4 +1,5 @@
 import type { AuthProfile, Measurement, Recipe } from "@/lib/api";
+import { AdSlot } from "./ads/ad-slot";
 import { EditorialSection } from "./home/editorial-section";
 import { GlucoseEntrySection } from "./home/glucose-entry-section";
 import { GuidesSection } from "./home/guides-section";
@@ -15,12 +16,7 @@ type HomePageProps = {
   recipes: Recipe[];
 };
 
-export function HomePage({
-  isAuthenticated,
-  profile,
-  recentReadings,
-  recipes,
-}: HomePageProps) {
+export function HomePage({ isAuthenticated, profile, recentReadings, recipes }: HomePageProps) {
   const glucoseEntryKey = `${isAuthenticated}-${recentReadings.map((reading) => reading.id).join("-")}`;
 
   return (
@@ -28,7 +24,9 @@ export function HomePage({
       <SiteHeader isAuthenticated={isAuthenticated} profile={profile} />
       <main>
         <HeroSection />
+        <AdSlot className="wrap" placement="homeTop" />
         <EditorialSection />
+        <AdSlot className="wrap" placement="homeMiddle" />
         <RecipesCarouselSection recipes={recipes} />
 
         <GlucoseEntrySection
@@ -37,6 +35,7 @@ export function HomePage({
           recentReadings={recentReadings}
         />
         <GuidesSection />
+        <AdSlot className="wrap" placement="homeBottom" />
         <NewsletterSection />
       </main>
       <SiteFooter />

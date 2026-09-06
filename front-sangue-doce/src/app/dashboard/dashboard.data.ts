@@ -45,13 +45,13 @@ export type SidebarGroup = {
 export const adminSidebarItems: SidebarItem[] = [
   { href: "/admin", icon: LayoutDashboard, label: "Visao geral" },
   { href: "/admin/posts", icon: Newspaper, label: "Materias" },
-  { href: "/admin/receitas", icon: CookingPot, label: "Receitas" },
-  { href: "/admin/publicacoes-sociais", icon: Share2, label: "Publicacoes sociais" },
-  { href: "/admin/publicacoes-institucionais", icon: Landmark, label: "Institucional" },
-  { href: "/admin/taxonomia", icon: Tags, label: "Tags e Categorias" },
-  { href: "/admin/usuarios", icon: Users, label: "Usuarios" },
-  { href: "/admin/convites", icon: Mail, label: "Convites" },
-  { href: "/admin/autores", icon: PenTool, label: "Autores" },
+  { href: "/admin/recipes", icon: CookingPot, label: "Receitas" },
+  { href: "/admin/social-publications", icon: Share2, label: "Publicacoes sociais" },
+  { href: "/admin/institutional-publications", icon: Landmark, label: "Institucional" },
+  { href: "/admin/taxonomy", icon: Tags, label: "Tags e Categorias" },
+  { href: "/admin/users", icon: Users, label: "Usuarios" },
+  { href: "/admin/invites", icon: Mail, label: "Convites" },
+  { href: "/admin/authors", icon: PenTool, label: "Autores" },
 ];
 
 export const dashboardSidebarItems: SidebarItem[] = [
