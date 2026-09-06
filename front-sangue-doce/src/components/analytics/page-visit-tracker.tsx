@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/analytics";
 
-const ignoredPrefixes = ["/admin", "/dashboard", "/login", "/cadastro"];
+const ignoredPrefixes = ["/admin", "/dashboard", "/login", "/signup"];
 
 export function PageVisitTracker() {
   const pathname = usePathname();

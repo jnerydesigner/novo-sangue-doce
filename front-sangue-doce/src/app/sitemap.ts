@@ -26,61 +26,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
     {
-      url: `${SITE_URL}/materias`,
+      url: `${SITE_URL}/articles`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/receitas`,
+      url: `${SITE_URL}/recipes`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/guias/antes-da-consulta`,
+      url: `${SITE_URL}/guides/before-appointment`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${SITE_URL}/guias/no-mercado`,
+      url: `${SITE_URL}/guides/at-the-market`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${SITE_URL}/guias/depois-do-exercicio`,
+      url: `${SITE_URL}/guides/after-exercise`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${SITE_URL}/sobre`,
+      url: `${SITE_URL}/about`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: `${SITE_URL}/contato`,
+      url: `${SITE_URL}/contact`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: `${SITE_URL}/privacidade`,
+      url: `${SITE_URL}/privacy`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.2,
     },
     {
-      url: `${SITE_URL}/termos-de-servico`,
+      url: `${SITE_URL}/terms-of-service`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.2,
     },
     {
-      url: `${SITE_URL}/exclusao-de-dados`,
+      url: `${SITE_URL}/data-deletion`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.2,
@@ -91,7 +91,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .catch(() => []);
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${SITE_URL}/materias/${post.slug}`,
+    url: `${SITE_URL}/articles/${post.slug}`,
     lastModified: new Date(post.updatedAt),
     changeFrequency: "weekly",
     priority: 0.8,
@@ -99,7 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const authorsBySlug = new Map(posts.map((post) => [post.author.slug, post.author]));
   const authorRoutes: MetadataRoute.Sitemap = Array.from(authorsBySlug.values()).map((author) => ({
-    url: `${SITE_URL}/autores/${author.slug}`,
+    url: `${SITE_URL}/authors/${author.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.5,
@@ -109,7 +109,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .catch(() => []);
 
   const recipeRoutes: MetadataRoute.Sitemap = recipes.map((recipe) => ({
-    url: `${SITE_URL}/receitas/${recipe.slug}`,
+    url: `${SITE_URL}/recipes/${recipe.slug}`,
     lastModified: new Date(recipe.updatedAt),
     changeFrequency: "weekly",
     priority: 0.8,

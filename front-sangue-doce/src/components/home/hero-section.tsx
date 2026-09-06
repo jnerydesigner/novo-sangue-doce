@@ -32,12 +32,12 @@ export function HeroSection() {
           <div className="mt-8 flex flex-wrap gap-3.5">
             <button
               className="btn btn-primary px-6 py-4 text-base"
-              onClick={() => scrollToId("materias")}
+              onClick={() => scrollToId("articles")}
               type="button"
             >
               Ler destaques
             </button>
-            <a className="btn btn-ghost px-6 py-4 text-base" href="#guias">
+            <a className="btn btn-ghost px-6 py-4 text-base" href="#guides">
               Ver guias rapidos
             </a>
           </div>
