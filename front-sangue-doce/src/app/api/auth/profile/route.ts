@@ -2,6 +2,11 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { api, type UpdateProfilePayload } from "@/lib/api";
 import { AUTH_COOKIE_NAME, authCookieOptions } from "@/lib/auth-cookie";
+import {
+  appendSetCookieHeaders,
+  getBetterAuthSession,
+  mapBetterAuthSessionToProfile,
+} from "@/lib/better-auth-server";
 
 function getErrorMessage(error: unknown) {
   if (!(error instanceof Error)) {
@@ -30,9 +35,23 @@ function expiredSessionResponse() {
   return response;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+  const betterAuthResponse = await getBetterAuthSession(request.headers.get("cookie")).catch(
+    () => null,
+  );
+
+  if (betterAuthResponse?.ok) {
+    const profile = mapBetterAuthSessionToProfile(await betterAuthResponse.json());
+
+    if (profile) {
+      const response = NextResponse.json({ ok: true, profile });
+      appendSetCookieHeaders(response.headers, betterAuthResponse.headers);
+
+      return response;
+    }
+  }
 
   if (!accessToken) {
     return expiredSessionResponse();

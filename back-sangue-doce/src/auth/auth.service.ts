@@ -1,11 +1,4 @@
-import {
-  createHash,
-  randomBytes,
-  randomInt,
-  scrypt as scryptCallback,
-  timingSafeEqual,
-} from "node:crypto";
-import { promisify } from "node:util";
+import { createHash, randomBytes, randomInt, timingSafeEqual } from "node:crypto";
 import { formatDateToDayMonthYear } from "@app/@helper/format-date.helper";
 import type { AuthenticatedRequest } from "@app/@infra/guard/auth.guard";
 import { MailService } from "@app/mail/mail.service";
@@ -17,6 +10,7 @@ import {
 import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { DiabetesTypeEnum } from "@shared/enum/diabets-type.enum";
+import { hashPasswordWithScrypt, verifyScryptPassword } from "./better-auth/password-hash";
 import {
   type RequestEmailLoginCodeDto,
   requestEmailLoginCodeSchema,
@@ -31,7 +25,6 @@ import { AuthRepository } from "./repositories/auth.repository";
 import type { GoogleAuthUser, GoogleProfileUser } from "./types/google-auth-user.type";
 import type { JwtPayload } from "./types/jwt-payload.type";
 
-const scrypt = promisify(scryptCallback);
 const EMAIL_LOGIN_CODE_TTL_IN_MINUTES = 5;
 const EMAIL_LOGIN_CODE_MAX_ATTEMPTS = 5;
 
@@ -51,7 +44,7 @@ export class AuthService {
       return null;
     }
 
-    const passwordMatches = await this.comparePassword(password, user.getPasswordHash());
+    const passwordMatches = await verifyScryptPassword(password, user.getPasswordHash());
 
     if (!passwordMatches) {
       return null;
@@ -217,19 +210,6 @@ export class AuthService {
     return this.validateSessionUser(user);
   }
 
-  private async comparePassword(plainPassword: string, passwordHash: string): Promise<boolean> {
-    const [algorithm, salt, storedHash] = passwordHash.split(":");
-
-    if (algorithm !== "scrypt" || !salt || !storedHash) {
-      return false;
-    }
-
-    const derivedKey = (await scrypt(plainPassword, salt, 64)) as Buffer;
-    const storedKey = Buffer.from(storedHash, "hex");
-
-    return derivedKey.length === storedKey.length && timingSafeEqual(derivedKey, storedKey);
-  }
-
   private compareEasyCode(plainCode: string, hashedCode: string): boolean {
     const hashedPlainCode = this.hashLoginCode(plainCode);
 
@@ -279,7 +259,7 @@ export class AuthService {
     const payload = this.parseSetPassword(setPasswordDto);
     const updatedUser = await this.userRepository.updatePasswordHash(
       currentUser.sub,
-      await this.hashPassword(payload.password),
+      await hashPasswordWithScrypt(payload.password),
     );
     const profile = this.createJwtPayload(updatedUser);
     const access_token = await this.signJwt(profile);
@@ -342,13 +322,6 @@ export class AuthService {
       code: result.data.code,
       email: result.data.email.trim().toLowerCase(),
     };
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const salt = randomBytes(16).toString("hex");
-    const derivedKey = (await scrypt(password, salt, 64)) as Buffer;
-
-    return `scrypt:${salt}:${derivedKey.toString("hex")}`;
   }
 
   private createOAuthPasswordHash(providerUserId: string): string {

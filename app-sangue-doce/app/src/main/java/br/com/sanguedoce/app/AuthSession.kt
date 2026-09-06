@@ -9,26 +9,43 @@ object AuthSession {
     private const val PREFS = "auth_session"
     private const val TOKEN = "access_token"
     private const val KEY_EMAIL = "email"
+    private var inMemoryToken: String? = null
+    private var inMemoryEmail: String? = null
 
     fun signIn(
         context: Context,
         token: String,
-        email: String
+        email: String,
+        rememberMe: Boolean = true
     ) {
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        inMemoryToken = token
+        inMemoryEmail = email
+
+        val editor = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .edit()
-            .putString(TOKEN, token)
-            .putString(KEY_EMAIL, email)
-            .apply()
+            .clear()
+
+        if (rememberMe) {
+            editor
+                .putString(TOKEN, token)
+                .putString(KEY_EMAIL, email)
+        }
+
+        editor.apply()
     }
 
     fun getToken(context: Context): String? {
+        inMemoryToken?.let { return it }
+
         return context
             .getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .getString(TOKEN, null)
     }
 
     fun signOut(context: Context) {
+        inMemoryToken = null
+        inMemoryEmail = null
+
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .edit()
             .clear()
@@ -68,6 +85,8 @@ object AuthSession {
     }
 
     fun getEmail(context: Context): String? {
+        inMemoryEmail?.let { return it }
+
         return context
             .getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .getString(KEY_EMAIL, null)

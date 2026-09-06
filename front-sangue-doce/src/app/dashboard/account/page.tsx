@@ -1,7 +1,6 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { api } from "@/lib/api";
-import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
+import { getCurrentAuth } from "@/lib/current-auth";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
 import { AuthorProfileForm } from "./author-profile-form";
@@ -12,16 +11,9 @@ import { ProfileForm } from "./profile-form";
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+  const { accessToken, profile: userData } = await getCurrentAuth();
 
-  if (!accessToken) {
-    redirect("/login");
-  }
-
-  const userData = await api.auth.profile(accessToken).catch(() => null);
-
-  if (!userData) {
+  if (!accessToken || !userData) {
     redirect("/login");
   }
 
