@@ -4,11 +4,13 @@ import { Global, MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { SharedModule } from "@shared/shared.module";
+import { AuthModule as BetterAuthModule } from "@thallesp/nestjs-better-auth";
 import { AuthGuard } from "./@infra/guard/auth.guard";
 import { RequestIdMiddleware } from "./@infra/middleware/request-id.middleware";
 import { AnalyticsModule } from "./analytics/analytics.module";
 import { AppHomeModule } from "./app-home/app-home.module";
 import { AuthModule } from "./auth/auth.module";
+import { auth } from "./auth/better-auth/better-auth.instance";
 import { AuthorsModule } from "./authors/authors.module";
 import { CarbAnalysisModule } from "./carb-analysis/carb-analysis.module";
 import { FoodsModule } from "./foods/foods.module";
@@ -41,6 +43,15 @@ import { UsersModule } from "./users/users.module";
           port: Number(configService.get<string>("REDIS_PORT") ?? 6380),
         },
       }),
+    }),
+    BetterAuthModule.forRoot({
+      auth,
+      disableGlobalAuthGuard: true,
+      bodyParser: {
+        json: { limit: "10mb" },
+        urlencoded: { limit: "10mb", extended: true },
+        rawBody: true,
+      },
     }),
     ImageModule,
     InstitutionalPublicationsModule,

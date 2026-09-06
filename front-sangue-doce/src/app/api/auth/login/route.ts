@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { api, type LoginPayload } from "@/lib/api";
 import { AUTH_COOKIE_NAME, getAuthCookieOptions } from "@/lib/auth-cookie";
+import { appendSetCookieHeaders, signInWithBetterAuth } from "@/lib/better-auth-server";
 
 function getErrorMessage(error: unknown) {
   if (!(error instanceof Error)) {
@@ -24,6 +25,20 @@ function getErrorMessage(error: unknown) {
 
 export async function POST(request: Request) {
   const payload = (await request.json()) as LoginPayload;
+  const betterAuthResponse = await signInWithBetterAuth(
+    payload,
+    request.headers.get("origin"),
+  ).catch(() => null);
+
+  if (!betterAuthResponse?.ok) {
+    const message = betterAuthResponse ? await betterAuthResponse.text() : "";
+
+    return NextResponse.json(
+      { message: message ? getErrorMessage(new Error(message)) : "E-mail ou senha invalidos." },
+      { status: 401 },
+    );
+  }
+
   const loginResponse = await api.auth.login(payload).catch((error: unknown) => {
     return NextResponse.json({ message: getErrorMessage(error) }, { status: 401 });
   });
@@ -49,6 +64,7 @@ export async function POST(request: Request) {
     loginResponse.access_token,
     getAuthCookieOptions(payload.rememberMe),
   );
+  appendSetCookieHeaders(response.headers, betterAuthResponse.headers);
 
   return response;
 }
