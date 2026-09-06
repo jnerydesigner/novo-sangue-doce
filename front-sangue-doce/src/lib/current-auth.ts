@@ -18,7 +18,7 @@ export async function getCurrentAuth() {
   const legacyProfile = accessToken ? await api.auth.profile(accessToken).catch(() => null) : null;
 
   return {
-    accessToken,
+    accessToken: legacyProfile ? accessToken : null,
     profile: betterAuthProfile ?? legacyProfile,
   };
 }

@@ -1,11 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { AppLogger } from "@app/@shared/logger/app-logger.provider";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import PDFDocument from "pdfkit";
 import sharp from "sharp";
 import type { MonthlyMeasurementReport, PublicMeasurement } from "./measurements.service";
-import { AppLogger } from "@app/@shared/logger/app-logger.provider";
 
 type ReportColumn = {
   label: string;
@@ -57,6 +57,7 @@ const REPORT_COLUMNS: ReportColumn[] = [
 ];
 
 const ADA_REFERENCE_TEXT = "De acordo com a American Diabetes Association (ADA)";
+const REPORT_TIME_ZONE = "America/Manaus";
 
 const GLUCOSE_STAGES: GlucoseStage[] = [
   {
@@ -174,12 +175,14 @@ export class MeasurementReportPdfService {
     const tableHeaderY = 124 * scale;
     const tableWidth =
       dateWidth + REPORT_COLUMNS.reduce((total, column) => total + column.width * scale, 0);
+    const displayPeriod = this.getDisplayPeriod(params.report);
     const headerRows = [
       ["NOME:", params.report.userName.toUpperCase()],
-      ["DATA NASC:", params.birthDate ?? "NAO INFORMADO"],
-      ["INICIO AMOSTRAGEM:", this.formatDate(params.report.period.startDate)],
-      ["FIM AMOSTRAGEM:", this.formatDate(params.report.period.endDate)],
+      ["DATA NASC:", this.formatOptionalDate(params.birthDate)],
+      ["INICIO AMOSTRAGEM:", this.formatDate(displayPeriod.startDate)],
+      ["FIM AMOSTRAGEM:", this.formatDate(displayPeriod.endDate)],
       ["TIPO DIABETES:", this.formatDiabetesType(params.diabetesType)],
+      ["PERIODO:", this.formatMonthYear(params.report.year, params.report.month)],
     ];
     const headerInfo = headerRows
       .map(
@@ -285,12 +288,14 @@ export class MeasurementReportPdfService {
     const valueX = labelX + labelWidth + 12;
     const valueWidth = brandX - valueX - 18;
     const rowHeight = 18;
+    const displayPeriod = this.getDisplayPeriod(report);
     const rows = [
       ["NOME:", report.userName.toUpperCase()],
-      ["DATA NASC:", params.birthDate ?? "NAO INFORMADO"],
-      ["INICIO AMOSTRAGEM:", this.formatDate(report.period.startDate)],
-      ["FIM AMOSTRAGEM:", this.formatDate(report.period.endDate)],
+      ["DATA NASC:", this.formatOptionalDate(params.birthDate)],
+      ["INICIO AMOSTRAGEM:", this.formatDate(displayPeriod.startDate)],
+      ["FIM AMOSTRAGEM:", this.formatDate(displayPeriod.endDate)],
       ["TIPO DIABETES:", this.formatDiabetesType(params.diabetesType)],
+      ["PERIODO:", this.formatMonthYear(report.year, report.month)],
     ];
 
     doc
@@ -582,10 +587,31 @@ export class MeasurementReportPdfService {
   }
 
   private formatDate(value: Date | string) {
+    if (typeof value === "string") {
+      const [, displayDay, displayMonth, displayYear] =
+        value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/) ?? [];
+
+      if (displayDay && displayMonth && displayYear) {
+        return `${displayDay}/${displayMonth}/${displayYear}`;
+      }
+
+      const [, year, month, day] = value.match(/^(\d{4})-(\d{2})-(\d{2})$/) ?? [];
+
+      if (year && month && day) {
+        return `${day}/${month}/${year}`;
+      }
+
+      const [, isoYear, isoMonth, isoDay] = value.match(/^(\d{4})-(\d{2})-(\d{2})T/) ?? [];
+
+      if (isoYear && isoMonth && isoDay) {
+        return `${isoDay}/${isoMonth}/${isoYear}`;
+      }
+    }
+
     return new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",
-      timeZone: "UTC",
+      timeZone: REPORT_TIME_ZONE,
       year: "numeric",
     }).format(new Date(value));
   }
@@ -595,7 +621,37 @@ export class MeasurementReportPdfService {
       return "NAO INFORMADO";
     }
 
-    return value.replace("Diabetes tipo ", "").replace("Diabetes ", "").toUpperCase();
+    const normalized = value.trim().toUpperCase();
+    const diabetesTypeLabels: Record<string, string> = {
+      GESTATIONAL: "Diabetes gestacional",
+      OTHER: "Outro",
+      TYPE_1: "Diabetes tipo 1",
+      TYPE_2: "Diabetes tipo 2",
+      UNKNOWN: "Nao informado",
+    };
+
+    return diabetesTypeLabels[normalized] ?? value;
+  }
+
+  private formatOptionalDate(value?: string) {
+    return value ? this.formatDate(value) : "NAO INFORMADO";
+  }
+
+  private formatMonthYear(year: number, month: number) {
+    const label = new Intl.DateTimeFormat("pt-BR", {
+      month: "long",
+      timeZone: "UTC",
+      year: "numeric",
+    }).format(new Date(Date.UTC(year, month - 1, 1)));
+
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
+  private getDisplayPeriod(report: MonthlyMeasurementReport) {
+    return {
+      endDate: report.days.at(-1)?.date ?? report.period.endDate,
+      startDate: report.days[0]?.date ?? report.period.startDate,
+    };
   }
 
   private drawImage(
@@ -718,12 +774,15 @@ export class MeasurementReportPdfService {
       }
     }
 
-    const publicPath = (this.configService.get<string>("MINIO_PUBLIC_PATH") ?? "")
-      .replace(/^\/+|\/+$/g, "");
+    const publicPath = (this.configService.get<string>("MINIO_PUBLIC_PATH") ?? "").replace(
+      /^\/+|\/+$/g,
+      "",
+    );
     const normalizedPath = value.replace(/^\/+/, "");
-    const key = publicPath && normalizedPath.startsWith(`${publicPath}/`)
-      ? normalizedPath.slice(publicPath.length + 1)
-      : normalizedPath.replace(/^sangue-doce\/public\//, "");
+    const key =
+      publicPath && normalizedPath.startsWith(`${publicPath}/`)
+        ? normalizedPath.slice(publicPath.length + 1)
+        : normalizedPath.replace(/^sangue-doce\/public\//, "");
 
     return `${s3BaseUrl}/${key
       .split("/")
