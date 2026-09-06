@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { api, type LoginPayload } from "@/lib/api";
-import { AUTH_COOKIE_NAME, authCookieOptions } from "@/lib/auth-cookie";
+import { AUTH_COOKIE_NAME, getAuthCookieOptions } from "@/lib/auth-cookie";
 
 function getErrorMessage(error: unknown) {
   if (!(error instanceof Error)) {
@@ -44,7 +44,11 @@ export async function POST(request: Request) {
       : "/dashboard";
 
   const response = NextResponse.json({ ok: true, redirectTo });
-  response.cookies.set(AUTH_COOKIE_NAME, loginResponse.access_token, authCookieOptions);
+  response.cookies.set(
+    AUTH_COOKIE_NAME,
+    loginResponse.access_token,
+    getAuthCookieOptions(payload.rememberMe),
+  );
 
   return response;
 }
