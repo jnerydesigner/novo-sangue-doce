@@ -28,7 +28,7 @@ export default async function AdminPostsPage() {
           </p>
           <Link
             className="inline-flex w-full items-center justify-center rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep sm:w-auto"
-            href="/admin/posts/novo"
+            href="/admin/posts/new"
           >
             Nova materia
           </Link>

@@ -20,7 +20,7 @@ export function ArticleCard({
 
   return (
     <Link
-      href={`/materias/${article.slug}`}
+      href={`/articles/${article.slug}`}
       className={`group overflow-hidden rounded-lg border border-line bg-surface transition hover:-translate-y-1 hover:border-azure hover:shadow-editorial ${
         compact ? "grid md:grid-cols-[42%_1fr] lg:min-h-[216px]" : ""
       }`}

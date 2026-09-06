@@ -5,6 +5,7 @@ import { resolvePublicImageUrl } from "@/lib/public-image-url";
 
 type PostContentBlocksProps = {
   blocks: PostContentBlock[];
+  leadDropcap?: boolean;
 };
 
 function getSafeExternalUrl(value: string) {
@@ -53,7 +54,7 @@ function renderInlineMarkdown(value: string): ReactNode {
   });
 }
 
-export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
+export function PostContentBlocks({ blocks, leadDropcap = true }: PostContentBlocksProps) {
   return (
     <>
       {blocks.map((block, index) => {
@@ -198,7 +199,7 @@ export function PostContentBlocks({ blocks }: PostContentBlocksProps) {
         return (
           <p
             key={`${block.type}-${index}`}
-            className={`mb-7 text-pretty ${index === 0 ? "first-letter:float-left first-letter:pr-3 first-letter:pt-2 first-letter:font-serif first-letter:text-[4.6rem] first-letter:font-medium first-letter:leading-[0.82] first-letter:text-energy" : ""}`}
+            className={`mb-7 text-pretty ${leadDropcap && index === 0 ? "first-letter:float-left first-letter:pr-3 first-letter:pt-2 first-letter:font-serif first-letter:text-[4.6rem] first-letter:font-medium first-letter:leading-[0.82] first-letter:text-energy" : ""}`}
           >
             {renderInlineMarkdown(block.content)}
           </p>

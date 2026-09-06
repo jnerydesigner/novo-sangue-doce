@@ -18,12 +18,12 @@ const adminActions = [
   {
     title: "Usuarios",
     description: "Ver contas cadastradas e acompanhar quem usa a plataforma.",
-    href: "/admin/usuarios",
+    href: "/admin/users",
   },
   {
     title: "Autores",
     description: "Gerenciar autores, perfis editoriais e vinculos com usuarios.",
-    href: "/admin/autores",
+    href: "/admin/authors",
   },
 ];
 
@@ -201,7 +201,7 @@ export default async function AdminPage() {
                   </span>
                   <Link
                     className="rounded-lg border border-lineStrong px-3 py-2 text-sm font-semibold text-inkSoft transition hover:bg-paper2"
-                    href={`/admin/posts/novo?id=${latestPost.id}`}
+                    href={`/admin/posts/new?id=${latestPost.id}`}
                   >
                     Editar materia
                   </Link>
@@ -209,7 +209,7 @@ export default async function AdminPage() {
               ) : (
                 <Link
                   className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep"
-                  href="/admin/posts/novo"
+                  href="/admin/posts/new"
                 >
                   Nova materia
                 </Link>

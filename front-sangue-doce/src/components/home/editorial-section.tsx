@@ -13,7 +13,7 @@ export async function EditorialSection() {
   }
 
   return (
-    <section className="py-[clamp(64px,9vw,110px)]" id="materias">
+    <section className="py-[clamp(64px,9vw,110px)]" id="articles">
       <div className="wrap">
         <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
           <div>
@@ -24,7 +24,7 @@ export async function EditorialSection() {
           </div>
           <Link
             className="group inline-flex items-center gap-2 text-[15px] font-semibold text-navy"
-            href="/materias"
+            href="/articles"
           >
             Todas as materias
             <ArrowIcon />
