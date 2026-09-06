@@ -2,7 +2,19 @@
 
 import { useEffect } from "react";
 
-type AdPlacement = "articleTop" | "articleMiddle" | "articleBottom";
+type AdPlacement =
+  | "homeTop"
+  | "homeMiddle"
+  | "homeBottom"
+  | "articleTop"
+  | "articleMiddle"
+  | "articleBottom"
+  | "articleList"
+  | "recipeTop"
+  | "recipeBottom"
+  | "recipeList"
+  | "guideTop"
+  | "guideBottom";
 
 type AdSlotProps = {
   className?: string;
@@ -16,15 +28,33 @@ type WindowWithAds = Window & {
 const adClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "ca-pub-1600331961556195";
 
 const adSlots: Record<AdPlacement, string | undefined> = {
+  homeTop: process.env.NEXT_PUBLIC_ADSENSE_HOME_TOP_SLOT,
+  homeMiddle: process.env.NEXT_PUBLIC_ADSENSE_HOME_MIDDLE_SLOT,
+  homeBottom: process.env.NEXT_PUBLIC_ADSENSE_HOME_BOTTOM_SLOT,
   articleTop: process.env.NEXT_PUBLIC_ADSENSE_ARTICLE_TOP_SLOT,
   articleMiddle: process.env.NEXT_PUBLIC_ADSENSE_ARTICLE_MIDDLE_SLOT,
   articleBottom: process.env.NEXT_PUBLIC_ADSENSE_ARTICLE_BOTTOM_SLOT,
+  articleList: process.env.NEXT_PUBLIC_ADSENSE_ARTICLE_LIST_SLOT,
+  recipeTop: process.env.NEXT_PUBLIC_ADSENSE_RECIPE_TOP_SLOT,
+  recipeBottom: process.env.NEXT_PUBLIC_ADSENSE_RECIPE_BOTTOM_SLOT,
+  recipeList: process.env.NEXT_PUBLIC_ADSENSE_RECIPE_LIST_SLOT,
+  guideTop: process.env.NEXT_PUBLIC_ADSENSE_GUIDE_TOP_SLOT,
+  guideBottom: process.env.NEXT_PUBLIC_ADSENSE_GUIDE_BOTTOM_SLOT,
 };
 
 const adHeights: Record<AdPlacement, string> = {
+  homeTop: "min-h-[118px] sm:min-h-[100px]",
+  homeMiddle: "min-h-[118px] sm:min-h-[100px]",
+  homeBottom: "min-h-[118px] sm:min-h-[100px]",
   articleTop: "min-h-[118px] sm:min-h-[100px]",
   articleMiddle: "min-h-[280px]",
   articleBottom: "min-h-[118px] sm:min-h-[100px]",
+  articleList: "min-h-[118px] sm:min-h-[100px]",
+  recipeTop: "min-h-[118px] sm:min-h-[100px]",
+  recipeBottom: "min-h-[118px] sm:min-h-[100px]",
+  recipeList: "min-h-[118px] sm:min-h-[100px]",
+  guideTop: "min-h-[118px] sm:min-h-[100px]",
+  guideBottom: "min-h-[118px] sm:min-h-[100px]",
 };
 
 export function AdSlot({ className = "", placement }: AdSlotProps) {

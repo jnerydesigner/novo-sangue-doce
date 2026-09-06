@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { Brand } from "@/components/home/brand";
 import { SiteFooter } from "@/components/home/site-footer";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -119,6 +120,8 @@ export default function AntesDaConsultaPage() {
           </div>
         </section>
 
+        <AdSlot className="wrap" placement="guideTop" />
+
         {/* Content */}
         <section className="bg-bg py-[clamp(64px,9vw,110px)]">
           <div className="wrap">
@@ -209,6 +212,8 @@ export default function AntesDaConsultaPage() {
             </div>
           </div>
         </section>
+
+        <AdSlot className="wrap" placement="guideBottom" />
 
         {/* Other guides */}
         <section className="border-t border-line bg-subtle py-[clamp(56px,8vw,96px)]">

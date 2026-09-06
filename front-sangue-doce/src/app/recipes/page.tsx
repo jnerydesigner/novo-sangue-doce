@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { PublicSiteHeader } from "@/components/home/public-site-header";
 import { SiteFooter } from "@/components/home/site-footer";
 import { RecipeCard } from "@/components/recipes/recipe-card";
@@ -57,16 +58,28 @@ export default async function RecipesPage({
               </p>
               <div className="mt-6 grid grid-cols-3 divide-x divide-white/20 overflow-hidden rounded-lg border border-white/25 bg-white/10">
                 <div className="flex min-h-[86px] flex-col items-center justify-center px-3 py-3 text-center">
-                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">Total</span>
-                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">{recipes.meta.total}</strong>
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">
+                    Total
+                  </span>
+                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">
+                    {recipes.meta.total}
+                  </strong>
                 </div>
                 <div className="flex min-h-[86px] flex-col items-center justify-center px-3 py-3 text-center">
-                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">Página</span>
-                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">{recipes.meta.page}</strong>
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">
+                    Página
+                  </span>
+                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">
+                    {recipes.meta.page}
+                  </strong>
                 </div>
                 <div className="flex min-h-[86px] flex-col items-center justify-center px-3 py-3 text-center">
-                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">Série</span>
-                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">{recipes.meta.totalPages}</strong>
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.13em] text-white/70">
+                    Série
+                  </span>
+                  <strong className="mt-1 font-serif text-[2rem] font-normal leading-none tabular-nums">
+                    {recipes.meta.totalPages}
+                  </strong>
                 </div>
               </div>
             </div>
@@ -74,6 +87,8 @@ export default async function RecipesPage({
         </section>
         <section className="py-[clamp(52px,8vw,92px)]">
           <div className="wrap">
+            <AdSlot className="mb-10 mt-0" placement="recipeList" />
+
             {recipes.data.length ? (
               <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
                 {recipes.data.map((recipe) => (
@@ -88,24 +103,27 @@ export default async function RecipesPage({
                 <p className="mt-3 text-inkSoft">Volte em breve para conhecer a nova seleção.</p>
               </div>
             )}
-            <nav aria-label="Paginação de receitas" className="mx-auto mt-12 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-                <Link
-                  aria-disabled={!recipes.meta.hasPreviousPage}
-                  className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-center text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:w-auto"
-                  href={`/recipes?pagina=${Math.max(1, recipes.meta.page - 1)}`}
-                >
-                  Anterior
-                </Link>
-                <span className="order-first px-3 py-2.5 text-center text-sm text-muted sm:order-none">
-                  Página {recipes.meta.page} de {recipes.meta.totalPages}
-                </span>
-                <Link
-                  aria-disabled={!recipes.meta.hasNextPage}
-                  className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-center text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:w-auto"
-                  href={`/recipes?pagina=${Math.min(recipes.meta.totalPages, recipes.meta.page + 1)}`}
-                >
-                  Próxima
-                </Link>
+            <nav
+              aria-label="Paginação de receitas"
+              className="mx-auto mt-12 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center"
+            >
+              <Link
+                aria-disabled={!recipes.meta.hasPreviousPage}
+                className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-center text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:w-auto"
+                href={`/recipes?pagina=${Math.max(1, recipes.meta.page - 1)}`}
+              >
+                Anterior
+              </Link>
+              <span className="order-first px-3 py-2.5 text-center text-sm text-muted sm:order-none">
+                Página {recipes.meta.page} de {recipes.meta.totalPages}
+              </span>
+              <Link
+                aria-disabled={!recipes.meta.hasNextPage}
+                className="w-full rounded-lg border border-lineStrong px-4 py-2.5 text-center text-sm font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:w-auto"
+                href={`/recipes?pagina=${Math.min(recipes.meta.totalPages, recipes.meta.page + 1)}`}
+              >
+                Próxima
+              </Link>
             </nav>
           </div>
         </section>
