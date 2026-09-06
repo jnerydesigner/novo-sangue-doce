@@ -35,6 +35,12 @@ function formatDateForInput(date?: string) {
     return "";
   }
 
+  const [, isoYear, isoMonth, isoDay] = date.match(/^(\d{4})-(\d{2})-(\d{2})/) ?? [];
+
+  if (isoYear && isoMonth && isoDay) {
+    return `${isoYear}-${isoMonth}-${isoDay}`;
+  }
+
   const [day, month, year] = date.split("/");
 
   if (!day || !month || !year) {

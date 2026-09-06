@@ -2,6 +2,8 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { api, type Measurement, type MeasurementNoteType } from "@/lib/api";
 import { getCurrentAuth } from "@/lib/current-auth";
+import { formatDateUtil } from "@/lib/date/format-date.util";
+import { mapDiabetesType } from "@/lib/enums/map-type-diabets.enumj";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
@@ -59,20 +61,30 @@ const reportColumns: ReportColumn[] = [
 ];
 
 function formatDate(value: string | Date) {
+  if (typeof value === "string") {
+    const [, year, month, day] = value.match(/^(\d{4})-(\d{2})-(\d{2})$/) ?? [];
+
+    if (year && month && day) {
+      return `${day}/${month}/${year}`;
+    }
+  }
+
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    timeZone: "UTC",
+    timeZone: "America/Manaus",
   }).format(new Date(value));
 }
 
 function getMonthLabel(year: number, month: number) {
-  return new Intl.DateTimeFormat("pt-BR", {
+  const label = new Intl.DateTimeFormat("pt-BR", {
     month: "long",
     year: "numeric",
     timeZone: "UTC",
   }).format(new Date(Date.UTC(year, month - 1, 1)));
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
 function getQueryNumber(value: string | undefined, fallback: number) {
@@ -121,7 +133,9 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   const monthlyReport = await api.measurements.monthlyReport({
     ...reportQuery,
   });
-  const diabetesType = userData.diabetesType.replace("Diabetes tipo ", "");
+  const reportStartDate = monthlyReport.days[0]?.date ?? monthlyReport.period.startDate;
+  const reportEndDate = monthlyReport.days.at(-1)?.date ?? monthlyReport.period.endDate;
+  const diabetesType = mapDiabetesType(userData.diabetesType);
   const showAdminItems = userData.role === "ADMIN";
   const reportUrlSearchParams = new URLSearchParams();
 
@@ -241,15 +255,17 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Data nasc:</span>
-                  <span>{userData.birthDate ?? "Nao informado"}</span>
+                  <span>
+                    {formatDateUtil(userData.birthDate?.toString() ?? "") || "Nao informado"}
+                  </span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Inicio amostragem:</span>
-                  <span>{formatDate(monthlyReport.period.startDate)}</span>
+                  <span>{formatDate(reportStartDate)}</span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Fim amostragem:</span>
-                  <span>{formatDate(monthlyReport.period.endDate)}</span>
+                  <span>{formatDate(reportEndDate)}</span>
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Tipo diabetes:</span>
@@ -257,7 +273,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 </div>
                 <div className="grid grid-cols-[150px_1fr] gap-4 print:grid-cols-[120px_1fr]">
                   <span className="font-bold uppercase text-muted">Periodo:</span>
-                  <span className="capitalize">{periodLabel}</span>
+                  <span>{periodLabel}</span>
                 </div>
               </div>
 

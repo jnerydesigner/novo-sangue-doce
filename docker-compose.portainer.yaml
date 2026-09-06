@@ -209,6 +209,16 @@ services:
         condition: service_healthy
       smart:
         condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "node -e \"fetch('http://127.0.0.1:3011/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
     networks:
       - sangue_doce_internal
 
@@ -233,7 +243,7 @@ services:
       NEXT_PUBLIC_AWS_S3_PUBLIC_URL: ${NEXT_PUBLIC_AWS_S3_PUBLIC_URL:-https://sangue-doce.s3.us-east-1.amazonaws.com}
     depends_on:
       backend:
-        condition: service_started
+        condition: service_healthy
     networks:
       - sangue_doce_internal
 
