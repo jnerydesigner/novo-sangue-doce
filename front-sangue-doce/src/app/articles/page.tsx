@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { ArticleCard } from "@/components/home/article-card";
 import { PublicSiteHeader } from "@/components/home/public-site-header";
 import { SiteFooter } from "@/components/home/site-footer";
@@ -127,6 +128,8 @@ export default async function MateriasPage({ searchParams }: MateriasPageProps) 
                 {postsPage.meta.total}
               </p>
             </div>
+
+            <AdSlot className="mb-10 mt-0" placement="articleList" />
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {visibleArticles.map((article, index) => (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { Brand } from "@/components/home/brand";
 import { SiteFooter } from "@/components/home/site-footer";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -122,6 +123,8 @@ export default function DepoisDoExercicioPage() {
           </div>
         </section>
 
+        <AdSlot className="wrap" placement="guideTop" />
+
         <section className="bg-bg py-[clamp(64px,9vw,110px)]">
           <div className="wrap">
             <div className="mx-auto max-w-[780px]">
@@ -234,6 +237,8 @@ export default function DepoisDoExercicioPage() {
             </div>
           </div>
         </section>
+
+        <AdSlot className="wrap" placement="guideBottom" />
 
         <section className="border-t border-line bg-subtle py-[clamp(56px,8vw,96px)]">
           <div className="wrap">

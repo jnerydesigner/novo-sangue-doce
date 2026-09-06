@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { PostContentBlocks } from "@/components/articles/post-content-blocks";
 import { PublicSiteHeader } from "@/components/home/public-site-header";
 import { SiteFooter } from "@/components/home/site-footer";
@@ -130,6 +131,7 @@ export default async function RecipePage({ params }: Props) {
               width={1280}
             />
           </div>
+          <AdSlot className="mx-auto max-w-[970px]" placement="recipeTop" />
           <div className="grid gap-12 py-[clamp(48px,7vw,84px)] lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.4fr)]">
             <aside>
               <div className="lg:sticky lg:top-28">
@@ -188,6 +190,7 @@ export default async function RecipePage({ params }: Props) {
               <div className="article-prose mt-12 text-[1.12rem] leading-[1.72] text-inkSoft">
                 <PostContentBlocks blocks={post.content} />
               </div>
+              <AdSlot placement="recipeBottom" />
               <aside className="mt-12 rounded-xl bg-navy px-6 py-5 text-white">
                 <h2 className="font-semibold">Uma nota importante</h2>
                 <p className="mt-2 text-sm leading-relaxed text-white/80">
