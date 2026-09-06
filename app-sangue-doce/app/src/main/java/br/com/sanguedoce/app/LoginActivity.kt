@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -83,10 +85,11 @@ class LoginActivity : ComponentActivity() {
                 LoginScreen(
                     initialEmail = if (BuildConfig.DEBUG) MOCK_LOGIN_EMAIL else "",
                     initialPassword = if (BuildConfig.DEBUG) MOCK_LOGIN_PASSWORD else "",
-                    onLogin = { email, password, onFinished ->
+                    onLogin = { email, password, rememberMe, onFinished ->
                         login(
                             email = email,
                             password = password,
+                            rememberMe = rememberMe,
                             onFinished = onFinished
                         )
                     }
@@ -98,6 +101,7 @@ class LoginActivity : ComponentActivity() {
     private fun login(
         email: String,
         password: String,
+        rememberMe: Boolean,
         onFinished: (String?) -> Unit
     ) {
         lifecycleScope.launch {
@@ -105,12 +109,13 @@ class LoginActivity : ComponentActivity() {
                 val response = RetrofitClient.api.login(
                     LoginRequest(
                         email = email,
-                        password = password
+                        password = password,
+                        rememberMe = rememberMe
                     )
                 )
 
                 RetrofitClient.setToken(response.accessToken)
-                AuthSession.signIn(this@LoginActivity, response.accessToken, email)
+                AuthSession.signIn(this@LoginActivity, response.accessToken, email, rememberMe)
                 openMain()
             } catch (error: HttpException) {
                 val message = if (error.code() == 401) {
@@ -147,10 +152,11 @@ class LoginActivity : ComponentActivity() {
 private fun LoginScreen(
     initialEmail: String = "",
     initialPassword: String = "",
-    onLogin: (String, String, (String?) -> Unit) -> Unit
+    onLogin: (String, String, Boolean, (String?) -> Unit) -> Unit
 ) {
     var email by remember { mutableStateOf(initialEmail) }
     var password by remember { mutableStateOf(initialPassword) }
+    var rememberMe by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -165,7 +171,7 @@ private fun LoginScreen(
 
         isLoading = true
         errorMessage = null
-        onLogin(normalizedEmail, password) { message ->
+        onLogin(normalizedEmail, password, rememberMe) { message ->
             isLoading = false
             errorMessage = message
         }
@@ -280,6 +286,37 @@ private fun LoginScreen(
                         ),
                         enabled = !isLoading
                     )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = rememberMe,
+                            onCheckedChange = {
+                                rememberMe = it
+                            },
+                            enabled = !isLoading
+                        )
+
+                        Column(
+                            modifier = Modifier.padding(start = 4.dp),
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            Text(
+                                text = "Continuar conectado",
+                                color = SangueDoceInk,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "Mantem seu acesso neste aparelho.",
+                                color = SangueDoceMutedText,
+                                fontSize = 12.sp,
+                                lineHeight = 16.sp
+                            )
+                        }
+                    }
 
                     errorMessage?.let { message ->
                         Text(
@@ -396,7 +433,7 @@ private fun LoginPill(
 private fun LoginScreenPreview() {
     MaterialTheme {
         LoginScreen(
-            onLogin = { _, _, _ -> }
+            onLogin = { _, _, _, _ -> }
         )
     }
 }

@@ -5,6 +5,7 @@ import { AppModule } from "./app.module";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
+    bodyParser: false,
   });
   app.useLogger(app.get(PinoLogger));
   const logger = app.get(PinoLogger);

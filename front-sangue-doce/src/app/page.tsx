@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { JsonLd } from "@/components/json-ld";
 import { api } from "@/lib/api";
-import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
+import { getCurrentAuth } from "@/lib/current-auth";
 import {
   buildWebsiteJsonLd,
   DEFAULT_SOCIAL_IMAGE,
@@ -34,9 +33,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
-  const profile = accessToken ? await api.auth.profile(accessToken).catch(() => null) : null;
+  const { accessToken, profile } = await getCurrentAuth();
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const recentReadings =
     accessToken && profile

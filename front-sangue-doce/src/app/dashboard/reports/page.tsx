@@ -1,8 +1,7 @@
-import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { api, type Measurement, type MeasurementNoteType } from "@/lib/api";
-import { AUTH_COOKIE_NAME } from "@/lib/auth-cookie";
+import { getCurrentAuth } from "@/lib/current-auth";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
 import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
@@ -92,16 +91,9 @@ function getMeasurementForColumn(measurements: Measurement[], column: ReportColu
 
 export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   const query = (await searchParams) ?? {};
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+  const { accessToken, profile: userData } = await getCurrentAuth();
 
-  if (!accessToken) {
-    redirect("/login");
-  }
-
-  const userData = await api.auth.profile(accessToken).catch(() => null);
-
-  if (!userData) {
+  if (!accessToken || !userData) {
     redirect("/login");
   }
 
