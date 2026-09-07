@@ -1,0 +1,51 @@
+@startuml
+title Backend - Modulos de Suporte Operacional
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "UploadsModule" {
+  class UploadsController <<controller>>
+  class UploadsService <<service>>
+}
+
+package "InvitesModule" {
+  class InvitesController <<controller>>
+  class InvitesService <<service>>
+}
+
+package "AnalyticsModule" {
+  class AnalyticsController <<controller>>
+  class AnalyticsService <<service>>
+}
+
+package "HealthModule" {
+  class HealthController <<controller>>
+  class HealthService <<service>>
+}
+
+class AwsS3Service <<service>>
+class MailService <<service>>
+class PrismaService <<service>>
+storage "S3 / MinIO" as ObjectStorage
+database "PostgreSQL" as Postgres
+
+UploadsController --> UploadsService
+UploadsService --> AwsS3Service
+AwsS3Service --> ObjectStorage
+
+InvitesController --> InvitesService
+InvitesService --> PrismaService
+InvitesService --> MailService
+
+AnalyticsController --> AnalyticsService
+AnalyticsService --> PrismaService
+HealthController --> HealthService
+PrismaService --> Postgres
+
+@enduml

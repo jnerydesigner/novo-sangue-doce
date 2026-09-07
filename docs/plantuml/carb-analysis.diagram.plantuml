@@ -1,0 +1,43 @@
+@startuml
+title Backend - Modulo CarbAnalysis
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "CarbAnalysisModule" {
+  class CarbAnalysisController <<controller>>
+  class CarbAnalysisService <<service>>
+  class AnthropicCarbAnalysisService <<gateway>>
+  class CarbAnalysisReportPdfService <<service>>
+  class CountCarbProducer <<queue>>
+  class CountCarbWorker <<worker>>
+}
+
+class AwsS3Service <<service>>
+class MailService <<service>>
+class PrismaService <<service>>
+queue "Redis / BullMQ" as Redis
+storage "S3 / MinIO" as ObjectStorage
+cloud "Anthropic API" as AnthropicApi
+database "PostgreSQL" as Postgres
+
+CarbAnalysisController --> CarbAnalysisService
+CarbAnalysisService --> AnthropicCarbAnalysisService
+CarbAnalysisService --> CountCarbProducer
+CarbAnalysisService --> AwsS3Service
+CarbAnalysisService --> CarbAnalysisReportPdfService
+CarbAnalysisService --> MailService
+CarbAnalysisService --> PrismaService
+CountCarbProducer --> Redis
+CountCarbWorker --> Redis
+CountCarbWorker --> CarbAnalysisService
+AnthropicCarbAnalysisService --> AnthropicApi
+AwsS3Service --> ObjectStorage
+PrismaService --> Postgres
+
+@enduml

@@ -1,7 +1,6 @@
 package br.com.sanguedoce.app
 
 import android.content.Intent
-import retrofit2.HttpException
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -25,10 +24,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -56,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.core.content.FileProvider
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -76,8 +78,13 @@ import br.com.sanguedoce.app.ui.componentes.SangueDoceBottomBar
 import br.com.sanguedoce.app.ui.configureSangueDoceSystemBars
 import coil3.compose.AsyncImage
 import com.google.gson.JsonSyntaxException
+import java.io.File
+import java.util.Calendar
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 private const val S3_BASE_URL = "https://sangue-doce.s3.us-east-1.amazonaws.com"
 
@@ -237,8 +244,16 @@ private fun ProfileScreen(
                 }
             }
 
+            if (profileState is ProfileUiState.Success) {
+                item {
+                    ReportCardSend(profile = profileState.profile)
+                }
+            }
+
             if (profileState is ProfileUiState.Success && profileState.profile.role == "ADMIN") {
-                item { AdminInvitesCard() }
+                item {
+                    AdminInvitesCard()
+                }
             }
 
             item {
@@ -427,6 +442,7 @@ private fun AdminInvitesCard() {
                 )
             }
             Text("Envie e acompanhe convites de novos usuários.", color = SangueDoceMutedText)
+            Text("Text de criação de linha.", color = SangueDoceMutedText)
             Button(
                 onClick = { email = ""; message = null; showDialog = true },
                 modifier = Modifier.fillMaxWidth()
@@ -565,6 +581,249 @@ private fun SettingsCard() {
             ProfileInfoRow(label = "Fuso horário", value = "America/Manaus")
         }
     }
+}
+
+@Composable
+private fun ReportCardSend(profile: ProfileResponse) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var sendingPdf by remember { mutableStateOf(false) }
+    var sendingImage by remember { mutableStateOf(false) }
+    var message by remember { mutableStateOf<String?>(null) }
+    val calendar = remember { Calendar.getInstance() }
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH) + 1
+    val sending = sendingPdf || sendingImage
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = SangueDoceCard),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.AutoMirrored.Filled.Send,
+                    contentDescription = null,
+                    tint = SangueDocePrimary
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    "Relatório mensal",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SangueDoceInk
+                )
+            }
+
+            Text(
+                "Gere o relatório do mês atual e envie pelo aplicativo que preferir.",
+                color = SangueDoceMutedText,
+                fontSize = 14.sp
+            )
+
+            Button(
+                enabled = !sending,
+                onClick = {
+                    scope.launch {
+                        sendingPdf = true
+                        message = null
+
+                        runCatching {
+                            val reportFile = downloadMonthlyReportPdf(
+                                context = context,
+                                profile = profile,
+                                year = year,
+                                month = month
+                            )
+                            shareMonthlyReportPdf(context, reportFile)
+                        }.onSuccess {
+                            message = "PDF pronto para envio."
+                            Toast.makeText(
+                                context,
+                                "PDF pronto para envio.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }.onFailure { error ->
+                            val detail = error.message ?: "Não foi possível gerar o PDF."
+                            message = detail
+                            Toast.makeText(context, detail, Toast.LENGTH_LONG).show()
+                        }
+
+                        sendingPdf = false
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = SangueDocePrimary)
+            ) {
+                if (sendingPdf) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                } else {
+                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(if (sendingPdf) "Preparando PDF..." else "Enviar PDF do mês")
+            }
+
+            OutlinedButton(
+                enabled = !sending,
+                onClick = {
+                    scope.launch {
+                        sendingImage = true
+                        message = null
+
+                        runCatching {
+                            val reportFile = downloadMonthlyReportImage(
+                                context = context,
+                                profile = profile,
+                                year = year,
+                                month = month
+                            )
+                            shareReportFile(
+                                context = context,
+                                reportFile = reportFile,
+                                mimeType = "image/png",
+                                chooserTitle = "Enviar imagem do relatório"
+                            )
+                        }.onSuccess {
+                            message = "Imagem pronta para envio."
+                            Toast.makeText(
+                                context,
+                                "Imagem pronta para envio.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }.onFailure { error ->
+                            val detail = error.message ?: "Não foi possível gerar a imagem."
+                            message = detail
+                            Toast.makeText(context, detail, Toast.LENGTH_LONG).show()
+                        }
+
+                        sendingImage = false
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (sendingImage) {
+                    CircularProgressIndicator(
+                        color = SangueDocePrimary,
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                } else {
+                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(if (sendingImage) "Preparando imagem..." else "Enviar imagem do mês")
+            }
+
+            message?.let {
+                Text(
+                    it,
+                    color = SangueDocePrimary,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+    }
+}
+
+private suspend fun downloadMonthlyReportPdf(
+    context: android.content.Context,
+    profile: ProfileResponse,
+    year: Int,
+    month: Int
+): File = withContext(Dispatchers.IO) {
+    val responseBody = RetrofitClient.api.getMonthlyMeasurementReportPdf(
+        year = year,
+        month = month,
+        birthDate = profile.birthDate.takeIf { it.isNotBlank() },
+        diabetesType = profile.diabetesType.takeIf { it.isNotBlank() }
+    )
+    val reportsDir = File(context.cacheDir, "reports").apply { mkdirs() }
+    val reportFile = File(
+        reportsDir,
+        "relatorio-glicemia-${year}-${month.toString().padStart(2, '0')}.pdf"
+    )
+
+    responseBody.byteStream().use { input ->
+        reportFile.outputStream().use { output ->
+            input.copyTo(output)
+        }
+    }
+
+    reportFile
+}
+
+private suspend fun downloadMonthlyReportImage(
+    context: android.content.Context,
+    profile: ProfileResponse,
+    year: Int,
+    month: Int
+): File = withContext(Dispatchers.IO) {
+    val responseBody = RetrofitClient.api.getMonthlyMeasurementReportImage(
+        year = year,
+        month = month,
+        birthDate = profile.birthDate.takeIf { it.isNotBlank() },
+        diabetesType = profile.diabetesType.takeIf { it.isNotBlank() }
+    )
+    val reportsDir = File(context.cacheDir, "reports").apply { mkdirs() }
+    val reportFile = File(
+        reportsDir,
+        "relatorio-glicemia-${year}-${month.toString().padStart(2, '0')}.png"
+    )
+
+    responseBody.byteStream().use { input ->
+        reportFile.outputStream().use { output ->
+            input.copyTo(output)
+        }
+    }
+
+    reportFile
+}
+
+private fun shareMonthlyReportPdf(context: android.content.Context, reportFile: File) {
+    shareReportFile(
+        context = context,
+        reportFile = reportFile,
+        mimeType = "application/pdf",
+        chooserTitle = "Enviar relatório"
+    )
+}
+
+private fun shareReportFile(
+    context: android.content.Context,
+    reportFile: File,
+    mimeType: String,
+    chooserTitle: String
+) {
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        reportFile
+    )
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = mimeType
+        putExtra(Intent.EXTRA_STREAM, uri)
+        putExtra(Intent.EXTRA_SUBJECT, "Relatório mensal de glicemia")
+        putExtra(Intent.EXTRA_TEXT, "Segue o relatório mensal de glicemia.")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+
+    context.startActivity(
+        Intent.createChooser(shareIntent, chooserTitle)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    )
 }
 
 @Composable

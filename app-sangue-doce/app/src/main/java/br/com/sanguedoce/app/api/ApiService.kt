@@ -13,6 +13,7 @@ import br.com.sanguedoce.app.model.consumptions.FoodSearchResult
 import br.com.sanguedoce.app.model.consumptions.SaveFoodConsumptionRequest
 import br.com.sanguedoce.app.model.home.AppHomeResponse
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -22,6 +23,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Streaming
 
 interface ApiService {
 
@@ -71,6 +73,24 @@ interface ApiService {
     suspend fun createMeasurementFromImage(
         @Part image: MultipartBody.Part
     ): TodayResponse
+
+    @Streaming
+    @GET("measurements/reports/monthly.pdf")
+    suspend fun getMonthlyMeasurementReportPdf(
+        @Query("year") year: Int,
+        @Query("month") month: Int,
+        @Query("birthDate") birthDate: String? = null,
+        @Query("diabetesType") diabetesType: String? = null
+    ): ResponseBody
+
+    @Streaming
+    @GET("measurements/reports/monthly.png")
+    suspend fun getMonthlyMeasurementReportImage(
+        @Query("year") year: Int,
+        @Query("month") month: Int,
+        @Query("birthDate") birthDate: String? = null,
+        @Query("diabetesType") diabetesType: String? = null
+    ): ResponseBody
 
     @GET("food-consumptions/today/meal")
     suspend fun getFoodConsumptionsTodayMeal(

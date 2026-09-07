@@ -1,0 +1,110 @@
+@startuml
+title Sangue Doce - Backend por modulos
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+skinparam nodesep 30
+skinparam ranksep 42
+
+package "Entrada HTTP" {
+  class AppModule <<module>>
+  class AuthGuard <<guard>>
+  class RolesGuard <<guard>>
+  class RequestIdMiddleware <<middleware>>
+}
+
+package "Core" {
+  class AuthModule <<module>>
+  class UsersModule <<module>>
+  class InfraModule <<module>>
+  class DatabaseModule <<module>>
+}
+
+package "Recursos do paciente" {
+  class MeasurementsModule <<module>>
+  class FoodsModule <<module>>
+  class CarbAnalysisModule <<module>>
+}
+
+package "Conteudo" {
+  class PostsModule <<module>>
+  class AuthorsModule <<module>>
+  class RecipesModule <<module>>
+  class InstitutionalPublicationsModule <<module>>
+}
+
+package "Automacoes" {
+  class SocialPublicationsModule <<module>>
+  class PostBannerModule <<module>>
+  class NewsletterModule <<module>>
+}
+
+package "Suporte operacional" {
+  class UploadsModule <<module>>
+  class InvitesModule <<module>>
+  class AnalyticsModule <<module>>
+  class HealthModule <<module>>
+}
+
+database "PostgreSQL" as Postgres
+queue "Redis / BullMQ" as Redis
+storage "S3 / MinIO" as ObjectStorage
+cloud "Smart FastAPI" as SmartApi
+cloud "LLM APIs" as LlmApis
+
+AppModule --> AuthGuard
+AppModule --> RolesGuard
+AppModule --> RequestIdMiddleware
+
+AppModule *-- AuthModule
+AppModule *-- UsersModule
+AppModule *-- InfraModule
+AppModule *-- MeasurementsModule
+AppModule *-- FoodsModule
+AppModule *-- CarbAnalysisModule
+AppModule *-- PostsModule
+AppModule *-- AuthorsModule
+AppModule *-- RecipesModule
+AppModule *-- InstitutionalPublicationsModule
+AppModule *-- SocialPublicationsModule
+AppModule *-- PostBannerModule
+AppModule *-- NewsletterModule
+AppModule *-- UploadsModule
+AppModule *-- InvitesModule
+AppModule *-- AnalyticsModule
+AppModule *-- HealthModule
+
+InfraModule *-- DatabaseModule
+DatabaseModule --> Postgres
+MeasurementsModule --> SmartApi
+MeasurementsModule --> Redis
+FoodsModule --> Redis
+FoodsModule --> ObjectStorage
+CarbAnalysisModule --> Redis
+CarbAnalysisModule --> ObjectStorage
+CarbAnalysisModule --> LlmApis
+SocialPublicationsModule --> Redis
+SocialPublicationsModule --> LlmApis
+PostBannerModule --> Redis
+PostBannerModule --> LlmApis
+NewsletterModule --> Redis
+UploadsModule --> ObjectStorage
+
+note bottom
+  Diagramas detalhados por recurso:
+  - auth-users.diagram.plantuml
+  - measurements.diagram.plantuml
+  - foods.diagram.plantuml
+  - carb-analysis.diagram.plantuml
+  - content.diagram.plantuml
+  - social-publications.diagram.plantuml
+  - post-banners-newsletter.diagram.plantuml
+  - support.diagram.plantuml
+end note
+
+@enduml

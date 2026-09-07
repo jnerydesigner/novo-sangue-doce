@@ -1,0 +1,51 @@
+@startuml
+title Backend - Modulos Auth e Users
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "AuthModule" {
+  class AuthController <<controller>>
+  class AuthService <<service>>
+  class GoogleStrategy <<strategy>>
+  abstract class AuthRepository <<repository>>
+  class AuthPrismaRepository <<repository>>
+}
+
+package "UsersModule" {
+  class UsersController <<controller>>
+  class UsersService <<service>>
+  abstract class UserRepository <<repository>>
+  class PrismaUsersRepository <<repository>>
+  class UserEntity <<entity>>
+}
+
+class AuthGuard <<guard>>
+class RolesGuard <<guard>>
+class MailService <<service>>
+class PrismaService <<service>>
+database "PostgreSQL" as Postgres
+
+AuthGuard --> AuthService : JWT / Better Auth
+RolesGuard --> AuthGuard
+AuthController --> AuthService
+AuthService --> AuthRepository
+AuthService --> MailService
+AuthPrismaRepository ..|> AuthRepository
+AuthPrismaRepository --> PrismaService
+GoogleStrategy --> AuthService
+
+UsersController --> UsersService
+UsersService --> UserRepository
+UsersService --> PrismaService
+UserRepository ..> UserEntity
+PrismaUsersRepository ..|> UserRepository
+PrismaUsersRepository --> PrismaService
+PrismaService --> Postgres
+
+@enduml
