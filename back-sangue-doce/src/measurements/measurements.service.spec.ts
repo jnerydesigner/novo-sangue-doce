@@ -14,6 +14,10 @@ describe("MeasurementsService smart image ingestion", () => {
     sendImageToDecodedSmart: vi.fn(),
     sendReportToDecodedSmart: vi.fn(),
   };
+  const measurementReportImportQueue = {
+    enqueue: vi.fn(),
+    getJob: vi.fn(),
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -22,6 +26,7 @@ describe("MeasurementsService smart image ingestion", () => {
       {} as never,
       authService as never,
       measurementSmartService as never,
+      measurementReportImportQueue as never,
     );
   });
 
@@ -115,5 +120,49 @@ describe("MeasurementsService smart image ingestion", () => {
       SensorManufacturer.Sibionics,
     );
     expect(createSpy).toHaveBeenCalledWith(request, decodedMeasurements[0]);
+  });
+
+  it("queues report import using authenticated user id", async () => {
+    const file: UploadedImageFile = {
+      buffer: Buffer.from("fake-report"),
+      mimetype: "application/vnd.ms-excel",
+      originalname: "relatorio.xls",
+      size: 20,
+    };
+    const request = { user: { sub: "4f3069fb-7d80-45b1-a2b4-dc2d3dbec84d" } };
+    authService.getAuthenticatedUser.mockReturnValue(request.user);
+    measurementReportImportQueue.enqueue.mockResolvedValue({ id: "job-id" });
+
+    await expect(
+      service.enqueueSmartReportImport(request as never, file, SensorManufacturer.Sibionics),
+    ).resolves.toEqual({ jobId: "job-id", status: "queued" });
+    expect(measurementReportImportQueue.enqueue).toHaveBeenCalledWith({
+      fileBase64: file.buffer.toString("base64"),
+      mimetype: file.mimetype,
+      originalName: file.originalname,
+      sensorManufacturer: SensorManufacturer.Sibionics,
+      size: file.size,
+      userId: request.user.sub,
+    });
+  });
+
+  it("returns report import job status for the authenticated user", async () => {
+    const request = { user: { sub: "4f3069fb-7d80-45b1-a2b4-dc2d3dbec84d" } };
+    authService.getAuthenticatedUser.mockReturnValue(request.user);
+    measurementReportImportQueue.getJob.mockResolvedValue({
+      data: { userId: request.user.sub },
+      failedReason: undefined,
+      getState: vi.fn().mockResolvedValue("completed"),
+      progress: 100,
+      returnvalue: { importedCount: 6 },
+    });
+
+    await expect(service.getReportImportStatus(request as never, "job-id")).resolves.toEqual({
+      error: undefined,
+      importedCount: 6,
+      jobId: "job-id",
+      progress: 100,
+      status: "completed",
+    });
   });
 });

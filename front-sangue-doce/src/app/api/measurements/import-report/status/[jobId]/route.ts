@@ -9,7 +9,7 @@ const API_URL =
 
 function getErrorMessage(error: unknown) {
   if (!(error instanceof Error)) {
-    return "Nao foi possivel importar o relatorio.";
+    return "Nao foi possivel consultar o status da importacao.";
   }
 
   try {
@@ -27,7 +27,10 @@ function getErrorMessage(error: unknown) {
   }
 }
 
-export async function POST(request: Request) {
+export async function GET(
+  request: Request,
+  context: { params: Promise<{ jobId: string }> },
+) {
   const accessToken = (await cookies()).get(AUTH_COOKIE_NAME)?.value;
   const cookieHeader = request.headers.get("cookie");
 
@@ -36,16 +39,15 @@ export async function POST(request: Request) {
   }
 
   try {
-    const formData = await request.formData();
+    const { jobId } = await context.params;
     const response = await fetch(
-      `${API_URL}/measurements/upload/report/measurement`,
+      `${API_URL}/measurements/upload/report/measurement/status/${jobId}`,
       {
-        body: formData,
         headers: {
           ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
           ...(cookieHeader ? { Cookie: cookieHeader } : {}),
         },
-        method: "POST",
+        method: "GET",
       },
     );
 
