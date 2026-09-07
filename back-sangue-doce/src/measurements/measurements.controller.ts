@@ -26,10 +26,12 @@ import {
 } from "./measurements.service";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
+import { SensorManufacturer } from "./enums/sensor-manufacturer.enum";
 
 type MeasurementUploadFiles = {
   image?: UploadedImageFile[];
   file?: UploadedImageFile[];
+  report?: UploadedImageFile[];
 };
 
 @Controller("measurements")
@@ -218,6 +220,31 @@ export class MeasurementsController {
       xForwardedFor: this.getHeader(headers, "x-forwarded-for"),
       xForwardedProto: this.getHeader(headers, "x-forwarded-proto"),
     });
+  }
+
+  @Post("upload/report/measurement")
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: "report", maxCount: 1 },
+        { name: "file", maxCount: 1 },
+      ],
+      {
+        limits: {
+          fileSize: 10 * 1024 * 1024,
+        },
+      },
+    ),
+  )
+  @UseGuards(AuthGuard)
+  uploadReportMeasurementToSmart(
+    @UploadedFiles() files: MeasurementUploadFiles | undefined,
+    @Body("sensorManufacturer") sensorManufacturer: SensorManufacturer = SensorManufacturer.Sibionics,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    const file = files?.report?.[0] ?? files?.file?.[0];
+
+    return this.measurementsService.readSmartReport(req, file, sensorManufacturer);
   }
 
   private getHeader(

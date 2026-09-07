@@ -27,3 +27,16 @@ export interface Evidence {
   foundReadingsMgDl: number[];
   ocrText: string;
 }
+
+export interface SmartMeasurementReportResponseDto {
+  ok: boolean;
+  count: number;
+  user_id: string;
+  measurements: SmartReportMeasurement[];
+  warnings: string[];
+}
+
+export interface SmartReportMeasurement {
+  measured_at: string;
+  glucose_value_mg_dl: number;
+}
