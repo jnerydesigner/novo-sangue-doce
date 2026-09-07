@@ -13,6 +13,7 @@ import {
 } from "./dto/create-measurement.dto";
 import { MeasurementSmartService } from "./measurement-smart.service";
 import { SensorManufacturer } from "./enums/sensor-manufacturer.enum";
+import { MeasurementReportImportQueue } from "./measurement-report-import.queue";
 import {
   classifyMeasurementMoment,
   MEASUREMENT_NOTE_LABELS,
@@ -20,6 +21,11 @@ import {
   type MeasurementNoteType,
 } from "./measurement.constants";
 import { type UpdateMeasurementDto, updateMeasurementSchema } from "./dto/update-measurement.dto";
+import type {
+  MeasurementReportImportJobData,
+  MeasurementReportImportJobStatus,
+  QueuedMeasurementReportImport,
+} from "./types";
 
 const MEASUREMENT_TIME_ZONE = "America/Manaus";
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -77,6 +83,7 @@ export class MeasurementsService {
     private readonly userService: UsersService,
     private readonly authService: AuthService,
     private readonly measurementSmartService: MeasurementSmartService,
+    private readonly measurementReportImportQueue: MeasurementReportImportQueue,
   ) {}
 
   async create(
@@ -113,7 +120,7 @@ export class MeasurementsService {
       0,
       0,
       0,
-      0
+      0,
     );
     const dayEnd = this.createStoredLocalDateTime(
       measurementDay.year,
@@ -122,7 +129,7 @@ export class MeasurementsService {
       23,
       59,
       59,
-      999
+      999,
     );
 
     try {
@@ -226,11 +233,9 @@ export class MeasurementsService {
     file?: UploadedImageFile,
     sensorManufacturer: SensorManufacturer = SensorManufacturer.Sibionics,
   ): Promise<PublicMeasurement[]> {
-
     if (!file) {
-
       throw new BadRequestException(
-        `Envie o relatorio no campo "report" ou "file" usando multipart/form-data`
+        `Envie o relatorio no campo "report" ou "file" usando multipart/form-data`,
       );
     }
 
@@ -247,6 +252,75 @@ export class MeasurementsService {
     }
 
     return persistedMeasurements;
+  }
+
+  async enqueueSmartReportImport(
+    userRequest: AuthenticatedRequest,
+    file?: UploadedImageFile,
+    sensorManufacturer: SensorManufacturer = SensorManufacturer.Sibionics,
+  ): Promise<QueuedMeasurementReportImport> {
+    if (!file) {
+      throw new BadRequestException(
+        `Envie o relatorio no campo "report" ou "file" usando multipart/form-data`,
+      );
+    }
+
+    const userId = this.authService.getAuthenticatedUser(userRequest).sub;
+    const job = await this.measurementReportImportQueue.enqueue({
+      fileBase64: file.buffer.toString("base64"),
+      mimetype: file.mimetype,
+      originalName: file.originalname,
+      sensorManufacturer,
+      size: file.size,
+      userId,
+    });
+
+    return {
+      jobId: String(job.id),
+      status: "queued",
+    };
+  }
+
+  async getReportImportStatus(
+    userRequest: AuthenticatedRequest,
+    jobId: string,
+  ): Promise<MeasurementReportImportJobStatus> {
+    const userId = this.authService.getAuthenticatedUser(userRequest).sub;
+    const job = await this.measurementReportImportQueue.getJob(jobId);
+
+    if (!job || (job.data as MeasurementReportImportJobData).userId !== userId) {
+      throw new NotFoundException("Job de importacao de relatorio nao encontrado.");
+    }
+
+    const state = await job.getState();
+    const returnValue = job.returnvalue as { importedCount?: number } | null;
+    const progress = typeof job.progress === "number" ? job.progress : 0;
+
+    return {
+      error: state === "failed" ? job.failedReason : undefined,
+      importedCount: returnValue?.importedCount,
+      jobId,
+      progress,
+      status: this.mapReportImportJobState(state),
+    };
+  }
+
+  private mapReportImportJobState(state: string): MeasurementReportImportJobStatus["status"] {
+    switch (state) {
+      case "completed":
+        return "completed";
+      case "failed":
+        return "failed";
+      case "active":
+        return "processing";
+      case "waiting":
+      case "waiting-children":
+      case "delayed":
+      case "prioritized":
+        return "queued";
+      default:
+        return "unknown";
+    }
   }
 
   async update(
@@ -331,15 +405,7 @@ export class MeasurementsService {
     const userTimeZone = this.getSupportedTimeZone(timeZone);
     const today = this.getDatePartsInTimeZone(new Date(), userTimeZone);
 
-    const dayStart = this.createStoredLocalDateTime(
-      today.year,
-      today.month,
-      today.day,
-      0,
-      0,
-      0,
-      0
-    );
+    const dayStart = this.createStoredLocalDateTime(today.year, today.month, today.day, 0, 0, 0, 0);
 
     const dayEnd = this.createStoredLocalDateTime(
       today.year,
@@ -348,7 +414,7 @@ export class MeasurementsService {
       23,
       59,
       59,
-      999
+      999,
     );
 
     const noteTypeOrder: $Enums.MeasurementNoteType[] = [
@@ -544,7 +610,7 @@ export class MeasurementsService {
       isEndDate ? 23 : 0,
       isEndDate ? 59 : 0,
       isEndDate ? 59 : 0,
-      isEndDate ? 999 : 0
+      isEndDate ? 999 : 0,
     );
   }
 
@@ -585,7 +651,7 @@ export class MeasurementsService {
       Number(hour),
       Number(minute),
       Number(second),
-      Number(millisecond.padEnd(3, "0"))
+      Number(millisecond.padEnd(3, "0")),
     );
   }
 
@@ -604,7 +670,7 @@ export class MeasurementsService {
       schedule.hour,
       schedule.minute,
       0,
-      8
+      8,
     );
   }
 

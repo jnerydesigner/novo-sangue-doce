@@ -6,6 +6,8 @@ describe("MeasurementsController", () => {
   it("passes undefined file to service when upload payload is missing", async () => {
     const measurementsService = {
       createFromSmartImage: vi.fn().mockResolvedValue({ id: "measurement-id" }),
+      enqueueSmartReportImport: vi.fn(),
+      getReportImportStatus: vi.fn(),
       readSmartReport: vi.fn(),
     };
     const controller = new MeasurementsController(measurementsService as never, {} as never);
@@ -39,6 +41,8 @@ describe("MeasurementsController", () => {
   it("passes report file to service when report upload is received", async () => {
     const measurementsService = {
       createFromSmartImage: vi.fn(),
+      enqueueSmartReportImport: vi.fn().mockResolvedValue({ jobId: "job-id", status: "queued" }),
+      getReportImportStatus: vi.fn(),
       readSmartReport: vi.fn().mockResolvedValue({ ok: true, count: 0, measurements: [] }),
     };
     const controller = new MeasurementsController(measurementsService as never, {} as never);
@@ -56,11 +60,33 @@ describe("MeasurementsController", () => {
         SensorManufacturer.Sibionics,
         request as never,
       ),
-    ).resolves.toEqual({ ok: true, count: 0, measurements: [] });
-    expect(measurementsService.readSmartReport).toHaveBeenCalledWith(
+    ).resolves.toEqual({ jobId: "job-id", status: "queued" });
+    expect(measurementsService.enqueueSmartReportImport).toHaveBeenCalledWith(
       request,
       file,
       SensorManufacturer.Sibionics,
     );
+  });
+
+  it("passes report import status lookup to service", async () => {
+    const measurementsService = {
+      createFromSmartImage: vi.fn(),
+      enqueueSmartReportImport: vi.fn(),
+      getReportImportStatus: vi.fn().mockResolvedValue({
+        jobId: "job-id",
+        progress: 100,
+        status: "completed",
+      }),
+      readSmartReport: vi.fn(),
+    };
+    const controller = new MeasurementsController(measurementsService as never, {} as never);
+    const request = { user: { sub: "4f3069fb-7d80-45b1-a2b4-dc2d3dbec84d" } };
+
+    await expect(controller.getReportImportStatus(request as never, "job-id")).resolves.toEqual({
+      jobId: "job-id",
+      progress: 100,
+      status: "completed",
+    });
+    expect(measurementsService.getReportImportStatus).toHaveBeenCalledWith(request, "job-id");
   });
 });

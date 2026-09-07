@@ -27,6 +27,7 @@ import {
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { UploadedImageFile } from "@app/uploads/types/uploaded-image-file.type";
 import { SensorManufacturer } from "./enums/sensor-manufacturer.enum";
+import type { MeasurementReportImportJobStatus, QueuedMeasurementReportImport } from "./types";
 
 type MeasurementUploadFiles = {
   image?: UploadedImageFile[];
@@ -239,12 +240,22 @@ export class MeasurementsController {
   @UseGuards(AuthGuard)
   uploadReportMeasurementToSmart(
     @UploadedFiles() files: MeasurementUploadFiles | undefined,
-    @Body("sensorManufacturer") sensorManufacturer: SensorManufacturer = SensorManufacturer.Sibionics,
+    @Body("sensorManufacturer")
+    sensorManufacturer: SensorManufacturer = SensorManufacturer.Sibionics,
     @Request() req: AuthenticatedRequest,
-  ) {
+  ): Promise<QueuedMeasurementReportImport> {
     const file = files?.report?.[0] ?? files?.file?.[0];
 
-    return this.measurementsService.readSmartReport(req, file, sensorManufacturer);
+    return this.measurementsService.enqueueSmartReportImport(req, file, sensorManufacturer);
+  }
+
+  @Get("upload/report/measurement/status/:jobId")
+  @UseGuards(AuthGuard)
+  getReportImportStatus(
+    @Request() req: AuthenticatedRequest,
+    @Param("jobId") jobId: string,
+  ): Promise<MeasurementReportImportJobStatus> {
+    return this.measurementsService.getReportImportStatus(req, jobId);
   }
 
   private getHeader(
