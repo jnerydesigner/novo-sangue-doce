@@ -1,0 +1,57 @@
+@startuml
+title Backend - Modulos de Conteudo
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "PostsModule" {
+  class PostsController <<controller>>
+  class PostsService <<service>>
+  abstract class PostRepository <<repository>>
+  class PrismaPostsRepository <<repository>>
+  class PostEntity <<entity>>
+}
+
+package "AuthorsModule" {
+  class AuthorsController <<controller>>
+  class AuthorsService <<service>>
+  abstract class AuthorRepository <<repository>>
+  class PrismaAuthorsRepository <<repository>>
+  class AuthorEntity <<entity>>
+}
+
+package "RecipesModule" {
+  class RecipesController <<controller>>
+  class RecipesService <<service>>
+}
+
+package "InstitutionalPublicationsModule" {
+  class InstitutionalPublicationsController <<controller>>
+  class InstitutionalPublicationsService <<service>>
+}
+
+class PrismaService <<service>>
+database "PostgreSQL" as Postgres
+
+PostsController --> PostsService
+PostsService --> PostRepository
+PrismaPostsRepository ..|> PostRepository
+PrismaPostsRepository --> PrismaService
+PostRepository ..> PostEntity
+
+AuthorsController --> AuthorsService
+AuthorsService --> AuthorRepository
+PrismaAuthorsRepository ..|> AuthorRepository
+PrismaAuthorsRepository --> PrismaService
+AuthorRepository ..> AuthorEntity
+
+RecipesController --> RecipesService
+InstitutionalPublicationsController --> InstitutionalPublicationsService
+PrismaService --> Postgres
+
+@enduml

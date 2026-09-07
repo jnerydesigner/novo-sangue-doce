@@ -1,0 +1,91 @@
+@startuml
+title Backend - Modulo Measurements
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "MeasurementsModule" {
+  class MeasurementsController <<controller>> {
+    +create()
+    +update()
+    +findAll()
+    +findToday()
+    +getMonthlyFormalReport()
+    +uploadImageMeasurementToSmart()
+    +uploadReportMeasurementToSmart()
+    +getReportImportStatus()
+  }
+
+  class MeasurementsService <<service>> {
+    +create()
+    +createFromSmartImage()
+    +readSmartReport()
+    +enqueueSmartReportImport()
+    +getReportImportStatus()
+    +getMonthlyFormalReport()
+  }
+
+  class MeasurementSmartService <<gateway>> {
+    +sendImageToDecodedSmart()
+    +sendReportToDecodedSmart()
+  }
+
+  class MeasurementReportPdfService <<service>> {
+    +generateMonthlyReportPdf()
+    +generateMonthlyReportImage()
+  }
+
+  class MeasurementReportImportQueue <<queue>> {
+    +enqueue()
+    +getJob()
+  }
+
+  class MeasurementReportImportWorker <<worker>> {
+    +process()
+  }
+
+  class ReportSmartMapper <<mapper>> {
+    +mapSmartReportToMeasurements()
+  }
+}
+
+class AuthService <<service>>
+class UsersService <<service>>
+class PrismaService <<service>>
+cloud "Smart Sangue Doce\nFastAPI" as SmartApi
+queue "Redis / BullMQ" as Redis
+database "Measurement" as MeasurementTable
+
+MeasurementsController --> MeasurementsService
+MeasurementsController --> MeasurementReportPdfService
+
+MeasurementsService --> AuthService
+MeasurementsService --> UsersService
+MeasurementsService --> PrismaService
+MeasurementsService --> MeasurementSmartService
+MeasurementsService --> MeasurementReportImportQueue
+
+MeasurementSmartService --> SmartApi : read-image / import-xls
+MeasurementSmartService ..> ReportSmartMapper
+MeasurementReportImportQueue --> Redis
+MeasurementReportImportWorker --> Redis
+MeasurementReportImportWorker --> MeasurementsService
+PrismaService --> MeasurementTable
+
+note right of MeasurementsService
+  Regra central:
+  cria ou atualiza medicao existente
+  por usuario, dia e noteType.
+end note
+
+note right of ReportSmartMapper
+  Filtra horarios relevantes do relatorio
+  e converte resposta Smart para CreateMeasurementDto.
+end note
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+title Backend - Modulo Foods
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "FoodsModule" {
+  class FoodsController <<controller>>
+  class FoodImagesController <<controller>>
+  class FoodConsumptionsController <<controller>>
+  class FoodsService <<service>>
+  class FoodImagesService <<service>>
+  class FoodConsumptionsService <<service>>
+  class FoodsImagesQueue <<queue>>
+  class FoodsImagesWorker <<worker>>
+  abstract class FoodsRepository <<repository>>
+  class FoodsPrismaRepository <<repository>>
+}
+
+class ImageService <<service>>
+class AwsS3Service <<service>>
+class PrismaService <<service>>
+queue "Redis / BullMQ" as Redis
+storage "S3 / MinIO" as ObjectStorage
+database "PostgreSQL" as Postgres
+
+FoodsController --> FoodsService
+FoodImagesController --> FoodImagesService
+FoodConsumptionsController --> FoodConsumptionsService
+FoodsService --> FoodsRepository
+FoodsService --> FoodImagesService
+FoodsService --> FoodsImagesQueue
+FoodImagesService --> ImageService
+FoodImagesService --> AwsS3Service
+FoodConsumptionsService --> PrismaService
+FoodsImagesQueue --> Redis
+FoodsImagesWorker --> Redis
+FoodsImagesWorker --> FoodImagesService
+FoodsPrismaRepository ..|> FoodsRepository
+FoodsPrismaRepository --> PrismaService
+AwsS3Service --> ObjectStorage
+PrismaService --> Postgres
+
+@enduml

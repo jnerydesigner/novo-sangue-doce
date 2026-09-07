@@ -1,0 +1,58 @@
+@startuml
+title Backend - Modulo SocialPublications
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "SocialPublicationsModule" {
+  class SocialPublicationController <<controller>>
+  class LinkedinController <<controller>>
+  class InstagramController <<controller>>
+  class SocialPublicationService <<service>>
+  class ProcessSocialPublicationUseCase <<usecase>>
+  class SocialPublicationProducer <<queue>>
+  class SocialPublicationProcessor <<worker>>
+  class LlmTextGateway <<gateway>>
+  class LlmImageGateway <<gateway>>
+  class LinkedinService <<gateway>>
+  class InstagramService <<gateway>>
+  abstract class SocialPublicationRepository <<repository>>
+  class PrismaSocialPublicationRepository <<repository>>
+  class SocialPublicationEntity <<entity>>
+}
+
+abstract class PostRepository <<repository>>
+class PrismaService <<service>>
+queue "Redis / BullMQ" as Redis
+cloud "OpenAI / Anthropic" as LlmApis
+cloud "LinkedIn / Instagram" as SocialApis
+database "PostgreSQL" as Postgres
+
+SocialPublicationController --> SocialPublicationService
+LinkedinController --> LinkedinService
+InstagramController --> InstagramService
+SocialPublicationService --> SocialPublicationRepository
+SocialPublicationService --> PostRepository
+SocialPublicationService --> SocialPublicationProducer
+SocialPublicationProducer --> Redis
+SocialPublicationProcessor --> Redis
+SocialPublicationProcessor --> ProcessSocialPublicationUseCase
+ProcessSocialPublicationUseCase --> LlmTextGateway
+ProcessSocialPublicationUseCase --> LlmImageGateway
+ProcessSocialPublicationUseCase --> LinkedinService
+ProcessSocialPublicationUseCase --> InstagramService
+LlmTextGateway --> LlmApis
+LlmImageGateway --> LlmApis
+LinkedinService --> SocialApis
+InstagramService --> SocialApis
+PrismaSocialPublicationRepository ..|> SocialPublicationRepository
+PrismaSocialPublicationRepository --> PrismaService
+SocialPublicationRepository ..> SocialPublicationEntity
+PrismaService --> Postgres
+
+@enduml

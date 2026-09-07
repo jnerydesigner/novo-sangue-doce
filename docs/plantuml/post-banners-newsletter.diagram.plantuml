@@ -1,0 +1,54 @@
+@startuml
+title Backend - Modulos PostBanner e Newsletter
+
+allowmixing
+top to bottom direction
+hide empty members
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+
+package "PostBannerModule" {
+  class PostBannerController <<controller>>
+  class PostBannerService <<service>>
+  class PostBannerQueue <<queue>>
+  class PostBannerProcessor <<worker>>
+}
+
+package "NewsletterModule" {
+  class NewsletterController <<controller>>
+  class NewsletterService <<service>>
+  class NewsletterQueue <<queue>>
+  class NewsletterProcessor <<worker>>
+}
+
+class AwsS3Service <<service>>
+class LlmImageGateway <<gateway>>
+class SocialPublicationService <<service>>
+class MailService <<service>>
+queue "Redis / BullMQ" as Redis
+storage "S3 / MinIO" as ObjectStorage
+cloud "LLM APIs" as LlmApis
+cloud "SMTP / Resend" as MailProvider
+
+PostBannerController --> PostBannerService
+PostBannerService --> PostBannerQueue
+PostBannerService --> AwsS3Service
+PostBannerService --> LlmImageGateway
+PostBannerService --> SocialPublicationService
+PostBannerQueue --> Redis
+PostBannerProcessor --> Redis
+PostBannerProcessor --> PostBannerService
+AwsS3Service --> ObjectStorage
+LlmImageGateway --> LlmApis
+
+NewsletterController --> NewsletterService
+NewsletterService --> NewsletterQueue
+NewsletterService --> MailService
+NewsletterQueue --> Redis
+NewsletterProcessor --> Redis
+NewsletterProcessor --> NewsletterService
+MailService --> MailProvider
+
+@enduml
