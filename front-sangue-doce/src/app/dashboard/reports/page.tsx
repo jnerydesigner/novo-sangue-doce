@@ -9,6 +9,7 @@ import { DashboardHeader } from "../components/dashboard-header";
 import { DashboardSidebar } from "../components/dashboard-sidebar";
 import { GLUCOSE_STAGES, getGlucoseStage } from "../glucose-stage";
 import { ExportReportButton } from "./export-report-button";
+import { ImportReportButton } from "./import-report-button";
 
 export const dynamic = "force-dynamic";
 
@@ -210,7 +211,8 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 </button>
               </form>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap justify-end gap-2">
+              <ImportReportButton />
               <ExportReportButton
                 birthDate={userData.birthDate}
                 diabetesType={userData.diabetesType}

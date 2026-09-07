@@ -2,7 +2,7 @@ import logging
 
 from fastapi import FastAPI
 
-from app.routers import health, measurement_images
+from app.routers import health, measurement_images, measurement_imports
 
 
 def create_app() -> FastAPI:
@@ -15,8 +15,9 @@ def create_app() -> FastAPI:
         version="0.1.0",
         description="Centraliza servicos de inteligencia do Sangue Doce.",
     )
-    app.include_router(health.router)
+    app.include_router(health.router, prefix="/v1")
     app.include_router(measurement_images.router, prefix="/v1")
+    app.include_router(measurement_imports.router, prefix="/v1")
     return app
 
 

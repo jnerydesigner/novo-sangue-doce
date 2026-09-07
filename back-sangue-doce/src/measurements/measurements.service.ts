@@ -12,6 +12,7 @@ import {
   createMeasurementInputSchema,
 } from "./dto/create-measurement.dto";
 import { MeasurementSmartService } from "./measurement-smart.service";
+import { SensorManufacturer } from "./enums/sensor-manufacturer.enum";
 import {
   classifyMeasurementMoment,
   MEASUREMENT_NOTE_LABELS,
@@ -218,6 +219,34 @@ export class MeasurementsService {
     );
 
     return persistedMeasurement;
+  }
+
+  async readSmartReport(
+    userRequest: AuthenticatedRequest,
+    file?: UploadedImageFile,
+    sensorManufacturer: SensorManufacturer = SensorManufacturer.Sibionics,
+  ): Promise<PublicMeasurement[]> {
+
+    if (!file) {
+
+      throw new BadRequestException(
+        `Envie o relatorio no campo "report" ou "file" usando multipart/form-data`
+      );
+    }
+
+    const userId = this.authService.getAuthenticatedUser(userRequest).sub;
+    const decodedMeasurements = await this.measurementSmartService.sendReportToDecodedSmart(
+      file,
+      userId,
+      sensorManufacturer,
+    );
+    const persistedMeasurements: PublicMeasurement[] = [];
+
+    for (const decodedMeasurement of decodedMeasurements) {
+      persistedMeasurements.push(await this.create(userRequest, decodedMeasurement));
+    }
+
+    return persistedMeasurements;
   }
 
   async update(

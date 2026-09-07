@@ -41,7 +41,7 @@ export function ExportReportButton({
 
   return (
     <a
-      className="rounded-lg bg-green px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep print:hidden"
+      className="inline-flex h-10 items-center justify-center rounded-lg bg-green px-4 text-sm font-bold text-white transition hover:-translate-y-px hover:bg-greenDeep print:hidden"
       href={`/api/measurements/reports/monthly-${format === "png" ? "image" : "pdf"}?${searchParams}`}
     >
       {format === "png" ? "Exportar imagem" : "Exportar PDF"}
