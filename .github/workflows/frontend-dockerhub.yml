@@ -102,6 +102,8 @@ jobs:
           LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
           LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ vars.AWS_REGION }}
@@ -131,7 +133,8 @@ jobs:
               for key, value in os.environ.items()
               if key in {
                   "ANTHROPIC_API_KEY", "OPENAI_API_KEY", "LINKEDIN_ACCESS_TOKEN",
-                  "LINKEDIN_AUTHOR_URN", "RESEND_API_KEY", "AWS_ACCESS_KEY_ID",
+                  "LINKEDIN_AUTHOR_URN", "RESEND_API_KEY", "JWT_SECRET", "BETTER_AUTH_SECRET",
+                  "AWS_ACCESS_KEY_ID",
                   "AWS_SECRET_ACCESS_KEY", "AWS_REGION", "AWS_S3_REGION", "AWS_S3_BUCKET",
                   "LLM_IMAGE_MODEL", "LLM_IMAGE_QUALITY", "LLM_IMAGE_TIMEOUT_MS",
                   "LLM_TEXT_MODEL", "LLM_TEXT_TIMEOUT_MS", "LINKEDIN_API_VERSION",
