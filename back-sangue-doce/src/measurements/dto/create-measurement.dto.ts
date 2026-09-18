@@ -21,7 +21,7 @@ export const createMeasurementSchema = z.object({
   glucoseValueMgDl: z
     .number()
     .int({ message: "Glucose value must be an integer." })
-    .min(40, { message: "Glucose value must be at least 40 mg/dL." })
+    .min(35, { message: "Glucose value must be at least 35 mg/dL." })
     .max(450, { message: "Glucose value must be at most 450 mg/dL." }),
   readingContext: z.enum(READING_CONTEXTS).optional(),
   source: z.enum(MEASUREMENT_SOURCES).default("MANUAL"),

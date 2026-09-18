@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class ImportedMeasurement(BaseModel):
     measured_at: str
-    glucose_value_mg_dl: int = Field(ge=40, le=450)
+    glucose_value_mg_dl: int = Field(ge=35, le=450)
 
 
 class MeasurementImportResponse(BaseModel):

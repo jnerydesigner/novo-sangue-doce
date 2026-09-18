@@ -34,7 +34,7 @@ MeasurementNoteType = Literal[
 
 class MeasurementIngestionContract(BaseModel):
     measuredAt: str = Field(description="ISO datetime aceito pelo NestJS.")
-    glucoseValueMgDl: int = Field(ge=40, le=450)
+    glucoseValueMgDl: int = Field(ge=35, le=450)
     readingContext: ReadingContext
     source: MeasurementSource = "SENSOR"
     noteType: MeasurementNoteType

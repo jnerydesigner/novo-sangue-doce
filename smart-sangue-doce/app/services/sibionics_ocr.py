@@ -111,7 +111,7 @@ def extract_measurement_from_path(
 
     if current_reading is None:
         warnings.append("Nao foi possivel identificar a leitura em mg/dL.")
-    elif not 40 <= current_reading <= 450:
+    elif not 35 <= current_reading <= 450:
         warnings.append("Leitura identificada fora do intervalo aceito pelo backend.")
 
     logger.info(
@@ -131,7 +131,7 @@ def extract_measurement_from_path(
     )
 
     measurement = None
-    if measured_at and current_reading and 40 <= current_reading <= 450:
+    if measured_at and current_reading and 35 <= current_reading <= 450:
         moment = classify_measurement_moment(measured_at, time_zone)
         measurement = MeasurementIngestionContract(
             measuredAt=measured_at,
@@ -268,7 +268,7 @@ def parse_time_to_minutes(value: str) -> int | None:
 
 def first_valid_reading(*readings: int | None) -> int | None:
     fallback = next((reading for reading in readings if reading is not None), None)
-    return next((reading for reading in readings if reading is not None and 40 <= reading <= 450), fallback)
+    return next((reading for reading in readings if reading is not None and 35 <= reading <= 450), fallback)
 
 
 def preview_text(value: str, limit: int = 180) -> str:

@@ -3,7 +3,7 @@ import { MEASUREMENT_NOTE_TYPES } from "../measurement.constants";
 
 export const updateMeasurementSchema = z
   .object({
-    glucoseValueMgDl: z.number().int().min(40).max(450).optional(),
+    glucoseValueMgDl: z.number().int().min(35).max(450).optional(),
     noteType: z.enum(MEASUREMENT_NOTE_TYPES).optional(),
     timeZone: z.string().trim().min(1).optional(),
   })
