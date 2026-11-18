@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 app/
+!smart-sangue-doce/app/
 **/node_modules/
 
 # Build output

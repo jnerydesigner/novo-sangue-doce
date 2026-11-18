@@ -12,6 +12,7 @@ from app.schemas.measurement_image import (
     MeasurementImageResponse,
     MeasurementIngestionContract,
 )
+from app.services import aidex_ocr
 from app.services.measurement_contract import (
     build_measured_at,
     classify_measurement_moment,
@@ -19,6 +20,8 @@ from app.services.measurement_contract import (
     extract_digits_reading,
     extract_reading_from_card,
     timestamp_from_filename,
+    parse_iso_datetime,
+    parse_time_zone,
 )
 
 try:
@@ -79,26 +82,40 @@ def extract_measurement_from_path(
     text = ocr(path)
     logger.info("OCR geral concluido. chars=%s preview=%s", len(text), preview_text(text))
     basic = extract_basic_evidence(text)
-    digits_text = ocr_digits_reading(path)
+    aidex = aidex_ocr.is_aidex(text)
+    digits_text = str(aidex_ocr.read_digits(path, image_to_string) or "") if aidex else ocr_digits_reading(path)
     logger.info("OCR area de digitos concluido. chars=%s preview=%s", len(digits_text), preview_text(digits_text))
     digits_reading = extract_digits_reading(digits_text)
     card_text = ocr_current_card(path)
     logger.info("OCR card atual concluido. chars=%s preview=%s", len(card_text), preview_text(card_text))
     card_reading = extract_reading_from_card(card_text, text)
-    current_reading = first_valid_reading(
-        digits_reading,
-        card_reading,
-        basic["currentReadingMgDl"],
+    current_reading = (
+        digits_reading
+        if aidex
+        else first_valid_reading(digits_reading, card_reading, basic["currentReadingMgDl"])
     )
-    estimated_time, confidence = estimate_time_from_chart(path, basic["foundTimes"])
+    if aidex:
+        estimated_time, confidence = aidex_ocr.estimate_chart_time(path, image_to_data)
+    else:
+        estimated_time, confidence = estimate_time_from_chart(path, basic["foundTimes"])
     filename_timestamp = timestamp_from_filename(original_filename)
+    date_value = basic["date"]
+    inferred_date = False
+    if aidex and not date_value and estimated_time and sent_at:
+        date_value = parse_iso_datetime(sent_at, time_zone).astimezone(parse_time_zone(time_zone)).strftime("%d/%m/%Y")
+        inferred_date = True
     measured_at, warnings = build_measured_at(
-        date_value=basic["date"],
+        date_value=date_value,
         estimated_time=estimated_time,
         filename_timestamp=filename_timestamp,
         sent_at=sent_at,
         time_zone=time_zone,
     )
+
+    if aidex:
+        warnings.append("Imagem identificada como Aidex; horario do grafico e aproximado.")
+    if inferred_date:
+        warnings.append("Data nao identificada na imagem; foi usada a data do envio.")
 
     evidence_payload = {**basic, "currentReadingMgDl": current_reading}
     evidence = MeasurementImageEvidence(
@@ -165,6 +182,14 @@ def image_to_string(*args, **kwargs) -> str:
         raise OcrDependencyError(
             "Binario tesseract nao encontrado. Instale com: sudo apt install tesseract-ocr tesseract-ocr-por"
         ) from error
+
+
+def image_to_data(*args, **kwargs):
+    ensure_tesseract_available()
+    try:
+        return pytesseract.image_to_data(*args, **kwargs)
+    except TesseractNotFoundError as error:
+        raise OcrDependencyError("Binario tesseract nao encontrado.") from error
 
 
 def ocr(path: Path) -> str:

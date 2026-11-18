@@ -27,3 +27,19 @@ Quando o app estiver pronto, poderá informar o horário real do envio:
 python3 capture-screen/ler_sibionics.py imagem.jpeg \
   --horario-envio 2026-08-10T13:22:15-04:00
 ```
+
+## Leitura de prints Aidex
+
+Com o Tesseract e o Pillow instalados (veja a instalação acima), execute:
+
+```bash
+python3 capture-screen/ler_aidex.py capture-screen/aidex.jpeg
+```
+
+Para a imagem de exemplo, a saída é `121 mg/dL` e o horário estimado
+da última marcação do gráfico é `15:16`. Para `aidex2.png`, o script lê
+`124 mg/dL` e estima `15:22`. O horário é interpolado pela posição
+do ponto no eixo e pode variar alguns minutos. O leitor usa a posição
+relativa do número no layout mostrado nessa imagem; alterações no layout ou
+recortes diferentes podem exigir ajuste. Confira o resultado com a imagem,
+pois o reconhecimento de texto pode falhar.

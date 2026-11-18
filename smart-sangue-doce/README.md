@@ -93,3 +93,17 @@ Depois atualize/recrie a stack no Portainer usando o compose da raiz. O servico 
 ```bash
 make test-smart
 ```
+
+## Capturas AiDEX/LinX
+
+O mesmo endpoint `/v1/measurements/read-image` identifica capturas AiDEX/LinX
+pelos textos da tela e lê a glicose e a posição do último ponto no gráfico de
+6 horas. O horário do gráfico é aproximado. A identificação depende do layout e
+dos textos visíveis; outros layouts, idiomas ou recortes podem não funcionar.
+
+Quando não há data completa na imagem e há um horário estimado no gráfico, o
+serviço usa a data local de `sent_at` e inclui um aviso em `warnings`. No fluxo
+do backend, `sent_at` é o momento do upload; portanto, essa data pode estar
+incorreta para capturas antigas. Se o gráfico não puder ser lido, continua
+valendo o fallback de horário existente. Na resposta de sucesso do backend, os
+avisos ficam nos logs do Smart e não são retornados ao cliente.
