@@ -809,3 +809,27 @@ model Invite {
   @@index([expiresAt, status])
   @@map("invites")
 }
+
+model ShortLink {
+  id        String   @id @default(uuid()) @db.Uuid
+  code      String   @unique
+  url       String
+  title     String?
+  visits    Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  locations ShortLinkLocation[]
+
+  @@map("short_links")
+}
+
+model ShortLinkLocation {
+  id          String    @id @default(uuid()) @db.Uuid
+  shortLinkId String    @map("short_link_id") @db.Uuid
+  shortLink   ShortLink @relation(fields: [shortLinkId], references: [id], onDelete: Cascade)
+  country     String
+  region      String    @default("")
+  visits      Int       @default(0)
+
+  @@unique([shortLinkId, country, region])
+  @@map("short_link_locations")
+}

@@ -26,6 +26,7 @@ import { RecipesModule } from "./recipes/recipes.module";
 import { SocialPublicationsModule } from "./social-publications/social-publications.module";
 import { UploadsModule } from "./uploads/uploads.module";
 import { UsersModule } from "./users/users.module";
+import { ShortLinksModule } from "./short-links/short-links.module";
 
 @Global()
 @Module({
@@ -72,6 +73,7 @@ import { UsersModule } from "./users/users.module";
     UploadsModule,
     SocialPublicationsModule,
     FoodsModule,
+    ShortLinksModule,
   ],
   controllers: [],
   providers: [
