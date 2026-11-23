@@ -16,6 +16,7 @@ import {
   Users,
   Mail,
   Utensils,
+  Link2,
 } from "lucide-react";
 
 export type DashboardTone = "blue" | "green" | "tomato";
@@ -48,6 +49,7 @@ export const adminSidebarItems: SidebarItem[] = [
   { href: "/admin/recipes", icon: CookingPot, label: "Receitas" },
   { href: "/admin/social-publications", icon: Share2, label: "Publicacoes sociais" },
   { href: "/admin/institutional-publications", icon: Landmark, label: "Institucional" },
+  { href: "/admin/links", icon: Link2, label: "Links curtos" },
   { href: "/admin/taxonomy", icon: Tags, label: "Tags e Categorias" },
   { href: "/admin/users", icon: Users, label: "Usuarios" },
   { href: "/admin/invites", icon: Mail, label: "Convites" },
@@ -71,11 +73,11 @@ export const adminSidebarGroups: SidebarGroup[] = [
   },
   {
     label: "Conteudo",
-    items: adminSidebarItems.slice(1, 5),
+    items: adminSidebarItems.slice(1, 6),
   },
   {
     label: "Organizacao",
-    items: adminSidebarItems.slice(5, 9),
+    items: adminSidebarItems.slice(6, 10),
   },
 ];
 

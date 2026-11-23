@@ -12,7 +12,8 @@ type AdminShellProps = {
     | "taxonomy"
     | "users"
     | "invites"
-    | "authors";
+    | "authors"
+    | "links";
   children: React.ReactNode;
   subtitle?: string;
   title?: string;
@@ -57,6 +58,10 @@ const pageTitles: Record<AdminShellProps["active"], { title: string; subtitle: s
   authors: {
     title: "Autores",
     subtitle: "Perfis editoriais vinculados a usuarios.",
+  },
+  links: {
+    title: "Links curtos",
+    subtitle: "Crie links para compartilhar seus conteúdos e indicações.",
   },
 };
 
