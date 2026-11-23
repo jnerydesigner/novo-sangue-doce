@@ -2,7 +2,7 @@ export function HostingerAd() {
   return (
     <a
       className="group relative flex min-h-[210px] flex-col overflow-hidden bg-[#1d1347] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#d8cfff] sm:flex-row sm:items-stretch"
-      href="https://bit.ly/hostinger-sangue-doce"
+      href="https://www.hostinger.com/br/cart?product=vps%3Avps_kvm_2&period=24&referral_type=cart_link&REFERRALCODE=JANDERNERY&referral_id=01a2086a-f898-72e8-8a5b-e20398315d0f"
       target="_blank"
       rel="sponsored noopener noreferrer"
     >

@@ -2,7 +2,7 @@ export function AidexxAd() {
   return (
         <a
           className="affiliate-ad group relative flex min-h-[210px] flex-col overflow-hidden bg-[#102c4f] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#ffbf7b] sm:flex-row sm:items-stretch"
-          href="https://bit.ly/3UPnIof"
+          href="https://s.click.aliexpress.com/e/_c4rHYdzb"
           target="_blank"
           rel="sponsored noopener noreferrer"
         >
