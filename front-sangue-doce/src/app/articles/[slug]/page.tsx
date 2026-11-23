@@ -1,7 +1,3 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/ads/ad-slot";
 import { PostContentBlocks } from "@/components/articles/post-content-blocks";
 import { ArticleCard } from "@/components/home/article-card";
@@ -13,7 +9,16 @@ import type { PostContentBlock } from "@/lib/api";
 import { api } from "@/lib/api";
 import { formatPostDate, mapPostToArticle } from "@/lib/posts";
 import { resolvePublicImageUrl } from "@/lib/public-image-url";
-import { buildArticleJsonLd, SITE_NAME, SITE_URL, truncateMetaTitle } from "@/lib/seo";
+import {
+  buildArticleJsonLd,
+  SITE_NAME,
+  SITE_URL,
+  truncateMetaTitle,
+} from "@/lib/seo";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArticleActions, ReadingProgress } from "./article-actions";
 
 type ArticlePageProps = {
@@ -22,7 +27,9 @@ type ArticlePageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await api.posts.getBySlug(slug).catch(() => null);
 
@@ -77,7 +84,10 @@ function tagClass(color: string) {
   return "bg-[#E4F8FC] text-navy";
 }
 
-function splitContentAfterParagraphs(blocks: PostContentBlock[], paragraphLimit: number) {
+function splitContentAfterParagraphs(
+  blocks: PostContentBlock[],
+  paragraphLimit: number,
+) {
   let paragraphs = 0;
   const splitIndex = blocks.findIndex((block) => {
     if (block.type !== "paragraph" || !block.content.trim()) {
@@ -182,8 +192,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <div className="h-[50px] w-[50px] rounded-full border border-lineStrong bg-subtle" />
                   )}
                   <div>
-                    <div className="text-[15.5px] font-semibold text-ink">{post.author.name}</div>
-                    <div className="text-[13.5px] text-muted">{post.author.role}</div>
+                    <div className="text-[15.5px] font-semibold text-ink">
+                      {post.author.name}
+                    </div>
+                    <div className="text-[13.5px] text-muted">
+                      {post.author.role}
+                    </div>
                   </div>
                 </Link>
 
@@ -245,7 +259,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
 
           <div className="wrap">
-            <AdSlot className="mx-auto max-w-[970px]" placement="articleTop" />
+            <AdSlot
+              className="mx-auto max-w-[970px]"
+              placement="articleTop"
+              ownAd="aidexx"
+            />
           </div>
 
           <div className="wrap grid gap-10 py-[clamp(48px,7vw,84px)] md:grid-cols-[1fr_minmax(0,720px)_1fr]">
@@ -256,9 +274,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="article-prose text-[1.16rem] leading-[1.72] text-inkSoft">
               <PostContentBlocks blocks={contentParts.before} />
 
-              {contentParts.after.length ? <AdSlot placement="articleMiddle" /> : null}
+              {contentParts.after.length ? (
+                <AdSlot placement="articleMiddle" ownAd="hostinger" />
+              ) : null}
 
-              <PostContentBlocks blocks={contentParts.after} leadDropcap={false} />
+              <PostContentBlocks
+                blocks={contentParts.after}
+                leadDropcap={false}
+              />
 
               <div className="mt-11 flex flex-wrap gap-2.5">
                 {post.tags.map((tag) => (
@@ -303,8 +326,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <h2 className="m-0 font-serif text-2xl font-medium tracking-normal text-ink">
                   {post.author.name}
                 </h2>
-                <p className="mb-3 mt-1 text-sm text-muted">{post.author.role}</p>
-                <p className="m-0 text-[15.5px] leading-relaxed text-inkSoft">{post.author.bio}</p>
+                <p className="mb-3 mt-1 text-sm text-muted">
+                  {post.author.role}
+                </p>
+                <p className="m-0 text-[15.5px] leading-relaxed text-inkSoft">
+                  {post.author.bio}
+                </p>
                 {post.author.socialMedia.length ? (
                   <div className="relative z-10 mt-5 flex flex-wrap gap-2">
                     {post.author.socialMedia.map((social) => (
@@ -333,7 +360,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </article>
 
         <div className="wrap">
-          <AdSlot className="mx-auto max-w-[970px]" placement="articleBottom" />
+          <AdSlot
+            className="mx-auto max-w-[970px]"
+            placement="articleBottom"
+            ownAd="hostinger"
+          />
         </div>
 
         <section className="mt-[clamp(64px,8vw,96px)] border-t border-line bg-subtle py-[clamp(56px,8vw,88px)]">

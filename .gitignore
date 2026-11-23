@@ -2,6 +2,7 @@
 node_modules/
 app/
 !smart-sangue-doce/app/
+!front-sangue-doce/src/app/
 **/node_modules/
 
 # Build output

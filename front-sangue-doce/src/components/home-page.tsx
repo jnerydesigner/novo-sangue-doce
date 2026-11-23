@@ -24,9 +24,13 @@ export function HomePage({ isAuthenticated, profile, recentReadings, recipes }: 
       <SiteHeader isAuthenticated={isAuthenticated} profile={profile} />
       <main>
         <HeroSection />
-        <AdSlot className="wrap" placement="homeTop" />
+        <div className="wrap">
+          <AdSlot placement="homeTop" ownAd="aidexx" />
+        </div>
         <EditorialSection />
-        <AdSlot className="wrap" placement="homeMiddle" />
+        <div className="wrap">
+          <AdSlot placement="homeMiddle" ownAd="hostinger" />
+        </div>
         <RecipesCarouselSection recipes={recipes} />
 
         <GlucoseEntrySection
@@ -35,7 +39,9 @@ export function HomePage({ isAuthenticated, profile, recentReadings, recipes }: 
           recentReadings={recentReadings}
         />
         <GuidesSection />
-        <AdSlot className="wrap" placement="homeBottom" />
+        <div className="wrap">
+          <AdSlot placement="homeBottom" ownAd="aidexx" />
+        </div>
         <NewsletterSection />
       </main>
       <SiteFooter />

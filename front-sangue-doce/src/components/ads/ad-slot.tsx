@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { AidexxAd } from "./aidexx-ad";
+import { HostingerAd } from "./hostinger-ad";
 
 type AdPlacement =
   | "homeTop"
@@ -19,6 +21,7 @@ type AdPlacement =
 type AdSlotProps = {
   className?: string;
   placement: AdPlacement;
+  ownAd?: "aidexx" | "hostinger";
 };
 
 type WindowWithAds = Window & {
@@ -57,8 +60,9 @@ const adHeights: Record<AdPlacement, string> = {
   guideBottom: "min-h-[118px] sm:min-h-[100px]",
 };
 
-export function AdSlot({ className = "", placement }: AdSlotProps) {
+export function AdSlot({ className = "", placement, ownAd }: AdSlotProps) {
   const slot = adSlots[placement];
+  const showOwnAd = Boolean(ownAd && !slot);
   const showPlaceholder = process.env.NODE_ENV !== "production" && !slot;
 
   useEffect(() => {
@@ -75,7 +79,7 @@ export function AdSlot({ className = "", placement }: AdSlotProps) {
     }
   }, [slot]);
 
-  if (!slot && !showPlaceholder) {
+  if (!slot && !showPlaceholder && !showOwnAd) {
     return null;
   }
 
@@ -87,7 +91,9 @@ export function AdSlot({ className = "", placement }: AdSlotProps) {
       <div className="border-b border-line px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
         Publicidade
       </div>
-      <div className={`grid place-items-center px-3 py-4 ${adHeights[placement]}`}>
+      {showOwnAd ? (
+        ownAd === "hostinger" ? <HostingerAd /> : <AidexxAd />
+      ) : <div className={`grid place-items-center px-3 py-4 ${adHeights[placement]}`}>
         {slot ? (
           <ins
             className="adsbygoogle block w-full"
@@ -99,7 +105,7 @@ export function AdSlot({ className = "", placement }: AdSlotProps) {
         ) : (
           <span className="text-sm font-medium text-muted">Bloco de anuncio</span>
         )}
-      </div>
+      </div>}
     </aside>
   );
 }

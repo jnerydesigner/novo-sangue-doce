@@ -100,6 +100,32 @@ body {
   }
 }
 
+@keyframes affiliate-orbit {
+  50% { transform: translate(-18px, 12px) scale(1.08); }
+}
+
+@keyframes affiliate-product-float {
+  50% { transform: translateY(-6px); }
+}
+
+.affiliate-ad-art {
+  background: radial-gradient(circle at center, #316d73 0%, #173d59 48%, #102c4f 78%);
+}
+
+.hostinger-ad-art {
+  background: radial-gradient(circle at center, #6042b5 0%, #30205f 50%, #1d1347 80%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .affiliate-ad-orbit {
+    animation: affiliate-orbit 8s ease-in-out infinite;
+  }
+
+  .affiliate-ad-product {
+    animation: affiliate-product-float 5s ease-in-out infinite;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
