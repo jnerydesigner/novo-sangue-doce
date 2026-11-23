@@ -4733,9 +4733,9 @@ fast-check@^3.23.1:
     pure-rand "^6.1.0"
 
 fast-copy@^4.0.0:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/fast-copy/-/fast-copy-4.0.4.tgz#e569e2331ee6a9d67826c31aeb0e84b50bfb63e6"
-  integrity sha512-eVAiWVNPSEGIzDl5yPuLrx8fNMogScXvD9xp1Kzd41FjRIz2I3sSIcxsFeM5EzFfHAfobdvs8ZySffUopljvIA==
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/fast-copy/-/fast-copy-4.3.3.tgz#16bd7ddbe550de388f6aa2bf32bd42ea3a2062ae"
+  integrity sha512-U3A5d4cBrc7fpZ2Sbz46FbFl+VdnCBAwRQaIR7IFWsyvndISF5CGjTbhiawGoMv7Ob8slBY1nT8XT3bWRFErzA==
 
 fast-decode-uri-component@^1.0.1:
   version "1.0.1"
