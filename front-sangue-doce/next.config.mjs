@@ -81,6 +81,16 @@ const nextConfig = {
         pathname: "/local/social_medias/thumb/**",
         protocol: s3Url.protocol.replace(":", ""),
       },
+      {
+        hostname: s3Url.hostname,
+        pathname: "/cloud/social_medias/thumb/posts/**",
+        protocol: s3Url.protocol.replace(":", ""),
+      },
+      ...["/social-publications/posts/**", "/local/social-publications/posts/**", "/cloud/social-publications/posts/**"].map((pathname) => ({
+        hostname: s3Url.hostname,
+        pathname,
+        protocol: s3Url.protocol.replace(":", ""),
+      })),
     ],
   },
   output: "standalone",
